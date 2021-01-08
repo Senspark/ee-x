@@ -1,8 +1,7 @@
 using System.Threading.Tasks;
 
 namespace EE.Internal {
-    internal class FacebookBannerAd
-        : ObserverManager<IAdViewObserver>, IAdView {
+    internal class FacebookBannerAd : ObserverManager<AdObserver>, IAdView {
         private readonly IMessageBridge _bridge;
         private readonly FacebookAds _plugin;
         private readonly string _adId;
@@ -19,18 +18,9 @@ namespace EE.Internal {
             _helper = new AdViewHelper(_bridge, _messageHelper, size);
             _loader = new AsyncHelper<bool>();
 
-            _bridge.RegisterHandler(_ => {
-                Thread.RunOnLibraryThread(OnLoaded);
-                return "";
-            }, _messageHelper.OnLoaded);
-            _bridge.RegisterHandler(message => {
-                Thread.RunOnLibraryThread(() => OnFailedToLoad(message));
-                return "";
-            }, _messageHelper.OnFailedToLoad);
-            _bridge.RegisterHandler(_ => {
-                Thread.RunOnLibraryThread(OnClicked);
-                return "";
-            }, _messageHelper.OnClicked);
+            _bridge.RegisterHandler(_ => OnLoaded(), _messageHelper.OnLoaded);
+            _bridge.RegisterHandler(OnFailedToLoad, _messageHelper.OnFailedToLoad);
+            _bridge.RegisterHandler(_ => OnClicked(), _messageHelper.OnClicked);
         }
 
         public void Destroy() {

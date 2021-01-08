@@ -31,9 +31,9 @@ public:
     virtual std::shared_ptr<IAdView>
     createNativeAd(const std::string& adId, const std::string& layoutName,
                    const NativeAdLayout& identifiers) override;
-    virtual std::shared_ptr<IInterstitialAd>
+    virtual std::shared_ptr<IFullScreenAd>
     createInterstitialAd(const std::string& adId) override;
-    virtual std::shared_ptr<IRewardedAd>
+    virtual std::shared_ptr<IFullScreenAd>
     createRewardedAd(const std::string& adId) override;
 
 private:
@@ -44,21 +44,20 @@ private:
 
     std::pair<int, int> getBannerAdSize(BannerAdSize adSize);
 
+    template <class Ad>
+    std::shared_ptr<IFullScreenAd>
+    createFullScreenAd(const std::string& handlerId, const std::string& adId);
+
     bool destroyBannerAd(const std::string& adId);
     bool destroyNativeAd(const std::string& adId);
     bool destroyInterstitialAd(const std::string& adId);
     bool destroyRewardedAd(const std::string& adId);
+    bool destroyAd(const std::string& handlerId, const std::string& adId);
 
     IMessageBridge& bridge_;
     const Logger& logger_;
-
-    std::map<std::string, std::shared_ptr<IAdView>> bannerAds_;
-    std::map<std::string, std::shared_ptr<IAdView>> nativeAds_;
-    std::map<std::string, std::shared_ptr<IInterstitialAd>> interstitialAds_;
-    std::map<std::string, std::shared_ptr<IRewardedAd>> rewardedAds_;
-
-    std::shared_ptr<ads::IAsyncHelper<bool>> interstitialAdDisplayer_;
-    std::shared_ptr<ads::IAsyncHelper<IRewardedAdResult>> rewardedAdDisplayer_;
+    std::map<std::string, std::shared_ptr<IAd>> ads_;
+    std::shared_ptr<ads::IAsyncHelper<FullScreenAdResult>> displayer_;
 };
 } // namespace facebook_ads
 } // namespace ee

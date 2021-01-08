@@ -1,7 +1,6 @@
 #include "ee/iron_source/private/IronSourceBridge.hpp"
 
-#include <ee/ads/internal/GuardedInterstitialAd.hpp>
-#include <ee/ads/internal/GuardedRewardedAd.hpp>
+#include <ee/ads/internal/GuardedFullScreenAd.hpp>
 #include <ee/ads/internal/IAsyncHelper.hpp>
 #include <ee/ads/internal/MediationManager.hpp>
 #include <ee/core/Logger.hpp>
@@ -21,9 +20,7 @@ namespace core {
 template <>
 std::shared_ptr<IIronSource>
 PluginManager::createPluginImpl(IMessageBridge& bridge) {
-    if (not addPlugin(Plugin::IronSource)) {
-        return nullptr;
-    }
+    addPlugin(Plugin::IronSource);
     return std::make_shared<iron_source::Bridge>(bridge);
 }
 } // namespace core
@@ -62,82 +59,54 @@ Self::Bridge(IMessageBridge& bridge)
     , logger_(Logger::getSystemLogger()) {
     logger_.debug("%s", __PRETTY_FUNCTION__);
     auto&& mediation = ads::MediationManager::getInstance();
-    interstitialAdDisplayer_ = mediation.getInterstitialAdDisplayer();
-    rewardedAdDisplayer_ = mediation.getRewardedAdDisplayer();
+    displayer_ = mediation.getAdDisplayer();
     interstitialAd_ = nullptr;
     rewardedAd_ = nullptr;
 
     bridge_.registerHandler(
-        [this](const std::string& message) {
-            Thread::runOnLibraryThread([this] { //
-                onInterstitialAdLoaded();
-            });
-            return "";
+        [this](const std::string& message) { //
+            onInterstitialAdLoaded();
         },
         kOnInterstitialAdLoaded);
     bridge_.registerHandler(
-        [this](const std::string& message) {
-            Thread::runOnLibraryThread([this, message] { //
-                onInterstitialAdFailedToLoad(message);
-            });
-            return "";
+        [this](const std::string& message) { //
+            onInterstitialAdFailedToLoad(message);
         },
         kOnInterstitialAdFailedToLoad);
     bridge_.registerHandler(
-        [this](const std::string& message) {
-            Thread::runOnLibraryThread([this, message] { //
-                onInterstitialAdFailedToShow(message);
-            });
-            return "";
+        [this](const std::string& message) { //
+            onInterstitialAdFailedToShow(message);
         },
         kOnInterstitialAdFailedToShow);
     bridge_.registerHandler(
-        [this](const std::string& message) {
-            Thread::runOnLibraryThread([this] { //
-                onInterstitialAdClicked();
-            });
-            return "";
+        [this](const std::string& message) { //
+            onInterstitialAdClicked();
         },
         kOnInterstitialAdClicked);
     bridge_.registerHandler(
-        [this](const std::string& message) {
-            Thread::runOnLibraryThread([this] { //
-                onInterstitialAdClosed();
-            });
-            return "";
+        [this](const std::string& message) { //
+            onInterstitialAdClosed();
         },
         kOnInterstitialAdClosed);
 
     bridge_.registerHandler(
-        [this](const std::string& message) {
-            Thread::runOnLibraryThread([this] { //
-                onRewardedAdLoaded();
-            });
-            return "";
+        [this](const std::string& message) { //
+            onRewardedAdLoaded();
         },
         kOnRewardedAdLoaded);
     bridge_.registerHandler(
-        [this](const std::string& message) {
-            Thread::runOnLibraryThread([this, message] { //
-                onRewardedAdFailedToShow(message);
-            });
-            return "";
+        [this](const std::string& message) { //
+            onRewardedAdFailedToShow(message);
         },
         kOnRewardedAdFailedToShow);
     bridge_.registerHandler(
-        [this](const std::string& message) {
-            Thread::runOnLibraryThread([this] { //
-                onRewardedAdClicked();
-            });
-            return "";
+        [this](const std::string& message) { //
+            onRewardedAdClicked();
         },
         kOnRewardedAdClicked);
     bridge_.registerHandler(
-        [this](const std::string& message) {
-            Thread::runOnLibraryThread([this, message] { //
-                onRewardedAdClosed(core::toBool(message));
-            });
-            return "";
+        [this](const std::string& message) { //
+            onRewardedAdClosed(core::toBool(message));
         },
         kOnRewardedAdClosed);
 }
@@ -168,17 +137,17 @@ Task<bool> Self::initialize(const std::string& appKey) {
     co_return core::toBool(response);
 }
 
-std::shared_ptr<IInterstitialAd>
+std::shared_ptr<IFullScreenAd>
 Self::createInterstitialAd(const std::string& adId) {
     // adId has no usage at the moment since all ads share the same instance.
     logger_.debug("%s: adId = %s", __PRETTY_FUNCTION__, adId.c_str());
     if (sharedInterstitialAd_) {
         return sharedInterstitialAd_;
     }
-    interstitialAd_ = std::make_shared<InterstitialAd>(
-        logger_, interstitialAdDisplayer_, this, adId);
+    interstitialAd_ =
+        std::make_shared<InterstitialAd>(logger_, displayer_, this, adId);
     sharedInterstitialAd_ =
-        std::make_shared<ads::GuardedInterstitialAd>(interstitialAd_);
+        std::make_shared<ads::GuardedFullScreenAd>(interstitialAd_);
     return sharedInterstitialAd_;
 }
 
@@ -192,15 +161,14 @@ bool Self::destroyInterstitialAd(const std::string& adId) {
     return true;
 }
 
-std::shared_ptr<IRewardedAd> Self::createRewardedAd(const std::string& adId) {
+std::shared_ptr<IFullScreenAd> Self::createRewardedAd(const std::string& adId) {
     // adId has no usage at the moment since all ads share the same instance.
     logger_.debug("%s: adId = %s", __PRETTY_FUNCTION__, adId.c_str());
     if (sharedRewardedAd_) {
         return sharedRewardedAd_;
     }
-    rewardedAd_ =
-        std::make_shared<RewardedAd>(logger_, rewardedAdDisplayer_, this, adId);
-    sharedRewardedAd_ = std::make_shared<ads::GuardedRewardedAd>(rewardedAd_);
+    rewardedAd_ = std::make_shared<RewardedAd>(logger_, displayer_, this, adId);
+    sharedRewardedAd_ = std::make_shared<ads::GuardedFullScreenAd>(rewardedAd_);
     return sharedRewardedAd_;
 }
 
@@ -277,7 +245,7 @@ void Self::onInterstitialAdClosed() {
     if (interstitialAd_) {
         interstitialAd_->onClosed();
     } else {
-        onMediationAdClosed(false);
+        onMediationAdClosed(FullScreenAdResult::Completed);
     }
 }
 
@@ -287,7 +255,7 @@ void Self::onRewardedAdLoaded() {
     if (rewardedAd_) {
         rewardedAd_->onLoaded();
     } else {
-        assert(false);
+        // Automatically reloaded by SDK.
     }
 }
 
@@ -312,21 +280,17 @@ void Self::onRewardedAdClosed(bool rewarded) {
     if (rewardedAd_) {
         rewardedAd_->onClosed(rewarded);
     } else {
-        onMediationAdClosed(rewarded);
+        onMediationAdClosed(rewarded ? FullScreenAdResult::Completed
+                                     : FullScreenAdResult::Canceled);
     }
 }
 
 #pragma mark - Mediation Ad Callbacks.
 
-void Self::onMediationAdClosed(bool rewarded) {
+void Self::onMediationAdClosed(FullScreenAdResult result) {
     logger_.debug("%s", __PRETTY_FUNCTION__);
-    if (interstitialAdDisplayer_->isProcessing()) {
-        interstitialAdDisplayer_->resolve(true);
-        return;
-    }
-    if (rewardedAdDisplayer_->isProcessing()) {
-        rewardedAdDisplayer_->resolve(rewarded ? IRewardedAdResult::Completed
-                                               : IRewardedAdResult::Canceled);
+    if (displayer_->isProcessing()) {
+        displayer_->resolve(result);
         return;
     }
     assert(false);

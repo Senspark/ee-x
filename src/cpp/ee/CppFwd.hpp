@@ -19,6 +19,7 @@
 #include "ee/notification/NotificationFwd.hpp"
 #include "ee/play/PlayFwd.hpp"
 #include "ee/recorder/RecorderFwd.hpp"
+#include "ee/services/ServicesFwd.hpp"
 #include "ee/store/StoreFwd.hpp"
 #include "ee/unity_ads/UnityAdsFwd.hpp"
 #include "ee/vungle/VungleFwd.hpp"

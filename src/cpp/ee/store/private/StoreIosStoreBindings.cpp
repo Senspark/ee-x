@@ -35,14 +35,11 @@ Self::IosStoreBindings(IMessageBridge& bridge)
     : bridge_(bridge) {
     bridge_.registerHandler(
         [this](const std::string& message) {
-            Thread::runOnLibraryThread([this, message] { //
-                auto json = nlohmann::json::parse(message);
-                if (purchasingCallback_) {
-                    purchasingCallback_(json["subject"], json["payload"],
-                                        json["receipt"], json["transactionId"]);
-                }
-            });
-            return "";
+            auto json = nlohmann::json::parse(message);
+            if (purchasingCallback_) {
+                purchasingCallback_(json["subject"], json["payload"],
+                                    json["receipt"], json["transactionId"]);
+            }
         },
         kCallback);
 }

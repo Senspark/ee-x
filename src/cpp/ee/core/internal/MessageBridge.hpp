@@ -24,10 +24,10 @@ private:
 public:
     static MessageBridge& getInstance();
 
-    virtual bool registerHandler(const MessageHandler& handler,
+    virtual void registerHandler(const MessageHandler& handler,
                                  const std::string& tag) override;
 
-    virtual bool deregisterHandler(const std::string& tag) override;
+    virtual void deregisterHandler(const std::string& tag) override;
 
     virtual std::string call(const std::string& tag,
                              const std::string& message = "") override;
@@ -39,12 +39,11 @@ public:
     /// @warning This method should not be called manually.
     /// @param tag The unique tag of the handler.
     /// @param message The message.
-    /// @return Reply message from C++.
-    std::string callCpp(const std::string& tag, const std::string& message);
+    void callCpp(const std::string& tag, const std::string& message);
 
 private:
     MessageBridge();
-    ~MessageBridge();
+    virtual ~MessageBridge() override;
 
     MessageBridge(const Self&) = delete;
     Self& operator=(const Self&) = delete;
@@ -54,8 +53,6 @@ private:
     const Logger& logger_;
 
     int callbackCounter_;
-
-    std::unique_ptr<SpinLock> handlerLock_;
 
     /// Registered handlers.
     std::unordered_map<std::string, MessageHandler> handlers_;

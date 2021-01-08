@@ -8,8 +8,7 @@
 
 #include "ee/unity_ads/private/UnityAdsBridge.hpp"
 
-#include <ee/ads/internal/GuardedInterstitialAd.hpp>
-#include <ee/ads/internal/GuardedRewardedAd.hpp>
+#include <ee/ads/internal/GuardedFullScreenAd.hpp>
 #include <ee/ads/internal/IAsyncHelper.hpp>
 #include <ee/ads/internal/MediationManager.hpp>
 #include <ee/core/IMessageBridge.hpp>
@@ -29,9 +28,7 @@ namespace core {
 template <>
 std::shared_ptr<IUnityAds>
 PluginManager::createPluginImpl(IMessageBridge& bridge) {
-    if (not addPlugin(Plugin::UnityAds)) {
-        return nullptr;
-    }
+    addPlugin(Plugin::UnityAds);
     return std::make_shared<unity_ads::Bridge>(bridge);
 }
 } // namespace core
@@ -60,33 +57,23 @@ Self::Bridge(IMessageBridge& bridge)
     displaying_ = false;
 
     auto&& mediation = ads::MediationManager::getInstance();
-    interstitialAdDisplayer_ = mediation.getInterstitialAdDisplayer();
-    rewardedAdDisplayer_ = mediation.getRewardedAdDisplayer();
+    displayer_ = mediation.getAdDisplayer();
 
     bridge_.registerHandler(
-        [this](const std::string& message) {
-            Thread::runOnLibraryThread([this, message] { //
-                onLoaded(message);
-            });
-            return "";
+        [this](const std::string& message) { //
+            onLoaded(message);
         },
         kOnLoaded);
     bridge_.registerHandler(
         [this](const std::string& message) {
-            Thread::runOnLibraryThread([this, message] { //
-                auto json = nlohmann::json::parse(message);
-                onFailedToShow(json["ad_id"], json["message"]);
-            });
-            return "";
+            auto json = nlohmann::json::parse(message);
+            onFailedToShow(json["ad_id"], json["message"]);
         },
         kOnFailedToShow);
     bridge_.registerHandler(
         [this](const std::string& message) {
-            Thread::runOnLibraryThread([this, message] { //
-                auto json = nlohmann::json::parse(message);
-                onClosed(json["ad_id"], json["rewarded"]);
-            });
-            return "";
+            auto json = nlohmann::json::parse(message);
+            onClosed(json["ad_id"], json["rewarded"]);
         },
         kOnClosed);
 }
@@ -116,50 +103,36 @@ void Self::setDebugModeEnabled(bool enabled) {
     bridge_.call(kSetDebugModeEnabled, core::toString(enabled));
 }
 
-std::shared_ptr<IInterstitialAd>
+std::shared_ptr<IFullScreenAd>
 Self::createInterstitialAd(const std::string& adId) {
+    return createFullScreenAd<InterstitialAd>(adId);
+}
+
+std::shared_ptr<IFullScreenAd> Self::createRewardedAd(const std::string& adId) {
+    return createFullScreenAd<RewardedAd>(adId);
+}
+
+template <class Ad>
+std::shared_ptr<IFullScreenAd>
+Self::createFullScreenAd(const std::string& adId) {
     logger_.debug("%s: adId = %s", __PRETTY_FUNCTION__, adId.c_str());
-    auto iter = interstitialAds_.find(adId);
-    if (iter != interstitialAds_.cend()) {
-        return iter->second.ad;
+    auto iter = ads_.find(adId);
+    if (iter != ads_.cend()) {
+        return std::dynamic_pointer_cast<IFullScreenAd>(iter->second.first);
     }
-    auto raw = std::make_shared<InterstitialAd>(
-        logger_, interstitialAdDisplayer_, this, adId);
-    auto ad = std::make_shared<ads::GuardedInterstitialAd>(raw);
-    interstitialAds_.try_emplace(adId, ad, raw);
+    auto raw = std::make_shared<Ad>(logger_, displayer_, this, adId);
+    auto ad = std::make_shared<ads::GuardedFullScreenAd>(raw);
+    ads_.try_emplace(adId, ad, raw);
     return ad;
 }
 
-bool Self::destroyInterstitialAd(const std::string& adId) {
+bool Self::destroyAd(const std::string& adId) {
     logger_.debug("%s: adId = %s", __PRETTY_FUNCTION__, adId.c_str());
-    auto iter = interstitialAds_.find(adId);
-    if (iter == interstitialAds_.cend()) {
+    auto iter = ads_.find(adId);
+    if (iter == ads_.cend()) {
         return false;
     }
-    interstitialAds_.erase(iter);
-    return true;
-}
-
-std::shared_ptr<IRewardedAd> Self::createRewardedAd(const std::string& adId) {
-    logger_.debug("%s: adId = %s", __PRETTY_FUNCTION__, adId.c_str());
-    auto iter = rewardedAds_.find(adId);
-    if (iter != rewardedAds_.cend()) {
-        return iter->second.ad;
-    }
-    auto raw =
-        std::make_shared<RewardedAd>(logger_, rewardedAdDisplayer_, this, adId);
-    auto ad = std::make_shared<ads::GuardedRewardedAd>(raw);
-    rewardedAds_.try_emplace(adId, ad, raw);
-    return ad;
-}
-
-bool Self::destroyRewardedAd(const std::string& adId) {
-    logger_.debug("%s: adId = %s", __PRETTY_FUNCTION__, adId.c_str());
-    auto iter = rewardedAds_.find(adId);
-    if (iter == rewardedAds_.cend()) {
-        return false;
-    }
-    rewardedAds_.erase(iter);
+    ads_.erase(iter);
     return true;
 }
 
@@ -184,14 +157,18 @@ void Self::showRewardedAd(const std::string& adId) {
 
 void Self::onLoaded(const std::string& adId) {
     logger_.debug("%s: adId = %s", __PRETTY_FUNCTION__, adId.c_str());
-    if (auto iter = interstitialAds_.find(adId);
-        iter != interstitialAds_.cend()) {
-        iter->second.raw->onLoaded();
-        return;
-    }
-    if (auto iter = rewardedAds_.find(adId); iter != rewardedAds_.cend()) {
-        iter->second.raw->onLoaded();
-        return;
+    if (auto iter = ads_.find(adId); iter != ads_.cend()) {
+        auto&& ad = iter->second.second;
+        if (auto item = std::dynamic_pointer_cast<InterstitialAd>(ad);
+            item != nullptr) {
+            item->onLoaded();
+            return;
+        }
+        if (auto item = std::dynamic_pointer_cast<RewardedAd>(ad);
+            item != nullptr) {
+            item->onLoaded();
+            return;
+        }
     }
     // Mediation.
     logger_.error("%s: unexpected adId = %s", __PRETTY_FUNCTION__,
@@ -203,14 +180,20 @@ void Self::onFailedToShow(const std::string& adId, const std::string& message) {
                   adId.c_str(), message.c_str());
     if (displaying_) {
         assert(adId_ == adId);
-        if (auto iter = interstitialAds_.find(adId);
-            iter != interstitialAds_.cend()) {
-            iter->second.raw->onFailedToShow(message);
-        }
-        if (auto iter = rewardedAds_.find(adId); iter != rewardedAds_.cend()) {
-            iter->second.raw->onFailedToShow(message);
-        }
         displaying_ = false;
+        if (auto iter = ads_.find(adId); iter != ads_.cend()) {
+            auto&& ad = iter->second.second;
+            if (auto item = std::dynamic_pointer_cast<InterstitialAd>(ad);
+                item != nullptr) {
+                item->onFailedToShow(message);
+                return;
+            }
+            if (auto item = std::dynamic_pointer_cast<RewardedAd>(ad);
+                item != nullptr) {
+                item->onFailedToShow(message);
+                return;
+            }
+        }
     } else {
         // Mediation.
         onMediationAdFailedToShow(adId, message);
@@ -222,40 +205,40 @@ void Self::onClosed(const std::string& adId, bool rewarded) {
                   adId.c_str(), core::toString(rewarded).c_str());
     if (displaying_) {
         assert(adId_ == adId);
-        if (auto iter = interstitialAds_.find(adId);
-            iter != interstitialAds_.cend()) {
-            iter->second.raw->onClosed();
-        }
-        if (auto iter = rewardedAds_.find(adId); iter != rewardedAds_.cend()) {
-            iter->second.raw->onClosed(rewarded);
+        displaying_ = false;
+        if (auto iter = ads_.find(adId); iter != ads_.cend()) {
+            auto&& ad = iter->second.second;
+            if (auto item = std::dynamic_pointer_cast<InterstitialAd>(ad);
+                item != nullptr) {
+                item->onClosed();
+                return;
+            }
+            if (auto item = std::dynamic_pointer_cast<RewardedAd>(ad);
+                item != nullptr) {
+                item->onClosed(rewarded);
+                return;
+            }
         }
     } else {
         // Mediation.
-        onMediationAdClosed(adId, rewarded);
+        onMediationAdClosed(adId, rewarded ? FullScreenAdResult::Completed
+                                           : FullScreenAdResult::Canceled);
     }
 }
 
 void Self::onMediationAdFailedToShow(const std::string& adId,
                                      const std::string& message) {
-    if (interstitialAdDisplayer_->isProcessing()) {
-        interstitialAdDisplayer_->resolve(false);
-        return;
-    }
-    if (rewardedAdDisplayer_->isProcessing()) {
-        rewardedAdDisplayer_->resolve(IRewardedAdResult::Failed);
+    if (displayer_->isProcessing()) {
+        displayer_->resolve(FullScreenAdResult::Failed);
         return;
     }
     assert(false);
 }
 
-void Self::onMediationAdClosed(const std::string& adId, bool rewarded) {
-    if (interstitialAdDisplayer_->isProcessing()) {
-        interstitialAdDisplayer_->resolve(true);
-        return;
-    }
-    if (rewardedAdDisplayer_->isProcessing()) {
-        rewardedAdDisplayer_->resolve(rewarded ? IRewardedAdResult::Completed
-                                               : IRewardedAdResult::Canceled);
+void Self::onMediationAdClosed(const std::string& adId,
+                               FullScreenAdResult result) {
+    if (displayer_->isProcessing()) {
+        displayer_->resolve(result);
         return;
     }
     assert(false);

@@ -24,22 +24,18 @@ public class MessageBridge: NSObject, IMessageBridge {
         super.init()
     }
     
-    @discardableResult
     public func registerHandler(_ tag: String,
-                                _ handler: @escaping MessageHandler) -> Bool {
+                                _ handler: @escaping MessageHandler) {
         objc_sync_enter(_handleLock)
         defer { objc_sync_exit(_handleLock) }
         if _handlers.contains(where: { key, _ -> Bool in key == tag }) {
             assert(false, "A handler with tag \(tag) already exists")
-            return false
         }
         _handlers[tag] = handler
-        return true
     }
     
-    @discardableResult
     public func registerAsyncHandler(_ tag: String,
-                                     _ handler: @escaping AsyncMessageHandler) -> Bool {
+                                     _ handler: @escaping AsyncMessageHandler) {
         return registerHandler(tag) { message -> String in
             let dict = EEJsonUtils.convertString(toDictionary: message)
             guard
@@ -56,16 +52,13 @@ public class MessageBridge: NSObject, IMessageBridge {
         }
     }
     
-    @discardableResult
-    public func deregisterHandler(_ tag: String) -> Bool {
+    public func deregisterHandler(_ tag: String) {
         objc_sync_enter(_handleLock)
         defer { objc_sync_exit(_handleLock) }
         if !_handlers.contains(where: { key, _ -> Bool in key == tag }) {
             assert(false, "A handler with tag \(tag) doesn't exist")
-            return false
         }
         _handlers.removeValue(forKey: tag)
-        return true
     }
     
     private func findHandler(_ tag: String) -> MessageHandler? {
@@ -74,19 +67,12 @@ public class MessageBridge: NSObject, IMessageBridge {
         return _handlers[tag]
     }
     
-    @discardableResult
-    public func callCpp(_ tag: String) -> String {
-        return callCpp(tag, "")
+    public func callCpp(_ tag: String) {
+        callCpp(tag, "")
     }
     
-    @discardableResult
-    public func callCpp(_ tag: String, _ message: String) -> String {
-        guard let response_cpp = ee_callCppInternal(tag, message) else {
-            return ""
-        }
-        let response = String(cString: response_cpp)
-        free(response_cpp)
-        return response
+    public func callCpp(_ tag: String, _ message: String) {
+        ee_callCppInternal(tag, message)
     }
     
     /// Calls a handler from Objective-C with a message.

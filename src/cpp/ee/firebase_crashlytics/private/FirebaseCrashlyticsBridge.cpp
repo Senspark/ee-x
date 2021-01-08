@@ -8,9 +8,7 @@ namespace core {
 template <>
 std::shared_ptr<IFirebaseCrashlytics>
 PluginManager::createPluginImpl(IMessageBridge& bridge) {
-    if (not addPlugin(Plugin::FirebaseCrashlytics)) {
-        return nullptr;
-    }
+    addPlugin(Plugin::FirebaseCrashlytics);
     return std::make_shared<firebase::crashlytics::Bridge>(bridge);
 }
 } // namespace core

@@ -7,7 +7,7 @@
 
 #include <string>
 
-using CallCppPointer = const char* (*)(const char*, const char*);
+using CallCppPointer = void (*)(const char*, const char*);
 using RunOnMainThreadCallbackPointer = void (*)();
 using RunOnMainThreadDelayedCallbackPointer = void (*)(int);
 
@@ -22,10 +22,8 @@ void ee_initializeMessageBridge(CallCppPointer pointer) {
     callCppPointer_ = pointer;
 }
 
-char* ee_callCppInternal(const char* tag, const char* message) {
-    auto result = callCppPointer_(tag, message);
-    auto result_chars = strdup(result);
-    return result_chars;
+void ee_callCppInternal(const char* tag, const char* message) {
+    callCppPointer_(tag, message);
 }
 
 void ee_initializeThread(RunOnMainThreadCallbackPointer pointer1,

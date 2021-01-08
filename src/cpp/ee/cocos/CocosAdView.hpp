@@ -17,7 +17,7 @@
 
 namespace ee {
 namespace cocos {
-class CocosAdView : public IAdView, public ObserverManager<IAdViewObserver> {
+class CocosAdView : public IAdView, public ObserverManager<AdObserver> {
 public:
     explicit CocosAdView(const std::shared_ptr<IAdView>& ad);
 

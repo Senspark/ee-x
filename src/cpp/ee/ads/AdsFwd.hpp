@@ -15,27 +15,22 @@
 
 namespace ee {
 namespace ads {
-enum class IRewardedAdResult;
+enum class FullScreenAdResult;
 
-struct IAdViewObserver;
-struct IInterstitialAdObserver;
-struct IRewardedAdObserver;
+struct AdObserver;
 
+class IAd;
 class IAdView;
-class IInterstitialAd;
-class IRewardedAd;
+class IFullScreenAd;
 
 class MultiAdView;
-class MultiInterstitialAd;
-class MultiRewardedAd;
+class MultiFullScreenAd;
 
 class NullAdView;
-class NullInterstitialAd;
-class NullRewardedAd;
+class NullFullScreenAd;
 
 class GuardedAdView;
-class GuardedInterstitialAd;
-class GuardedRewardedAd;
+class GuardedFullScreenAd;
 
 class MessageHelper;
 
@@ -49,27 +44,33 @@ class Retrier;
 class MediationManager;
 } // namespace ads
 
-using ads::IRewardedAdResult;
+using ads::FullScreenAdResult;
+using IRewardedAdResult [[deprecated]] = FullScreenAdResult;
 
-using ads::IAdViewObserver;
-using ads::IInterstitialAdObserver;
-using ads::IRewardedAdObserver;
+using ads::AdObserver;
+using IAdViewObserver [[deprecated]] = AdObserver;
+using IInterstitialAdObserver [[deprecated]] = AdObserver;
+using IRewardedAdObserver [[deprecated]] = AdObserver;
 
+using ads::IAd;
 using ads::IAdView;
-using ads::IInterstitialAd;
-using ads::IRewardedAd;
+using ads::IFullScreenAd;
+using IInterstitialAd [[deprecated]] = IFullScreenAd;
+using IRewardedAd [[deprecated]] = IFullScreenAd;
 
 using ads::MultiAdView;
-using ads::MultiInterstitialAd;
-using ads::MultiRewardedAd;
+using ads::MultiFullScreenAd;
+using MultiInterstitialAd [[deprecated]] = MultiFullScreenAd;
+using MultiRewardedAd [[deprecated]] = MultiFullScreenAd;
 
 using ads::NullAdView;
-using ads::NullInterstitialAd;
-using ads::NullRewardedAd;
+using ads::NullFullScreenAd;
+using NullInterstitialAd [[deprecated]] = NullFullScreenAd;
+using NullRewardedAd [[deprecated]] = NullFullScreenAd;
 
-using IRewardedVideo [[deprecated]] = IRewardedAd;
-using MultiRewardedVideo [[deprecated]] = MultiRewardedAd;
-using NullRewardedVideo [[deprecated]] = NullRewardedAd;
+using IRewardedVideo [[deprecated]] = IFullScreenAd;
+using MultiRewardedVideo [[deprecated]] = MultiFullScreenAd;
+using NullRewardedVideo [[deprecated]] = NullFullScreenAd;
 } // namespace ee
 
 #endif // __cplusplus

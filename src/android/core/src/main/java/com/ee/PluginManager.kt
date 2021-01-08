@@ -10,9 +10,7 @@ import com.ee.internal.MessageBridgeHandler
 import com.ee.internal.NativeThread
 import com.ee.internal.ThreadImpl
 import com.ee.internal.ee_callCppInternal
-import com.google.common.truth.Truth.assertThat
 import kotlinx.serialization.InternalSerializationApi
-import java.lang.reflect.InvocationTargetException
 import java.util.concurrent.ConcurrentHashMap
 
 /**
@@ -143,29 +141,22 @@ class PluginManager private constructor() {
 
     @AnyThread
     @InternalSerializationApi
-    fun initializePlugins(version: String, messageHandler: MessageBridgeHandler): Boolean {
-        val expectedVersion = "2.1.2"
+    fun initializePlugins(version: String, messageHandler: MessageBridgeHandler) {
+        val expectedVersion = "2.2.0"
         if (version != expectedVersion) {
-            _logger.error("Version mismatched: found $version expected $expectedVersion")
-            assertThat(false).isTrue()
-            return false
+            throw IllegalStateException("Version mismatched: found $version expected $expectedVersion")
         }
         _logger.info("Initialize ee-x plugin version $version")
         val application = _application
-        if (application == null) {
-            _logger.error("""
-                $kTag: Please set activity via
-                PluginManager.getInstance().setActivity() (kotlin) or
-                ee::PluginManager::setActivity() (c++)
-            """.trimIndent())
-            assertThat(false).isTrue()
-            return false
-        }
+            ?: throw IllegalStateException("""
+                    $kTag: Please set activity via
+                    PluginManager.getInstance().setActivity() (kotlin) or
+                    ee::PluginManager::setActivity() (c++)
+                """.trimIndent())
         val bridge = MessageBridge(_logger, messageHandler)
         _bridge = bridge
         Thread.registerImpl(ThreadImpl(_logger))
         Platform.registerHandlers(bridge, application)
-        return true
     }
 
     @AnyThread
@@ -174,48 +165,29 @@ class PluginManager private constructor() {
     }
 
     @AnyThread
-    fun addPlugin(name: String): Boolean {
+    fun addPlugin(name: String) {
         _logger.info("$kTag: ${this::addPlugin.name}: $name")
         if (_plugins.containsKey(name)) {
-            _logger.error("$kTag: ${this::addPlugin.name}: $name already exists!")
-            return false
+            throw IllegalStateException("$kTag: ${this::addPlugin.name}: $name already exists!")
         }
         val className = "com.ee.${name}Bridge"
-        try {
-            val clazz = Class.forName(className)
-            val constructor = clazz.getConstructor(
-                IMessageBridge::class.java,
-                ILogger::class.java,
-                Application::class.java,
-                Activity::class.java)
-            val plugin = constructor.newInstance(_bridge, _logger, _application, _activity)
-            _plugins[name] = plugin as IPlugin
-            return true
-        } catch (ex: ClassNotFoundException) {
-            ex.printStackTrace()
-        } catch (ex: NoSuchMethodException) {
-            ex.printStackTrace()
-        } catch (ex: IllegalAccessException) {
-            ex.printStackTrace()
-        } catch (ex: InstantiationException) {
-            ex.printStackTrace()
-        } catch (ex: InvocationTargetException) {
-            ex.printStackTrace()
-        }
-        return false
+        val clazz = Class.forName(className)
+        val constructor = clazz.getConstructor(
+            IMessageBridge::class.java,
+            ILogger::class.java,
+            Application::class.java,
+            Activity::class.java)
+        val plugin = constructor.newInstance(_bridge, _logger, _application, _activity)
+        _plugins[name] = plugin as IPlugin
     }
 
     @AnyThread
-    fun removePlugin(name: String): Boolean {
+    fun removePlugin(name: String) {
         _logger.info("$kTag: ${this::removePlugin.name}: $name")
         val plugin = _plugins[name]
-        if (plugin == null) {
-            _logger.error("$kTag: ${this::removePlugin.name}: $name doesn't exist!")
-            return false
-        }
+            ?: throw IllegalStateException("$kTag: ${this::removePlugin.name}: $name doesn't exist!")
         plugin.destroy()
         _plugins.remove(name)
-        return true
     }
 
     @AnyThread
@@ -252,8 +224,8 @@ class PluginManager private constructor() {
 @InternalSerializationApi
 @NativeThread
 @Suppress("FunctionName", "unused")
-private fun ee_staticInitializePlugins(version: String): Boolean {
-    return PluginManager.getInstance().initializePlugins(version) { tag, message ->
+private fun ee_staticInitializePlugins(version: String) {
+    PluginManager.getInstance().initializePlugins(version) { tag, message ->
         ee_callCppInternal(tag, message)
     }
 }
@@ -266,14 +238,14 @@ private fun ee_staticSetLogLevel(level: Int) {
 
 @NativeThread
 @Suppress("FunctionName", "unused")
-private fun ee_staticAddPlugin(name: String): Boolean {
-    return PluginManager.getInstance().addPlugin(name)
+private fun ee_staticAddPlugin(name: String) {
+    PluginManager.getInstance().addPlugin(name)
 }
 
 @NativeThread
 @Suppress("FunctionName", "unused")
-private fun ee_staticRemovePlugin(name: String): Boolean {
-    return PluginManager.getInstance().removePlugin(name)
+private fun ee_staticRemovePlugin(name: String) {
+    PluginManager.getInstance().removePlugin(name)
 }
 
 @NativeThread

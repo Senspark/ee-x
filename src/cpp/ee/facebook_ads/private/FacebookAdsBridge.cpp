@@ -9,8 +9,7 @@
 #include "ee/facebook_ads/private/FacebookAdsBridge.hpp"
 
 #include <ee/ads/internal/GuardedAdView.hpp>
-#include <ee/ads/internal/GuardedInterstitialAd.hpp>
-#include <ee/ads/internal/GuardedRewardedAd.hpp>
+#include <ee/ads/internal/GuardedFullScreenAd.hpp>
 #include <ee/ads/internal/MediationManager.hpp>
 #include <ee/core/IMessageBridge.hpp>
 #include <ee/core/LogLevel.hpp>
@@ -32,9 +31,7 @@ namespace core {
 template <>
 std::shared_ptr<IFacebookAds>
 PluginManager::createPluginImpl(IMessageBridge& bridge) {
-    if (not addPlugin(Plugin::FacebookAds)) {
-        return nullptr;
-    }
+    addPlugin(Plugin::FacebookAds);
     return std::make_shared<facebook_ads::Bridge>(bridge);
 }
 } // namespace core
@@ -80,24 +77,14 @@ Self::Bridge(IMessageBridge& bridge)
     , logger_(Logger::getSystemLogger()) {
     logger_.debug("%s", __PRETTY_FUNCTION__);
     auto&& mediation = ads::MediationManager::getInstance();
-    interstitialAdDisplayer_ = mediation.getInterstitialAdDisplayer();
-    rewardedAdDisplayer_ = mediation.getRewardedAdDisplayer();
+    displayer_ = mediation.getAdDisplayer();
 }
 
 Self::~Bridge() = default;
 
 void Self::destroy() {
     logger_.debug("%s", __PRETTY_FUNCTION__);
-    for (auto&& [key, value] : bannerAds_) {
-        value->destroy();
-    }
-    for (auto&& [key, value] : nativeAds_) {
-        value->destroy();
-    }
-    for (auto&& [key, value] : interstitialAds_) {
-        value->destroy();
-    }
-    for (auto&& [key, value] : rewardedAds_) {
+    for (auto&& [key, value] : ads_) {
         value->destroy();
     }
     PluginManager::removePlugin(Plugin::FacebookAds);
@@ -132,10 +119,11 @@ std::pair<int, int> Self::getBannerAdSize(BannerAdSize adSize) {
 
 std::shared_ptr<IAdView> Self::createBannerAd(const std::string& adId,
                                               BannerAdSize adSize) {
-    logger_.debug("%s: id = %s", __PRETTY_FUNCTION__, adId.c_str());
-    auto iter = bannerAds_.find(adId);
-    if (iter != bannerAds_.cend()) {
-        return iter->second;
+    logger_.debug("%s: id = %s size = %d", __PRETTY_FUNCTION__, adId.c_str(),
+                  static_cast<int>(adSize));
+    auto iter = ads_.find(adId);
+    if (iter != ads_.cend()) {
+        return std::dynamic_pointer_cast<IAdView>(iter->second);
     }
     nlohmann::json json;
     json[k__ad_id] = adId;
@@ -150,34 +138,17 @@ std::shared_ptr<IAdView> Self::createBannerAd(const std::string& adId,
     auto size = getBannerAdSize(adSize);
     auto ad = std::make_shared<ads::GuardedAdView>(
         std::make_shared<BannerAd>(bridge_, logger_, this, adId, size));
-    bannerAds_.emplace(adId, ad);
+    ads_.emplace(adId, ad);
     return ad;
-}
-
-bool Self::destroyBannerAd(const std::string& adId) {
-    logger_.debug("%s: id = %s", __PRETTY_FUNCTION__, adId.c_str());
-    auto iter = bannerAds_.find(adId);
-    if (iter == bannerAds_.cend()) {
-        return false;
-    }
-    auto response = bridge_.call(kDestroyBannerAd, adId);
-    if (not core::toBool(response)) {
-        logger_.error("%s: There was an error when attempt to destroy an ad",
-                      __PRETTY_FUNCTION__);
-        assert(false);
-        return false;
-    }
-    bannerAds_.erase(iter);
-    return true;
 }
 
 std::shared_ptr<IAdView>
 Self::createNativeAd(const std::string& adId, const std::string& layoutName,
                      const NativeAdLayout& identifiers) {
     logger_.debug("%s: id = %s", __PRETTY_FUNCTION__, adId.c_str());
-    auto iter = nativeAds_.find(adId);
-    if (iter != nativeAds_.cend()) {
-        return iter->second;
+    auto iter = ads_.find(adId);
+    if (iter != ads_.cend()) {
+        return std::dynamic_pointer_cast<IAdView>(iter->second);
     }
     nlohmann::json json;
     json[k__ad_id] = adId;
@@ -192,99 +163,71 @@ Self::createNativeAd(const std::string& adId, const std::string& layoutName,
     }
     auto ad = std::make_shared<ads::GuardedAdView>(
         std::make_shared<NativeAd>(bridge_, logger_, this, adId));
-    nativeAds_.emplace(adId, ad);
+    ads_.emplace(adId, ad);
     return ad;
+}
+
+std::shared_ptr<IFullScreenAd>
+Self::createInterstitialAd(const std::string& adId) {
+    return createFullScreenAd<InterstitialAd>(kCreateInterstitialAd, adId);
+}
+
+std::shared_ptr<IFullScreenAd> Self::createRewardedAd(const std::string& adId) {
+    return createFullScreenAd<RewardedAd>(kCreateRewardedAd, adId);
+}
+
+template <class Ad>
+std::shared_ptr<IFullScreenAd>
+Self::createFullScreenAd(const std::string& handlerId,
+                         const std::string& adId) {
+    logger_.debug("%s: id = %s", __PRETTY_FUNCTION__, adId.c_str());
+    auto iter = ads_.find(adId);
+    if (iter != ads_.cend()) {
+        return std::dynamic_pointer_cast<IFullScreenAd>(iter->second);
+    }
+    auto response = bridge_.call(handlerId, adId);
+    if (not core::toBool(response)) {
+        logger_.error("%s: There was an error when attempt to create an ad.",
+                      __PRETTY_FUNCTION__);
+        assert(false);
+        return nullptr;
+    }
+    auto ad = std::make_shared<ads::GuardedFullScreenAd>(
+        std::make_shared<Ad>(bridge_, logger_, displayer_, this, adId));
+    ads_.emplace(adId, ad);
+    return ad;
+}
+
+bool Self::destroyBannerAd(const std::string& adId) {
+    return destroyAd(kDestroyBannerAd, adId);
 }
 
 bool Self::destroyNativeAd(const std::string& adId) {
-    logger_.debug("%s: id = %s", __PRETTY_FUNCTION__, adId.c_str());
-    auto iter = nativeAds_.find(adId);
-    if (iter == nativeAds_.cend()) {
-        return false;
-    }
-    auto response = bridge_.call(kDestroyNativeAd, adId);
-    if (not core::toBool(response)) {
-        logger_.error("%s: There was an error when attempt to destroy an ad",
-                      __PRETTY_FUNCTION__);
-        assert(false);
-        return false;
-    }
-    nativeAds_.erase(iter);
-    return true;
-}
-
-std::shared_ptr<IInterstitialAd>
-Self::createInterstitialAd(const std::string& adId) {
-    logger_.debug("%s: id = %s", __PRETTY_FUNCTION__, adId.c_str());
-    auto iter = interstitialAds_.find(adId);
-    if (iter != interstitialAds_.cend()) {
-        return iter->second;
-    }
-    auto response = bridge_.call(kCreateInterstitialAd, adId);
-    if (not core::toBool(response)) {
-        logger_.error("%s: There was an error when attempt to create an ad",
-                      __PRETTY_FUNCTION__);
-        assert(false);
-        return nullptr;
-    }
-    auto ad = std::make_shared<ads::GuardedInterstitialAd>(
-        std::make_shared<InterstitialAd>(bridge_, logger_,
-                                         interstitialAdDisplayer_, this, adId));
-    interstitialAds_.emplace(adId, ad);
-    return ad;
+    return destroyAd(kDestroyNativeAd, adId);
 }
 
 bool Self::destroyInterstitialAd(const std::string& adId) {
-    logger_.debug("%s: id = %s", __PRETTY_FUNCTION__, adId.c_str());
-    auto iter = interstitialAds_.find(adId);
-    if (iter == interstitialAds_.cend()) {
-        return false;
-    }
-    auto&& response = bridge_.call(kDestroyInterstitialAd, adId);
-    if (not core::toBool(response)) {
-        logger_.error("%s: There was an error when attempt to destroy an ad",
-                      __PRETTY_FUNCTION__);
-        assert(false);
-        return false;
-    }
-    interstitialAds_.erase(iter);
-    return true;
-}
-
-std::shared_ptr<IRewardedAd> Self::createRewardedAd(const std::string& adId) {
-    logger_.debug("%s: id = %s", __PRETTY_FUNCTION__, adId.c_str());
-    auto iter = rewardedAds_.find(adId);
-    if (iter != rewardedAds_.cend()) {
-        return iter->second;
-    }
-    auto response = bridge_.call(kCreateRewardedAd, adId);
-    if (not core::toBool(response)) {
-        logger_.error("%s: There was an error when attempt to create an ad",
-                      __PRETTY_FUNCTION__);
-        assert(false);
-        return nullptr;
-    }
-    auto ad =
-        std::make_shared<ads::GuardedRewardedAd>(std::make_shared<RewardedAd>(
-            bridge_, logger_, rewardedAdDisplayer_, this, adId));
-    rewardedAds_.emplace(adId, ad);
-    return ad;
+    return destroyAd(kDestroyInterstitialAd, adId);
 }
 
 bool Self::destroyRewardedAd(const std::string& adId) {
+    return destroyAd(kDestroyRewardedAd, adId);
+}
+
+bool Self::destroyAd(const std::string& handlerId, const std::string& adId) {
     logger_.debug("%s: id = %s", __PRETTY_FUNCTION__, adId.c_str());
-    auto iter = rewardedAds_.find(adId);
-    if (iter == rewardedAds_.cend()) {
+    auto iter = ads_.find(adId);
+    if (iter == ads_.cend()) {
         return false;
     }
-    auto&& response = bridge_.call(kDestroyRewardedAd, adId);
+    auto&& response = bridge_.call(handlerId, adId);
     if (not core::toBool(response)) {
-        logger_.error("%s: There was an error when attempt to destroy an ad",
+        logger_.error("%s: There was an error when attempt to destroy an ad.",
                       __PRETTY_FUNCTION__);
         assert(false);
         return false;
     }
-    rewardedAds_.erase(iter);
+    ads_.erase(iter);
     return true;
 }
 } // namespace facebook_ads

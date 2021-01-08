@@ -17,8 +17,8 @@ namespace ads {
 using Self = MultiAdView;
 
 Self::MultiAdView() {
-    anchor_ = std::make_pair(0, 0);
-    position_ = std::make_pair(0, 0);
+    anchor_ = std::pair(0, 0);
+    position_ = std::pair(0, 0);
     visible_ = false;
     handle_ = std::make_unique<ObserverHandle>();
 }
@@ -97,7 +97,7 @@ std::pair<float, float> Self::getAnchor() const {
 }
 
 void Self::setAnchor(float x, float y) {
-    anchor_ = std::make_pair(x, y);
+    anchor_ = std::pair(x, y);
     for (auto&& item : items_) {
         item->setAnchor(x, y);
     }
@@ -108,7 +108,7 @@ std::pair<float, float> Self::getPosition() const {
 }
 
 void Self::setPosition(float x, float y) {
-    position_ = std::make_pair(x, y);
+    position_ = std::pair(x, y);
     for (auto&& item : items_) {
         item->setPosition(x, y);
     }
@@ -116,10 +116,10 @@ void Self::setPosition(float x, float y) {
 
 std::pair<float, float> Self::getSize() const {
     // Combined size of all ad views.
-    int width = 0;
-    int height = 0;
+    float width = 0;
+    float height = 0;
     for (auto&& item : items_) {
-        int itemWidth, itemHeight;
+        float itemWidth, itemHeight;
         std::tie(itemWidth, itemHeight) = item->getSize();
         width = std::max(width, itemWidth);
         height = std::max(height, itemHeight);

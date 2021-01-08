@@ -15,9 +15,9 @@ public:
     virtual void destroy() override;
 
     virtual Task<bool> initialize(const std::string& appKey) override;
-    virtual std::shared_ptr<IInterstitialAd>
+    virtual std::shared_ptr<IFullScreenAd>
     createInterstitialAd(const std::string& adId) override;
-    virtual std::shared_ptr<IRewardedAd>
+    virtual std::shared_ptr<IFullScreenAd>
     createRewardedAd(const std::string& adId) override;
 
 private:
@@ -45,19 +45,18 @@ private:
     void onRewardedAdClicked();
     void onRewardedAdClosed(bool rewarded);
 
-    void onMediationAdClosed(bool rewarded);
+    void onMediationAdClosed(FullScreenAdResult result);
 
     IMessageBridge& bridge_;
     const Logger& logger_;
 
     /// Share the same ad instance.
     std::shared_ptr<InterstitialAd> interstitialAd_;
-    std::shared_ptr<IInterstitialAd> sharedInterstitialAd_;
+    std::shared_ptr<IFullScreenAd> sharedInterstitialAd_;
     std::shared_ptr<RewardedAd> rewardedAd_;
-    std::shared_ptr<IRewardedAd> sharedRewardedAd_;
+    std::shared_ptr<IFullScreenAd> sharedRewardedAd_;
 
-    std::shared_ptr<ads::IAsyncHelper<bool>> interstitialAdDisplayer_;
-    std::shared_ptr<ads::IAsyncHelper<IRewardedAdResult>> rewardedAdDisplayer_;
+    std::shared_ptr<ads::IAsyncHelper<FullScreenAdResult>> displayer_;
 };
 } // namespace iron_source
 } // namespace ee

@@ -13,29 +13,29 @@ namespace ee {
 namespace core {
 namespace detail {
 template <class T>
-Task<> toVoidTask(T&& task) {
-    co_await task;
-    co_return;
+void whenOne(const std::shared_ptr<int>& counter,
+             const std::function<void()>& resolve, T&& callable) {
+    noAwait([counter, resolve, callable]() -> Task<> {
+        co_await callable();
+        --(*counter);
+        if (*counter == 0) {
+            resolve();
+        }
+    });
 }
 } // namespace detail
 
 template <class... Args>
 Task<> whenAll(Args&&... args) {
-    std::vector<Task<>> tasks = {
-        detail::toVoidTask(std::forward<Args>(args))...};
-    auto counter = std::make_shared<std::size_t>(tasks.size());
-    co_await LambdaAwaiter<>([&tasks, counter](auto&& resolve) { //
-        for (auto&& task : tasks) {
-            noAwait([&task, counter, resolve]() -> Task<> {
-                co_await task;
-                --(*counter);
-                if (*counter == 0) {
-                    resolve();
-                }
-            });
-        }
+    auto callableTuple = std::forward_as_tuple(std::forward<Args>(args)...);
+    auto counter = std::make_shared<int>(sizeof...(Args));
+    co_await LambdaAwaiter<>([&callableTuple, counter](auto&& resolve) {
+        std::apply(
+            [counter, resolve](auto&&... callables) {
+                ((detail::whenOne(counter, resolve, callables)), ...);
+            },
+            callableTuple);
     });
-    co_return;
 }
 } // namespace core
 

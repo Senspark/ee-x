@@ -3,21 +3,20 @@ using System.Threading.Tasks;
 using UnityEngine.Assertions;
 
 namespace EE.Internal {
-    internal class UnityInterstitialAd
-        : ObserverManager<IInterstitialAdObserver>, IInterstitialAd {
-        private readonly IAsyncHelper<bool> _displayer;
+    internal class UnityInterstitialAd : ObserverManager<AdObserver>, IFullScreenAd {
+        private readonly IAsyncHelper<FullScreenAdResult> _displayer;
         private readonly UnityAds _plugin;
         private readonly string _adId;
 
         public UnityInterstitialAd(
-            IAsyncHelper<bool> displayer, UnityAds plugin, string adId) {
+            IAsyncHelper<FullScreenAdResult> displayer, UnityAds plugin, string adId) {
             _displayer = displayer;
             _plugin = plugin;
             _adId = adId;
         }
 
         public void Destroy() {
-            _plugin.DestroyInterstitialAd(_adId);
+            _plugin.DestroyAd(_adId);
         }
 
         public bool IsLoaded => _plugin.HasRewardedAd(_adId);
@@ -29,7 +28,7 @@ namespace EE.Internal {
             return Task.FromResult(IsLoaded);
         }
 
-        public Task<bool> Show() {
+        public Task<FullScreenAdResult> Show() {
             return _displayer.Process(
                 () => _plugin.ShowRewardedAd(_adId),
                 result => {
@@ -43,7 +42,7 @@ namespace EE.Internal {
 
         internal void OnFailedToShow(string message) {
             if (_displayer.IsProcessing) {
-                _displayer.Resolve(false);
+                _displayer.Resolve(FullScreenAdResult.Failed);
             } else {
                 Assert.IsTrue(false);
             }
@@ -51,7 +50,7 @@ namespace EE.Internal {
 
         internal void OnClosed() {
             if (_displayer.IsProcessing) {
-                _displayer.Resolve(true);
+                _displayer.Resolve(FullScreenAdResult.Completed);
             } else {
                 Assert.IsTrue(false);
             }

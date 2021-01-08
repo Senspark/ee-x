@@ -5,7 +5,7 @@ import com.ee.PluginManager;
 
 class UnityMessageBridge {
     private interface Callback {
-        String callCpp(String tag, String message);
+        void callCpp(String tag, String message);
     }
     
     private static Callback _callback;
@@ -19,7 +19,7 @@ class UnityMessageBridge {
         return bridge.call(tag, message);
     }
     
-    public static String callCpp(String tag, String message) {
-        return _callback.callCpp(tag, message);
+    public static void callCpp(String tag, String message) {
+        _callback.callCpp(tag, message);
     }
 }

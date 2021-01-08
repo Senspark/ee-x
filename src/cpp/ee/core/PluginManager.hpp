@@ -47,7 +47,7 @@ public:
     /// Initializes plugins.
     /// Must be called first.
     template <Library library = Library::Core>
-    static bool initializePlugins();
+    static void initializePlugins();
 
     template <class T>
     static std::shared_ptr<T> createPlugin() {
@@ -70,11 +70,11 @@ public:
 
     /// Adds a cross-platform plugin.
     /// @note Internal uses.
-    static bool addPlugin(Plugin plugin);
+    static void addPlugin(Plugin plugin);
 
     /// Remove a cross-platform plugin.
     /// @note Internal uses.
-    static bool removePlugin(Plugin plugin);
+    static void removePlugin(Plugin plugin);
 
 private:
     template <class T>

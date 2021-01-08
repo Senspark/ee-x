@@ -1,8 +1,7 @@
 using System.Threading.Tasks;
 
 namespace EE.Internal {
-    internal class GuardedAdView
-        : ObserverManager<IAdViewObserver>, IAdView {
+    internal class GuardedAdView : ObserverManager<AdObserver>, IAdView {
         private readonly IAdView _ad;
         private bool _loading;
         private readonly ObserverHandle _handle;
@@ -10,7 +9,7 @@ namespace EE.Internal {
         public GuardedAdView(IAdView ad) {
             _ad = ad;
             _handle = new ObserverHandle();
-            _handle.Bind(ad).AddObserver(new IAdViewObserver {
+            _handle.Bind(ad).AddObserver(new AdObserver {
                 OnLoaded = () => DispatchEvent(observer => observer.OnLoaded?.Invoke()),
                 OnClicked = () => DispatchEvent(observer => observer.OnClicked?.Invoke())
             });

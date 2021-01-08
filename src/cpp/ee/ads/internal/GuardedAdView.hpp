@@ -9,7 +9,7 @@
 
 namespace ee {
 namespace ads {
-class GuardedAdView : public IAdView, public ObserverManager<IAdViewObserver> {
+class GuardedAdView : public IAdView, public ObserverManager<AdObserver> {
 public:
     explicit GuardedAdView(const std::shared_ptr<IAdView>& ad);
 

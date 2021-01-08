@@ -49,11 +49,11 @@ IMessageBridge* bridge_ = nullptr;
 } // namespace
 
 #if defined(EE_X_ANDROID)
-bool ee_staticInitializePlugins(const char* version) {
-    return JniUtils::callStaticBooleanMethod( //
-        "com/ee/PluginManagerKt",             //
-        "ee_staticInitializePlugins",         //
-        "(Ljava/lang/String;)Z",              //
+void ee_staticInitializePlugins(const char* version) {
+    JniUtils::callStaticVoidMethod(   //
+        "com/ee/PluginManagerKt",     //
+        "ee_staticInitializePlugins", //
+        "(Ljava/lang/String;)V",      //
         JniUtils::toJavaString(version)->get());
 }
 
@@ -80,40 +80,36 @@ void ee_staticSetActivity(void* activity) {
         activity);
 }
 
-bool ee_staticAddPlugin(const char* name) {
-    return JniUtils::callStaticBooleanMethod(
-        "com/ee/PluginManagerKt", //
-        "ee_staticAddPlugin",     //
-        "(Ljava/lang/String;)Z",  //
-        JniUtils::toJavaString(name)->get());
+void ee_staticAddPlugin(const char* name) {
+    JniUtils::callStaticVoidMethod("com/ee/PluginManagerKt", //
+                                   "ee_staticAddPlugin",     //
+                                   "(Ljava/lang/String;)V",  //
+                                   JniUtils::toJavaString(name)->get());
 }
 
-bool ee_staticRemovePlugin(const char* name) {
-    return JniUtils::callStaticBooleanMethod(
-        "com/ee/PluginManagerKt", //
-        "ee_staticRemovePlugin",  //
-        "(Ljava/lang/String;)Z",  //
-        JniUtils::toJavaString(name)->get());
+void ee_staticRemovePlugin(const char* name) {
+    JniUtils::callStaticVoidMethod("com/ee/PluginManagerKt", //
+                                   "ee_staticRemovePlugin",  //
+                                   "(Ljava/lang/String;)V",  //
+                                   JniUtils::toJavaString(name)->get());
 }
 #endif // EE_X_ANDROID
 
 #if defined(EE_X_IOS) || defined(EE_X_OSX)
 extern "C" {
-bool ee_staticInitializePlugins(const char* version);
+void ee_staticInitializePlugins(const char* version);
 void ee_staticSetLogLevel(int level);
 void* ee_staticGetActivity();
 void ee_staticSetActivity(void* activity);
-bool ee_staticAddPlugin(const char* name);
-bool ee_staticRemovePlugin(const char* name);
+void ee_staticAddPlugin(const char* name);
+void ee_staticRemovePlugin(const char* name);
 } // extern "C"
 #endif // defined(EE_X_IOS) || defined(EE_X_OSX)
 using Self = PluginManager;
 
 template <>
-bool Self::initializePlugins<Library::Core>() {
-    if (not ee_staticInitializePlugins("2.1.2")) {
-        return false;
-    }
+void Self::initializePlugins<Library::Core>() {
+    ee_staticInitializePlugins("2.2.0");
     bridge_ = &MessageBridge::getInstance();
     Platform::registerHandlers(*bridge_);
 
@@ -125,7 +121,6 @@ bool Self::initializePlugins<Library::Core>() {
         runnable();
         return true;
     };
-    return true;
 }
 
 IMessageBridge& Self::getBridge() {
@@ -144,14 +139,14 @@ void Self::setActivity(void* activity) {
     ee_staticSetActivity(activity);
 }
 
-bool Self::addPlugin(Plugin plugin) {
+void Self::addPlugin(Plugin plugin) {
     auto&& name = pluginNames_.at(plugin);
-    return ee_staticAddPlugin(name.c_str());
+    ee_staticAddPlugin(name.c_str());
 }
 
-bool Self::removePlugin(Plugin plugin) {
+void Self::removePlugin(Plugin plugin) {
     auto&& name = pluginNames_.at(plugin);
-    return ee_staticRemovePlugin(name.c_str());
+    ee_staticRemovePlugin(name.c_str());
 }
 } // namespace core
 } // namespace ee

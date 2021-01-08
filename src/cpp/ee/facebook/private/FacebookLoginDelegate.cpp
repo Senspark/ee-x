@@ -37,36 +37,27 @@ Self::LoginDelegate(IMessageBridge& bridge, int tag)
     , tag_(tag) {
     bridge_.registerHandler(
         [this](const std::string& message) {
-            Thread::runOnLibraryThread([this, message] {
-                if (successCallback_) {
-                    auto token = core::makeShared<AccessToken>(message);
-                    successCallback_(token);
-                }
-                self_.reset();
-            });
-            return "";
+            if (successCallback_) {
+                auto token = core::makeShared<AccessToken>(message);
+                successCallback_(token);
+            }
+            self_.reset();
         },
         k__onSuccess(tag_));
     bridge_.registerHandler(
         [this](const std::string& message) {
-            Thread::runOnLibraryThread([this, message] {
-                if (failureCallback_) {
-                    failureCallback_(message);
-                }
-                self_.reset();
-            });
-            return "";
+            if (failureCallback_) {
+                failureCallback_(message);
+            }
+            self_.reset();
         },
         k__onFailure(tag_));
     bridge_.registerHandler(
         [this](const std::string& message) {
-            Thread::runOnLibraryThread([this] {
-                if (cancelCallback_) {
-                    cancelCallback_();
-                }
-                self_.reset();
-            });
-            return "";
+            if (cancelCallback_) {
+                cancelCallback_();
+            }
+            self_.reset();
         },
         k__onCancel(tag_));
 }

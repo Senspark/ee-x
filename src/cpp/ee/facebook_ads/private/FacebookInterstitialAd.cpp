@@ -11,6 +11,7 @@
 #include <cassert>
 
 #include <ee/ads/internal/AsyncHelper.hpp>
+#include <ee/core/Delay.hpp>
 #include <ee/core/IMessageBridge.hpp>
 #include <ee/core/Logger.hpp>
 #include <ee/core/Thread.hpp>
@@ -22,9 +23,10 @@ namespace ee {
 namespace facebook_ads {
 using Self = InterstitialAd;
 
-Self::InterstitialAd(IMessageBridge& bridge, const Logger& logger,
-                     const std::shared_ptr<ads::IAsyncHelper<bool>>& displayer,
-                     Bridge* plugin, const std::string& adId)
+Self::InterstitialAd(
+    IMessageBridge& bridge, const Logger& logger,
+    const std::shared_ptr<ads::IAsyncHelper<FullScreenAdResult>>& displayer,
+    Bridge* plugin, const std::string& adId)
     : bridge_(bridge)
     , logger_(logger)
     , displayer_(displayer)
@@ -32,46 +34,32 @@ Self::InterstitialAd(IMessageBridge& bridge, const Logger& logger,
     , adId_(adId)
     , messageHelper_("FacebookInterstitialAd", adId) {
     logger_.debug("%s: adId = %s", __PRETTY_FUNCTION__, adId_.c_str());
+    loadingCapped_ = false;
     loader_ = std::make_unique<ads::AsyncHelper<bool>>();
 
     bridge_.registerHandler(
-        [this](const std::string& message) {
-            Thread::runOnLibraryThread([this] { //
-                onLoaded();
-            });
-            return "";
+        [this](const std::string& message) { //
+            onLoaded();
         },
         messageHelper_.onLoaded());
     bridge_.registerHandler(
-        [this](const std::string& message) {
-            Thread::runOnLibraryThread([this, message] { //
-                onFailedToLoad(message);
-            });
-            return "";
+        [this](const std::string& message) { //
+            onFailedToLoad(message);
         },
         messageHelper_.onFailedToLoad());
     bridge_.registerHandler(
-        [this](const std::string& message) {
-            Thread::runOnLibraryThread([this, message] { //
-                onFailedToShow(message);
-            });
-            return "";
+        [this](const std::string& message) { //
+            onFailedToShow(message);
         },
         messageHelper_.onFailedToShow());
     bridge_.registerHandler(
-        [this](const std::string& message) {
-            Thread::runOnLibraryThread([this] { //
-                onClicked();
-            });
-            return "";
+        [this](const std::string& message) { //
+            onClicked();
         },
         messageHelper_.onClicked());
     bridge_.registerHandler(
-        [this](const std::string& message) {
-            Thread::runOnLibraryThread([this] { //
-                onClosed();
-            });
-            return "";
+        [this](const std::string& message) { //
+            onClosed();
         },
         messageHelper_.onClosed());
 }
@@ -99,6 +87,14 @@ Task<bool> Self::load() {
     logger_.debug("%s: adId = %s loading = %s", __PRETTY_FUNCTION__,
                   adId_.c_str(),
                   core::toString(loader_->isProcessing()).c_str());
+    if (loadingCapped_) {
+        co_return false;
+    }
+    loadingCapped_ = true;
+    noAwait([this]() -> Task<> {
+        co_await Delay(30.0f);
+        loadingCapped_ = false;
+    });
     auto result = co_await loader_->process(
         [this] { //
             bridge_.call(messageHelper_.load());
@@ -109,7 +105,7 @@ Task<bool> Self::load() {
     co_return result;
 }
 
-Task<bool> Self::show() {
+Task<FullScreenAdResult> Self::show() {
     logger_.debug("%s: adId = %s displaying = %s", __PRETTY_FUNCTION__,
                   adId_.c_str(),
                   core::toString(displayer_->isProcessing()).c_str());
@@ -117,7 +113,7 @@ Task<bool> Self::show() {
         [this] { //
             bridge_.call(messageHelper_.show());
         },
-        [](bool result) {
+        [](FullScreenAdResult result) {
             // OK.
         });
     co_return result;
@@ -161,7 +157,7 @@ void Self::onFailedToShow(const std::string& message) {
                   core::toString(displayer_->isProcessing()).c_str(),
                   message.c_str());
     if (displayer_->isProcessing()) {
-        displayer_->resolve(false);
+        displayer_->resolve(FullScreenAdResult::Failed);
     } else {
         logger_.error("%s: this ad is expected to be displaying",
                       __PRETTY_FUNCTION__);
@@ -183,7 +179,7 @@ void Self::onClosed() {
                   adId_.c_str(),
                   core::toString(displayer_->isProcessing()).c_str());
     if (displayer_->isProcessing()) {
-        displayer_->resolve(true);
+        displayer_->resolve(FullScreenAdResult::Completed);
     } else {
         logger_.error("%s: this ad is expected to be displaying",
                       __PRETTY_FUNCTION__);

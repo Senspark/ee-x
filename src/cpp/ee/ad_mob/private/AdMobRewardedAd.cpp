@@ -24,7 +24,7 @@ using Self = RewardedAd;
 
 Self::RewardedAd(
     IMessageBridge& bridge, const Logger& logger,
-    const std::shared_ptr<ads::IAsyncHelper<IRewardedAdResult>>& displayer,
+    const std::shared_ptr<ads::IAsyncHelper<FullScreenAdResult>>& displayer,
     Bridge* plugin, const std::string& adId)
     : bridge_(bridge)
     , logger_(logger)
@@ -36,35 +36,23 @@ Self::RewardedAd(
     loader_ = std::make_unique<ads::AsyncHelper<bool>>();
 
     bridge_.registerHandler(
-        [this](const std::string& message) {
-            Thread::runOnLibraryThread([this] { //
-                onLoaded();
-            });
-            return "";
+        [this](const std::string& message) { //
+            onLoaded();
         },
         messageHelper_.onLoaded());
     bridge_.registerHandler(
-        [this](const std::string& message) {
-            Thread::runOnLibraryThread([this, message] { //
-                onFailedToLoad(message);
-            });
-            return "";
+        [this](const std::string& message) { //
+            onFailedToLoad(message);
         },
         messageHelper_.onFailedToLoad());
     bridge_.registerHandler(
-        [this](const std::string& message) {
-            Thread::runOnLibraryThread([this, message] { //
-                onFailedToShow(message);
-            });
-            return "";
+        [this](const std::string& message) { //
+            onFailedToShow(message);
         },
         messageHelper_.onFailedToShow());
     bridge_.registerHandler(
-        [this](const std::string& message) {
-            Thread::runOnLibraryThread([this, message] { //
-                onClosed(core::toBool(message));
-            });
-            return "";
+        [this](const std::string& message) { //
+            onClosed(core::toBool(message));
         },
         messageHelper_.onClosed());
 }
@@ -102,7 +90,7 @@ Task<bool> Self::load() {
     co_return result;
 }
 
-Task<IRewardedAdResult> Self::show() {
+Task<FullScreenAdResult> Self::show() {
     logger_.debug("%s: adId = %s displaying = %s", __PRETTY_FUNCTION__,
                   adId_.c_str(),
                   core::toString(displayer_->isProcessing()).c_str());
@@ -110,7 +98,7 @@ Task<IRewardedAdResult> Self::show() {
         [this] { //
             bridge_.call(messageHelper_.show());
         },
-        [](IRewardedAdResult result) {
+        [](FullScreenAdResult result) {
             // OK.
         });
     co_return result;
@@ -152,7 +140,7 @@ void Self::onFailedToShow(const std::string& message) {
                   core::toString(displayer_->isProcessing()).c_str(),
                   message.c_str());
     if (displayer_->isProcessing()) {
-        displayer_->resolve(IRewardedAdResult::Failed);
+        displayer_->resolve(FullScreenAdResult::Failed);
     } else {
         logger_.error("%s: this ad is expected to be displaying",
                       __PRETTY_FUNCTION__);
@@ -166,8 +154,8 @@ void Self::onClosed(bool rewarded) {
                   core::toString(displayer_->isProcessing()).c_str(),
                   core::toString(rewarded).c_str());
     if (displayer_->isProcessing()) {
-        displayer_->resolve(rewarded ? IRewardedAdResult::Completed
-                                     : IRewardedAdResult::Canceled);
+        displayer_->resolve(rewarded ? FullScreenAdResult::Completed
+                                     : FullScreenAdResult::Canceled);
     } else {
         logger_.error("%s: this ad is expected to be displaying",
                       __PRETTY_FUNCTION__);

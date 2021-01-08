@@ -21,20 +21,14 @@ Self& Self::getInstance() {
 }
 
 Self::MediationManager() {
-    interstitialAdDisplayer_ = std::make_shared<AsyncHelper<bool>>();
-    rewardedAdDisplayer_ = std::make_shared<AsyncHelper<IRewardedAdResult>>();
+    adDisplayer_ = std::make_shared<AsyncHelper<FullScreenAdResult>>();
 }
 
 Self::~MediationManager() {}
 
-const std::shared_ptr<IAsyncHelper<bool>>&
-Self::getInterstitialAdDisplayer() const {
-    return interstitialAdDisplayer_;
-}
-
-const std::shared_ptr<IAsyncHelper<IRewardedAdResult>>&
-Self::getRewardedAdDisplayer() const {
-    return rewardedAdDisplayer_;
+const std::shared_ptr<IAsyncHelper<FullScreenAdResult>>&
+Self::getAdDisplayer() const {
+    return adDisplayer_;
 }
 } // namespace ads
 } // namespace ee

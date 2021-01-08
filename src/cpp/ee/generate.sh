@@ -14,6 +14,7 @@ $(find ./iron_source          -type f | sed "s/^/  \${CMAKE_CURRENT_LIST_DIR}\//
 $(find ./notification         -type f | sed "s/^/  \${CMAKE_CURRENT_LIST_DIR}\//")\n\
 $(find ./play                 -type f | sed "s/^/  \${CMAKE_CURRENT_LIST_DIR}\//")\n\
 $(find ./recorder             -type f | sed "s/^/  \${CMAKE_CURRENT_LIST_DIR}\//")\n\
+$(find ./services             -type f | sed "s/^/  \${CMAKE_CURRENT_LIST_DIR}\//")\n\
 $(find ./store                -type f | sed "s/^/  \${CMAKE_CURRENT_LIST_DIR}\//")\n\
 $(find ./unity_ads            -type f | sed "s/^/  \${CMAKE_CURRENT_LIST_DIR}\//")\n\
 $(find ./vungle               -type f | sed "s/^/  \${CMAKE_CURRENT_LIST_DIR}\//")\n\

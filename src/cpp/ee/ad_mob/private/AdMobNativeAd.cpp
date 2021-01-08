@@ -34,27 +34,18 @@ Self::NativeAd(IMessageBridge& bridge, const Logger& logger, Bridge* plugin,
     loader_ = std::make_unique<ads::AsyncHelper<bool>>();
 
     bridge_.registerHandler(
-        [this](const std::string& message) {
-            Thread::runOnLibraryThread([this] { //
-                onLoaded();
-            });
-            return "";
+        [this](const std::string& message) { //
+            onLoaded();
         },
         messageHelper_.onLoaded());
     bridge_.registerHandler(
-        [this](const std::string& message) {
-            Thread::runOnLibraryThread([this, message] { //
-                onFailedToLoad(message);
-            });
-            return "";
+        [this](const std::string& message) { //
+            onFailedToLoad(message);
         },
         messageHelper_.onFailedToLoad());
     bridge_.registerHandler(
-        [this](const std::string& message) {
-            Thread::runOnLibraryThread([this] { //
-                onClicked();
-            });
-            return "";
+        [this](const std::string& message) { //
+            onClicked();
         },
         messageHelper_.onClicked());
 }

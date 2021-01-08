@@ -55,11 +55,8 @@ Self::Bridge(IMessageBridge& bridge)
     PluginManager::addPlugin(Plugin::Facebook);
     delegateId_ = 0;
     bridge_.registerHandler(
-        [this](const std::string& message) {
-            Thread::runOnLibraryThread([this, message] { //
-                onProfileChanged(message);
-            });
-            return "";
+        [this](const std::string& message) { //
+            onProfileChanged(message);
         },
         kOnProfileChanged);
     registerNotifications();

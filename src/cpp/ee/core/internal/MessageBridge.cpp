@@ -15,6 +15,7 @@
 #include "ee/core/LambdaAwaiter.hpp"
 #include "ee/core/Logger.hpp"
 #include "ee/core/SpinLock.hpp"
+#include "ee/core/Thread.hpp"
 
 #ifdef EE_X_ANDROID
 #include "ee/core/internal/JniMethodInfo.hpp"
@@ -33,35 +34,26 @@ Self& Self::getInstance() {
 
 Self::MessageBridge()
     : logger_(Logger::getSystemLogger())
-    , callbackCounter_(0) {
-    handlerLock_ = std::make_unique<SpinLock>();
-}
+    , callbackCounter_(0) {}
 
 Self::~MessageBridge() = default;
 
-bool Self::registerHandler(const MessageHandler& handler,
+void Self::registerHandler(const MessageHandler& handler,
                            const std::string& tag) {
-    std::scoped_lock<SpinLock> lock(*handlerLock_);
     if (handlers_.count(tag) > 0) {
-        assert(false);
-        return false;
+        throw std::runtime_error("Failed to register handler: " + tag);
     }
     handlers_[tag] = handler;
-    return true;
 }
 
-bool Self::deregisterHandler(const std::string& tag) {
-    std::scoped_lock<SpinLock> lock(*handlerLock_);
+void Self::deregisterHandler(const std::string& tag) {
     if (handlers_.count(tag) == 0) {
-        assert(false);
-        return false;
+        throw std::runtime_error("Failed to deregister handler: " + tag);
     }
     handlers_.erase(tag);
-    return true;
 }
 
 MessageHandler Self::findHandler(const std::string& tag) const {
-    std::scoped_lock<SpinLock> lock(*handlerLock_);
     auto iter = handlers_.find(tag);
     if (iter == handlers_.cend()) {
         logger_.error("%s: tag %s doesn't exist!", __PRETTY_FUNCTION__,
@@ -71,13 +63,12 @@ MessageHandler Self::findHandler(const std::string& tag) const {
     return iter->second;
 }
 
-std::string Self::callCpp(const std::string& tag, const std::string& message) {
+void Self::callCpp(const std::string& tag, const std::string& message) {
     auto handler = findHandler(tag);
-    if (not handler) {
-        assert(false);
-        return "";
+    if (handler == nullptr) {
+        throw std::runtime_error("Failed to call handler: " + tag);
     }
-    return handler(message);
+    handler(message);
 }
 
 Task<std::string> Self::callAsync(const std::string& tag,
@@ -89,7 +80,6 @@ Task<std::string> Self::callAsync(const std::string& tag,
             [this, resolve, callbackTag](const std::string& callbackMessage) {
                 deregisterHandler(callbackTag);
                 resolve(callbackMessage);
-                return "";
             },
             callbackTag);
         nlohmann::json json;
@@ -103,20 +93,17 @@ Task<std::string> Self::callAsync(const std::string& tag,
 
 #ifdef EE_X_ANDROID
 extern "C" {
-JNIEXPORT jstring JNICALL
-Java_com_ee_internal_MessageBridgeKt_ee_1callCppInternal(JNIEnv* env,
-                                                         jclass clazz,
-                                                         jstring tag,
-                                                         jstring message) {
+JNIEXPORT void JNICALL Java_com_ee_internal_MessageBridgeKt_ee_1callCppInternal(
+    JNIEnv* env, jclass clazz, jstring tag, jstring message) {
     auto tag_cpp = env->GetStringUTFChars(tag, nullptr);
     auto message_cpp = env->GetStringUTFChars(message, nullptr);
-
-    auto result = MessageBridge::getInstance().callCpp(tag_cpp, message_cpp);
-
+    std::string tagStr = tag_cpp;
+    std::string messageStr = message_cpp;
     env->ReleaseStringUTFChars(tag, tag_cpp);
     env->ReleaseStringUTFChars(message, message_cpp);
-
-    return env->NewStringUTF(result.c_str());
+    Thread::runOnLibraryThread([tagStr, messageStr] { //
+        MessageBridge::getInstance().callCpp(tagStr, messageStr);
+    });
 }
 } // extern "C"
 
@@ -138,11 +125,12 @@ std::string Self::call(const std::string& tag, const std::string& message) {
 
 #if defined(EE_X_IOS) || defined(EE_X_OSX)
 extern "C" {
-char* ee_callCppInternal(const char* tag, const char* message) {
-    auto&& bridge = ee::MessageBridge::getInstance();
-    auto result = bridge.callCpp(tag, message);
-    auto result_chars = strdup(result.c_str());
-    return result_chars;
+void ee_callCppInternal(const char* tag, const char* message) {
+    std::string tagStr = tag;
+    std::string messageStr = message;
+    Thread::runOnLibraryThread([tagStr, messageStr] { //
+        MessageBridge::getInstance().callCpp(tagStr, messageStr);
+    });
 }
 
 char* ee_staticCall(const char* tag, const char* message);

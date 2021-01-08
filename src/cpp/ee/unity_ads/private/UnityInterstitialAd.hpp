@@ -11,19 +11,19 @@
 
 #include <string>
 
-#include <ee/ads/IInterstitialAd.hpp>
+#include <ee/ads/IFullScreenAd.hpp>
 #include <ee/core/ObserverManager.hpp>
 
 #include "ee/unity_ads/UnityAdsFwd.hpp"
 
 namespace ee {
 namespace unity_ads {
-class InterstitialAd : public IInterstitialAd,
-                       public ee::ObserverManager<IInterstitialAdObserver> {
+class InterstitialAd : public IFullScreenAd,
+                       public ObserverManager<AdObserver> {
 public:
     explicit InterstitialAd(
         const Logger& logger,
-        const std::shared_ptr<ads::IAsyncHelper<bool>>& displayer,
+        const std::shared_ptr<ads::IAsyncHelper<FullScreenAdResult>>& displayer,
         Bridge* plugin, const std::string& adId);
 
     virtual ~InterstitialAd() override;
@@ -32,7 +32,7 @@ public:
 
     virtual bool isLoaded() const override;
     virtual Task<bool> load() override;
-    virtual Task<bool> show() override;
+    virtual Task<FullScreenAdResult> show() override;
 
 private:
     friend Bridge;
@@ -42,7 +42,7 @@ private:
     void onClosed();
 
     const Logger& logger_;
-    std::shared_ptr<ads::IAsyncHelper<bool>> displayer_;
+    std::shared_ptr<ads::IAsyncHelper<FullScreenAdResult>> displayer_;
     Bridge* plugin_;
     std::string adId_;
 };

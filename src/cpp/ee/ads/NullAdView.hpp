@@ -17,7 +17,7 @@
 
 namespace ee {
 namespace ads {
-class NullAdView : public IAdView, public ObserverManager<IAdViewObserver> {
+class NullAdView : public IAdView, public ObserverManager<AdObserver> {
 public:
     NullAdView();
     virtual void destroy() override;

@@ -11,35 +11,15 @@
 
 #ifdef __cplusplus
 
-#include <functional>
 #include <utility>
 
-#include <ee/core/IObserverManager.hpp>
-
-#include "ee/ads/AdsFwd.hpp"
+#include "ee/ads/IAd.hpp"
 
 namespace ee {
 namespace ads {
-struct IAdViewObserver {
-    /// Occurs when this ad is loaded.
-    std::function<void()> onLoaded;
-
-    /// Occurs when the user clicks this ad.
-    std::function<void()> onClicked;
-};
-
-class IAdView : public virtual IObserverManager<IAdViewObserver> {
+class IAdView : public IAd {
 public:
     virtual ~IAdView() = default;
-
-    /// Destroys this ad.
-    virtual void destroy() = 0;
-
-    /// Checks whether this ad view is loaded.
-    virtual bool isLoaded() const = 0;
-
-    /// Attempts to load this ad view.
-    [[nodiscard]] virtual Task<bool> load() = 0;
 
     /// Gets the anchor of this ad view.
     virtual std::pair<float, float> getAnchor() const = 0;

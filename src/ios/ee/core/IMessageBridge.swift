@@ -17,35 +17,25 @@ public protocol IMessageBridge {
     /// Registers a new handler to receive messages from C++.
     /// @param tag The unique tag of the handler.
     /// @param handler The handler.
-    /// @return Whether the registration was successful.
-    @discardableResult
     func registerHandler(_ tag: String,
-                         _ handler: @escaping MessageHandler) -> Bool
+                         _ handler: @escaping MessageHandler)
 
     /// Registers a new async handler to receive messages from C++.
     /// @param tag The unique tag of the handler.
     /// @param handler The handler.
-    /// @return Whether the registration was successful.
-    @discardableResult
     func registerAsyncHandler(_ tag: String,
-                              _ handler: @escaping AsyncMessageHandler) -> Bool
+                              _ handler: @escaping AsyncMessageHandler)
 
     /// Deregisters an existing handler not to receive messages from C++.
     /// @param tag The unique tag of the handler.
-    /// @return Whether the deregistration was successful.
-    @discardableResult
-    func deregisterHandler(_ tag: String) -> Bool
+    func deregisterHandler(_ tag: String)
 
     /// Calls a handler from C++ without a message.
     /// @param tag The unique tag of the handler.
-    /// @return Reply message from C++.
-    @discardableResult
-    func callCpp(_ tag: String) -> String
+    func callCpp(_ tag: String)
 
     /// Calls a handler from C++ with a message.
     /// @param tag The unique tag of the handler.
     /// @param message The message.
-    /// @return Reply message from C++.
-    @discardableResult
-    func callCpp(_ tag: String, _ message: String) -> String
+    func callCpp(_ tag: String, _ message: String)
 }

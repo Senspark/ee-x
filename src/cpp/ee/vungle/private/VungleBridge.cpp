@@ -1,6 +1,6 @@
 #include "ee/vungle/private/VungleBridge.hpp"
 
-#include <ee/ads/internal/GuardedRewardedAd.hpp>
+#include <ee/ads/internal/GuardedFullScreenAd.hpp>
 #include <ee/ads/internal/IAsyncHelper.hpp>
 #include <ee/ads/internal/MediationManager.hpp>
 #include <ee/core/IMessageBridge.hpp>
@@ -19,9 +19,7 @@ namespace core {
 template <>
 std::shared_ptr<IVungle>
 PluginManager::createPluginImpl(IMessageBridge& bridge) {
-    if (not addPlugin(Plugin::Vungle)) {
-        return nullptr;
-    }
+    addPlugin(Plugin::Vungle);
     return std::make_shared<vungle::Bridge>(bridge);
 }
 } // namespace core
@@ -52,50 +50,35 @@ Self::Bridge(IMessageBridge& bridge)
     , logger_(Logger::getSystemLogger()) {
     logger_.debug(__PRETTY_FUNCTION__);
     auto&& mediation = ads::MediationManager::getInstance();
-    rewardedAdDisplayer_ = mediation.getRewardedAdDisplayer();
+    displayer_ = mediation.getAdDisplayer();
 
     bridge_.registerHandler(
         [this](const std::string& message) {
-            Thread::runOnLibraryThread([this, message] { //
-                auto json = nlohmann::json::parse(message);
-                onLoaded(json["ad_id"]);
-            });
-            return "";
+            auto json = nlohmann::json::parse(message);
+            onLoaded(json["ad_id"]);
         },
         kOnLoaded);
     bridge_.registerHandler(
         [this](const std::string& message) {
-            Thread::runOnLibraryThread([this, message] { //
-                auto json = nlohmann::json::parse(message);
-                onFailedToLoad(json["ad_id"], json["message"]);
-            });
-            return "";
+            auto json = nlohmann::json::parse(message);
+            onFailedToLoad(json["ad_id"], json["message"]);
         },
         kOnFailedToLoad);
     bridge_.registerHandler(
         [this](const std::string& message) {
-            Thread::runOnLibraryThread([this, message] { //
-                auto json = nlohmann::json::parse(message);
-                onFailedToShow(json["ad_id"], json["message"]);
-            });
-            return "";
+            auto json = nlohmann::json::parse(message);
+            onFailedToShow(json["ad_id"], json["message"]);
         },
         kOnFailedToShow);
     bridge_.registerHandler(
-        [this](const std::string& message) {
-            Thread::runOnLibraryThread([this, message] { //
-                onClicked(message);
-            });
-            return "";
+        [this](const std::string& message) { //
+            onClicked(message);
         },
         kOnClicked);
     bridge_.registerHandler(
         [this](const std::string& message) {
-            Thread::runOnLibraryThread([this, message] { //
-                auto json = nlohmann::json::parse(message);
-                onClosed(json["ad_id"], json["rewarded"]);
-            });
-            return "";
+            auto json = nlohmann::json::parse(message);
+            onClosed(json["ad_id"], json["rewarded"]);
         },
         kOnClosed);
 }
@@ -107,6 +90,7 @@ void Self::destroy() {
     bridge_.deregisterHandler(kOnLoaded);
     bridge_.deregisterHandler(kOnFailedToLoad);
     bridge_.deregisterHandler(kOnFailedToShow);
+    bridge_.deregisterHandler(kOnClicked);
     bridge_.deregisterHandler(kOnClosed);
     PluginManager::removePlugin(Plugin::Vungle);
 }
@@ -120,15 +104,14 @@ Task<bool> Self::initialize(const std::string& appId) {
     co_return core::toBool(response);
 }
 
-std::shared_ptr<IRewardedAd> Self::createRewardedAd(const std::string& adId) {
+std::shared_ptr<IFullScreenAd> Self::createRewardedAd(const std::string& adId) {
     logger_.debug("%s: adId = %s", __PRETTY_FUNCTION__, adId.c_str());
     auto iter = rewardedAds_.find(adId);
     if (iter != rewardedAds_.cend()) {
         return iter->second.ad;
     }
-    auto raw =
-        std::make_shared<RewardedAd>(logger_, rewardedAdDisplayer_, this, adId);
-    auto ad = std::make_shared<ads::GuardedRewardedAd>(raw);
+    auto raw = std::make_shared<RewardedAd>(logger_, displayer_, this, adId);
+    auto ad = std::make_shared<ads::GuardedFullScreenAd>(raw);
     rewardedAds_.try_emplace(adId, ad, raw);
     return ad;
 }
@@ -209,7 +192,6 @@ void Self::onClosed(const std::string& adId, bool rewarded) {
         iter->second.raw->onClosed(rewarded);
     } else {
         // Mediation.
-        assert(false);
         onMediationAdClosed(adId, rewarded);
     }
 }
@@ -217,9 +199,9 @@ void Self::onClosed(const std::string& adId, bool rewarded) {
 void Self::onMediationAdClosed(const std::string& adId, bool rewarded) {
     logger_.debug("%s: %s", __PRETTY_FUNCTION__,
                   core::toString(rewarded).c_str());
-    if (rewardedAdDisplayer_->isProcessing()) {
-        rewardedAdDisplayer_->resolve(rewarded ? IRewardedAdResult::Completed
-                                               : IRewardedAdResult::Canceled);
+    if (displayer_->isProcessing()) {
+        displayer_->resolve(rewarded ? FullScreenAdResult::Completed
+                                     : FullScreenAdResult::Canceled);
         return;
     }
     assert(false);

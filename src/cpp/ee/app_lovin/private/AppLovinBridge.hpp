@@ -25,7 +25,7 @@ public:
     virtual Task<bool> initialize(const std::string& key) override;
     virtual void setVerboseLogging(bool enabled) override;
     virtual void setMuted(bool enabled) override;
-    virtual std::shared_ptr<IRewardedAd> createRewardedAd() override;
+    virtual std::shared_ptr<IFullScreenAd> createRewardedAd() override;
 
 private:
     friend RewardedAd;
@@ -55,9 +55,9 @@ private:
 
     /// Share the same instance.
     RewardedAd* rewardedAd_;
-    std::shared_ptr<IRewardedAd> sharedRewardedAd_;
+    std::shared_ptr<IFullScreenAd> sharedRewardedAd_;
 
-    std::shared_ptr<ads::IAsyncHelper<IRewardedAdResult>> rewardedAdDisplayer_;
+    std::shared_ptr<ads::IAsyncHelper<FullScreenAdResult>> displayer_;
 };
 } // namespace app_lovin
 } // namespace ee

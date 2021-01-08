@@ -4,14 +4,14 @@
 Modify `build.gradle`
 ```java
 dependencies {
-    implementation 'com.senspark.ee:iron-source-mediation:2.1.2'
+    implementation 'com.senspark.ee:iron-source-mediation:2.2.0'
 }
 ```
 
 ### iOS
 Modify `Podfile`
 ```ruby
-pod 'ee-x/iron-source-mediation', '2.1.2'
+pod 'ee-x/iron-source-mediation', '2.2.0'
 ```
 
 ## Basic usage

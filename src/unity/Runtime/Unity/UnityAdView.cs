@@ -3,8 +3,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 
 namespace EE {
-    public class UnityAdView
-        : ObserverManager<IAdViewObserver>, IAdView {
+    public class UnityAdView : ObserverManager<AdObserver>, IAdView {
         private readonly IAdView _ad;
         private readonly ObserverHandle _handle;
         private readonly int _screenHeight;
@@ -12,7 +11,7 @@ namespace EE {
         public UnityAdView(IAdView ad) {
             _ad = ad;
             _handle = new ObserverHandle();
-            _handle.Bind(ad).AddObserver(new IAdViewObserver {
+            _handle.Bind(ad).AddObserver(new AdObserver {
                 OnLoaded = () => DispatchEvent(observer => observer.OnLoaded?.Invoke()),
                 OnClicked = () => DispatchEvent(observer => observer.OnClicked?.Invoke())
             });

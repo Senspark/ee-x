@@ -25,17 +25,19 @@ public:
     virtual Task<bool> initialize(const std::string& gameId,
                                   bool testModeEnabled) override;
     virtual void setDebugModeEnabled(bool enabled) override;
-    virtual std::shared_ptr<IInterstitialAd>
+    virtual std::shared_ptr<IFullScreenAd>
     createInterstitialAd(const std::string& adId) override;
-    virtual std::shared_ptr<IRewardedAd>
+    virtual std::shared_ptr<IFullScreenAd>
     createRewardedAd(const std::string& adId) override;
 
 private:
     friend InterstitialAd;
     friend RewardedAd;
 
-    bool destroyInterstitialAd(const std::string& adId);
-    bool destroyRewardedAd(const std::string& adId);
+    template <class Ad>
+    std::shared_ptr<IFullScreenAd> createFullScreenAd(const std::string& adId);
+
+    bool destroyAd(const std::string& adId);
 
     bool hasRewardedAd(const std::string& adId) const;
     Task<bool> loadRewardedAd(const std::string& adId);
@@ -47,7 +49,8 @@ private:
 
     void onMediationAdFailedToShow(const std::string& adId,
                                    const std::string& message);
-    void onMediationAdClosed(const std::string& adId, bool rewarded);
+    void onMediationAdClosed(const std::string& adId,
+                             FullScreenAdResult result);
 
     IMessageBridge& bridge_;
     const Logger& logger_;
@@ -57,24 +60,10 @@ private:
     /// Currently displaying ad ID.
     std::string adId_;
 
-    template <class Ad, class Raw>
-    struct Entry {
-        std::shared_ptr<Ad> ad;
-        std::shared_ptr<Raw> raw;
-
-        explicit Entry(const std::shared_ptr<Ad>& ad_,
-                       const std::shared_ptr<Raw>& raw_)
-            : ad(ad_)
-            , raw(raw_) {}
-    };
-
-    /// Unity only has rewarded ads.
-    std::map<std::string, Entry<IInterstitialAd, InterstitialAd>>
-        interstitialAds_;
-    std::map<std::string, Entry<IRewardedAd, RewardedAd>> rewardedAds_;
-
-    std::shared_ptr<ads::IAsyncHelper<bool>> interstitialAdDisplayer_;
-    std::shared_ptr<ads::IAsyncHelper<IRewardedAdResult>> rewardedAdDisplayer_;
+    std::map<std::string, std::pair<std::shared_ptr<IAd>,  // Decorated ad.
+                                    std::shared_ptr<IAd>>> // Raw ad.
+        ads_;
+    std::shared_ptr<ads::IAsyncHelper<FullScreenAdResult>> displayer_;
 };
 } // namespace unity_ads
 } // namespace ee

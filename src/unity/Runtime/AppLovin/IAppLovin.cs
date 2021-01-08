@@ -5,6 +5,6 @@ namespace EE {
         Task<bool> Initialize(string key);
         void SetVerboseLogging(bool enabled);
         void SetMuted(bool enabled);
-        IRewardedAd CreateRewardedAd();
+        IFullScreenAd CreateRewardedAd();
     }
 }

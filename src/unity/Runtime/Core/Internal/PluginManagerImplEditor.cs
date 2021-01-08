@@ -1,7 +1,6 @@
 namespace EE.Internal {
     internal class PluginManagerImplEditor : IPluginManagerImpl {
-        public bool InitializePlugins(string version) {
-            return true;
+        public void InitializePlugins(string version) {
         }
 
         public void SetLogLevel(LogLevel level) {
@@ -14,12 +13,10 @@ namespace EE.Internal {
         public void SetActivity(object activity) {
         }
 
-        public bool AddPlugin(string name) {
-            return true;
+        public void AddPlugin(string name) {
         }
 
-        public bool RemovePlugin(string name) {
-            return true;
+        public void RemovePlugin(string name) {
         }
     }
 }

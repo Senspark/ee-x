@@ -255,7 +255,7 @@ void Self::onRewardedAdLoaded() {
     if (rewardedAd_) {
         rewardedAd_->onLoaded();
     } else {
-        assert(false);
+        // Automatically reloaded by SDK.
     }
 }
 

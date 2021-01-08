@@ -163,7 +163,7 @@ namespace EE.Internal {
             if (_rewardedAd != null) {
                 _rewardedAd.OnLoaded();
             } else {
-                Assert.IsTrue(false);
+                // Automatically reloaded by SDK.
             }
         }
 

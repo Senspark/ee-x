@@ -7,7 +7,7 @@ namespace EE {
     }
 
     public interface IAdsManager : IObserverManager<AdsObserver> {
-        bool isBannerAdLoaded { get; }
+        bool IsBannerAdLoaded { get; }
         bool IsBannerAdVisible { get; set; }
         (float, float) BannerAdAnchor { get; set; }
         (float, float) BannerAdPosition { get; set; }

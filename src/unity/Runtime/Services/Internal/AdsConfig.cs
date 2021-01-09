@@ -170,11 +170,7 @@ namespace EE.Internal {
 
         public UnityAdsConfig(JSONNode node) {
             _appId = node["app_id"];
-            if (node.HasKey("time_out")) {
-                _timeOut = node["time_out"];
-            } else {
-                _timeOut = 30;
-            }
+            _timeOut = node.HasKey("time_out") ? node["time_out"].AsInt : 30;
         }
 
         public async Task Initialize() {
@@ -182,7 +178,7 @@ namespace EE.Internal {
             await Task.WhenAny(Task.Delay(_timeOut * 1000), _plugin.Initialize(_appId, false));
         }
 
-        public Network Network => Network.IronSource;
+        public Network Network => Network.UnityAds;
 
         public IAd CreateAd(AdFormat format, string id) {
             switch (format) {
@@ -278,7 +274,7 @@ namespace EE.Internal {
         private readonly IAdInstanceConfig<IFullScreenAd> _instance;
 
         public AppOpenConfig(JSONNode node) {
-            _interval = node["interval"] ?? 0;
+            _interval = node.HasKey("interval") ? node["interval"].AsInt : 0;
             _instance = AdInstanceConfig<IFullScreenAd>.Parse<MultiFullScreenAd>(AdFormat.AppOpen, node["instance"]);
         }
 
@@ -295,7 +291,7 @@ namespace EE.Internal {
         private readonly IAdInstanceConfig<IFullScreenAd> _instance;
 
         public InterstitialConfig(JSONNode node) {
-            _interval = node["interval"] ?? 0;
+            _interval = node.HasKey("interval") ? node["interval"].AsInt : 0;
             _instance = AdInstanceConfig<IFullScreenAd>.Parse<MultiFullScreenAd>(AdFormat.Interstitial,
                 node["instance"]);
         }
@@ -352,7 +348,7 @@ namespace EE.Internal {
             };
             var network = node["network"].Value;
             _network = networks[network];
-            _id = node["id"] ?? "";
+            _id = node.HasKey("id") ? node["id"].Value : "";
         }
 
         public Ad CreateAd(INetworkConfigManager manager) {

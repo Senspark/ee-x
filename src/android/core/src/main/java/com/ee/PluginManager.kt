@@ -142,7 +142,7 @@ class PluginManager private constructor() {
     @AnyThread
     @InternalSerializationApi
     fun initializePlugins(version: String, messageHandler: MessageBridgeHandler) {
-        val expectedVersion = "2.2.1"
+        val expectedVersion = "2.2.2"
         if (version != expectedVersion) {
             throw IllegalStateException("Version mismatched: found $version expected $expectedVersion")
         }

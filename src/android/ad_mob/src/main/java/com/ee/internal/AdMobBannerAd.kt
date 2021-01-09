@@ -175,7 +175,7 @@ internal class AdMobBannerAd(
 
     override fun onAdLoaded() {
         Thread.runOnMainThread {
-            _logger.debug("$kTag: ${this::onAdLoaded.name}")
+            _logger.debug("$kTag: ${this::onAdLoaded.name}: id = $_adId")
             _isLoaded.set(true)
             _bridge.callCpp(_messageHelper.onLoaded)
         }

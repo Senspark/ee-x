@@ -68,11 +68,11 @@ internal class AdMobAppOpenAd(
     @AnyThread
     override fun load() {
         Thread.runOnMainThread {
-            _logger.debug("$kTag: ${this::load.name}")
+            _logger.debug("$kTag: ${this::load.name}: id = $_adId")
             val callback = object : AppOpenAd.AppOpenAdLoadCallback() {
                 override fun onAppOpenAdLoaded(ad: AppOpenAd) {
                     Thread.runOnMainThread {
-                        _logger.debug("$kTag: ${this::onAppOpenAdLoaded.name}")
+                        _logger.debug("$kTag: ${this::onAppOpenAdLoaded.name}: id = $_adId")
                         _isLoaded.set(true)
                         _ad = ad
                         _bridge.callCpp(_messageHelper.onLoaded)
@@ -81,7 +81,7 @@ internal class AdMobAppOpenAd(
 
                 override fun onAppOpenAdFailedToLoad(error: LoadAdError?) {
                     Thread.runOnMainThread {
-                        _logger.debug("$kTag: onAppOpenAdFailedToLoad: message = ${error?.message ?: ""} response = ${error?.responseInfo ?: ""}")
+                        _logger.debug("$kTag: onAppOpenAdFailedToLoad: id = $_adId message = ${error?.message ?: ""} response = ${error?.responseInfo ?: ""}")
                         _bridge.callCpp(_messageHelper.onFailedToLoad, error?.message ?: "")
                     }
                 }
@@ -96,7 +96,7 @@ internal class AdMobAppOpenAd(
     @AnyThread
     override fun show() {
         Thread.runOnMainThread {
-            _logger.debug("$kTag: ${this::show.name}")
+            _logger.debug("$kTag: ${this::show.name}: id = $_adId")
             val ad = _ad ?: throw IllegalArgumentException("Ad is not initialized")
             val callback = object : FullScreenContentCallback() {
                 override fun onAdShowedFullScreenContent() {
@@ -107,7 +107,7 @@ internal class AdMobAppOpenAd(
 
                 override fun onAdFailedToShowFullScreenContent(error: AdError?) {
                     Thread.runOnMainThread {
-                        _logger.debug("$kTag: ${this::onAdFailedToShowFullScreenContent.name}: message = ${error?.message ?: ""}")
+                        _logger.debug("$kTag: ${this::onAdFailedToShowFullScreenContent.name}: id = $_adId message = ${error?.message ?: ""}")
                         _ad = null
                         _bridge.callCpp(_messageHelper.onFailedToShow, error?.message ?: "")
                     }
@@ -115,7 +115,7 @@ internal class AdMobAppOpenAd(
 
                 override fun onAdDismissedFullScreenContent() {
                     Thread.runOnMainThread {
-                        _logger.info("$kTag: ${this::onAdDismissedFullScreenContent.name}")
+                        _logger.debug("$kTag: ${this::onAdDismissedFullScreenContent.name}: id = $_adId")
                         _ad = null
                         _bridge.callCpp(_messageHelper.onClosed)
                     }

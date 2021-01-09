@@ -36,22 +36,25 @@ object Thread {
     }
 }
 
+@Suppress("FunctionName")
 private external fun ee_runOnMainThreadCallback()
+
+@Suppress("FunctionName")
 private external fun ee_runOnMainThreadDelayedCallback(key: Int)
 
-@Suppress("unused")
+@Suppress("FunctionName", "unused")
 private fun ee_isMainThread(): Boolean {
     return Thread.isMainThread()
 }
 
-@Suppress("unused")
+@Suppress("FunctionName", "unused")
 private fun ee_runOnMainThread(): Boolean {
     return Thread.runOnMainThread {
         ee_runOnMainThreadCallback()
     }
 }
 
-@Suppress("unused")
+@Suppress("FunctionName", "unused")
 private fun ee_runOnMainThreadDelayed(key: Int, delay: Float) {
     Thread.runOnMainThreadDelayed(delay) {
         ee_runOnMainThreadDelayedCallback(key)

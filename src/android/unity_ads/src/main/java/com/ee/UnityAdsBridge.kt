@@ -102,6 +102,7 @@ class UnityAdsBridge(
         _bridge.deregisterHandler(kInitialize)
         _bridge.deregisterHandler(kSetDebugModeEnabled)
         _bridge.deregisterHandler(kHasRewardedAd)
+        _bridge.deregisterHandler(kLoadRewardedAd)
         _bridge.deregisterHandler(kShowRewardedAd)
     }
 

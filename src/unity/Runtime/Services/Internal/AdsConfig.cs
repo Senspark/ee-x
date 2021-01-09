@@ -75,15 +75,13 @@ namespace EE.Internal {
 
     internal class AdMobConfig : INetworkConfig {
         private IAdMob _plugin;
-        private readonly int _timeOut;
 
         public AdMobConfig(JSONNode node) {
-            _timeOut = node["time_out"] ?? 30;
         }
 
         public async Task Initialize() {
             _plugin = PluginManager.CreatePlugin<IAdMob>();
-            await Task.WhenAny(Task.Delay(_timeOut * 1000), _plugin.Initialize());
+            await _plugin.Initialize();
         }
 
         public Network Network => Network.AdMob;
@@ -109,15 +107,13 @@ namespace EE.Internal {
 
     internal class FacebookAdsConfig : INetworkConfig {
         private IFacebookAds _plugin;
-        private readonly int _timeOut;
 
         public FacebookAdsConfig(JSONNode node) {
-            _timeOut = node["time_out"] ?? 30;
         }
 
         public async Task Initialize() {
             _plugin = PluginManager.CreatePlugin<IFacebookAds>();
-            await Task.WhenAny(Task.Delay(_timeOut * 1000), _plugin.Initialize());
+            await _plugin.Initialize();
         }
 
         public Network Network => Network.FacebookAds;
@@ -142,16 +138,14 @@ namespace EE.Internal {
     internal class IronSourceConfig : INetworkConfig {
         private IIronSource _plugin;
         private readonly string _appId;
-        private readonly int _timeOut;
 
         public IronSourceConfig(JSONNode node) {
             _appId = node["app_id"];
-            _timeOut = node["time_out"] ?? 30;
         }
 
         public async Task Initialize() {
             _plugin = PluginManager.CreatePlugin<IIronSource>();
-            await Task.WhenAny(Task.Delay(_timeOut * 1000), _plugin.Initialize(_appId));
+            await _plugin.Initialize(_appId);
         }
 
         public Network Network => Network.IronSource;
@@ -176,7 +170,7 @@ namespace EE.Internal {
 
         public UnityAdsConfig(JSONNode node) {
             _appId = node["app_id"];
-            _timeOut = node["time_out"] ?? 30;
+            _timeOut = node.HasKey("time_out") ? node["time_out"].AsInt : 30;
         }
 
         public async Task Initialize() {
@@ -184,7 +178,7 @@ namespace EE.Internal {
             await Task.WhenAny(Task.Delay(_timeOut * 1000), _plugin.Initialize(_appId, false));
         }
 
-        public Network Network => Network.IronSource;
+        public Network Network => Network.UnityAds;
 
         public IAd CreateAd(AdFormat format, string id) {
             switch (format) {
@@ -235,6 +229,7 @@ namespace EE.Internal {
             var format = node["format"].Value;
             switch (format) {
                 case "banner": return new BannerConfig(node);
+                case "rect": return new RectangleConfig(node);
                 case "app_open": return new AppOpenConfig(node);
                 case "interstitial": return new InterstitialConfig(node);
                 case "rewarded": return new RewardedConfig(node);
@@ -279,7 +274,7 @@ namespace EE.Internal {
         private readonly IAdInstanceConfig<IFullScreenAd> _instance;
 
         public AppOpenConfig(JSONNode node) {
-            _interval = node["interval"] ?? 0;
+            _interval = node.HasKey("interval") ? node["interval"].AsInt : 0;
             _instance = AdInstanceConfig<IFullScreenAd>.Parse<MultiFullScreenAd>(AdFormat.AppOpen, node["instance"]);
         }
 
@@ -296,7 +291,7 @@ namespace EE.Internal {
         private readonly IAdInstanceConfig<IFullScreenAd> _instance;
 
         public InterstitialConfig(JSONNode node) {
-            _interval = node["interval"] ?? 0;
+            _interval = node.HasKey("interval") ? node["interval"].AsInt : 0;
             _instance = AdInstanceConfig<IFullScreenAd>.Parse<MultiFullScreenAd>(AdFormat.Interstitial,
                 node["instance"]);
         }
@@ -353,7 +348,7 @@ namespace EE.Internal {
             };
             var network = node["network"].Value;
             _network = networks[network];
-            _id = node["id"] ?? "";
+            _id = node.HasKey("id") ? node["id"].Value : "";
         }
 
         public Ad CreateAd(INetworkConfigManager manager) {

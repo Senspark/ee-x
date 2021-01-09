@@ -179,7 +179,7 @@ internal class AdMobNativeAd(
     @AnyThread
     override fun load() {
         Thread.runOnMainThread {
-            _logger.debug("$kTag: ${this::load.name}")
+            _logger.debug("$kTag: ${this::load.name}: id = $_adId")
             val ad = _ad ?: throw IllegalArgumentException("Ad is not initialized")
             ad.loadAd(AdRequest.Builder().build())
         }
@@ -339,7 +339,7 @@ internal class AdMobNativeAd(
 
     override fun onAdLoaded() {
         Thread.runOnMainThread {
-            _logger.debug("$kTag: ${this::onAdLoaded.name}")
+            _logger.debug("$kTag: ${this::onAdLoaded.name}: id = $_adId")
             // There is one important difference between the way AdListener objects work with native ads
             // and the way they work with banners and interstitials. Because the AdLoader has its own
             // format-specific listeners (i.e., UnifiedNativeAd.OnUnifiedNativeAdLoadedListener) to use
@@ -350,39 +350,33 @@ internal class AdMobNativeAd(
 
     override fun onAdFailedToLoad(error: LoadAdError?) {
         Thread.runOnMainThread {
-            _logger.debug("$kTag: onAdFailedToLoad: message = ${error?.message ?: ""}")
+            _logger.debug("$kTag: onAdFailedToLoad: id = $_adId message = ${error?.message ?: ""}")
             _bridge.callCpp(_messageHelper.onFailedToLoad, error?.message ?: "")
         }
     }
 
     override fun onAdOpened() {
         Thread.runOnMainThread {
-            _logger.info("$kTag: ${this::onAdOpened.name}")
+            _logger.debug("$kTag: ${this::onAdOpened.name}: id = $_adId")
         }
     }
 
     override fun onAdImpression() {
         Thread.runOnMainThread {
-            _logger.info("$kTag: ${this::onAdImpression.name}")
+            _logger.debug("$kTag: ${this::onAdImpression.name}: id = $_adId")
         }
     }
 
     override fun onAdClicked() {
         Thread.runOnMainThread {
-            _logger.info("$kTag: ${this::onAdClicked.name}")
-        }
-    }
-
-    override fun onAdLeftApplication() {
-        Thread.runOnMainThread {
-            _logger.info("$kTag: ${this::onAdLeftApplication.name}")
+            _logger.debug("$kTag: ${this::onAdClicked.name}: id = $_adId")
             _bridge.callCpp(_messageHelper.onClicked)
         }
     }
 
     override fun onAdClosed() {
         Thread.runOnMainThread {
-            _logger.info("$kTag: ${this::onAdClosed.name}")
+            _logger.debug("$kTag: ${this::onAdClosed.name}: id = $_adId")
         }
     }
 }

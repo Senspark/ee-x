@@ -233,6 +233,7 @@ namespace EE.Internal {
             var format = node["format"].Value;
             switch (format) {
                 case "banner": return new BannerConfig(node);
+                case "rect": return new RectangleConfig(node);
                 case "app_open": return new AppOpenConfig(node);
                 case "interstitial": return new InterstitialConfig(node);
                 case "rewarded": return new RewardedConfig(node);

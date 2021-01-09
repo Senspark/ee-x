@@ -1,6 +1,8 @@
 using System;
 using System.Threading.Tasks;
 
+using UnityEngine;
+
 namespace EE {
     public static class TaskExtensions {
         public static async Task<T> Then<T, U>(this Task<U> task, Func<U, T> func) {
@@ -20,7 +22,10 @@ namespace EE {
         /// http://stackoverflow.com/questions/22629951/suppressing-warning-cs4014-because-this-call-is-not-awaited-execution-of-the
         /// </summary>
         public static void Forget(this Task task, Action<Exception> callback = null) {
-            task.ContinueWith(t => callback?.Invoke(t.Exception), TaskContinuationOptions.OnlyOnFaulted);
+            task.ContinueWith(t => {
+                Debug.LogError(t.Exception?.StackTrace);
+                callback?.Invoke(t.Exception);
+            }, TaskContinuationOptions.OnlyOnFaulted);
         }
     }
 }

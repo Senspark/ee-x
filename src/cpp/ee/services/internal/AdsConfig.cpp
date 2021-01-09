@@ -72,8 +72,7 @@ INetworkConfig::parse(const nlohmann::json& node) {
     return nullptr;
 }
 
-AdMobConfig::AdMobConfig(const nlohmann::json& node) {
-}
+AdMobConfig::AdMobConfig(const nlohmann::json& node) {}
 
 Task<> AdMobConfig::initialize() {
     plugin_ = PluginManager::createPlugin<IAdMob>();
@@ -127,8 +126,7 @@ std::shared_ptr<IAd> AppLovinConfig::createAd(AdFormat format,
     }
 }
 
-FacebookAdsConfig::FacebookAdsConfig(const nlohmann::json& node) {
-}
+FacebookAdsConfig::FacebookAdsConfig(const nlohmann::json& node) {}
 
 Task<> FacebookAdsConfig::initialize() {
     plugin_ = PluginManager::createPlugin<IFacebookAds>();

@@ -73,18 +73,11 @@ INetworkConfig::parse(const nlohmann::json& node) {
 }
 
 AdMobConfig::AdMobConfig(const nlohmann::json& node) {
-    timeOut_ = node.value("time_out", 30);
 }
 
 Task<> AdMobConfig::initialize() {
     plugin_ = PluginManager::createPlugin<IAdMob>();
-    co_await whenAny(
-        [this]() -> Task<> { //
-            co_await Delay(timeOut_);
-        },
-        [this]() -> Task<> { //
-            co_await plugin_->initialize();
-        });
+    co_await plugin_->initialize();
 }
 
 Network AdMobConfig::network() const {
@@ -112,18 +105,11 @@ std::shared_ptr<IAd> AdMobConfig::createAd(AdFormat format,
 
 AppLovinConfig::AppLovinConfig(const nlohmann::json& node) {
     appId_ = node["app_id"];
-    timeOut_ = node.value("time_out", 30);
 }
 
 Task<> AppLovinConfig::initialize() {
     plugin_ = PluginManager::createPlugin<IAppLovin>();
-    co_await whenAny(
-        [this]() -> Task<> { //
-            co_await Delay(timeOut_);
-        },
-        [this]() -> Task<> { //
-            co_await plugin_->initialize(appId_);
-        });
+    co_await plugin_->initialize(appId_);
 }
 
 Network AppLovinConfig::network() const {
@@ -142,18 +128,11 @@ std::shared_ptr<IAd> AppLovinConfig::createAd(AdFormat format,
 }
 
 FacebookAdsConfig::FacebookAdsConfig(const nlohmann::json& node) {
-    timeOut_ = node.value("time_out", 30);
 }
 
 Task<> FacebookAdsConfig::initialize() {
     plugin_ = PluginManager::createPlugin<IFacebookAds>();
-    co_await whenAny(
-        [this]() -> Task<> { //
-            co_await Delay(timeOut_);
-        },
-        [this]() -> Task<> { //
-            co_await plugin_->initialize();
-        });
+    co_await plugin_->initialize();
 }
 
 Network FacebookAdsConfig::network() const {
@@ -181,18 +160,11 @@ std::shared_ptr<IAd> FacebookAdsConfig::createAd(AdFormat format,
 
 IronSourceConfig::IronSourceConfig(const nlohmann::json& node) {
     appId_ = node["app_id"];
-    timeOut_ = node.value("time_out", 30);
 }
 
 Task<> IronSourceConfig::initialize() {
     plugin_ = PluginManager::createPlugin<IIronSource>();
-    co_await whenAny(
-        [this]() -> Task<> { //
-            co_await Delay(timeOut_);
-        },
-        [this]() -> Task<> { //
-            co_await plugin_->initialize(appId_);
-        });
+    co_await plugin_->initialize(appId_);
 }
 
 Network IronSourceConfig::network() const {

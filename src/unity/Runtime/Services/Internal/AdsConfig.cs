@@ -75,15 +75,13 @@ namespace EE.Internal {
 
     internal class AdMobConfig : INetworkConfig {
         private IAdMob _plugin;
-        private readonly int _timeOut;
 
         public AdMobConfig(JSONNode node) {
-            _timeOut = node["time_out"] ?? 30;
         }
 
         public async Task Initialize() {
             _plugin = PluginManager.CreatePlugin<IAdMob>();
-            await Task.WhenAny(Task.Delay(_timeOut * 1000), _plugin.Initialize());
+            await _plugin.Initialize();
         }
 
         public Network Network => Network.AdMob;
@@ -109,15 +107,13 @@ namespace EE.Internal {
 
     internal class FacebookAdsConfig : INetworkConfig {
         private IFacebookAds _plugin;
-        private readonly int _timeOut;
 
         public FacebookAdsConfig(JSONNode node) {
-            _timeOut = node["time_out"] ?? 30;
         }
 
         public async Task Initialize() {
             _plugin = PluginManager.CreatePlugin<IFacebookAds>();
-            await Task.WhenAny(Task.Delay(_timeOut * 1000), _plugin.Initialize());
+            await _plugin.Initialize();
         }
 
         public Network Network => Network.FacebookAds;
@@ -142,16 +138,14 @@ namespace EE.Internal {
     internal class IronSourceConfig : INetworkConfig {
         private IIronSource _plugin;
         private readonly string _appId;
-        private readonly int _timeOut;
 
         public IronSourceConfig(JSONNode node) {
             _appId = node["app_id"];
-            _timeOut = node["time_out"] ?? 30;
         }
 
         public async Task Initialize() {
             _plugin = PluginManager.CreatePlugin<IIronSource>();
-            await Task.WhenAny(Task.Delay(_timeOut * 1000), _plugin.Initialize(_appId));
+            await _plugin.Initialize(_appId);
         }
 
         public Network Network => Network.IronSource;
@@ -176,7 +170,11 @@ namespace EE.Internal {
 
         public UnityAdsConfig(JSONNode node) {
             _appId = node["app_id"];
-            _timeOut = node["time_out"] ?? 30;
+            if (node.HasKey("time_out")) {
+                _timeOut = node["time_out"];
+            } else {
+                _timeOut = 30;
+            }
         }
 
         public async Task Initialize() {

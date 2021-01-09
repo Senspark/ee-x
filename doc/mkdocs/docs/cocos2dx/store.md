@@ -4,14 +4,14 @@
 Modify `build.gradle`
 ```java
 dependencies {
-    implementation 'com.senspark.ee:store:2.2.1'
+    implementation 'com.senspark.ee:store:2.2.2'
 }
 ```
 
 ### iOS
 Modify `Podfile`
 ```ruby
-pod 'ee-x/store', '2.2.1'
+pod 'ee-x/store', '2.2.2'
 ```
 
 ## Basic usage

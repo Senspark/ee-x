@@ -21,10 +21,14 @@ namespace EE {
         /// <summary>
         /// http://stackoverflow.com/questions/22629951/suppressing-warning-cs4014-because-this-call-is-not-awaited-execution-of-the
         /// </summary>
-        public static void Forget(this Task task, Action<Exception> callback = null) {
-            task.ContinueWith(t => {
-                Debug.LogError(t.Exception?.StackTrace);
-                callback?.Invoke(t.Exception);
+        public static void Forget(this Task task) {
+            task.ContinueWith(async t => {
+                try {
+                    await t;
+                } catch (Exception ex) {
+                    Debug.LogError(ex.Message);
+                    Debug.LogError(ex.StackTrace);
+                }
             }, TaskContinuationOptions.OnlyOnFaulted);
         }
     }

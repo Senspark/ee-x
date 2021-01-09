@@ -95,7 +95,7 @@ namespace EE.Internal {
         }
 
         public IFullScreenAd CreateInterstitialAd(string adId) {
-            return CreateFullScreenAd(kCreateRewardedAd, adId,
+            return CreateFullScreenAd(kCreateInterstitialAd, adId,
                 () => new FacebookInterstitialAd(_bridge, _displayer, this, adId));
         }
 

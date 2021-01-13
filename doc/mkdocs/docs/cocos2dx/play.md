@@ -4,14 +4,14 @@
 Modify `build.gradle`
 ```java
 dependencies {
-    implementation 'com.senspark.ee:play:2.2.2'
+    implementation 'com.senspark.ee:play:2.2.3'
 }
 ```
 
 ### iOS
 Modify `Podfile`
 ```ruby
-pod 'ee-x/play', '2.2.2'
+pod 'ee-x/play', '2.2.3'
 ```
 
 ## Basic usage

@@ -52,6 +52,7 @@ private:
     Task<AdResult> showFullScreenAd(AdFormat format);
 
     bool initialized_;
+    bool fullScreenAdCapped_;
     std::shared_ptr<AdsConfig> config_;
     std::map<AdFormat, std::shared_ptr<LazyAdView>> bannerAds_;
     std::map<AdFormat, std::shared_ptr<GenericAd>> fullScreenAds_;

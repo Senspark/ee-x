@@ -3,6 +3,7 @@
 #include <cassert>
 
 #include <ee/cocos/CocosAdView.hpp>
+#include <ee/core/Delay.hpp>
 #include <ee/core/NoAwait.hpp>
 #include <ee/core/ObserverHandle.hpp>
 #include <ee/core/Task.hpp>
@@ -17,6 +18,8 @@ namespace services {
 using Self = DefaultAdsManager;
 
 Self::DefaultAdsManager(const std::string& configJson) {
+    initialized_ = false;
+    fullScreenAdCapped_ = false;
     config_ = AdsConfig::parse(configJson);
     handle_ = std::make_unique<ObserverHandle>();
 }
@@ -166,7 +169,15 @@ Task<AdResult> Self::showFullScreenAd(AdFormat format) {
     if (ad == nullptr) {
         co_return AdResult::NotConfigured;
     }
+    if (fullScreenAdCapped_) {
+        co_return AdResult::Capped;
+    }
+    fullScreenAdCapped_ = true;
     auto result = co_await ad->show();
+    noAwait([this]() -> Task<> {
+        co_await Delay(0.1f);
+        fullScreenAdCapped_ = false;
+    });
     co_return result;
 }
 } // namespace services

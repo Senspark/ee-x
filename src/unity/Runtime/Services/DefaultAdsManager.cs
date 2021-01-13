@@ -7,12 +7,15 @@ namespace EE {
     public class DefaultAdsManager : ObserverManager<AdsObserver>, IAdsManager {
         private Task<bool> _initializer;
         private bool _initialized;
+        private bool _fullScreenAdCapped;
         private readonly AdsConfig _config;
         private readonly Dictionary<AdFormat, LazyAdView> _bannerAds;
         private readonly Dictionary<AdFormat, GenericAd> _fullScreenAds;
         private readonly ObserverHandle _handle;
 
         public DefaultAdsManager(string configJson) {
+            _initialized = false;
+            _fullScreenAdCapped = false;
             _config = AdsConfig.Parse(configJson);
             _bannerAds = new Dictionary<AdFormat, LazyAdView>();
             _fullScreenAds = new Dictionary<AdFormat, GenericAd>();
@@ -125,7 +128,16 @@ namespace EE {
             } else {
                 return AdResult.NotConfigured;
             }
-            return await ad.Show();
+            if (_fullScreenAdCapped) {
+                return AdResult.Capped;
+            }
+            _fullScreenAdCapped = true;
+            var result = await ad.Show();
+            Utils.NoAwait(async () => {
+                await Task.Delay(100);
+                _fullScreenAdCapped = false;
+            });
+            return result;
         }
     }
 }

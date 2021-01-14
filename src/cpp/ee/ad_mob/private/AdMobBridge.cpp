@@ -8,7 +8,7 @@
 
 #include "ee/ad_mob/private/AdMobBridge.hpp"
 
-#include <ee/ads/internal/GuardedAdView.hpp>
+#include <ee/ads/internal/GuardedBannerAd.hpp>
 #include <ee/ads/internal/GuardedFullScreenAd.hpp>
 #include <ee/ads/internal/MediationManager.hpp>
 #include <ee/core/IMessageBridge.hpp>
@@ -100,13 +100,13 @@ std::pair<int, int> Self::getBannerAdSize(BannerAdSize adSize) {
     return std::pair(width, height);
 }
 
-std::shared_ptr<IAdView> Self::createBannerAd(const std::string& adId,
-                                              BannerAdSize adSize) {
+std::shared_ptr<IBannerAd> Self::createBannerAd(const std::string& adId,
+                                                BannerAdSize adSize) {
     logger_.debug("%s: id = %s size = %d", __PRETTY_FUNCTION__, adId.c_str(),
                   static_cast<int>(adSize));
     auto iter = ads_.find(adId);
     if (iter != ads_.cend()) {
-        return std::dynamic_pointer_cast<IAdView>(iter->second);
+        return std::dynamic_pointer_cast<IBannerAd>(iter->second);
     }
     nlohmann::json json;
     json["adId"] = adId;
@@ -119,19 +119,19 @@ std::shared_ptr<IAdView> Self::createBannerAd(const std::string& adId,
         return nullptr;
     }
     auto size = getBannerAdSize(adSize);
-    auto ad = std::make_shared<ads::GuardedAdView>(
+    auto ad = std::make_shared<ads::GuardedBannerAd>(
         std::make_shared<BannerAd>(bridge_, logger_, this, adId, size));
     ads_.emplace(adId, ad);
     return ad;
 }
 
-std::shared_ptr<IAdView>
+std::shared_ptr<IBannerAd>
 Self::createNativeAd(const std::string& adId, const std::string& layoutName,
                      const NativeAdLayout& identifiers) {
     logger_.debug("%s: id = %s", __PRETTY_FUNCTION__, adId.c_str());
     auto iter = ads_.find(adId);
     if (iter != ads_.cend()) {
-        return std::dynamic_pointer_cast<IAdView>(iter->second);
+        return std::dynamic_pointer_cast<IBannerAd>(iter->second);
     }
     nlohmann::json json;
     json["adId"] = adId;
@@ -144,7 +144,7 @@ Self::createNativeAd(const std::string& adId, const std::string& layoutName,
         assert(false);
         return nullptr;
     }
-    auto ad = std::make_shared<ads::GuardedAdView>(
+    auto ad = std::make_shared<ads::GuardedBannerAd>(
         std::make_shared<NativeAd>(bridge_, logger_, this, adId));
     ads_.emplace(adId, ad);
     return ad;

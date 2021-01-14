@@ -319,7 +319,7 @@ class Metrics;
 
 class SwitchToCocosThread;
 
-class CocosAdView;
+class CocosBannerAd;
 } // namespace cocos
 
 using cocos::Dialog;
@@ -328,7 +328,7 @@ using cocos::Metrics;
 
 using cocos::SwitchToCocosThread;
 
-using cocos::CocosAdView;
+using cocos::CocosBannerAd;
 } // namespace ee
 
 #endif // __cplusplus

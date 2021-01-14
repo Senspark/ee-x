@@ -1,28 +1,25 @@
 //
-//  CocosAdView.hpp
-//  Pods
+//  NullAdView.hpp
+//  ee_x
 //
-//  Created by eps on 6/18/20.
+//  Created by Zinge on 10/27/17.
+//
 //
 
-#ifndef EE_X_COCOS_AD_VIEW_HPP
-#define EE_X_COCOS_AD_VIEW_HPP
+#ifndef EE_X_NULL_BANNER_AD_HPP
+#define EE_X_NULL_BANNER_AD_HPP
 
 #ifdef __cplusplus
 
-#include <ee/ads/IAdView.hpp>
 #include <ee/core/ObserverManager.hpp>
 
-#include "ee/cocos/CocosFwd.hpp"
+#include "ee/ads/IBannerAd.hpp"
 
 namespace ee {
-namespace cocos {
-class CocosAdView : public IAdView, public ObserverManager<AdObserver> {
+namespace ads {
+class NullBannerAd : public IBannerAd, public ObserverManager<AdObserver> {
 public:
-    explicit CocosAdView(const std::shared_ptr<IAdView>& ad);
-
-    virtual ~CocosAdView() override;
-
+    NullBannerAd();
     virtual void destroy() override;
 
     virtual bool isLoaded() const override;
@@ -41,14 +38,18 @@ public:
     virtual void setVisible(bool visible) override;
 
 private:
-    std::shared_ptr<IAdView> ad_;
-    std::unique_ptr<ObserverHandle> handle_;
-    std::unique_ptr<Metrics> metrics_;
-    float sceneHeight_;
+    bool loaded_;
+    int positionX_;
+    int positionY_;
+    float anchorX_;
+    float anchorY_;
+    int width_;
+    int height_;
+    bool visible_;
 };
-} // namespace cocos
+} // namespace ads
 } // namespace ee
 
 #endif // __cplusplus
 
-#endif /* EE_X_COCOS_AD_VIEW_HPP */
+#endif /* EE_X_NULL_BANNER_AD_HPP */

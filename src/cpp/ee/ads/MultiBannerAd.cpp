@@ -6,7 +6,7 @@
 //
 //
 
-#include "ee/ads/MultiAdView.hpp"
+#include "ee/ads/MultiBannerAd.hpp"
 
 #include <ee/core/NoAwait.hpp>
 #include <ee/core/ObserverHandle.hpp>
@@ -14,18 +14,18 @@
 
 namespace ee {
 namespace ads {
-using Self = MultiAdView;
+using Self = MultiBannerAd;
 
-Self::MultiAdView() {
+Self::MultiBannerAd() {
     anchor_ = std::pair(0, 0);
     position_ = std::pair(0, 0);
     visible_ = false;
     handle_ = std::make_unique<ObserverHandle>();
 }
 
-Self::~MultiAdView() = default;
+Self::~MultiBannerAd() = default;
 
-Self& Self::addItem(const std::shared_ptr<IAdView>& item) {
+Self& Self::addItem(const std::shared_ptr<IBannerAd>& item) {
     items_.push_back(item);
     item->setVisible(visible_);
     (*handle_) //

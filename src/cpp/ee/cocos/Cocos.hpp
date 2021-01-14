@@ -79,7 +79,7 @@
 
 #include "ee/cocos/SwitchToCocosThread.hpp"
 
-#include "ee/cocos/CocosAdView.hpp"
+#include "ee/cocos/CocosBannerAd.hpp"
 
 #endif // __cplusplus
 

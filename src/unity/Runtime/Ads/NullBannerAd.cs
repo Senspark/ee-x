@@ -1,7 +1,7 @@
 using System.Threading.Tasks;
 
 namespace EE {
-    public class NullAdView : ObserverManager<AdObserver>, IAdView {
+    public class NullBannerAd : ObserverManager<AdObserver>, IBannerAd {
         private (float, float) _anchor;
         private (float, float) _position;
         private (float, float) _size;

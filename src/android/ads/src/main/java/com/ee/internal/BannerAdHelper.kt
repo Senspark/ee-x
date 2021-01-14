@@ -2,7 +2,7 @@ package com.ee.internal
 
 import android.graphics.Point
 import androidx.annotation.AnyThread
-import com.ee.IAdView
+import com.ee.IBannerAd
 import com.ee.IMessageBridge
 import com.ee.Utils
 import kotlinx.serialization.InternalSerializationApi
@@ -12,9 +12,9 @@ import kotlinx.serialization.Serializable
  * Created by Zinge on 10/12/17.
  */
 @InternalSerializationApi
-class AdViewHelper(private val _bridge: IMessageBridge,
-                   private val _view: IAdView,
-                   private val _helper: MessageHelper) {
+class BannerAdHelper(private val _bridge: IMessageBridge,
+                     private val _view: IBannerAd,
+                     private val _helper: MessageHelper) {
     @AnyThread
     fun registerHandlers() {
         _bridge.registerHandler(_helper.isLoaded) {

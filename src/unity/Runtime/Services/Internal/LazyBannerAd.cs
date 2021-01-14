@@ -1,15 +1,15 @@
 using System.Threading.Tasks;
 
 namespace EE.Internal {
-    internal class LazyAdView : ObserverManager<AdObserver>, IAdView {
-        private IAdView _ad;
+    internal class LazyBannerAd : ObserverManager<AdObserver>, IBannerAd {
+        private IBannerAd _ad;
         private bool _visible;
         private (float, float) _anchor;
         private (float, float) _position;
         private (float, float)? _size;
         private readonly ObserverHandle _handle;
 
-        public LazyAdView() {
+        public LazyBannerAd() {
             _visible = false;
             _anchor = (0, 0);
             _position = (0, 0);
@@ -17,7 +17,7 @@ namespace EE.Internal {
             _handle = new ObserverHandle();
         }
 
-        public IAdView Ad {
+        public IBannerAd Ad {
             get => _ad;
             set {
                 _handle.Clear();

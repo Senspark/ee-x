@@ -1,12 +1,12 @@
 using System.Threading.Tasks;
 
 namespace EE.Internal {
-    internal class GuardedAdView : ObserverManager<AdObserver>, IAdView {
-        private readonly IAdView _ad;
+    internal class GuardedBannerAd : ObserverManager<AdObserver>, IBannerAd {
+        private readonly IBannerAd _ad;
         private bool _loading;
         private readonly ObserverHandle _handle;
 
-        public GuardedAdView(IAdView ad) {
+        public GuardedBannerAd(IBannerAd ad) {
             _ad = ad;
             _handle = new ObserverHandle();
             _handle.Bind(ad).AddObserver(new AdObserver {

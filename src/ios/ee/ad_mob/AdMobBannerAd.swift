@@ -9,13 +9,13 @@ import GoogleMobileAds
 
 private let kTag = "\(AdMobBannerAd.self)"
 
-internal class AdMobBannerAd: NSObject, IAdView, GADBannerViewDelegate {
+internal class AdMobBannerAd: NSObject, IBannerAd, GADBannerViewDelegate {
     private let _bridge: IMessageBridge
     private let _logger: ILogger
     private let _adId: String
     private let _adSize: GADAdSize
     private let _messageHelper: MessageHelper
-    private var _helper: AdViewHelper?
+    private var _helper: BannerAdHelper?
     private let _viewHelper: ViewHelper
     private var _isLoaded = false
     private var _ad: GADBannerView?
@@ -32,7 +32,7 @@ internal class AdMobBannerAd: NSObject, IAdView, GADBannerViewDelegate {
         _messageHelper = MessageHelper("AdMobBannerAd", _adId)
         _viewHelper = ViewHelper(CGPoint.zero, bannerHelper.getSize(adSize: adSize), false)
         super.init()
-        _helper = AdViewHelper(_bridge, self, _messageHelper)
+        _helper = BannerAdHelper(_bridge, self, _messageHelper)
         registerHandlers()
         createInternalAd()
     }

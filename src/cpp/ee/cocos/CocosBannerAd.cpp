@@ -5,7 +5,7 @@
 //  Created by eps on 6/18/20.
 //
 
-#include "ee/cocos/CocosAdView.hpp"
+#include "ee/cocos/CocosBannerAd.hpp"
 
 #include <base/CCDirector.h>
 
@@ -16,9 +16,9 @@
 
 namespace ee {
 namespace cocos {
-using Self = CocosAdView;
+using Self = CocosBannerAd;
 
-Self::CocosAdView(const std::shared_ptr<IAdView>& ad)
+Self::CocosBannerAd(const std::shared_ptr<IBannerAd>& ad)
     : ad_(ad) {
     handle_ = std::make_unique<ObserverHandle>();
     handle_->bind(*ad_).addObserver({
@@ -46,7 +46,7 @@ Self::CocosAdView(const std::shared_ptr<IAdView>& ad)
     sceneHeight_ = cocos2d::Director::getInstance()->getWinSize().height;
 }
 
-Self::~CocosAdView() = default;
+Self::~CocosBannerAd() = default;
 
 void Self::destroy() {
     ad_->destroy();

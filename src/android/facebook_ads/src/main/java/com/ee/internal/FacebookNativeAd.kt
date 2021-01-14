@@ -13,7 +13,7 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.annotation.AnyThread
 import androidx.annotation.UiThread
-import com.ee.IAdView
+import com.ee.IBannerAd
 import com.ee.ILogger
 import com.ee.IMessageBridge
 import com.ee.Thread
@@ -43,7 +43,7 @@ internal class FacebookNativeAd(
     private val _adId: String,
     private val _layoutName: String,
     private val _identifiers: Map<String, String>)
-    : IAdView, NativeAdListener {
+    : IBannerAd, NativeAdListener {
     companion object {
         private val kTag = FacebookNativeAd::class.java.name
         private const val k__ad_choices = "ad_choices"
@@ -56,7 +56,7 @@ internal class FacebookNativeAd(
     }
 
     private val _messageHelper = MessageHelper("FacebookNativeAd", _adId)
-    private val _helper = AdViewHelper(_bridge, this, _messageHelper)
+    private val _helper = BannerAdHelper(_bridge, this, _messageHelper)
     private val _viewHelper = ViewHelper(Point(0, 0), Point(0, 0), false)
     private val _isLoaded = AtomicBoolean(false)
     private var _ad: NativeAd? = null

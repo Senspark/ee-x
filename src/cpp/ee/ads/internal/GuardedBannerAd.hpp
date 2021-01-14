@@ -1,25 +1,20 @@
-//
-//  NullAdView.hpp
-//  ee_x
-//
-//  Created by Zinge on 10/27/17.
-//
-//
-
-#ifndef EE_X_NULL_AD_VIEW_HPP
-#define EE_X_NULL_AD_VIEW_HPP
+#ifndef EE_X_GUARDED_BANNER_AD_HPP
+#define EE_X_GUARDED_BANNER_AD_HPP
 
 #ifdef __cplusplus
 
 #include <ee/core/ObserverManager.hpp>
 
-#include "ee/ads/IAdView.hpp"
+#include "ee/ads/IBannerAd.hpp"
 
 namespace ee {
 namespace ads {
-class NullAdView : public IAdView, public ObserverManager<AdObserver> {
+class GuardedBannerAd : public IBannerAd, public ObserverManager<AdObserver> {
 public:
-    NullAdView();
+    explicit GuardedBannerAd(const std::shared_ptr<IBannerAd>& ad);
+
+    virtual ~GuardedBannerAd() override;
+
     virtual void destroy() override;
 
     virtual bool isLoaded() const override;
@@ -38,18 +33,15 @@ public:
     virtual void setVisible(bool visible) override;
 
 private:
+    std::shared_ptr<IBannerAd> ad_;
+
+    bool loading_;
     bool loaded_;
-    int positionX_;
-    int positionY_;
-    float anchorX_;
-    float anchorY_;
-    int width_;
-    int height_;
-    bool visible_;
+    std::unique_ptr<ObserverHandle> handle_;
 };
 } // namespace ads
 } // namespace ee
 
 #endif // __cplusplus
 
-#endif /* EE_X_NULL_AD_VIEW_HPP */
+#endif // EE_X_GUARDED_BANNER_AD_HPP

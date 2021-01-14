@@ -18,19 +18,19 @@
 
 #include <ee/core/ObserverManager.hpp>
 
-#include "ee/ads/IAdView.hpp"
+#include "ee/ads/IBannerAd.hpp"
 
 namespace ee {
 namespace ads {
-class MultiAdView : public IAdView, public ObserverManager<AdObserver> {
+class MultiBannerAd : public IBannerAd, public ObserverManager<AdObserver> {
 private:
-    using Self = MultiAdView;
+    using Self = MultiBannerAd;
 
 public:
-    MultiAdView();
-    virtual ~MultiAdView() override;
+    MultiBannerAd();
+    virtual ~MultiBannerAd() override;
 
-    Self& addItem(const std::shared_ptr<IAdView>& item);
+    Self& addItem(const std::shared_ptr<IBannerAd>& item);
 
     virtual void destroy() override;
 
@@ -59,11 +59,11 @@ private:
     /// Whether visible.
     bool visible_;
 
-    std::vector<std::shared_ptr<IAdView>> items_;
+    std::vector<std::shared_ptr<IBannerAd>> items_;
     std::unique_ptr<ObserverHandle> handle_;
 
-    std::shared_ptr<IAdView> activeItem_;
-    std::set<std::shared_ptr<IAdView>> loadedItems_;
+    std::shared_ptr<IBannerAd> activeItem_;
+    std::set<std::shared_ptr<IBannerAd>> loadedItems_;
 };
 } // namespace ads
 } // namespace ee

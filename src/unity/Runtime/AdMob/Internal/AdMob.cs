@@ -71,9 +71,9 @@ namespace EE.Internal {
             public int adSize;
         }
 
-        public IAdView CreateBannerAd(string adId, AdMobBannerAdSize adSize) {
+        public IBannerAd CreateBannerAd(string adId, AdMobBannerAdSize adSize) {
             if (_ads.TryGetValue(adId, out var result)) {
-                return result as IAdView;
+                return result as IBannerAd;
             }
             var request = new CreateBannerAdRequest {
                 adId = adId,
@@ -85,7 +85,7 @@ namespace EE.Internal {
                 return null;
             }
             var size = GetBannerAdSize(adSize);
-            var ad = new GuardedAdView(new AdMobBannerAd(_bridge, this, adId, size));
+            var ad = new GuardedBannerAd(new AdMobBannerAd(_bridge, this, adId, size));
             _ads.Add(adId, ad);
             return ad;
         }

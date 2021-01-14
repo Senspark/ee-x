@@ -1,7 +1,7 @@
 # Multi Ad
 - Purpose: use ad waterfall to optimize monetization.
 - Supported ad:
-    + Use `ee::MultiAdView` for banner and native ads.
+    + Use `ee::MultiBannerAd` for banner and native ads.
     + Use `ee::MultiInterstitialAd` for interstitial ads.
     + Use `ee::MultiRewardedAd` for rewarded ads.
 - Samples:
@@ -25,7 +25,7 @@ ee::noAwait([admob, facebook, ironsource, unity]() -> ee::Task<> {
 });
 
 // Create a banner ad.
-auto ad = std::make_shared<ee::MultiAdView>();
+auto ad = std::make_shared<ee::MultiBannerAd>();
 ad->addItem(admob->createBannerAd("ad_id", ee::AdMobBannerAdSize::Normal));
 ad->addItem(facebook->createBannerAd("ad_id", ee::FacebookBannerAdSize::BannerHeight50));
 

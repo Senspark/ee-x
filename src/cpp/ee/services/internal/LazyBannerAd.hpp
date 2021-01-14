@@ -5,24 +5,24 @@
 //  Created by eps on 1/7/21.
 //
 
-#ifndef EE_X_LAZY_AD_VIEW_HPP
-#define EE_X_LAZY_AD_VIEW_HPP
+#ifndef EE_X_LAZY_BANNER_AD_HPP
+#define EE_X_LAZY_BANNER_AD_HPP
 
 #include <optional>
 
-#include <ee/ads/IAdView.hpp>
+#include <ee/ads/IBannerAd.hpp>
 #include <ee/core/ObserverManager.hpp>
 
 #include "ee/services/ServicesFwd.hpp"
 
 namespace ee {
 namespace services {
-class LazyAdView : public IAdView, public ObserverManager<AdObserver> {
+class LazyBannerAd : public IBannerAd, public ObserverManager<AdObserver> {
 public:
-    LazyAdView();
-    virtual ~LazyAdView() override;
+    LazyBannerAd();
+    virtual ~LazyBannerAd() override;
 
-    void setAd(const std::shared_ptr<IAdView>& ad);
+    void setAd(const std::shared_ptr<IBannerAd>& ad);
 
     virtual void destroy() override;
 
@@ -42,7 +42,7 @@ public:
     virtual void setVisible(bool visible) override;
 
 private:
-    std::shared_ptr<IAdView> ad_;
+    std::shared_ptr<IBannerAd> ad_;
 
     bool visible_;
     std::pair<float, float> anchor_;
@@ -53,4 +53,4 @@ private:
 } // namespace services
 } // namespace ee
 
-#endif /* EE_X_LAZY_AD_VIEW_HPP */
+#endif /* EE_X_BANNER_AD_HPP */

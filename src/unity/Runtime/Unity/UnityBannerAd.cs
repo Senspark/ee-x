@@ -3,12 +3,12 @@ using System.Threading.Tasks;
 using UnityEngine;
 
 namespace EE {
-    public class UnityAdView : ObserverManager<AdObserver>, IAdView {
-        private readonly IAdView _ad;
+    public class UnityBannerAd : ObserverManager<AdObserver>, IBannerAd {
+        private readonly IBannerAd _ad;
         private readonly ObserverHandle _handle;
         private readonly int _screenHeight;
 
-        public UnityAdView(IAdView ad) {
+        public UnityBannerAd(IBannerAd ad) {
             _ad = ad;
             _handle = new ObserverHandle();
             _handle.Bind(ad).AddObserver(new AdObserver {

@@ -6,8 +6,8 @@
 //
 //
 
-#ifndef EE_X_AD_VIEW_HELPER_HPP
-#define EE_X_AD_VIEW_HELPER_HPP
+#ifndef EE_X_BANNER_AD_HELPER_HPP
+#define EE_X_BANNER_AD_HELPER_HPP
 
 #include <string>
 #include <utility>
@@ -16,10 +16,10 @@
 
 namespace ee {
 namespace ads {
-class AdViewHelper {
+class BannerAdHelper {
 public:
-    explicit AdViewHelper(IMessageBridge& bridge, const MessageHelper& helper,
-                          const std::pair<float, float>& size);
+    explicit BannerAdHelper(IMessageBridge& bridge, const MessageHelper& helper,
+                            const std::pair<float, float>& size);
 
     bool isLoaded() const;
     void load();
@@ -63,4 +63,4 @@ private:
 } // namespace ads
 } // namespace ee
 
-#endif /* EE_X_AD_VIEW_HELPER_HPP */
+#endif /* EE_X_BANNER_AD_HELPER_HPP */

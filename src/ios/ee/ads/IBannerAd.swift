@@ -7,7 +7,7 @@
 
 import Foundation
 
-protocol IAdView {
+protocol IBannerAd {
     var isLoaded: Bool { get }
     func load()
     var position: CGPoint { get set }

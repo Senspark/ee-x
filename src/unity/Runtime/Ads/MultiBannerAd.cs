@@ -4,22 +4,22 @@ using System.Linq;
 using System.Threading.Tasks;
 
 namespace EE {
-    public class MultiAdView : ObserverManager<AdObserver>, IAdView, IMultiAd<IAdView> {
+    public class MultiBannerAd : ObserverManager<AdObserver>, IBannerAd, IMultiAd<IBannerAd> {
         private (float, float) _anchor;
         private (float, float) _position;
         private bool _visible;
-        private readonly List<IAdView> _items;
+        private readonly List<IBannerAd> _items;
         private readonly ObserverHandle _handle;
-        private IAdView _activeItem;
-        private readonly HashSet<IAdView> _loadedItems;
+        private IBannerAd _activeItem;
+        private readonly HashSet<IBannerAd> _loadedItems;
 
-        public MultiAdView() {
-            _items = new List<IAdView>();
+        public MultiBannerAd() {
+            _items = new List<IBannerAd>();
             _handle = new ObserverHandle();
-            _loadedItems = new HashSet<IAdView>();
+            _loadedItems = new HashSet<IBannerAd>();
         }
 
-        public void AddItem(IAdView item) {
+        public void AddItem(IBannerAd item) {
             _items.Add(item);
             item.IsVisible = _visible;
             _handle.Bind(item).AddObserver(new AdObserver {

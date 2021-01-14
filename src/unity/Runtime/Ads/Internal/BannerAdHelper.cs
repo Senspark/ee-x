@@ -3,7 +3,7 @@ using System;
 using UnityEngine;
 
 namespace EE.Internal {
-    internal class AdViewHelper {
+    internal class BannerAdHelper {
         private readonly IMessageBridge _bridge;
         private readonly MessageHelper _helper;
         private (float, float) _anchor;
@@ -11,7 +11,7 @@ namespace EE.Internal {
         private (float, float) _size;
         private bool _visible;
 
-        public AdViewHelper(IMessageBridge bridge, MessageHelper helper, (int, int) size) {
+        public BannerAdHelper(IMessageBridge bridge, MessageHelper helper, (int, int) size) {
             _bridge = bridge;
             _helper = helper;
             _size = size;

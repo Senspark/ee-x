@@ -6,15 +6,15 @@
 //
 //
 
-#include "ee/ads/NullAdView.hpp"
+#include "ee/ads/NullBannerAd.hpp"
 
 #include <ee/core/Task.hpp>
 
 namespace ee {
 namespace ads {
-using Self = NullAdView;
+using Self = NullBannerAd;
 
-Self::NullAdView() {
+Self::NullBannerAd() {
     loaded_ = false;
     positionX_ = 0;
     positionY_ = 0;

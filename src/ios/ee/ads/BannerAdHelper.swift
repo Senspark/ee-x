@@ -7,13 +7,13 @@
 
 import Foundation
 
-class AdViewHelper {
+class BannerAdHelper {
     private let _bridge: IMessageBridge
-    private var _view: IAdView
+    private var _view: IBannerAd
     private let _helper: MessageHelper
 
     init(_ bridge: IMessageBridge,
-         _ view: IAdView,
+         _ view: IBannerAd,
          _ helper: MessageHelper) {
         _bridge = bridge
         _view = view

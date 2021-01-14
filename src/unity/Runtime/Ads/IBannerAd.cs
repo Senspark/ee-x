@@ -1,5 +1,5 @@
 namespace EE {
-    public interface IAdView : IAd {
+    public interface IBannerAd : IAd {
         /// <summary>
         /// Gets or sets the anchor of this ad.
         /// </summary>

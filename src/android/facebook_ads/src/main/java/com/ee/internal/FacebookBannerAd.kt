@@ -6,7 +6,7 @@ import android.view.Gravity
 import android.widget.FrameLayout
 import androidx.annotation.AnyThread
 import androidx.annotation.UiThread
-import com.ee.IAdView
+import com.ee.IBannerAd
 import com.ee.ILogger
 import com.ee.IMessageBridge
 import com.ee.Thread
@@ -31,13 +31,13 @@ internal class FacebookBannerAd(
     private val _adId: String,
     private val _adSize: AdSize,
     bannerHelper: FacebookBannerHelper)
-    : IAdView, AdListener {
+    : IBannerAd, AdListener {
     companion object {
         private val kTag = FacebookBannerAd::class.java.name
     }
 
     private val _messageHelper = MessageHelper("FacebookBannerAd", _adId)
-    private val _helper = AdViewHelper(_bridge, this, _messageHelper)
+    private val _helper = BannerAdHelper(_bridge, this, _messageHelper)
     private val _viewHelper = ViewHelper(Point(0, 0), bannerHelper.getSize(_adSize), false)
     private val _isLoaded = AtomicBoolean(false)
     private var _ad: AdView? = null

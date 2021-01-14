@@ -1,13 +1,13 @@
-#include "ee/ads/internal/GuardedAdView.hpp"
+#include "ee/ads/internal/GuardedBannerAd.hpp"
 
 #include <ee/core/ObserverHandle.hpp>
 #include <ee/core/Task.hpp>
 
 namespace ee {
 namespace ads {
-using Self = GuardedAdView;
+using Self = GuardedBannerAd;
 
-Self::GuardedAdView(const std::shared_ptr<IAdView>& ad)
+Self::GuardedBannerAd(const std::shared_ptr<IBannerAd>& ad)
     : ad_(ad) {
     loading_ = false;
     loaded_ = false;
@@ -35,7 +35,7 @@ Self::GuardedAdView(const std::shared_ptr<IAdView>& ad)
     });
 }
 
-Self::~GuardedAdView() = default;
+Self::~GuardedBannerAd() = default;
 
 void Self::destroy() {
     ad_->destroy();

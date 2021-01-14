@@ -6,7 +6,7 @@
 //
 //
 
-#include "ee/ads/internal/AdViewHelper.hpp"
+#include "ee/ads/internal/BannerAdHelper.hpp"
 
 #include <ee/core/IMessageBridge.hpp>
 #include <ee/core/Utils.hpp>
@@ -14,10 +14,10 @@
 
 namespace ee {
 namespace ads {
-using Self = AdViewHelper;
+using Self = BannerAdHelper;
 
-Self::AdViewHelper(IMessageBridge& bridge, const MessageHelper& helper,
-                   const std::pair<float, float>& size)
+Self::BannerAdHelper(IMessageBridge& bridge, const MessageHelper& helper,
+                     const std::pair<float, float>& size)
     : bridge_(bridge)
     , helper_(helper)
     , anchor_(0, 0)

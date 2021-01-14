@@ -240,32 +240,32 @@ namespace EE.Internal {
     }
 
     internal class BannerConfig : IAdConfig {
-        private readonly IAdInstanceConfig<IAdView> _instance;
+        private readonly IAdInstanceConfig<IBannerAd> _instance;
 
         public BannerConfig(JSONNode node) {
-            _instance = AdInstanceConfig<IAdView>.Parse<MultiAdView>(AdFormat.Banner, node["instance"]);
+            _instance = AdInstanceConfig<IBannerAd>.Parse<MultiBannerAd>(AdFormat.Banner, node["instance"]);
         }
 
         public AdFormat Format => AdFormat.Banner;
 
         public IAd CreateAd(INetworkConfigManager manager) {
             var ad = _instance.CreateAd(manager);
-            return new UnityAdView(ad);
+            return new UnityBannerAd(ad);
         }
     }
 
     internal class RectangleConfig : IAdConfig {
-        private readonly IAdInstanceConfig<IAdView> _instance;
+        private readonly IAdInstanceConfig<IBannerAd> _instance;
 
         public RectangleConfig(JSONNode node) {
-            _instance = AdInstanceConfig<IAdView>.Parse<MultiAdView>(AdFormat.Rectangle, node["instance"]);
+            _instance = AdInstanceConfig<IBannerAd>.Parse<MultiBannerAd>(AdFormat.Rectangle, node["instance"]);
         }
 
         public AdFormat Format => AdFormat.Rectangle;
 
         public IAd CreateAd(INetworkConfigManager manager) {
             var ad = _instance.CreateAd(manager);
-            return new UnityAdView(ad);
+            return new UnityBannerAd(ad);
         }
     }
 

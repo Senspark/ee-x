@@ -5,7 +5,7 @@
 //  Created by eps on 1/7/21.
 //
 
-#include "ee/services/internal/LazyAdView.hpp"
+#include "ee/services/internal/LazyBannerAd.hpp"
 
 #include <ee/core/NoAwait.hpp>
 #include <ee/core/ObserverHandle.hpp>
@@ -13,9 +13,9 @@
 
 namespace ee {
 namespace services {
-using Self = LazyAdView;
+using Self = LazyBannerAd;
 
-Self::LazyAdView() {
+Self::LazyBannerAd() {
     visible_ = false;
     anchor_ = std::pair(0, 0);
     position_ = std::pair(0, 0);
@@ -23,9 +23,9 @@ Self::LazyAdView() {
     handle_ = std::make_unique<ObserverHandle>();
 }
 
-Self::~LazyAdView() = default;
+Self::~LazyBannerAd() = default;
 
-void Self::setAd(const std::shared_ptr<IAdView>& ad) {
+void Self::setAd(const std::shared_ptr<IBannerAd>& ad) {
     handle_->clear();
     (*handle_) //
         .bind(*ad)

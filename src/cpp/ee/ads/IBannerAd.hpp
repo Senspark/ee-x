@@ -6,8 +6,8 @@
 //
 //
 
-#ifndef EE_X_I_AD_VIEW_HPP
-#define EE_X_I_AD_VIEW_HPP
+#ifndef EE_X_I_BANNER_AD_HPP
+#define EE_X_I_BANNER_AD_HPP
 
 #ifdef __cplusplus
 
@@ -17,9 +17,9 @@
 
 namespace ee {
 namespace ads {
-class IAdView : public IAd {
+class IBannerAd : public IAd {
 public:
-    virtual ~IAdView() = default;
+    virtual ~IBannerAd() = default;
 
     /// Gets the anchor of this ad view.
     virtual std::pair<float, float> getAnchor() const = 0;
@@ -56,4 +56,4 @@ public:
 
 #endif // __cplusplus
 
-#endif /* EE_X_I_AD_VIEW_HPP */
+#endif /* EE_X_I_BANNER_AD_HPP */

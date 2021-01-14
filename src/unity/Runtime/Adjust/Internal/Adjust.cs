@@ -46,7 +46,6 @@ namespace EE.Internal {
 
         public async Task<string> GetAdvertisingIdentifier() {
             var response = await _bridge.CallAsync(kGetAdvertisingIdentifier);
-            await Thread.SwitchToLibraryThread();
             return response;
         }
 

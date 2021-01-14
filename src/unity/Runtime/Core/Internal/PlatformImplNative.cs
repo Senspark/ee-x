@@ -143,7 +143,7 @@ namespace EE.Internal {
                 subject = subject,
                 body = body
             };
-            var response = _bridge.Call(kSendMail, JsonUtility.ToJson(recipient));
+            var response = _bridge.Call(kSendMail, JsonUtility.ToJson(request));
             return Utils.ToBool(response);
         }
 

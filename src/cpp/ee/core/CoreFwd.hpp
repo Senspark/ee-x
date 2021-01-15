@@ -136,6 +136,13 @@ using core::JniUtils;
 #endif // EE_X_ANDROID
 } // namespace ee
 
+/// JSB.
+namespace se {
+class Object;
+class Value;
+class Class;
+} // namespace se
+
 #endif // __cplusplus
 
 #endif /* EE_X_CORE_FWD_HPP */

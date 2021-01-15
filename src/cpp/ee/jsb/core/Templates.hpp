@@ -16,9 +16,7 @@
 #include <cocos/scripting/js-bindings/manual/jsb_conversions.hpp>
 #include <cocos/scripting/js-bindings/manual/jsb_helper.hpp>
 
-#include <ee/Core.hpp>
-
-#include "ee/jsb/core/Utils.hpp"
+#include <ee/core/Core.hpp>
 
 #define EE_JSB_DEFINE_FUNCTION(cls, name) cls->defineFunction(#name, _SE(name))
 

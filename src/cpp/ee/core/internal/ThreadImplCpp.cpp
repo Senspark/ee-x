@@ -23,8 +23,7 @@ bool Self::runOnLibraryThread(const std::function<void()>& runnable) {
         runnable();
         return true;
     }
-    auto director = cocos2d::Director::getInstance();
-    auto scheduler = director->getScheduler();
+    auto scheduler = cocos2d::Director::getInstance()->getScheduler();
     scheduler->performFunctionInCocosThread([runnable] { //
         runnable();
     });

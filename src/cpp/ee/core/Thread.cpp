@@ -11,6 +11,8 @@
 #include <queue>
 #include <unordered_map>
 
+#include <ee/cocos/CocosFwd.hpp>
+
 #include "ee/core/SpinLock.hpp"
 #include "ee/core/internal/ThreadImplCpp.hpp"
 #include "ee/core/internal/ThreadImplJs.hpp"
@@ -121,7 +123,11 @@ using Self = Thread;
 std::shared_ptr<IThreadImpl> Self::impl_;
 
 void Self::initialize() {
+#ifdef EE_X_COCOS_CPP
     impl_ = std::make_shared<ThreadImplCpp>();
+#else  // EE_X_COCOS_CPP
+    impl_ = std::make_shared<ThreadImplJs>();
+#endif // EE_X_COCOS_CPP
 }
 
 bool Self::isLibraryThread() {

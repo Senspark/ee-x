@@ -10,6 +10,8 @@
 #include <string>
 #include <unordered_map>
 
+#include <ee/cocos/CocosFwd.hpp>
+
 #include "ee/core/IMessageBridge.hpp"
 #include "ee/core/LogLevel.hpp"
 #include "ee/core/Platform.hpp"
@@ -145,7 +147,13 @@ void Self::initializePlugins() {
 #endif // defined(EE_X_ANDROID)
 
     ee_staticInitializePlugins("2.2.3");
+
+#ifdef EE_X_COCOS_CPP
     impl_ = std::make_shared<PluginManagerImplCpp>();
+#else  // EE_X_COCOS_CPP
+    impl_ = std::make_shared<PluginManagerImplJs>();
+#endif // EE_X_COCOS_CPP
+
     impl_->initialize();
     Thread::initialize();
     Platform::initialize(impl_->getBridge());

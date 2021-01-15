@@ -15,9 +15,6 @@ namespace firebase {
 namespace analytics {
 bool registerJsb(se::Object* global);
 } // namespace analytics
-namespace performance {
-bool registerJsb(se::Object* global);
-} // namespace performance
 namespace remote_config {
 bool registerJsb(se::Object* global);
 } // namespace remote_config

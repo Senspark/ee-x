@@ -1,3 +1,4 @@
+import { AdMob } from "../ad_mob/internal/AdMob";
 import { IMessageBridge } from "./IMessageBridge"
 import { IPluginManagerImpl } from "./internal/IPluginManagerImpl";
 import { MessageBridge } from "./internal/MessageBridge";
@@ -25,6 +26,7 @@ export class PluginManager {
     };
 
     private static readonly _pluginConstructores: { [index: string]: (bridge: IMessageBridge) => IPlugin } = {
+        [Plugin.AdMob]: bridge => new AdMob(bridge),
     };
 
     private static readonly _plugins: { [index: string]: IPlugin } = {};
@@ -38,12 +40,12 @@ export class PluginManager {
         Platform.registerHandlers(this._bridge);
     }
 
-    public static createPlugin(plugin: Plugin): IPlugin {
+    public static createPlugin<T extends IPlugin>(plugin: Plugin): T {
         const constructor = this._pluginConstructores[plugin];
         this.addPlugin(plugin);
         const instance = constructor(this._bridge);
         this._plugins[plugin] = instance;
-        return instance;
+        return instance as T;
     }
 
     public static destroyPlugin(plugin: Plugin): void {

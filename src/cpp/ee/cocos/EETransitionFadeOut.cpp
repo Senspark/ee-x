@@ -8,6 +8,7 @@
 
 #include "ee/cocos/EETransitionFadeOut.hpp"
 
+#ifdef EE_X_COCOS_CPP
 #include <cocos2d.h>
 
 namespace ee {
@@ -60,3 +61,5 @@ void TransitionFadeOut::onExit() {
     layerColor_->removeFromParentAndCleanup(false);
 }
 } // namespace ee
+
+#endif // EE_X_COCOS_CPP

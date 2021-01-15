@@ -7,6 +7,7 @@
 
 #include "ee/cocos/EEWidgetLoader.hpp"
 
+#ifdef EE_X_COCOS_CPP
 #include "ee/cocos/EEWidget.hpp"
 
 namespace ee {
@@ -49,3 +50,5 @@ void Self::onHandlePropTypeFloat(cocos2d::Node* node_, cocos2d::Node* parent,
 }
 } // namespace ui
 } // namespace ee
+
+#endif // EE_X_COCOS_CPP

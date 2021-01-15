@@ -8,6 +8,7 @@
 
 #include "ee/cocos/EESceneSwitcher.hpp"
 
+#ifdef EE_X_COCOS_CPP
 #include <2d/CCActionInstant.h>
 #include <2d/CCActionInterval.h>
 #include <2d/CCSpriteFrameCache.h>
@@ -311,3 +312,5 @@ void SceneSwitcher::setNewScene2() {
     _director->replaceScene(_inScene);
 }
 } // namespace ee
+
+#endif // EE_X_COCOS_CPP

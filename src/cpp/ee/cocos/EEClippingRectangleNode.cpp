@@ -8,6 +8,7 @@
 
 #include "ee/cocos/EEClippingRectangleNode.hpp"
 
+#ifdef EE_X_COCOS_CPP
 #include <base/CCDirector.h>
 #include <renderer/CCRenderer.h>
 
@@ -109,3 +110,5 @@ void Self::onAfterVisitScissor() {
     }
 }
 } // namespace ee
+
+#endif // EE_X_COCOS_CPP

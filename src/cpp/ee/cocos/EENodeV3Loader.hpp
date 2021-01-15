@@ -11,9 +11,10 @@
 
 #ifdef __cplusplus
 
-#include <cocosbuilder/CCNodeLoader.h>
-
 #include "ee/cocos/CocosFwd.hpp"
+
+#ifdef EE_X_COCOS_CPP
+#include <cocosbuilder/CCNodeLoader.h>
 
 namespace ee {
 /// Cocosbuilder loader for @c cocos2d::Node with color and opacity.
@@ -62,6 +63,7 @@ private:
 };
 } // namespace ee
 
+#endif // EE_X_COCOS_CPP
 #endif // __cplusplus
 
 #endif /* EE_LIBRARY_NODE_V3_LOADER_HPP_ */

@@ -1,7 +1,13 @@
 #include "ee/core/Delay.hpp"
 
-#include <base/CCDirector.h>
+#include <ee/cocos/CocosFwd.hpp>
 #include <base/CCScheduler.h>
+
+#ifdef EE_X_COCOS_CPP
+#include <base/CCDirector.h>
+#else // EE_X_COCOS_CPP
+#include <platform/CCApplication.h>
+#endif // EE_X_COCOS_CPP
 
 namespace ee {
 namespace core {
@@ -18,8 +24,11 @@ void Self::await_suspend(std::experimental::coroutine_handle<> handle) {
         handle.resume();
         return;
     }
-    auto director = cocos2d::Director::getInstance();
-    auto scheduler = director->getScheduler();
+#ifdef EE_X_COCOS_CPP
+    auto scheduler = cocos2d::Director::getInstance()->getScheduler();
+#else // EE_X_COCOS_CPP
+    auto scheduler = cocos2d::Application::getInstance()->getScheduler();
+#endif // EE_X_COCOS_CPP
     scheduler->schedule(
         [this, handle](float delta) mutable {
             ready_ = true;

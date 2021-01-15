@@ -8,6 +8,7 @@
 
 #include "ee/cocos/EEUiLayoutLoader.hpp"
 
+#ifdef EE_X_COCOS_CPP
 #include <ui/UILayout.h>
 
 namespace ee {
@@ -50,3 +51,5 @@ void UiLayoutLoader::onHandlePropTypeByte(cocos2d::Node* node,
     Super::onHandlePropTypeByte(node, parent, propertyName, byte, reader);
 }
 } // namespace ee
+
+#endif // EE_X_COCOS_CPP

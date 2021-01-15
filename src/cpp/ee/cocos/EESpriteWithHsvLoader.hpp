@@ -11,9 +11,10 @@
 
 #ifdef __cplusplus
 
-#include <cocosbuilder/CCSpriteLoader.h>
-
 #include "ee/cocos/CocosFwd.hpp"
+
+#ifdef EE_X_COCOS_CPP
+#include <cocosbuilder/CCSpriteLoader.h>
 
 namespace ee {
 class SpriteWithHsvLoader : public cocosbuilder::SpriteLoader {
@@ -36,6 +37,7 @@ protected:
 };
 } // namespace ee
 
+#endif // EE_X_COCOS_CPP
 #endif // __cplusplus
 
 #endif /* EE_LIBRARY_SPRITE_WITH_HSV_LOADER_HPP_ */

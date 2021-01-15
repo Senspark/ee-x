@@ -8,6 +8,7 @@
 
 #include "ee/cocos/EEUiButtonLoader.hpp"
 
+#ifdef EE_X_COCOS_CPP
 #include <2d/CCLabel.h>
 #include <2d/CCSpriteFrameCache.h>
 #include <base/CCDirector.h>
@@ -225,3 +226,5 @@ void UiButtonLoader::onHandlePropTypeColor3(cocos2d::Node* node,
     Super::onHandlePropTypeColor3(node, parent, propertyName, color3B, reader);
 }
 } // namespace ee
+
+#endif // EE_X_COCOS_CPP

@@ -8,6 +8,7 @@
 
 #include "ee/cocos/EESkeletonBone.hpp"
 
+#ifdef EE_X_COCOS_CPP
 #include <spine/SkeletonAnimation.h>
 
 #include "ee/cocos/EESpineMacro.hpp"
@@ -73,3 +74,5 @@ void SkeletonBone::setBoneName(const std::string& boneName) {
     boneName_ = boneName;
 }
 } // namespace ee
+
+#endif // EE_X_COCOS_CPP

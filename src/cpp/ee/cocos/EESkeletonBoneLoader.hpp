@@ -13,6 +13,8 @@
 
 #include "ee/cocos/EENodeV3Loader.hpp"
 
+#ifdef EE_X_COCOS_CPP
+
 namespace ee {
 class SkeletonBoneLoader : public NodeV3Loader {
 private:
@@ -32,6 +34,7 @@ protected:
 };
 } // namespace ee
 
+#endif // EE_X_COCOS_CPP
 #endif // __cplusplus
 
 #endif /* EE_LIBRARY_SKELETON_BONE_LOADER_HPP_ */

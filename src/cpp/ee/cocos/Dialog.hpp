@@ -11,6 +11,9 @@
 
 #ifdef __cplusplus
 
+#include "ee/cocos/EECocos2dxFwd.hpp"
+
+#ifdef EE_X_COCOS_CPP
 #include <functional>
 #include <memory>
 #include <vector>
@@ -18,8 +21,6 @@
 #include <2d/CCAction.h>
 #include <base/CCRefPtr.h>
 #include <ui/UIWidget.h>
-
-#include "ee/cocos/EECocos2dxFwd.hpp"
 
 namespace ee {
 namespace cocos {
@@ -177,6 +178,7 @@ private:
 } // namespace cocos
 } // namespace ee
 
+#endif // EE_X_COCOS_CPP
 #endif // __cplusplus
 
 #endif /* EE_X_DIALOG_HPP */

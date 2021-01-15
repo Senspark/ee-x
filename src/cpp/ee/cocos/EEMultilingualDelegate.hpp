@@ -14,6 +14,7 @@
 // Must included first.
 #include "ee/cocos/CocosFwd.hpp"
 
+#ifdef EE_X_COCOS_CPP
 #include <cocosbuilder/CCBMemberVariableAssigner.h>
 #include <cocosbuilder/CCNodeLoaderListener.h>
 
@@ -44,6 +45,7 @@ protected:
 };
 } // namespace ee
 
+#endif // EE_X_COCOS_CPP
 #endif // __cplusplus
 
 #endif /* EE_LIBRARY_MULTILINGUAL_DELEGATE_HPP */

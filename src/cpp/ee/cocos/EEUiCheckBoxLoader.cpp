@@ -8,6 +8,7 @@
 
 #include "ee/cocos/EEUiCheckBoxLoader.hpp"
 
+#ifdef EE_X_COCOS_CPP
 #include <2d/CCSpriteFrameCache.h>
 #include <base/CCDirector.h>
 #include <renderer/CCTextureCache.h>
@@ -180,3 +181,5 @@ void UiCheckBoxLoader::onHandlePropTypeSpriteFrame(
                                        reader);
 }
 } // namespace ee
+
+#endif // EE_X_COCOS_CPP

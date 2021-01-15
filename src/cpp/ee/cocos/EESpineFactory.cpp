@@ -8,6 +8,7 @@
 
 #include "ee/cocos/EESpineFactory.hpp"
 
+#ifdef EE_X_COCOS_CPP
 #include <cassert>
 
 #include <spine/AttachmentLoader.h>
@@ -116,3 +117,5 @@ SpineFactory::createAnimation(const std::string& dataFile,
     return skeleton;
 }
 } // namespace ee
+
+#endif // EE_X_COCOS_CPP

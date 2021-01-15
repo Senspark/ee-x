@@ -11,10 +11,11 @@
 
 #ifdef __cplusplus
 
+#include "ee/cocos/CocosFwd.hpp"
+
+#ifdef EE_X_COCOS_CPP
 #include <2d/CCClippingRectangleNode.h>
 #include <renderer/CCCustomCommand.h>
-
-#include "ee/cocos/CocosFwd.hpp"
 
 namespace ee {
 class ClippingRectangleNode : public cocos2d::ClippingRectangleNode {
@@ -43,6 +44,7 @@ protected:
 };
 } // namespace ee
 
+#endif // EE_X_COCOS_CPP
 #endif // __cplusplus
 
 #endif /* EE_LIBRARY_CLIPPING_RECTANGLE_NODE_HPP */

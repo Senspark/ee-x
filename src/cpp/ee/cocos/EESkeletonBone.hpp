@@ -11,9 +11,10 @@
 
 #ifdef __cplusplus
 
-#include <2d/CCNode.h>
-
 #include "ee/cocos/CocosFwd.hpp"
+
+#ifdef EE_X_COCOS_CPP
+#include <2d/CCNode.h>
 
 namespace ee {
 class SkeletonBone : public cocos2d::Node {
@@ -43,6 +44,7 @@ private:
 };
 } // namespace ee
 
+#endif // EE_X_COCOS_CPP
 #endif // __cplusplus
 
 #endif /* EE_LIBRARY_SKELETON_BONE_HPP_ */

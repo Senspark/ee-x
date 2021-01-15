@@ -11,9 +11,10 @@
 
 #ifdef __cplusplus
 
-#include <2d/CCActionInterval.h>
-
 #include "ee/cocos/CocosFwd.hpp"
+
+#ifdef EE_X_COCOS_CPP
+#include <2d/CCActionInterval.h>
 
 namespace ee {
 class Sequence : public cocos2d::Sequence {
@@ -99,6 +100,7 @@ protected:
 };
 } // namespace ee
 
+#endif // EE_X_COCOS_CPP
 #endif // __cplusplus
 
 #endif /* EE_LIBRARY_ACTION_HPP_ */

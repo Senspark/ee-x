@@ -8,6 +8,7 @@
 
 #include "ee/cocos/EEScale9SpriteWithHsv.hpp"
 
+#ifdef EE_X_COCOS_CPP
 #include <cocos2d.h> // For COCOS2D_VERSION
 
 #include "ee/cocos/EEShaderUtils.hpp"
@@ -97,3 +98,5 @@ cocos2d::GLProgramState* Self::createState() {
     return state;
 }
 } // namespace ee
+
+#endif // EE_X_COCOS_CPP

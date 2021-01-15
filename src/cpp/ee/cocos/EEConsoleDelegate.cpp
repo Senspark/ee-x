@@ -8,6 +8,7 @@
 
 #include "ee/cocos/EEConsoleDelegate.hpp"
 
+#ifdef EE_X_COCOS_CPP
 #include <sstream>
 
 #include "ee/cocos/EECommandPool.hpp"
@@ -50,3 +51,5 @@ void ConsoleDelegate::editBoxReturn(cocos2d::ui::EditBox* editBox) {
 }
 } // namespace detail
 } // namespace ee
+
+#endif // EE_X_COCOS_CPP

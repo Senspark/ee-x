@@ -8,6 +8,7 @@
 
 #include "ee/cocos/EEBackButtonListener.hpp"
 
+#ifdef EE_X_COCOS_CPP
 #include <base/CCDirector.h>
 #include <base/CCEventDispatcher.h>
 
@@ -49,3 +50,5 @@ void BackButtonListenerBase::onKeyReleased(
 }
 } // namespace detail
 } // namespace ee
+
+#endif // EE_X_COCOS_CPP

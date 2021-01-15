@@ -12,6 +12,8 @@
 
 #include "ee/cocos/EEUiWidgetLoader.hpp"
 
+#ifdef EE_X_COCOS_CPP
+
 namespace ee {
 namespace ui {
 class WidgetLoader : public UiWidgetLoader {
@@ -34,6 +36,7 @@ protected:
 } // namespace ui
 } // namespace ee
 
+#endif // EE_X_COCOS_CPP
 #endif // __cplusplus
 
 #endif /* EE_LIBRARY_WIDGET_LOADER_HPP */

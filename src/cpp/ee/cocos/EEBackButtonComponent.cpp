@@ -8,6 +8,7 @@
 
 #include "ee/cocos/EEBackButtonComponent.hpp"
 
+#ifdef EE_X_COCOS_CPP
 #include <cocos2d.h>
 
 namespace ee {
@@ -72,3 +73,5 @@ void BackButtonComponent::onKeyReleased(cocos2d::EventKeyboard::KeyCode keyCode,
     }
 }
 } // namespace ee
+
+#endif // EE_X_COCOS_CPP

@@ -8,6 +8,7 @@
 
 #include "ee/cocos/EEConsole.hpp"
 
+#ifdef EE_X_COCOS_CPP
 #include <2d/CCLayer.h>
 #include <2d/CCSprite.h>
 #include <base/CCDirector.h>
@@ -100,3 +101,5 @@ Console::addCommandPool(std::unique_ptr<detail::CommandPoolBase> pool) {
     return this;
 }
 } // namespace ee
+
+#endif // EE_X_COCOS_CPP

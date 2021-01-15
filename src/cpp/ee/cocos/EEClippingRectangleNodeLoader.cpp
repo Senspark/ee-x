@@ -8,6 +8,7 @@
 
 #include "ee/cocos/EEClippingRectangleNodeLoader.hpp"
 
+#ifdef EE_X_COCOS_CPP
 #include <2d/CCClippingRectangleNode.h>
 
 namespace ee {
@@ -44,3 +45,5 @@ void ClippingRectangleNodeLoader::onHandlePropTypeSize(
     Super::onHandlePropTypeSize(node, parent, propertyName, size, reader);
 }
 } // namespace ee
+
+#endif // EE_X_COCOS_CPP

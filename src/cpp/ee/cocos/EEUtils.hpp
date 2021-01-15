@@ -11,14 +11,15 @@
 
 #ifdef __cplusplus
 
+#include "ee/cocos/CocosFwd.hpp"
+
+#ifdef EE_X_COCOS_CPP
 #include <cstring>
 #include <functional>
 #include <limits>
 #include <sstream>
 
 #include <platform/CCPlatformMacros.h> // CC_SAFE_DELETE
-
-#include "ee/cocos/CocosFwd.hpp"
 
 namespace ee {
 /// Reference guard.
@@ -269,6 +270,7 @@ void downloadImage(
     const std::function<void(cocos2d::Texture2D*)>& afterDownloaded);
 } // namespace ee
 
+#endif // EE_X_COCOS_CPP
 #endif // __cplusplus
 
 #endif /* EE_LIBRARY_UTILS_HPP_ */

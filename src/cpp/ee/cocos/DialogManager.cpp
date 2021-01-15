@@ -8,6 +8,7 @@
 
 #include "ee/cocos/DialogManager.hpp"
 
+#ifdef EE_X_COCOS_CPP
 #include <2d/CCScene.h>
 
 #include <ee/core/Logger.hpp>
@@ -287,3 +288,5 @@ void Self::popDialogImmediately(Dialog* dialog) {
 }
 } // namespace cocos
 } // namespace ee
+
+#endif // EE_X_COCOS_CPP

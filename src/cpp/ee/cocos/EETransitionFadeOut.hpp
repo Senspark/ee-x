@@ -11,9 +11,10 @@
 
 #ifdef __cplusplus
 
-#include <2d/CCTransition.h>
-
 #include "ee/cocos/EECocos2dxFwd.hpp"
+
+#ifdef EE_X_COCOS_CPP
+#include <2d/CCTransition.h>
 
 namespace ee {
 class TransitionFadeOut : public cocos2d::TransitionScene {
@@ -45,6 +46,7 @@ private:
 };
 } // namespace ee
 
+#endif // EE_X_COCOS_CPP
 #endif // __cplusplus
 
 #endif /* EE_LIBRARY_TRANSITION_FADE_OUT_HPP_ */

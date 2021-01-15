@@ -8,6 +8,7 @@
 
 #include "ee/cocos/EEMultilingualDelegate.hpp"
 
+#ifdef EE_X_COCOS_CPP
 #include <2d/CCNode.h>
 #include <base/CCValue.h>
 
@@ -39,3 +40,5 @@ bool Self::onAssignCCBCustomProperty(cocos2d::Ref* target,
     return false;
 }
 } // namespace ee
+
+#endif // EE_X_COCOS_CPP

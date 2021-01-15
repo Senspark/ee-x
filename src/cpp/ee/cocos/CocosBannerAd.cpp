@@ -7,6 +7,7 @@
 
 #include "ee/cocos/CocosBannerAd.hpp"
 
+#ifdef EE_X_COCOS_CPP
 #include <base/CCDirector.h>
 
 #include <ee/core/ObserverHandle.hpp>
@@ -100,3 +101,5 @@ void Self::setVisible(bool visible) {
 }
 } // namespace cocos
 } // namespace ee
+
+#endif // EE_X_COCOS_CPP

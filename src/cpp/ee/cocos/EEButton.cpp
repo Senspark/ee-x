@@ -8,6 +8,7 @@
 
 #include "ee/cocos/EEButton.hpp"
 
+#ifdef EE_X_COCOS_CPP
 #include <2d/CCActionInterval.h>
 #include <2d/CCLabel.h>
 #include <base/CCRefPtr.h>
@@ -460,3 +461,5 @@ void ButtonEx::setBrightness(float brightness) {
 }
 } // namespace detail
 } // namespace ee
+
+#endif // EE_X_COCOS_CPP

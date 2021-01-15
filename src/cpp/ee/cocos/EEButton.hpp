@@ -11,12 +11,13 @@
 
 #ifdef __cplusplus
 
+#include "ee/cocos/CocosFwd.hpp"
+
+#ifdef EE_X_COCOS_CPP
 #include <array>
 #include <functional>
 
 #include <ui/UIButton.h>
-
-#include "ee/cocos/CocosFwd.hpp"
 
 namespace ee {
 namespace detail {
@@ -212,6 +213,7 @@ private:
 } // namespace detail
 } // namespace ee
 
+#endif // EE_X_COCOS_CPP
 #endif // __cplusplus
 
 #endif /* EE_LIBRARY_BUTTON_HPP_ */

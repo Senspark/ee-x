@@ -13,6 +13,8 @@
 
 #include "ee/cocos/EENodeV3Loader.hpp"
 
+#ifdef EE_X_COCOS_CPP
+
 namespace ee {
 /// Cocosbuilder loader for @c cocos2d::ui::Widget.
 ///
@@ -51,6 +53,7 @@ protected:
 };
 } // namespace ee
 
+#endif // EE_X_COCOS_CPP
 #endif // __cplusplus
 
 #endif /* EE_LIBRARY_UI_WIDGET_LOADER_HPP_ */

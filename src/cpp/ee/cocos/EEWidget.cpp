@@ -7,6 +7,7 @@
 
 #include "ee/cocos/EEWidget.hpp"
 
+#ifdef EE_X_COCOS_CPP
 #include "ee/cocos/EEUtils.hpp"
 
 #ifndef NDEBUG
@@ -181,3 +182,5 @@ void Self::updateInset() {
 }
 } // namespace ui
 } // namespace ee
+
+#endif // EE_X_COCOS_CPP

@@ -5,7 +5,7 @@
 //  Created by Le Van Kiet on 10/24/18.
 //
 
-#include "ee/jsb/core/Templates.hpp"
+#include "ee/core/JsbTemplates.hpp"
 
 #include <string>
 #include <unordered_map>

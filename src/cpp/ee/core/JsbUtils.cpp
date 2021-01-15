@@ -1,4 +1,4 @@
-#include "ee/core/internal/JsbUtils.hpp"
+#include "ee/core/JsbUtils.hpp"
 
 #include <cocos/scripting/js-bindings/jswrapper/SeApi.h>
 

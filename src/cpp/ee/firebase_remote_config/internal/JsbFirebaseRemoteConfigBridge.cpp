@@ -6,10 +6,11 @@
 //
 //
 
-#include "ee/jsb/firebase/remote_config/JsbFirebaseRemoteConfigBridge.hpp"
+#include "ee/firebase_remote_config/internal/JsbFirebaseRemoteConfigBridge.hpp"
 
-#include <ee/Firebase.hpp>
-#include <ee/jsb/JsbCore.hpp>
+#include <ee/core/JsbUtils.hpp>
+
+#include "ee/firebase_remote_config/FirebaseRemoteConfigBridge.hpp"
 
 namespace ee {
 namespace firebase {
@@ -20,23 +21,23 @@ se::Class* clazz = nullptr;
 using Self = Bridge;
 
 // clang-format off
-constexpr auto constructor      = &core::makeConstructor<Self>;
-constexpr auto finalize         = &core::makeFinalize<Self>;
-constexpr auto initialize       = &core::makeMethod<&Self::initialize>;
-constexpr auto activateFetched  = &core::makeMethod<&Self::activateFetched>;
-constexpr auto fetchOnly        = &core::makeMethod<&Self::fetchOnly>;
-constexpr auto fetch            = &core::makeMethod<&Self::fetch>;
-constexpr auto getInfo          = &core::makeMethod<&Self::getInfo>;
-constexpr auto getInfoJsb       = &core::makeMethod<&Self::getInfoJsb>;
-constexpr auto setDefaultBool   = &core::makeMethod<&Self::setDefaultBool>;
-constexpr auto setDefaultLong   = &core::makeMethod<&Self::setDefaultLong>;
-constexpr auto setDefaultDouble = &core::makeMethod<&Self::setDefaultDouble>;
-constexpr auto setDefaultString = &core::makeMethod<&Self::setDefaultString>;
-constexpr auto flushDefaults    = &core::makeMethod<&Self::flushDefaults>;
-constexpr auto getBool          = &core::makeMethod<&Self::getBool>;
-constexpr auto getLong          = &core::makeMethod<&Self::getLong>;
-constexpr auto getDouble        = &core::makeMethod<&Self::getDouble>;
-constexpr auto getString        = &core::makeMethod<&Self::getString>;
+constexpr auto constructor      = &JsbUtils::makeConstructor<Self>;
+constexpr auto finalize         = &JsbUtils::makeFinalize<Self>;
+constexpr auto initialize       = &JsbUtils::makeMethod<&Self::initialize>;
+constexpr auto activateFetched  = &JsbUtils::makeMethod<&Self::activateFetched>;
+constexpr auto fetchOnly        = &JsbUtils::makeMethod<&Self::fetchOnly>;
+constexpr auto fetch            = &JsbUtils::makeMethod<&Self::fetch>;
+constexpr auto getInfo          = &JsbUtils::makeMethod<&Self::getInfo>;
+constexpr auto getInfoJsb       = &JsbUtils::makeMethod<&Self::getInfoJsb>;
+constexpr auto setDefaultBool   = &JsbUtils::makeMethod<&Self::setDefaultBool>;
+constexpr auto setDefaultLong   = &JsbUtils::makeMethod<&Self::setDefaultLong>;
+constexpr auto setDefaultDouble = &JsbUtils::makeMethod<&Self::setDefaultDouble>;
+constexpr auto setDefaultString = &JsbUtils::makeMethod<&Self::setDefaultString>;
+constexpr auto flushDefaults    = &JsbUtils::makeMethod<&Self::flushDefaults>;
+constexpr auto getBool          = &JsbUtils::makeMethod<&Self::getBool>;
+constexpr auto getLong          = &JsbUtils::makeMethod<&Self::getLong>;
+constexpr auto getDouble        = &JsbUtils::makeMethod<&Self::getDouble>;
+constexpr auto getString        = &JsbUtils::makeMethod<&Self::getString>;
 // clang-format on
 
 SE_BIND_FINALIZE_FUNC(finalize)
@@ -59,7 +60,7 @@ SE_BIND_FUNC(getString)
 } // namespace
 
 bool registerJsbBridge(se::Object* global) {
-    auto scope = core::getPath(global, "ee");
+    auto scope = JsbUtils::getPath(global, "ee");
     auto cls = se::Class::create("FirebaseRemoteConfig", scope, nullptr,
                                  _SE(constructor));
     cls->defineFinalizeFunction(_SE(finalize));

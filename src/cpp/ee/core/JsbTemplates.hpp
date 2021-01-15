@@ -5,8 +5,8 @@
 //  Created by Duc Nguyen on 7/13/18.
 //
 
-#ifndef EE_X_TEMPLATES_HPP
-#define EE_X_TEMPLATES_HPP
+#ifndef EE_X_JSB_TEMPLATES_HPP
+#define EE_X_JSB_TEMPLATES_HPP
 
 #include <type_traits>
 #include <utility>
@@ -16,7 +16,7 @@
 #include <cocos/scripting/js-bindings/manual/jsb_conversions.hpp>
 #include <cocos/scripting/js-bindings/manual/jsb_helper.hpp>
 
-#include <ee/core/Core.hpp>
+#include "ee/core/Thread.hpp"
 
 #define EE_JSB_DEFINE_FUNCTION(cls, name) cls->defineFunction(#name, _SE(name))
 
@@ -183,7 +183,7 @@ struct ArgumentParser<T, std::void_t<decltype(&std::decay_t<T>::operator())>> {
         jsFunc.toObject()->root();
         auto lambda = [=](auto... values) {
             // Must copy values.
-            runOnCocosThread([=]() mutable {
+            Thread::runOnLibraryThread([=]() mutable {
                 se::ScriptEngine::getInstance()->clearException();
                 se::AutoHandleScope hs;
                 se::ValueArray args = {internal::to_value(
@@ -396,7 +396,9 @@ template <auto F1, auto F2>
 bool makeInstanceMethod(se::State& state) {
     constexpr auto Arity1 = FunctionArity<F1>;
     constexpr auto Arity2 = FunctionArity<F2>;
-    static_assert(Arity1 != Arity2, "Multiple overload functions must have different argument count.");
+    static_assert(
+        Arity1 != Arity2,
+        "Multiple overload functions must have different argument count.");
     auto&& args = state.args();
     if (Arity1 == args.size()) {
         return makeInstanceMethod<F1>(state);
@@ -404,8 +406,9 @@ bool makeInstanceMethod(se::State& state) {
     if (Arity2 == args.size()) {
         return makeInstanceMethod<F2>(state);
     }
-    SE_REPORT_ERROR("Wrong number of arguments: %zu, was expecting: %zu or %zu.",
-                    args.size(), Arity1, Arity2);
+    SE_REPORT_ERROR(
+        "Wrong number of arguments: %zu, was expecting: %zu or %zu.",
+        args.size(), Arity1, Arity2);
     return false;
 }
 
@@ -494,8 +497,8 @@ template <typename ReturnType, auto FunctionPtr, typename... Args>
 }
 
 template <typename ReturnType, auto MemberPtr>
-[[deprecated("Use makeStaticProperty")]] bool jsb_static_property_get(
-    se::State& s) { //
+[[deprecated("Use makeStaticProperty")]] bool
+jsb_static_property_get(se::State& s) { //
     return makeStaticProperty<MemberPtr>(s);
 }
 
@@ -507,14 +510,14 @@ template <typename InstanceType, auto FunctionPtr, typename... Args>
 template <typename InstanceType, auto FunctionPtr, typename... Args>
 [[deprecated("Use makeInstanceMethodOnUiThread")]] //
     bool jsb_method_call_on_ui_thread(se::State& s) {
-        return makeInstanceMethodOnUiThread<FunctionPtr>(s);
-    }
+    return makeInstanceMethodOnUiThread<FunctionPtr>(s);
+}
 
 template <typename InstanceType, auto FunctionPtr, typename... Args>
 [[deprecated("Use makeInstanceMethodOnUiThreadAndWait")]] //
     bool jsb_method_call_on_ui_thread_and_wait(se::State& s) {
-        return makeInstanceMethodOnUiThreadAndWait<FunctionPtr>(s);
-    }
+    return makeInstanceMethodOnUiThreadAndWait<FunctionPtr>(s);
+}
 
 template <typename InstanceType, auto FunctionPtr, typename ReturnType,
           typename... Args>
@@ -526,8 +529,8 @@ template <typename InstanceType, auto FunctionPtr, typename ReturnType,
           typename... Args>
 [[deprecated("Use makeInstanceMethodOnUiThreadAndWait")]] //
     bool jsb_method_get_on_ui_thread(se::State& s) {
-        return makeInstanceMethodOnUiThreadAndWait<FunctionPtr>(s);
-    }
+    return makeInstanceMethodOnUiThreadAndWait<FunctionPtr>(s);
+}
 
 template <typename InstanceType, auto FunctionPtr, typename ReturnType>
 [[deprecated("Use makeInstanceMethod")]] bool jsb_accessor_get(se::State& s) {
@@ -537,8 +540,8 @@ template <typename InstanceType, auto FunctionPtr, typename ReturnType>
 template <typename InstanceType, auto FunctionPtr, typename ReturnType>
 [[deprecated("Use makeInstanceMethodOnUiThreadAndWait")]] //
     bool jsb_accessor_get_on_ui_thread(se::State& s) {
-        return makeInstanceMethodOnUiThreadAndWait<FunctionPtr>(s);
-    }
+    return makeInstanceMethodOnUiThreadAndWait<FunctionPtr>(s);
+}
 
 template <typename InstanceType, auto FunctionPtr, typename ArgumentType>
 [[deprecated("Use makeInstanceMethod")]] bool jsb_accessor_set(se::State& s) {
@@ -548,8 +551,8 @@ template <typename InstanceType, auto FunctionPtr, typename ArgumentType>
 template <typename InstanceType, auto FunctionPtr, typename ArgumentType>
 [[deprecated("Use makeInstanceMethodOnUiThread")]] //
     bool jsb_accessor_set_on_ui_thread(se::State& s) {
-        return makeInstanceMethodOnUiThread<FunctionPtr>(s);
-    }
+    return makeInstanceMethodOnUiThread<FunctionPtr>(s);
+}
 
 template <typename InstanceType, auto MemberPtr, typename ReturnType>
 [[deprecated("Use makeInstanceProperty")]] //
@@ -572,4 +575,4 @@ bool jsb_propterty_set(se::State& s) {
 } // namespace core
 } // namespace ee
 
-#endif /* EE_X_TEMPLATES_HPP */
+#endif /* EE_X_JSB_TEMPLATES_HPP */

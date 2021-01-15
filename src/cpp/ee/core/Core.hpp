@@ -16,6 +16,8 @@
 #include "ee/core/DynamicValue.hpp"
 #include "ee/core/IMessageBridge.hpp"
 #include "ee/core/IService.hpp"
+#include "ee/core/JsbTemplates.hpp"
+#include "ee/core/JsbUtils.hpp"
 #include "ee/core/LambdaAwaiter.hpp"
 #include "ee/core/LogLevel.hpp"
 #include "ee/core/Logger.hpp"

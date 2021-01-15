@@ -6,10 +6,11 @@
 //
 //
 
-#include "ee/jsb/firebase/analytics/JsbFirebaseAnalyticsBridge.hpp"
+#include "ee/firebase_analytics/internal/JsbFirebaseAnalyticsBridge.hpp"
 
-#include <ee/Firebase.hpp>
-#include <ee/jsb/JsbCore.hpp>
+#include <ee/core/JsbUtils.hpp>
+
+#include "ee/firebase_analytics/FirebaseAnalyticsBridge.hpp"
 
 namespace ee {
 namespace firebase {
@@ -20,13 +21,13 @@ se::Class* clazz = nullptr;
 using Self = Bridge;
 
 // clang-format off
-constexpr auto finalize                   = &core::makeFinalize<Self>;
-constexpr auto constructor                = &core::makeConstructor<Self>;
-constexpr auto initialize                 = &core::makeMethod<&Self::initialize>;
-constexpr auto analyticsCollectionEnabled = &core::makeMethod<&Self::analyticsCollectionEnabled>;
-constexpr auto setSessionTimeoutDuration  = &core::makeMethod<&Self::setSessionTimeoutDuration>;
-constexpr auto setUserId                  = &core::makeMethod<&Self::setUserId>;
-constexpr auto logEvent                   = &core::makeMethod<&Self::logEvent>;
+constexpr auto finalize                   = &JsbUtils::makeFinalize<Self>;
+constexpr auto constructor                = &JsbUtils::makeConstructor<Self>;
+constexpr auto initialize                 = &JsbUtils::makeMethod<&Self::initialize>;
+constexpr auto analyticsCollectionEnabled = &JsbUtils::makeMethod<&Self::analyticsCollectionEnabled>;
+constexpr auto setSessionTimeoutDuration  = &JsbUtils::makeMethod<&Self::setSessionTimeoutDuration>;
+constexpr auto setUserId                  = &JsbUtils::makeMethod<&Self::setUserId>;
+constexpr auto logEvent                   = &JsbUtils::makeMethod<&Self::logEvent>;
 // clang-format on
 
 SE_BIND_FINALIZE_FUNC(finalize)
@@ -39,7 +40,7 @@ SE_BIND_FUNC(logEvent)
 } // namespace
 
 bool registerJsbBridge(se::Object* global) {
-    auto scope = core::getPath(global, "ee");
+    auto scope = JsbUtils::getPath(global, "ee");
     auto cls = se::Class::create("FirebaseAnalytics", scope, nullptr,
                                  _SE(constructor));
     cls->defineFinalizeFunction(_SE(finalize));

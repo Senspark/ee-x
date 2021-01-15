@@ -5,10 +5,11 @@
 //  Created by eps on 10/16/19
 //
 
-#include "ee/jsb/firebase/remote_config/JsbFirebaseLastFetchStatus.hpp"
+#include "ee/firebase_remote_config/internal/JsbFirebaseLastFetchStatus.hpp"
 
-#include <ee/firebase/remote_config/FirebaseRemoteConfigBridge.hpp>
-#include <ee/jsb/JsbCore.hpp>
+#include <ee/core/JsbUtils.hpp>
+
+#include "ee/firebase_remote_config/FirebaseRemoteConfigBridge.hpp"
 
 using Self = ee::firebase::remote_config::LastFetchStatus;
 using UnderlyingType = std::underlying_type_t<Self>;
@@ -28,11 +29,14 @@ void set_value(se::Value& value, Self& input) {
 namespace firebase {
 namespace remote_config {
 bool registerJsbLastFetchStatus(se::Object* global) {
-    auto scope = core::getPath(global, "ee");
-    auto cls = core::getPath(scope, "FirebaseLastFetchStatus");
-    cls->setProperty("Success", se::Value(static_cast<UnderlyingType>(Self::Success)));
-    cls->setProperty("Failure", se::Value(static_cast<UnderlyingType>(Self::Failure)));
-    cls->setProperty("Pending", se::Value(static_cast<UnderlyingType>(Self::Pending)));
+    auto scope = JsbUtils::getPath(global, "ee");
+    auto cls = JsbUtils::getPath(scope, "FirebaseLastFetchStatus");
+    cls->setProperty("Success",
+                     se::Value(static_cast<UnderlyingType>(Self::Success)));
+    cls->setProperty("Failure",
+                     se::Value(static_cast<UnderlyingType>(Self::Failure)));
+    cls->setProperty("Pending",
+                     se::Value(static_cast<UnderlyingType>(Self::Pending)));
 
     se::ScriptEngine::getInstance()->clearException();
     return true;

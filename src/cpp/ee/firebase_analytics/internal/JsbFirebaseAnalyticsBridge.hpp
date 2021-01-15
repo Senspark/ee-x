@@ -8,7 +8,7 @@
 #ifndef EE_X_JSB_FIREBASE_ANALYTICS_BRIDGE_HPP
 #define EE_X_JSB_FIREBASE_ANALYTICS_BRIDGE_HPP
 
-#include <ee/jsb/JsbCoreFwd.hpp>
+#include <ee/FirebaseFwd.hpp>
 
 namespace ee {
 namespace firebase {

@@ -5,9 +5,9 @@
 //  Created by Quynhnv on 10/24/18.
 //
 
-#include "ee/jsb/JsbFirebase.hpp"
+#include "ee/firebase_analytics/JsbFirebaseAnalytics.hpp"
 
-#include "ee/jsb/firebase/analytics/JsbFirebaseAnalyticsBridge.hpp"
+#include "ee/firebase_analytics/internal/JsbFirebaseAnalyticsBridge.hpp"
 
 namespace ee {
 namespace firebase {

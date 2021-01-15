@@ -85,6 +85,8 @@ class JniMethodInfo;
 class JniString;
 class JniUtils;
 #endif // EE_X_ANDROID
+
+class JsbUtils;
 } // namespace core
 
 using core::IPlugin;
@@ -134,6 +136,8 @@ using core::JniMethodInfo;
 using core::JniString;
 using core::JniUtils;
 #endif // EE_X_ANDROID
+
+using core::JsbUtils;
 } // namespace ee
 
 /// JSB.

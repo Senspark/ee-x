@@ -8,7 +8,7 @@
 #ifndef EE_X_JSB_FIREBASE_FETCH_FAILURE_REASON_HPP
 #define EE_X_JSB_FIREBASE_FETCH_FAILURE_REASON_HPP
 
-#include <ee/jsb/JsbCoreFwd.hpp>
+#include <ee/FirebaseFwd.hpp>
 
 namespace ee {
 namespace firebase {

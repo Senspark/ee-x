@@ -1,11 +1,8 @@
 #include "ee/core/internal/MessageBridgeJs.hpp"
 
-#include <cocos/scripting/js-bindings/jswrapper/SeApi.h>
-#include <cocos/scripting/js-bindings/manual/jsb_helper.hpp>
-
+#include "ee/core/JsbUtils.hpp"
 #include "ee/core/Logger.hpp"
 #include "ee/core/Task.hpp"
-#include "ee/core/internal/JsbUtils.hpp"
 #include "ee/core/internal/MessageBridgeUtils.hpp"
 
 namespace ee {

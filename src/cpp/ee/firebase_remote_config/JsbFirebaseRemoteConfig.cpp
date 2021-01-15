@@ -5,12 +5,12 @@
 //  Created by Quynhnv on 10/24/18.
 //
 
-#include "ee/jsb/JsbFirebase.hpp"
+#include "ee/firebase_remote_config/JsbFirebaseRemoteConfig.hpp"
 
-#include "ee/jsb/firebase/remote_config/JsbFirebaseRemoteConfigBridge.hpp"
-#include "ee/jsb/firebase/remote_config/JsbFirebaseConfigInfo.hpp"
-#include "ee/jsb/firebase/remote_config/JsbFirebaseFetchFailureReason.hpp"
-#include "ee/jsb/firebase/remote_config/JsbFirebaseLastFetchStatus.hpp"
+#include "ee/firebase_remote_config/internal/JsbFirebaseConfigInfo.hpp"
+#include "ee/firebase_remote_config/internal/JsbFirebaseFetchFailureReason.hpp"
+#include "ee/firebase_remote_config/internal/JsbFirebaseLastFetchStatus.hpp"
+#include "ee/firebase_remote_config/internal/JsbFirebaseRemoteConfigBridge.hpp"
 
 namespace ee {
 namespace firebase {

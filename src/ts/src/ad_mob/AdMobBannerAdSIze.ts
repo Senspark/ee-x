@@ -1,6 +1,6 @@
 export enum AdMobBannerAdSize {
-    Normal,
-    Large,
-    Smart,
-    MediumRectangle,
+    Normal = 0,
+    Large = 1,
+    Smart = 2,
+    MediumRectangle = 3,
 }

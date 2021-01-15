@@ -26,11 +26,11 @@ export class AdMobInterstitialAd extends ObserverManager<AdObserver> implements 
         this._messageHelper = new MessageHelper("AdMobInterstitialAd", adId);
         this._loader = new AsyncHelper<boolean>();
 
-        this._bridge.RegisterHandler(_ => onLoaded(), this._messageHelper.onLoaded);
-        this._bridge.RegisterHandler(this.onFailedToLoad, this._messageHelper.onFailedToLoad);
-        this._bridge.RegisterHandler(this.onFailedToShow, this._messageHelper.onFailedToShow);
-        this._bridge.RegisterHandler(_ => onClicked(), this._messageHelper.onClicked);
-        this._bridge.RegisterHandler(_ => onClosed(), this._messageHelper.onClosed);
+        this._bridge.registerHandler(_ => this.onLoaded(), this._messageHelper.onLoaded);
+        this._bridge.registerHandler(this.onFailedToLoad, this._messageHelper.onFailedToLoad);
+        this._bridge.registerHandler(this.onFailedToShow, this._messageHelper.onFailedToShow);
+        this._bridge.registerHandler(_ => this.onClicked(), this._messageHelper.onClicked);
+        this._bridge.registerHandler(_ => this.onClosed(), this._messageHelper.onClosed);
     }
 
     public destroy(): void {

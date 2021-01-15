@@ -32,69 +32,67 @@ export class AdMobRewardedAd extends ObserverManager<AdObserver> implements IFul
         this._bridge.registerHandler(message => this.onClosed(Utils.toBool(message)), this._messageHelper.onClosed);
     }
 
-    public void Destroy() {
-        _bridge.DeregisterHandler(_messageHelper.OnLoaded);
-        _bridge.DeregisterHandler(_messageHelper.OnFailedToLoad);
-        _bridge.DeregisterHandler(_messageHelper.OnFailedToShow);
-        _bridge.DeregisterHandler(_messageHelper.OnClosed);
-        _plugin.DestroyRewardedAd(_adId);
+    public destroy(): void {
+        this._bridge.deregisterHandler(this._messageHelper.onLoaded);
+        this._bridge.deregisterHandler(this._messageHelper.onFailedToLoad);
+        this._bridge.deregisterHandler(this._messageHelper.onFailedToShow);
+        this._bridge.deregisterHandler(this._messageHelper.onClosed);
+        this._plugin.destroyRewardedAd(this._adId);
     }
 
-    public bool IsLoaded {
-    get {
-        var response = _bridge.Call(_messageHelper.IsLoaded);
-        return Utils.ToBool(response);
+    public get isLoaded(): boolean {
+        const response = this._bridge.call(this._messageHelper.isLoaded);
+        return Utils.toBool(response);
     }
-}
 
-    public Task < bool > Load() {
-    return _loader.Process(
-        () => _bridge.Call(_messageHelper.Load),
-        result => {
-            // OK.
-        });
-}
-
-    public Task < FullScreenAdResult > Show() {
-    return _displayer.Process(
-        () => _bridge.Call(_messageHelper.Show),
-        result => {
-            // OK.
-        });
-}
-
-    private void OnLoaded() {
-    if (_loader.IsProcessing) {
-        _loader.Resolve(true);
-    } else {
-        Assert.IsTrue(false);
+    public load(): Promise<boolean> {
+        return this._loader.process(
+            () => this._bridge.call(this._messageHelper.load),
+            result => {
+                // OK.
+            });
     }
-    DispatchEvent(observer => observer.OnLoaded?.Invoke());
-}
 
-    private void OnFailedToLoad(string message) {
-    if (_loader.IsProcessing) {
-        _loader.Resolve(false);
-    } else {
-        Assert.IsTrue(false);
+    public show(): Promise<FullScreenAdResult> {
+        return this._displayer.process(
+            () => this._bridge.call(this._messageHelper.show),
+            result => {
+                // OK.
+            });
     }
-}
 
-    private void OnFailedToShow(string message) {
-    if (_displayer.IsProcessing) {
-        _displayer.Resolve(FullScreenAdResult.Failed);
-    } else {
-        Assert.IsTrue(false);
+    private onLoaded(): void {
+        if (this._loader.isProcessing) {
+            this._loader.resolve(true);
+        } else {
+            // Assert.
+        }
+        this.dispatchEvent(observer => observer.onLoaded && observer.onLoaded());
     }
-}
 
-    private void OnClosed(bool rewarded) {
-    if (_displayer.IsProcessing) {
-        _displayer.Resolve(rewarded
-            ? FullScreenAdResult.Completed
-            : FullScreenAdResult.Canceled);
-    } else {
-        Assert.IsTrue(false);
+    private onFailedToLoad(message: string): void {
+        if (this._loader.isProcessing) {
+            this._loader.resolve(false);
+        } else {
+            // Assert.
+        }
     }
-}
+
+    private onFailedToShow(message: string): void {
+        if (this._displayer.isProcessing) {
+            this._displayer.resolve(FullScreenAdResult.Failed);
+        } else {
+            // Asert.
+        }
+    }
+
+    private onClosed(rewarded: boolean): void {
+        if (this._displayer.isProcessing) {
+            this._displayer.resolve(rewarded
+                ? FullScreenAdResult.Completed
+                : FullScreenAdResult.Canceled);
+        } else {
+            // Assert.
+        }
+    }
 }

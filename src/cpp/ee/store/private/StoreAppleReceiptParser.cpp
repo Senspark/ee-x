@@ -7,9 +7,9 @@
 
 #include "ee/store/private/StoreAppleReceiptParser.hpp"
 
+#include <ee/core/IMessageBridge.hpp>
+#include "ee/core/PluginManager.hpp"
 #include <ee/nlohmann/json.hpp>
-
-#include <ee/core/internal/MessageBridge.hpp>
 
 #include "ee/store/private/StoreAppleInAppPurchaseReceipt.hpp"
 #include "ee/store/private/StoreAppleReceipt.hpp"
@@ -51,7 +51,7 @@ void from_json(const nlohmann::json& json,
 using Self = AppleReceiptParser;
 
 Self::AppleReceiptParser()
-    : bridge_(MessageBridge::getInstance()) {}
+    : bridge_(PluginManager::getBridge()) {}
 
 std::shared_ptr<AppleReceipt> Self::parse(const std::string& receiptData) {
     if (receiptData.empty()) {

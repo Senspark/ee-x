@@ -8,9 +8,9 @@
 
 #include "ee/notification/NotificationBridge.hpp"
 
+#include <ee/core/IMessageBridge.hpp>
 #include <ee/core/Platform.hpp>
 #include <ee/core/PluginManager.hpp>
-#include <ee/core/internal/MessageBridge.hpp>
 #include <ee/nlohmann/json.hpp>
 
 #include "ee/notification/NotificationBuilder.hpp"
@@ -28,7 +28,7 @@ const auto kClearAll = kPrefix + "ClearAll";
 using Self = Bridge;
 
 Self::Bridge()
-    : bridge_(MessageBridge::getInstance()) {
+    : bridge_(PluginManager::getBridge()) {
     PluginManager::addPlugin(Plugin::Notification);
 }
 

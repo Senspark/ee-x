@@ -67,7 +67,7 @@ namespace EE {
             _impl.InitializePlugins("2.2.3");
             _bridge = MessageBridge.Instance;
             Thread.Initialize();
-            Platform.RegisterHandlers(_bridge);
+            Platform.Initialize(_bridge);
         }
 
         public static T CreatePlugin<T>() where T : IPlugin {

@@ -48,7 +48,7 @@ using Self = Platform;
 
 IMessageBridge* Self::bridge_ = nullptr;
 
-void Self::registerHandlers(IMessageBridge& bridge) {
+void Self::initialize(IMessageBridge& bridge) {
     bridge_ = &bridge;
 }
 

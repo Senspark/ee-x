@@ -7,8 +7,9 @@
 
 #include "ee/store/private/StoreStandardPurchasingModule.hpp"
 
+#include <ee/core/IMessageBridge.hpp>
+#include <ee/core/PluginManager.hpp>
 #include <ee/core/Logger.hpp>
-#include <ee/core/internal/MessageBridge.hpp>
 
 #include "ee/store/StoreAppStore.hpp"
 #include "ee/store/private/StoreAppleStoreImpl.hpp"
@@ -82,7 +83,7 @@ std::shared_ptr<Self> Self::instance(AppStore androidStore) {
             androidStore = AppStore::AppleAppStore;
 #endif // EE_X_IOS
         }
-        auto&& bridge = MessageBridge::getInstance();
+        auto&& bridge = PluginManager::getBridge();
         moduleInstance_ = std::shared_ptr<Self>(new Self(
             Logger::getSystemLogger(),
             std::make_shared<NativeStoreProvider>(bridge), androidStore));

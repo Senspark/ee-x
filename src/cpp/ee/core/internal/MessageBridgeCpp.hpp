@@ -6,10 +6,8 @@
 //
 //
 
-#ifndef EE_X_CORE_MESSAGE_BRIDGE_HPP_
-#define EE_X_CORE_MESSAGE_BRIDGE_HPP_
-
-#ifdef __cplusplus
+#ifndef EE_X_CORE_MESSAGE_BRIDGE_CPP_HPP_
+#define EE_X_CORE_MESSAGE_BRIDGE_CPP_HPP_
 
 #include <unordered_map>
 
@@ -17,12 +15,10 @@
 
 namespace ee {
 namespace core {
-class MessageBridge final : public IMessageBridge {
-private:
-    using Self = MessageBridge;
-
+class MessageBridgeCpp final : public IMessageBridge {
 public:
-    static MessageBridge& getInstance();
+    MessageBridgeCpp();
+    virtual ~MessageBridgeCpp() override;
 
     virtual void registerHandler(const MessageHandler& handler,
                                  const std::string& tag) override;
@@ -39,12 +35,6 @@ public:
                          const std::string& message) override;
 
 private:
-    MessageBridge();
-    virtual ~MessageBridge() override;
-
-    MessageBridge(const Self&) = delete;
-    Self& operator=(const Self&) = delete;
-
     MessageHandler findHandler(const std::string& tag) const;
 
     const Logger& logger_;
@@ -57,6 +47,4 @@ private:
 } // namespace core
 } // namespace ee
 
-#endif // __cplusplus
-
-#endif /* EE_X_CORE_MESSAGE_BRIDGE_HPP_ */
+#endif /* EE_X_CORE_MESSAGE_BRIDGE_CPP_HPP */

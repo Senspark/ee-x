@@ -34,7 +34,7 @@ public:
     bool checkRecordingPermission() const;
 
 private:
-    MessageBridge& bridge_;
+    IMessageBridge& bridge_;
 };
 } // namespace recorder
 } // namespace ee

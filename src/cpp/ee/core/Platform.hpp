@@ -42,8 +42,6 @@ struct InstallReferrer {
 
 class Platform {
 public:
-    static void registerHandlers(IMessageBridge& bridge);
-
     /// Checks whether an application with the specified package name (Android)
     /// or scheme (iOS) is installed.
     static bool isApplicationInstalled(const std::string& applicationId);
@@ -103,6 +101,10 @@ public:
     [[nodiscard]] static Task<InstallReferrer> getInstallReferrer();
 
 private:
+    friend PluginManager;
+
+    static void initialize(IMessageBridge& bridge);
+
     static IMessageBridge* bridge_;
 };
 } // namespace core

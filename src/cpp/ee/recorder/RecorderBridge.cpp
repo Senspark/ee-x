@@ -5,9 +5,9 @@
 
 #include "ee/recorder/RecorderBridge.hpp"
 
+#include <ee/core/IMessageBridge.hpp>
 #include <ee/core/PluginManager.hpp>
 #include <ee/core/Utils.hpp>
-#include <ee/core/internal/MessageBridge.hpp>
 
 namespace ee {
 namespace recorder {
@@ -26,7 +26,7 @@ const auto kCheckRecordingPermission = kPrefix + "CheckRecordingPermission";
 using Self = Bridge;
 
 Self::Bridge()
-    : bridge_(MessageBridge::getInstance()) {
+    : bridge_(PluginManager::getBridge()) {
     PluginManager::addPlugin(Plugin::Recorder);
 }
 

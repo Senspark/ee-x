@@ -7,8 +7,9 @@
 
 #include "ee/core/VideoPlayerManager.hpp"
 
+#include "ee/core/IMessageBridge.hpp"
+#include "ee/core/PluginManager.hpp"
 #include "ee/core/VideoPlayer.hpp"
-#include "ee/core/internal/MessageBridge.hpp"
 
 namespace ee {
 namespace core {
@@ -25,7 +26,7 @@ Self& Self::getInstance() {
 }
 
 Self::VideoPlayerManager()
-    : bridge_(MessageBridge::getInstance()) {}
+    : bridge_(PluginManager::getBridge()) {}
 
 VideoPlayer* Self::createVideoPlayer() {
     static int counter = 0;

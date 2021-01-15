@@ -26,12 +26,12 @@ enum class Library;
 enum class Plugin;
 class IPlugin;
 class PluginManager;
+class IPluginManagerImpl;
 
 struct LogLevel;
 class Logger;
 
 class IMessageBridge;
-class MessageBridge;
 
 class IService;
 class ServiceLocator;
@@ -43,6 +43,7 @@ struct SafeInset;
 
 class Platform;
 class Thread;
+class IThreadImpl;
 
 class VideoPlayer;
 class VideoPlayerManager;
@@ -95,7 +96,6 @@ using core::Logger;
 using core::LogLevel;
 
 using core::IMessageBridge;
-using core::MessageBridge;
 
 using core::IService;
 using core::ServiceLocator;

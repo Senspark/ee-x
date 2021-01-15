@@ -9,7 +9,6 @@ import com.ee.internal.MessageBridge
 import com.ee.internal.MessageBridgeHandler
 import com.ee.internal.NativeThread
 import com.ee.internal.ThreadImpl
-import com.ee.internal.ee_callCppInternal
 import kotlinx.serialization.InternalSerializationApi
 import java.util.concurrent.ConcurrentHashMap
 
@@ -220,6 +219,9 @@ class PluginManager private constructor() {
         })
     }
 }
+
+@Suppress("FunctionName")
+private external fun ee_callCppInternal(tag: String, message: String)
 
 @InternalSerializationApi
 @NativeThread

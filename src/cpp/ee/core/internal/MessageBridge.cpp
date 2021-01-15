@@ -14,7 +14,6 @@
 
 #include "ee/core/LambdaAwaiter.hpp"
 #include "ee/core/Logger.hpp"
-#include "ee/core/SpinLock.hpp"
 #include "ee/core/Thread.hpp"
 
 #ifdef EE_X_ANDROID
@@ -92,21 +91,6 @@ Task<std::string> Self::callAsync(const std::string& tag,
 }
 
 #ifdef EE_X_ANDROID
-extern "C" {
-JNIEXPORT void JNICALL Java_com_ee_internal_MessageBridgeKt_ee_1callCppInternal(
-    JNIEnv* env, jclass clazz, jstring tag, jstring message) {
-    auto tag_cpp = env->GetStringUTFChars(tag, nullptr);
-    auto message_cpp = env->GetStringUTFChars(message, nullptr);
-    std::string tagStr = tag_cpp;
-    std::string messageStr = message_cpp;
-    env->ReleaseStringUTFChars(tag, tag_cpp);
-    env->ReleaseStringUTFChars(message, message_cpp);
-    Thread::runOnLibraryThread([tagStr, messageStr] { //
-        MessageBridge::getInstance().callCpp(tagStr, messageStr);
-    });
-}
-} // extern "C"
-
 std::string Self::call(const std::string& tag, const std::string& message) {
     jobject response = JniUtils::callStaticObjectMethod(
         "com/ee/internal/MessageBridgeKt", //
@@ -125,14 +109,6 @@ std::string Self::call(const std::string& tag, const std::string& message) {
 
 #if defined(EE_X_IOS) || defined(EE_X_OSX)
 extern "C" {
-void ee_callCppInternal(const char* tag, const char* message) {
-    std::string tagStr = tag;
-    std::string messageStr = message;
-    Thread::runOnLibraryThread([tagStr, messageStr] { //
-        MessageBridge::getInstance().callCpp(tagStr, messageStr);
-    });
-}
-
 char* ee_staticCall(const char* tag, const char* message);
 } // extern "C"
 

@@ -49,6 +49,21 @@ IMessageBridge* bridge_ = nullptr;
 } // namespace
 
 #if defined(EE_X_ANDROID)
+extern "C" {
+JNIEXPORT void JNICALL Java_com_ee_internal_PluginManagerKt_ee_1callCppInternal(
+    JNIEnv* env, jclass clazz, jstring tag, jstring message) {
+    auto tag_cpp = env->GetStringUTFChars(tag, nullptr);
+    auto message_cpp = env->GetStringUTFChars(message, nullptr);
+    std::string tagStr = tag_cpp;
+    std::string messageStr = message_cpp;
+    env->ReleaseStringUTFChars(tag, tag_cpp);
+    env->ReleaseStringUTFChars(message, message_cpp);
+    Thread::runOnLibraryThread([tagStr, messageStr] { //
+        PluginManager::getBridge().callCpp(tagStr, messageStr);
+    });
+}
+} // extern "C"
+
 void ee_staticInitializePlugins(const char* version) {
     JniUtils::callStaticVoidMethod(   //
         "com/ee/PluginManagerKt",     //
@@ -97,6 +112,14 @@ void ee_staticRemovePlugin(const char* name) {
 
 #if defined(EE_X_IOS) || defined(EE_X_OSX)
 extern "C" {
+void ee_callCppInternal(const char* tag, const char* message) {
+    std::string tagStr = tag;
+    std::string messageStr = message;
+    Thread::runOnLibraryThread([tagStr, messageStr] { //
+        PluginManager::getBridge().callCpp(tagStr, messageStr);
+    });
+}
+
 void ee_staticInitializePlugins(const char* version);
 void ee_staticSetLogLevel(int level);
 void* ee_staticGetActivity();

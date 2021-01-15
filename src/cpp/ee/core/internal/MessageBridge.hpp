@@ -35,11 +35,8 @@ public:
     [[nodiscard]] virtual Task<std::string>
     callAsync(const std::string& tag, const std::string& message = "") override;
 
-    /// Calls a handler from C++ with a message.
-    /// @warning This method should not be called manually.
-    /// @param tag The unique tag of the handler.
-    /// @param message The message.
-    void callCpp(const std::string& tag, const std::string& message);
+    virtual void callCpp(const std::string& tag,
+                         const std::string& message) override;
 
 private:
     MessageBridge();

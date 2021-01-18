@@ -20,6 +20,11 @@ se::Class* clazz = nullptr;
 namespace ee {
 namespace core {
 template <>
+void set_value(se::Value& value, soomla::CCVirtualCurrency* input) {
+    set_value_from_pointer(value, input);
+}
+
+template <>
 soomla::CCVirtualCurrency* get_value(const se::Value& value) {
     return static_cast<soomla::CCVirtualCurrency*>(
         value.toObject()->getPrivateData());

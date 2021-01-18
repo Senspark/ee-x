@@ -12,8 +12,16 @@
 
 #include "ee/soomla/internal/jsb_cc_purchasable_virtual_item.hpp"
 
-namespace soomla {
+namespace ee {
+namespace core {
+template <>
+void set_value(se::Value& value, soomla::CCLifetimeVG* input) {
+    set_value_from_pointer(value, input);
+}
+} // namespace core
+} // namespace ee
 
+namespace soomla {
 const auto jsb_CCLifetimeVG_finalize = &ee::core::jsb_finalize<CCLifetimeVG>;
 const auto jsb_CCLifttimeVG_getBalance =
     &ee::core::jsb_method_get<CCLifetimeVG, &CCLifetimeVG::getBalance, int,

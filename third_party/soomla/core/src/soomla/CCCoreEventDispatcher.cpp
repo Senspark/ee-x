@@ -78,7 +78,7 @@ bool CCCoreEventDispatcher::init() {
 void CCCoreEventDispatcher::onRewardGivenEvent(CCReward* reward) {
     ValueMap eventMap;
     eventMap[CCCoreConsts::DICT_ELEMENT_REWARD] = reward->toValueMap();
-    
+
 #if COCOSCREATOR_VERSION == 2
     cocos2d::CustomEvent event;
     event.name = CCCoreConsts::EVENT_REWARD_GIVEN;
@@ -86,7 +86,7 @@ void CCCoreEventDispatcher::onRewardGivenEvent(CCReward* reward) {
     EventDispatcher::dispatchCustomEvent(event);
 #elif COCOSCREATOR_VERSION == 1
     cocos2d::Director::getInstance()->getEventDispatcher()->dispatchCustomEvent(
-    CCCoreConsts::EVENT_REWARD_GIVEN , &eventMap);
+        CCCoreConsts::EVENT_REWARD_GIVEN, &eventMap);
 #endif
 }
 
@@ -101,9 +101,8 @@ void CCCoreEventDispatcher::onRewardTakenEvent(CCReward* reward) {
     EventDispatcher::dispatchCustomEvent(event);
 #elif COCOSCREATOR_VERSION == 1
     cocos2d::Director::getInstance()->getEventDispatcher()->dispatchCustomEvent(
-    CCCoreConsts::EVENT_REWARD_TAKEN, &eventMap);
+        CCCoreConsts::EVENT_REWARD_TAKEN, &eventMap);
 #endif
-    
 }
 
 void CCCoreEventDispatcher::onCustomEvent(const std::string& name,
@@ -111,7 +110,7 @@ void CCCoreEventDispatcher::onCustomEvent(const std::string& name,
     ValueMap eventDict;
     eventDict[CCCoreConsts::DICT_ELEMENT_NAME] = name;
     eventDict[CCCoreConsts::DICT_ELEMENT_EXTRA] = extra;
-    
+
 #if COCOSCREATOR_VERSION == 2
     cocos2d::CustomEvent event;
     event.name = CCCoreConsts::EVENT_CUSTOM;

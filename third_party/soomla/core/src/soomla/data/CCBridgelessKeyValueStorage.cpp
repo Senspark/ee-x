@@ -38,7 +38,8 @@ CCBridgelessKeyValueStorage::CCBridgelessKeyValueStorage() {
     loadStoredKeys();
 }
 
-std::string CCBridgelessKeyValueStorage::getValue(const std::string& key) const {
+std::string
+CCBridgelessKeyValueStorage::getValue(const std::string& key) const {
     std::string defaultValue = "";
     std::string result =
 #if COCOSCREATOR_VERSION == 2
@@ -54,8 +55,8 @@ std::string CCBridgelessKeyValueStorage::getValue(const std::string& key) const 
     return result;
 }
 
-void CCBridgelessKeyValueStorage::setValue(const std::string &key, const std::string &val) {
-    
+void CCBridgelessKeyValueStorage::setValue(const std::string& key,
+                                           const std::string& val) {
 #if COCOSCREATOR_VERSION == 2
     CCKeyValueStorage::getInstance()->setValue(key, val);
 #elif COCOSCREATOR_VERSION == 1
@@ -68,7 +69,7 @@ void CCBridgelessKeyValueStorage::setValue(const std::string &key, const std::st
 
 std::vector<std::string> CCBridgelessKeyValueStorage::getEncryptedKeys() const {
     std::vector<std::string> encryptedKeys;
-    for (auto& key: mStoredKeys) {
+    for (auto& key : mStoredKeys) {
         encryptedKeys.push_back(key);
     }
     return encryptedKeys;
@@ -76,12 +77,12 @@ std::vector<std::string> CCBridgelessKeyValueStorage::getEncryptedKeys() const {
 
 void CCBridgelessKeyValueStorage::deleteKeyValue(const std::string& key) {
 #if COCOSCREATOR_VERSION == 2
-    CCKeyValueStorage::getInstance()->deleteValue(key, val);
+    CCKeyValueStorage::getInstance()->deleteKeyValue(key);
 #elif COCOSCREATOR_VERSION == 1
     UserDefault::getInstance()->setStringForKey(key.c_str(), "");
     UserDefault::getInstance()->flush();
 #endif // COCOSCREATOR_VERSION == 2
-    
+
     removeStoredKeys(key);
     saveStoredKeys();
 }
@@ -92,7 +93,7 @@ void CCBridgelessKeyValueStorage::purge() {
     }
 
     mStoredKeys.clear();
-    
+
 #if COCOSCREATOR_VERSION == 2
     CCKeyValueStorage::getInstance()->setValue(KEY_VALUE_STORAGE_KEY, "");
 #elif COCOSCREATOR_VERSION == 1
@@ -118,11 +119,13 @@ void CCBridgelessKeyValueStorage::saveStoredKeys() {
     for (auto key : mStoredKeys) {
         joinedKeys.append("#").append(key);
     }
-    
+
 #if COCOSCREATOR_VERSION == 2
-    CCKeyValueStorage::getInstance()->setValue(KEY_VALUE_STORAGE_KEY, joinedKeys);
+    CCKeyValueStorage::getInstance()->setValue(KEY_VALUE_STORAGE_KEY,
+                                               joinedKeys);
 #elif COCOSCREATOR_VERSION == 1
-    UserDefault::getInstance()->setStringForKey(KEY_VALUE_STORAGE_KEY, joinedKeys);
+    UserDefault::getInstance()->setStringForKey(KEY_VALUE_STORAGE_KEY,
+                                                joinedKeys);
     UserDefault::getInstance()->flush();
 #endif
 }
@@ -130,9 +133,9 @@ void CCBridgelessKeyValueStorage::saveStoredKeys() {
 void CCBridgelessKeyValueStorage::loadStoredKeys() {
     std::string joinedKeys =
 #if COCOSCREATOR_VERSION == 2
-    CCKeyValueStorage::getInstance()->getValue(KEY_VALUE_STORAGE_KEY);
+        CCKeyValueStorage::getInstance()->getValue(KEY_VALUE_STORAGE_KEY);
 #elif COCOSCREATOR_VERSION == 1
-    UserDefault::getInstance()->getStringForKey(KEY_VALUE_STORAGE_KEY, "");
+        UserDefault::getInstance()->getStringForKey(KEY_VALUE_STORAGE_KEY, "");
 #endif
 
     std::stringstream ss(joinedKeys);

@@ -6,7 +6,6 @@ LOCAL_MODULE := ee_x_firebase_core
 LOCAL_CPP_FEATURES := exceptions
 LOCAL_CPPFLAGS := -std=c++2a
 LOCAL_SRC_FILES := ${shell find $(LOCAL_PATH) -print}
-LOCAL_STATIC_LIBRARIES := ee_x
-LOCAL_STATIC_LIBRARIES += firebase_app
+LOCAL_STATIC_LIBRARIES := ee_x firebase_app
 
 include $(BUILD_STATIC_LIBRARY)

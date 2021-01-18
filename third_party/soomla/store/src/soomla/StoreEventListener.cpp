@@ -12,17 +12,16 @@
 #include <unordered_map>
 #include <vector>
 
+#include <base/CCScheduler.h>
+
 #include "soomla/Cocos2dxStore.h"
 
-#if __has_include(<base/CCDirector.h>)
-#define COCOSCREATOR_VERSION 1
-#else
-#define COCOSCREATOR_VERSION 2
-#endif
-
-#if COCOSCREATOR_VERSION == 2
-#include "cocos/scripting/js-bindings/event/EventDispatcher.h"
-#endif
+#ifdef EE_X_COCOS_CPP
+#include <base/CCDirector.h>
+#else // EE_X_COCOS_CPP
+#include <cocos/scripting/js-bindings/event/EventDispatcher.h>
+#include <platform/CCApplication.h>
+#endif // EE_X_COCOS_CPP
 
 namespace soomla {
 class EventListenerProxy final {
@@ -30,31 +29,8 @@ private:
     using Self = EventListenerProxy;
 
 public:
-#if COCOSCREATOR_VERSION == 2
-    EventListenerProxy(
-        const std::string& eventName,
-        const std::function<void(cocos2d::CustomEvent event)>& callback) {
-        wrapped_ = cocos2d::EventDispatcher::addCustomEventListener(eventName,
-                                                                    callback);
-        eventName_ = eventName;
-    }
-    ~EventListenerProxy() {
-        cocos2d::EventDispatcher::removeCustomEventListener(eventName_,
-                                                            wrapped_);
-    }
-
-    EventListenerProxy(Self&& other)
-        : wrapped_(std::exchange(other.wrapped_, 0))
-        , eventName_(std::exchange(other.eventName_, "")) {}
-
-    Self& operator=(Self&& other) {
-        wrapped_ = std::exchange(other.wrapped_, 0);
-        eventName_ = std::exchange(other.eventName_, "");
-        return *this;
-    }
-
-#elif COCOSCREATOR_VERSION == 1
-    EventListenerProxy(
+#ifdef EE_X_COCOS_CPP
+    explicit EventListenerProxy(
         const std::string& eventName,
         const std::function<void(cocos2d::EventCustom* event)>& callback) {
         wrapped_ = cocos2d::Director::getInstance()
@@ -75,33 +51,56 @@ public:
         wrapped_ = std::exchange(other.wrapped_, nullptr);
         return *this;
     }
-#endif
+#else  // EE_X_COCOS_CPP
+    explicit EventListenerProxy(
+        const std::string& eventName,
+        const std::function<void(cocos2d::CustomEvent event)>& callback) {
+        wrapped_ = cocos2d::EventDispatcher::addCustomEventListener(eventName,
+                                                                    callback);
+        eventName_ = eventName;
+    }
+    ~EventListenerProxy() {
+        cocos2d::EventDispatcher::removeCustomEventListener(eventName_,
+                                                            wrapped_);
+    }
+
+    EventListenerProxy(Self&& other)
+        : wrapped_(std::exchange(other.wrapped_, 0))
+        , eventName_(std::exchange(other.eventName_, "")) {}
+
+    Self& operator=(Self&& other) {
+        wrapped_ = std::exchange(other.wrapped_, 0);
+        eventName_ = std::exchange(other.eventName_, "");
+        return *this;
+    }
+#endif // EE_X_COCOS_CPP
 
     EventListenerProxy(const Self&) = delete;
     EventListenerProxy& operator=(const Self&) = delete;
 
 private:
-#if COCOSCREATOR_VERSION == 2
+#ifdef EE_X_COCOS_CPP
+    cocos2d::EventListener* wrapped_;
+#else  // EE_X_COCOS_CPP
     std::uint32_t wrapped_;
     std::string eventName_;
-#elif COCOSCREATOR_VERSION == 1
-    cocos2d::EventListener* wrapped_;
-#endif
+#endif // EE_X_COCOS_CPP
 };
 
-#if COCOSCREATOR_VERSION == 2
+#ifdef EE_X_COCOS_CPP
+/// Note: pointer.
+using EventType = cocos2d::EventCustom*;
+#else  // EE_X_COCOS_CPP
 using EventType = cocos2d::CustomEvent;
-#else  // COCOSCREATOR_VERSION == 2
-using EventType = cocos2d::EventCustom*; // Note: pointer.
-#endif // COCOSCREATOR_VERSION == 2
+#endif // EE_X_COCOS_CPP
 
 namespace {
 decltype(auto) getUserData(EventType event) {
-#if COCOSCREATOR_VERSION == 2
-    return *static_cast<cocos2d::ValueMap*>(event.args[0].ptrVal);
-#else  // COCOSCREATOR_VERSION == 2
+#ifdef EE_X_COCOS_CPP
     return *static_cast<cocos2d::ValueMap*>(event->getUserData());
-#endif // COCOSCREATOR_VERSION == 2
+#else  // EE_X_COCOS_CPP
+    return *static_cast<cocos2d::ValueMap*>(event.args[0].ptrVal);
+#endif // EE_X_COCOS_CPP
 }
 
 template <class Function, class... Args>
@@ -116,11 +115,17 @@ void invokeCallbackDelayed(Function&& f, Args&&... args) {
     static int counter;
     static auto target = &counter;
     auto key = "__soomla_dispatch" + std::to_string(counter++);
-    cocos2d::Director::getInstance()->getScheduler()->schedule(
-        [=](float delta) { //
-            std::invoke(f, args...);
-        },
-        target, 0, 0, 0, false, key);
+#ifdef EE_X_COCOS_CPP
+    cocos2d::Director::getInstance()
+#else  // EE_X_COCOS_CPP
+    cocos2d::Application::getInstance()
+#endif // EE_X_COCOS_CPP
+        ->getScheduler()
+        ->schedule(
+            [=](float delta) { //
+                std::invoke(f, args...);
+            },
+            target, 0, 0, 0, false, key);
 }
 } // namespace
 

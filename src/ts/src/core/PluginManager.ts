@@ -1,4 +1,5 @@
 import { AdMob } from "../ad_mob/internal";
+import { FirebaseCrashlytics } from "../firebase_crashlytics/internal";
 import { IronSource } from "../iron_source/internal";
 import { IMessageBridge } from "./IMessageBridge"
 import {
@@ -26,6 +27,7 @@ export enum Plugin {
 export class PluginManager {
     private static readonly _pluginConstructores: { [index: string]: (bridge: IMessageBridge) => IPlugin } = {
         [Plugin.AdMob]: bridge => new AdMob(bridge),
+        [Plugin.FirebaseCrashlytics]: bridge => new FirebaseCrashlytics(bridge),
         [Plugin.IronSource]: bridge => new IronSource(bridge),
     };
 

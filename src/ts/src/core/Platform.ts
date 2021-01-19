@@ -1,6 +1,8 @@
 import { IMessageBridge } from "./IMessageBridge";
-import { IPlatformImpl } from "./internal/IPlatformImpl";
-import { PlatformImplNative } from "./internal/PlatformImplNative";
+import {
+    IPlatformImpl,
+    PlatformImplNative,
+} from "./internal";
 
 export class Platform {
     private static _impl: IPlatformImpl;

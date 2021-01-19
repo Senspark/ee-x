@@ -1,4 +1,7 @@
-import { IMessageBridge, Utils } from "../../core";
+import {
+    IMessageBridge,
+    Utils,
+} from "../../core";
 import { AdjustConfig } from "../AdjustConfig";
 import { IAdjust } from "../IAdjust";
 

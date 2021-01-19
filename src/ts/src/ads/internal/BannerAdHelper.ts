@@ -1,5 +1,7 @@
-import { IMessageBridge, MessageHandler } from "../../core/IMessageBridge";
-import { Utils } from "../../core/Utils";
+import {
+    IMessageBridge,
+    Utils,
+} from "../../core";
 import { MessageHelper } from "./MessageHelper";
 
 export class BannerAdHelper {

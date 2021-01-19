@@ -1,8 +1,10 @@
-import { AdMob } from "../ad_mob/internal/AdMob";
+import { AdMob } from "../ad_mob/internal";
 import { IMessageBridge } from "./IMessageBridge"
-import { IPluginManagerImpl } from "./internal/IPluginManagerImpl";
-import { MessageBridge } from "./internal/MessageBridge";
-import { PluginManagerImplNative } from "./internal/PluginManagerImplNative";
+import {
+    IPluginManagerImpl,
+    MessageBridge,
+    PluginManagerImplNative,
+} from "./internal";
 import { IPlugin } from "./IPlugin";
 import { LogLevel } from "./LogLevel";
 import { Platform } from "./Platform";

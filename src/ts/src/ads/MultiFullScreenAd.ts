@@ -1,7 +1,12 @@
-import { ObserverHandle } from "../core/ObserverHandle";
-import { ObserverManager } from "../core/ObserverManager";
+import {
+    ObserverHandle,
+    ObserverManager,
+} from "../core";
 import { AdObserver } from "./IAd";
-import { FullScreenAdResult, IFullScreenAd } from "./IFullScreenAd";
+import {
+    FullScreenAdResult,
+    IFullScreenAd,
+} from "./IFullScreenAd";
 import { IMultiAd } from "./IMultiAd";
 
 export class MultiFullScreenAd extends ObserverManager<AdObserver> implements IFullScreenAd, IMultiAd<IFullScreenAd> {

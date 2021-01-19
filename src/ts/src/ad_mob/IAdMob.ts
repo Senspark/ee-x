@@ -1,6 +1,8 @@
-import { IBannerAd } from "../ads/IBannerAd";
-import { IFullScreenAd } from "../ads/IFullScreenAd";
-import { IPlugin } from "../core/IPlugin";
+import {
+    IBannerAd,
+    IFullScreenAd,
+} from "../ads";
+import { IPlugin } from "../core";
 import { AdMobBannerAdSize } from "./AdMobBannerAdSIze";
 
 export interface IAdMob extends IPlugin {

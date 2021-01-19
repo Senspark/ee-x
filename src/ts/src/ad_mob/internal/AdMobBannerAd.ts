@@ -1,11 +1,17 @@
-import { AdObserver } from "../../ads/IAd";
-import { IBannerAd } from "../../ads/IBannerAd";
-import { AsyncHelper } from "../../ads/internal/AsyncHelper";
-import { BannerAdHelper } from "../../ads/internal/BannerAdHelper";
-import { IAsyncHelper } from "../../ads/internal/IAsyncHelper";
-import { MessageHelper } from "../../ads/internal/MessageHelper";
-import { IMessageBridge } from "../../core/IMessageBridge";
-import { ObserverManager } from "../../core/ObserverManager";
+import {
+    AdObserver,
+    IBannerAd,
+} from "../../ads";
+import {
+    AsyncHelper,
+    BannerAdHelper,
+    IAsyncHelper,
+    MessageHelper,
+} from "../../ads/internal";
+import {
+    IMessageBridge,
+    ObserverManager,
+} from "../../core";
 import { AdMob } from "./AdMob";
 
 export class AdMobBannerAd extends ObserverManager<AdObserver> implements IBannerAd {

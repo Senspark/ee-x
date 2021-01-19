@@ -1,12 +1,19 @@
-import { IAd } from "../../ads/IAd";
-import { IBannerAd } from "../../ads/IBannerAd";
-import { FullScreenAdResult, IFullScreenAd } from "../../ads/IFullScreenAd";
-import { GuardedBannerAd } from "../../ads/internal/GuardedBannerAd";
-import { GuardedFullScreenAd } from "../../ads/internal/GuardedFullScreenAd";
-import { IAsyncHelper } from "../../ads/internal/IAsyncHelper";
-import { MediationManager } from "../../ads/internal/MediationManager";
-import { IMessageBridge } from "../../core/IMessageBridge";
-import { Utils } from "../../core/Utils";
+import {
+    FullScreenAdResult,
+    IAd,
+    IBannerAd,
+    IFullScreenAd,
+} from "../../ads";
+import {
+    GuardedBannerAd,
+    GuardedFullScreenAd,
+    IAsyncHelper,
+    MediationManager,
+} from "../../ads/internal";
+import {
+    IMessageBridge,
+    Utils,
+} from "../../core";
 import { AdMobBannerAdSize } from "../AdMobBannerAdSIze";
 import { IAdMob } from "../IAdMob";
 import { AdMobBannerAd } from "./AdMobBannerAd";

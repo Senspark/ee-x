@@ -1,5 +1,7 @@
-import { ObserverHandle } from "../core/ObserverHandle";
-import { ObserverManager } from "../core/ObserverManager";
+import {
+    ObserverHandle,
+    ObserverManager,
+} from "../core";
 import { AdObserver } from "./IAd";
 import { IBannerAd } from "./IBannerAd";
 import { IMultiAd } from "./IMultiAd";

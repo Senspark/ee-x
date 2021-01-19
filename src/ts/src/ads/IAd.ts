@@ -1,4 +1,4 @@
-import { IObserverManager } from "../core/IObserverManager";
+import { IObserverManager } from "../core";
 
 export interface AdObserver {
     onLoaded?(): void;

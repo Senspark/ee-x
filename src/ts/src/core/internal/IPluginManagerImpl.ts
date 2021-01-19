@@ -1,8 +1,8 @@
 import { LogLevel } from "../LogLevel";
+import { Plugin } from '../PluginManager';
 
 export interface IPluginManagerImpl {
-    initializePLugins(version: string): void;
     setLogLevel(level: LogLevel): void;
-    addPlugin(name: string): void;
-    removePlugin(name: string): void;
+    addPlugin(plugin: Plugin): void;
+    removePlugin(plugin: Plugin): void;
 }

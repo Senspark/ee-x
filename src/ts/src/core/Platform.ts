@@ -1,11 +1,12 @@
 import { IMessageBridge } from "./IMessageBridge";
 import { IPlatformImpl } from "./internal/IPlatformImpl";
+import { PlatformImplNative } from "./internal/PlatformImplNative";
 
 export class Platform {
     private static _impl: IPlatformImpl;
 
-    public static registerHandlers(bridge: IMessageBridge) {
-
+    public static initialize(bridge: IMessageBridge) {
+        this._impl = new PlatformImplNative(bridge);
     }
 
     public static isApplicationInstalled(applicationId: string): boolean {
@@ -45,7 +46,7 @@ export class Platform {
         return this._impl.isTablet();
     }
 
-    public static getDensitiy(): number {
+    public static getDensity(): number {
         return this._impl.getDensity();
     }
 

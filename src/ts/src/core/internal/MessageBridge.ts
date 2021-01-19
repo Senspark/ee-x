@@ -1,17 +1,12 @@
 import { IMessageBridge, MessageHandler } from '../IMessageBridge';
+import { MessageBridgeImplNative } from './MessageBridgeImplNative';
 
 export class MessageBridge implements IMessageBridge {
-    private static _sharedInstance = new MessageBridge();
-
     private _callbackCounter = 0;
     private readonly _handlers: { [index: string]: MessageHandler } = {};
     private readonly _impl: IMessageBridgeImpl;
 
-    public static getInstance(): MessageBridge {
-        return this._sharedInstance;
-    }
-
-    private constructor() {
+    public constructor() {
         this._impl = new MessageBridgeImplNative(this.callCpp);
     }
 
@@ -52,7 +47,7 @@ export class MessageBridge implements IMessageBridge {
         });
     }
 
-    private callCpp(tag: string, message: string): void {
+    public callCpp(tag: string, message: string): void {
         const handler = this.findHandler(tag);
         if (handler === undefined) {
             throw new Error(`Failed to call handler: ${tag}`);

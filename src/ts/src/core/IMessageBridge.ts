@@ -5,4 +5,5 @@ export interface IMessageBridge {
     deregisterHandler(tag: string): void;
     call(tag: string, message?: string): string;
     callAsync(tag: string, message?: string): Promise<string>;
+    callCpp(tag: string, message: string): void;
 }

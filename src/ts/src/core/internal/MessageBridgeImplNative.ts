@@ -1,11 +1,13 @@
 type CallCppCallback = (tag: string, message: string) => void;
 
-class MessageBridgeImplNative implements IMessageBridgeImpl {
+declare function ee_staticCall(tag: string, message: string): string;
+
+export class MessageBridgeImplNative implements IMessageBridgeImpl {
     public constructor(callback: CallCppCallback) {
         // FIXME.
     }
 
     public call(tag: string, message: string): string {
-        throw new Error("Method not implemented.");
+        return ee_staticCall(tag, message);
     }
 }

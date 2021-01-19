@@ -2,7 +2,7 @@ import { IMessageBridge } from "../IMessageBridge";
 import { Utils } from "../Utils";
 import { IPlatformImpl } from "./IPlatformImpl";
 
-class PlatformImplNative implements IPlatformImpl {
+export class PlatformImplNative implements IPlatformImpl {
     private readonly kPrefix = "Platform_";
     private readonly kIsApplicationInstalled = this.kPrefix + "isApplicationInstalled";
     private readonly kOpenApplication = this.kPrefix + "openApplication";

@@ -2,42 +2,38 @@ import { AdMob } from "../ad_mob/internal/AdMob";
 import { IMessageBridge } from "./IMessageBridge"
 import { IPluginManagerImpl } from "./internal/IPluginManagerImpl";
 import { MessageBridge } from "./internal/MessageBridge";
+import { PluginManagerImplNative } from "./internal/PluginManagerImplNative";
 import { IPlugin } from "./IPlugin";
 import { LogLevel } from "./LogLevel";
 import { Platform } from "./Platform";
 
+function ee_callCppInternal(tag: string, message: string) {
+    PluginManager.getBridge().callCpp(tag, message);
+}
+
 export enum Plugin {
-    Adjust,
+    Adjust = 1,
     AdMob,
-    FacebookAds,
-    FirebaseCrashlytics,
-    IronSource,
-    UnityAds,
+    FacebookAds = 6,
+    FirebaseCrashlytics = 8,
+    IronSource = 11,
+    UnityAds = 16,
 }
 
 export class PluginManager {
-    private static readonly _pluginNames: { [index: string]: string } = {
-        [Plugin.Adjust]: `Adjust`,
-        [Plugin.AdMob]: `AdMob`,
-        [Plugin.FacebookAds]: `FacebookAds`,
-        [Plugin.FirebaseCrashlytics]: `FirebaseCrashlytics`,
-        [Plugin.IronSource]: `IronSource`,
-        [Plugin.UnityAds]: `UnityAds`,
-    };
-
     private static readonly _pluginConstructores: { [index: string]: (bridge: IMessageBridge) => IPlugin } = {
         [Plugin.AdMob]: bridge => new AdMob(bridge),
     };
 
     private static readonly _plugins: { [index: string]: IPlugin } = {};
 
-    private static readonly _impl: IPluginManagerImpl;
+    private static _impl: IPluginManagerImpl;
     private static _bridge: IMessageBridge;
 
     public static initializePlugins(): void {
-        this._impl.initializePLugins("2.3.0");
-        this._bridge = MessageBridge.getInstance();
-        Platform.registerHandlers(this._bridge);
+        this._impl = new PluginManagerImplNative();
+        this._bridge = new MessageBridge();
+        Platform.initialize(this._bridge);
     }
 
     public static createPlugin<T extends IPlugin>(plugin: Plugin): T {
@@ -53,17 +49,19 @@ export class PluginManager {
         delete this._plugins[plugin];
     }
 
+    public static getBridge(): IMessageBridge {
+        return this._bridge;
+    }
+
     public static setLogLevel(level: LogLevel): void {
         this._impl.setLogLevel(level);
     }
 
     private static addPlugin(plugin: Plugin): void {
-        const name = this._pluginNames[plugin];
-        this._impl.addPlugin(name);
+        this._impl.addPlugin(plugin);
     }
 
     private static removePlugin(plugin: Plugin): void {
-        const name = this._pluginNames[plugin];
-        this._impl.removePlugin(name);
+        this._impl.removePlugin(plugin);
     }
 }

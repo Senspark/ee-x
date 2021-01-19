@@ -29,6 +29,7 @@ SE_BIND_FUNC(ee_staticCall)
 
 bool registerJsb(se::Object* global) {
     global->defineFunction("ee_staticCall", _SE(ee_staticCall));
+    return true;
 }
 } // namespace
 
@@ -55,7 +56,9 @@ std::string Self::call(const std::string& tag, const std::string& message) {
 }
 
 void Self::callCpp(const std::string& tag, const std::string& message) {
-    // FIXME.
+    auto engine = se::ScriptEngine::getInstance();
+    engine->evalString(
+        ("ee_callCppInternal(\"" + tag + "\", \"" + message + "\");").c_str());
 }
 
 Task<std::string> Self::callAsync(const std::string& tag,

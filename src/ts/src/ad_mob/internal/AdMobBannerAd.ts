@@ -39,7 +39,7 @@ export class AdMobBannerAd extends ObserverManager<AdObserver> implements IBanne
     }
 
     public get isLoaded(): boolean {
-        return this._helper.isLoaded; ‰
+        return this._helper.isLoaded;
     }
 
     public load(): Promise<boolean> {

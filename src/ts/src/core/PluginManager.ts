@@ -1,4 +1,5 @@
 import { AdMob } from "../ad_mob/internal";
+import { IronSource } from "../iron_source/internal";
 import { IMessageBridge } from "./IMessageBridge"
 import {
     IPluginManagerImpl,
@@ -25,6 +26,7 @@ export enum Plugin {
 export class PluginManager {
     private static readonly _pluginConstructores: { [index: string]: (bridge: IMessageBridge) => IPlugin } = {
         [Plugin.AdMob]: bridge => new AdMob(bridge),
+        [Plugin.IronSource]: bridge => new IronSource(bridge),
     };
 
     private static readonly _plugins: { [index: string]: IPlugin } = {};

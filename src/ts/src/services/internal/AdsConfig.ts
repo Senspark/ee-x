@@ -286,7 +286,7 @@ class UnityAdsConfig implements INetworkConfig {
 }
 
 interface IAdConfigManager {
-    createAd(format: AdFormat): IAd
+    createAd(format: AdFormat): IAd | undefined
 }
 
 class AdConfigManager implements IAdConfigManager {
@@ -301,13 +301,13 @@ class AdConfigManager implements IAdConfigManager {
         }
     }
 
-    public createAd(format: AdFormat): IAd {
+    public createAd(format: AdFormat): IAd | undefined {
         for (const ad of this._ads) {
             if (ad.format == format) {
                 return ad.createAd(this._manager);
             }
         }
-        throw new Error(`Ad format not supported`);
+        return undefined;
     }
 }
 
@@ -509,7 +509,7 @@ export class AdsConfig {
         await this._networkManager.initialize();
     }
 
-    public createAd(format: AdFormat): IAd {
+    public createAd(format: AdFormat): IAd | undefined {
         return this._adManager.createAd(format);
     }
 }

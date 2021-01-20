@@ -54,7 +54,7 @@ std::unordered_map<Plugin, std::string> pluginNames_ = {{
 
 #if defined(EE_X_ANDROID)
 extern "C" {
-JNIEXPORT void JNICALL Java_com_ee_internal_PluginManagerKt_ee_1callCppInternal(
+JNIEXPORT void JNICALL Java_com_ee_PluginManagerKt_ee_1callCppInternal(
     JNIEnv* env, jclass clazz, jstring tag, jstring message) {
     auto tag_cpp = env->GetStringUTFChars(tag, nullptr);
     auto message_cpp = env->GetStringUTFChars(message, nullptr);

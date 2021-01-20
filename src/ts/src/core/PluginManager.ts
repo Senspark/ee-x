@@ -14,7 +14,11 @@ import { IPlugin } from "./IPlugin";
 import { LogLevel } from "./LogLevel";
 import { Platform } from "./Platform";
 
-function ee_callCppInternal(tag: string, message: string) {
+declare const global: any;
+
+const _global = (typeof window === 'undefined' ? global : window) as any;
+_global.ee_x = _global.ee_x || {};
+_global.ee_x.ee_callCppInternal = (tag: string, message: string) => {
     PluginManager.getBridge().callCpp(tag, message);
 }
 

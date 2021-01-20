@@ -11,4 +11,8 @@ export class Utils {
         const task = callable();
         task.catch(ex => console.log(JSON.stringify(ex)));
     }
+
+    public static delay(duration: number): Promise<void> {
+        return new Promise(resolve => setTimeout(resolve, duration * 1000));
+    }
 }

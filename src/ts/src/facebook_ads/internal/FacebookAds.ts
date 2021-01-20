@@ -14,24 +14,23 @@ import {
     IMessageBridge,
     Utils,
 } from "../../core";
-import { AdMobBannerAdSize } from "../AdMobBannerAdSIze";
-import { IAdMob } from "../IAdMob";
-import { AdMobBannerAd } from "./AdMobBannerAd";
-import { AdMobInterstitialAd } from "./AdMobInterstitialAd";
-import { AdMobRewardedAd } from "./AdMobRewardedAd";
+import { FacebookBannerAdSize } from "../FacebookBannerAdSize";
+import { IFacebookAds } from "../IFacebookAds";
+import { FacebookBannerAd } from "./FacebookBannerAd";
+import { FacebookInterstitialAd } from "./FacebookInterstitialAd";
+import { FacebookRewardedAd } from "./FacebookRewardedAd";
 
-export class AdMob implements IAdMob {
-    private readonly kPrefix = "AdMobBridge";
+export class FacebookAds implements IFacebookAds {
+    private readonly kPrefix = "FacebookAdsBridge";
     private readonly kInitialize = this.kPrefix + "Initialize";
-    private readonly kGetEmulatorTestDeviceHash = this.kPrefix + "GetEmulatorTestDeviceHash";
+    private readonly kGetTestDeviceHash = this.kPrefix + "GetTestDeviceHash";
     private readonly kAddTestDevice = this.kPrefix + "AddTestDevice";
+    private readonly kClearTestDevices = this.kPrefix + "ClearTestDevices";
     private readonly kGetBannerAdSize = this.kPrefix + "GetBannerAdSize";
     private readonly kCreateBannerAd = this.kPrefix + "CreateBannerAd";
     private readonly kDestroyBannerAd = this.kPrefix + "DestroyBannerAd";
     private readonly kCreateNativeAd = this.kPrefix + "CreateNativeAd";
     private readonly kDestroyNativeAd = this.kPrefix + "DestroyNativeAd";
-    private readonly kCreateAppOpenAd = this.kPrefix + "CreateAppOpenAd";
-    private readonly kDestroyAppOpenAd = this.kPrefix + "DestroyAppOpenAd";
     private readonly kCreateInterstitialAd = this.kPrefix + "CreateInterstitialAd";
     private readonly kDestroyInterstitialAd = this.kPrefix + "DestroyInterstitialAd";
     private readonly kCreateRewardedAd = this.kPrefix + "CreateRewardedAd";
@@ -60,15 +59,20 @@ export class AdMob implements IAdMob {
         return Utils.toBool(response);
     }
 
-    public getEmulatorTestDeviceHash(): string {
-        return this._bridge.call(this.kGetEmulatorTestDeviceHash);
+    public getTestDeviceHash(): string {
+        return this._bridge.call(this.kGetTestDeviceHash);
     }
 
     public addTestDevice(hash: string): void {
         this._bridge.call(this.kAddTestDevice, hash);
     }
 
-    private getBannerAdSize(adSize: AdMobBannerAdSize): [number, number] {
+    public clearTestDevices(): void {
+        this._bridge.call(this.kClearTestDevices);
+    }
+
+
+    private getBannerAdSize(adSize: FacebookBannerAdSize): [number, number] {
         const response = this._bridge.call(this.kGetBannerAdSize, `${adSize}`);
         const json: {
             width: number,
@@ -77,8 +81,7 @@ export class AdMob implements IAdMob {
         return [json.width, json.height];
     }
 
-
-    public createBannerAd(adId: string, adSize: AdMobBannerAdSize): IBannerAd {
+    public createBannerAd(adId: string, adSize: FacebookBannerAdSize): IBannerAd {
         if (this._ads[adId]) {
             return this._ads[adId] as IBannerAd;
         }
@@ -91,26 +94,19 @@ export class AdMob implements IAdMob {
             throw new Error(`Failed to create banner ad: ${adId}`);
         }
         const size = this.getBannerAdSize(adSize);
-        const ad = new GuardedBannerAd(new AdMobBannerAd(this._bridge, this, adId, size));
+        const ad = new GuardedBannerAd(new FacebookBannerAd(this._bridge, this, adId, size));
         this._ads[adId] = ad;
         return ad;
     }
 
-    public createAppOpenAd(adId: string): IFullScreenAd {
-        // FIXME.
-        throw new Error(`Not supported`);
-        // return this.createFullScreenAd(this.kCreateAppOpenAd, adId,
-        //     () => new AdMobAppOpenAd(this._bridge, this._displayer, this, adId));
-    }
-
     public createInterstitialAd(adId: string): IFullScreenAd {
         return this.createFullScreenAd(this.kCreateInterstitialAd, adId,
-            () => new AdMobInterstitialAd(this._bridge, this._displayer, this, adId));
+            () => new FacebookInterstitialAd(this._bridge, this._displayer, this, adId));
     }
 
     public createRewardedAd(adId: string): IFullScreenAd {
         return this.createFullScreenAd(this.kCreateRewardedAd, adId,
-            () => new AdMobRewardedAd(this._bridge, this._displayer, this, adId));
+            () => new FacebookRewardedAd(this._bridge, this._displayer, this, adId));
     }
 
     private createFullScreenAd(handlerId: string, adId: string, creator: () => IFullScreenAd): IFullScreenAd {
@@ -128,10 +124,6 @@ export class AdMob implements IAdMob {
 
     public destroyBannerAd(adId: string): boolean {
         return this.destroyAd(this.kDestroyBannerAd, adId);
-    }
-
-    public destroyAppOpenAd(adId: string): boolean {
-        return this.destroyAd(this.kDestroyAppOpenAd, adId);
     }
 
     public destroyInterstitialAd(adId: string): boolean {

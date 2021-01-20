@@ -1,5 +1,6 @@
 import { Adjust } from "../adjust/internal/Adjust";
 import { AdMob } from "../ad_mob/internal";
+import { FacebookAds } from "../facebook_ads/internal/FacebookAds";
 import { FirebaseCrashlytics } from "../firebase_crashlytics/internal";
 import { IronSource } from "../iron_source/internal";
 import { UnityAds } from "../unity_ads/internal";
@@ -30,6 +31,7 @@ export class PluginManager {
     private static readonly _pluginConstructores: { [index: string]: (bridge: IMessageBridge) => IPlugin } = {
         [Plugin.Adjust]: bridge => new Adjust(bridge),
         [Plugin.AdMob]: bridge => new AdMob(bridge),
+        [Plugin.FacebookAds]: bridge => new FacebookAds(bridge),
         [Plugin.FirebaseCrashlytics]: bridge => new FirebaseCrashlytics(bridge),
         [Plugin.IronSource]: bridge => new IronSource(bridge),
         [Plugin.UnityAds]: bridge => new UnityAds(bridge),

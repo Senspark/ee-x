@@ -16,6 +16,10 @@ import {
     PluginManager,
     Utils,
 } from "../../core";
+import {
+    FacebookBannerAdSize,
+    IFacebookAds,
+} from "../../facebook_ads";
 import { IIronSource } from "../../iron_source";
 import { IUnityAds } from "../../unity_ads";
 import { GenericAd } from "./GenericAd";
@@ -186,7 +190,7 @@ class FacebookAdsConfig implements INetworkConfig {
 
     public async initialize(): Promise<void> {
         this._plugin = PluginManager.createPlugin<IFacebookAds>(Plugin.FacebookAds);
-        await this._plugin.Initialize();
+        await this._plugin.initialize();
     }
 
     public get network(): Network {

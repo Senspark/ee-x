@@ -48,7 +48,7 @@ export class Adjust implements IAdjust {
     }
 
     public getDeviceIdentifier(): string {
-        var response = this._bridge.call(this.kGetDeviceIdentifier);
+        const response = this._bridge.call(this.kGetDeviceIdentifier);
         return response;
     }
 

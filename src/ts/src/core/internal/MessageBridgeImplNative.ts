@@ -1,3 +1,5 @@
+import { IMessageBridgeImpl } from "./IMessageBridgeImpl";
+
 type CallCppCallback = (tag: string, message: string) => void;
 
 declare function ee_staticCall(tag: string, message: string): string;

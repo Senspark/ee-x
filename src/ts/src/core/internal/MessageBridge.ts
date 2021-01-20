@@ -2,6 +2,7 @@ import {
     IMessageBridge,
     MessageHandler,
 } from '../IMessageBridge';
+import { IMessageBridgeImpl } from './IMessageBridgeImpl';
 import { MessageBridgeImplNative } from './MessageBridgeImplNative';
 
 export class MessageBridge implements IMessageBridge {

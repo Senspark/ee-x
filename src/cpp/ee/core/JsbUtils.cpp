@@ -1,5 +1,6 @@
 #include "ee/core/JsbUtils.hpp"
 
+#ifdef EE_X_COCOS_JS
 #include <cocos/scripting/js-bindings/jswrapper/SeApi.h>
 
 namespace ee {
@@ -46,3 +47,5 @@ se::Object* Self::getChild(se::Object* parent, const std::string& name) {
 }
 } // namespace core
 } // namespace ee
+
+#endif // EE_X_COCOS_JS

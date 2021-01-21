@@ -7,6 +7,7 @@
 
 #include "ee/soomla/internal/jsb_cc_purchase_with_market_builder.hpp"
 
+#ifdef EE_X_COCOS_JS
 #include <ee/core/JsbUtils.hpp>
 #include <soomla/PurchaseTypes/CCPurchaseWithMarket.h>
 #include <soomla/PurchaseTypes/CCPurchaseWithMarketBuilder.h>
@@ -84,3 +85,5 @@ bool register_cc_purchase_with_market_builder_manual(se::Object* globalObj) {
     return true;
 }
 } // namespace soomla
+
+#endif // EE_X_COCOS_JS

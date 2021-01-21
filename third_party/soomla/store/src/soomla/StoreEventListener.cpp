@@ -13,6 +13,7 @@
 #include <vector>
 
 #include <base/CCScheduler.h>
+#include <ee/cocos/CocosFwd.hpp>
 
 #include "soomla/Cocos2dxStore.h"
 

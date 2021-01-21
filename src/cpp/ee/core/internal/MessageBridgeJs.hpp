@@ -1,6 +1,9 @@
 #ifndef EE_X_MESSAGE_BRIDGE_JS_HPP
 #define EE_X_MESSAGE_BRIDGE_JS_HPP
 
+#include <ee/cocos/CocosFwd.hpp>
+
+#ifdef EE_X_COCOS_JS
 #include "ee/core/IMessageBridge.hpp"
 
 namespace ee {
@@ -27,4 +30,5 @@ public:
 } // namespace core
 } // namespace ee
 
+#endif // EE_X_COCOS_JS
 #endif // EE_X_MESSAGE_BRIDGE_JS_HPP

@@ -7,6 +7,7 @@
 
 #include "ee/core/JsbTemplates.hpp"
 
+#ifdef EE_X_COCOS_JS
 #include <string>
 #include <unordered_map>
 #include <vector>
@@ -367,3 +368,5 @@ void callFunction(const se::Value& jsThis, const se::Value& jsFunc,
 } // namespace internal
 } // namespace core
 } // namespace ee
+
+#endif // EE_X_COCOS_JS

@@ -8,6 +8,10 @@
 #ifndef EE_X_SHARED_PTR_HANDLER_HPP
 #define EE_X_SHARED_PTR_HANDLER_HPP
 
+#include <ee/cocos/CocosFwd.hpp>
+
+#ifdef EE_X_COCOS_JS
+
 #include <memory>
 #include <unordered_map>
 
@@ -118,5 +122,7 @@ private:
 };
 } // namespace core
 } // namespace ee
+
+#endif // EE_X_COCOS_JS
 
 #endif /* EE_X_SHARED_PTR_HANDLER_HPP */

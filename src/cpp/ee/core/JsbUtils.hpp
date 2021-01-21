@@ -1,6 +1,12 @@
 #ifndef EE_X_JSB_UTILS_HPP
 #define EE_X_JSB_UTILS_HPP
 
+#ifdef __cplusplus
+
+#include <ee/cocos/CocosFwd.hpp>
+
+#ifdef EE_X_COCOS_JS
+
 #include <string>
 
 #include "ee/core/JsbTemplates.hpp"
@@ -29,5 +35,8 @@ public:
 };
 } // namespace core
 } // namespace ee
+
+#endif // EE_X_COCOS_JS
+#endif // __cplusplus
 
 #endif // EE_X_JSB_UTILS_HPP

@@ -1,5 +1,6 @@
 #include "ee/core/internal/PluginManagerImplJs.hpp"
 
+#ifdef EE_X_COCOS_JS
 #include "ee/core/JsbUtils.hpp"
 #include "ee/core/PluginManager.hpp"
 #include "ee/core/internal/MessageBridgeJs.hpp"
@@ -76,3 +77,5 @@ IMessageBridge& Self::getBridge() {
 }
 } // namespace core
 } // namespace ee
+
+#endif // EE_X_COCOS_JS

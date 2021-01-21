@@ -7,6 +7,7 @@
 
 #include "ee/facebook/private/JsbIFacebookShareDelegate.hpp"
 
+#ifdef EE_X_COCOS_JS
 #include <ee/core/JsbUtils.hpp>
 #include <ee/core/internal/SharedPtrHandler.hpp>
 
@@ -76,3 +77,5 @@ bool registerJsbIShareDelegate(se::Object* global) {
 }
 } // namespace facebook
 } // namespace ee
+
+#endif // EE_X_COCOS_JS

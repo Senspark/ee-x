@@ -25,7 +25,7 @@ public:
     virtual void stop() override;
 
 private:
-    std::shared_ptr<ee::Notification> plugin_;
+    std::shared_ptr<ee::INotification> plugin_;
 };
 } // namespace notification
 

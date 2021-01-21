@@ -1,5 +1,6 @@
 #include "ee/core/internal/MessageBridgeJs.hpp"
 
+#ifdef EE_X_COCOS_JS
 #include "ee/core/JsbUtils.hpp"
 #include "ee/core/Logger.hpp"
 #include "ee/core/Task.hpp"
@@ -68,3 +69,5 @@ Task<std::string> Self::callAsync(const std::string& tag,
 }
 } // namespace core
 } // namespace ee
+
+#endif // EE_X_COCOS_JS

@@ -7,6 +7,7 @@
 
 #include "ee/soomla/internal/jsb_cc_store_assets_builder.hpp"
 
+#ifdef EE_X_COCOS_JS
 #include <ee/core/JsbUtils.hpp>
 #include <soomla/CCStoreAssetsBuilder.h>
 #include <soomla/Cocos2dxCore.h>
@@ -114,3 +115,5 @@ bool register_cc_store_assets_builder_manual(se::Object* globalObj) {
     return true;
 }
 } // namespace soomla
+
+#endif // EE_X_COCOS_JS

@@ -16,8 +16,6 @@
 #include <unordered_map>
 #include <vector>
 
-#include <ee/soomla/SoomlaFwd.hpp>
-
 namespace soomla {
 class StoreEventListener {
 private:

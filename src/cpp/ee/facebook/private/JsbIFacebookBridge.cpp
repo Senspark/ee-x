@@ -7,6 +7,7 @@
 
 #include "ee/facebook/private/JsbIFacebookBridge.hpp"
 
+#ifdef EE_X_COCOS_JS
 #include <ee/core/JsbUtils.hpp>
 
 #include "ee/facebook/FacebookGraphRequest.hpp"
@@ -87,3 +88,5 @@ bool registerJsbIBridge(se::Object* global) {
 }
 } // namespace facebook
 } // namespace ee
+
+#endif // EE_X_COCOS_JS

@@ -7,6 +7,7 @@
 
 #include "ee/facebook/private/JsbFacebookRequestContent.hpp"
 
+#ifdef EE_X_COCOS_JS
 #include <ee/core/JsbUtils.hpp>
 
 #include "ee/facebook/FacebookRequestContent.hpp"
@@ -119,3 +120,5 @@ bool registerJsbRequestContent(se::Object* global) {
 }
 } // namespace facebook
 } // namespace ee
+
+#endif // EE_X_COCOS_JS

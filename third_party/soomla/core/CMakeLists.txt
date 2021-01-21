@@ -8,4 +8,4 @@ include(${CMAKE_CURRENT_LIST_DIR}/sourcelist.cmake)
 
 target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_LIST_DIR}/src)
 
-target_link_libraries(${PROJECT_NAME} cocos2d jansson)
+target_link_libraries(${PROJECT_NAME} ee_x jansson)

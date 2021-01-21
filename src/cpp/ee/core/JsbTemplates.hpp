@@ -8,6 +8,11 @@
 #ifndef EE_X_JSB_TEMPLATES_HPP
 #define EE_X_JSB_TEMPLATES_HPP
 
+#ifdef __cplusplus
+
+#include <ee/cocos/CocosFwd.hpp>
+
+#ifdef EE_X_COCOS_JS
 #include <type_traits>
 #include <utility>
 
@@ -574,5 +579,8 @@ bool jsb_propterty_set(se::State& s) {
 }
 } // namespace core
 } // namespace ee
+
+#endif // EE_X_COCOS_JS
+#endif // __cplusplus
 
 #endif /* EE_X_JSB_TEMPLATES_HPP */

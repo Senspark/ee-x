@@ -8,6 +8,7 @@
 
 #include "ee/firebase_remote_config/internal/JsbFirebaseRemoteConfigBridge.hpp"
 
+#ifdef EE_X_COCOS_JS
 #include <ee/core/JsbUtils.hpp>
 
 #include "ee/firebase_remote_config/FirebaseRemoteConfigBridge.hpp"
@@ -92,3 +93,5 @@ bool registerJsbBridge(se::Object* global) {
 } // namespace remote_config
 } // namespace firebase
 } // namespace ee
+
+#endif // EE_X_COCOS_JS

@@ -7,6 +7,7 @@
 
 #include "ee/soomla/internal/jsb_cc_error.hpp"
 
+#ifdef EE_X_COCOS_JS
 #include <ee/core/JsbUtils.hpp>
 #include <soomla/CCError.h>
 
@@ -69,3 +70,5 @@ bool register_cc_error_manual(se::Object* globalObj) {
     return true;
 }
 } // namespace soomla
+
+#endif // EE_X_COCOS_JS

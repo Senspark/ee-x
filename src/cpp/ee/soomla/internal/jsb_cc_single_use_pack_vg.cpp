@@ -7,6 +7,7 @@
 
 #include "ee/soomla/internal/jsb_cc_single_use_pack_vg.hpp"
 
+#ifdef EE_X_COCOS_JS
 #include <ee/core/JsbUtils.hpp>
 #include <soomla/domain/virtualCurrencies/CCVirtualCurrencyPack.h>
 #include <soomla/domain/virtualGoods/CCSingleUsePackVG.h>
@@ -43,3 +44,5 @@ bool register_cc_single_use_pack_vg_manual(se::Object* globalObj) {
     return true;
 }
 } // namespace soomla
+
+#endif // EE_X_COCOS_JS

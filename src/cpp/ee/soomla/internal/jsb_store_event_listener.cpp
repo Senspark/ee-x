@@ -7,6 +7,7 @@
 
 #include "ee/soomla/internal/jsb_store_event_listener.hpp"
 
+#ifdef EE_X_COCOS_JS
 #include <ee/core/JsbUtils.hpp>
 #include <soomla/StoreEventListener.h>
 
@@ -82,3 +83,5 @@ bool register_store_event_listener_manual(se::Object* globalObj) {
     return true;
 }
 } // namespace soomla
+
+#endif // EE_X_COCOS_JS

@@ -7,6 +7,7 @@
 
 #include "ee/soomla/internal/jsb_cc_virtual_currency_pack.hpp"
 
+#ifdef EE_X_COCOS_JS
 #include <ee/core/JsbUtils.hpp>
 #include <soomla/domain/virtualCurrencies/CCVirtualCurrencyPack.h>
 
@@ -55,3 +56,5 @@ bool register_cc_virtual_currency_pack_manual(se::Object* globalObj) {
     return true;
 }
 } // namespace soomla
+
+#endif // EE_X_COCOS_JS

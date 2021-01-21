@@ -146,7 +146,7 @@ void Self::initializePlugins() {
     setActivity(activity);
 #endif // defined(EE_X_ANDROID)
 
-    ee_staticInitializePlugins("2.2.3");
+    ee_staticInitializePlugins("2.3.0");
 
 #ifdef EE_X_COCOS_CPP
     impl_ = std::make_shared<PluginManagerImplCpp>();

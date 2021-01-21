@@ -64,7 +64,7 @@ namespace EE {
         private static IMessageBridge _bridge;
 
         public static void InitializePlugins() {
-            _impl.InitializePlugins("2.2.3");
+            _impl.InitializePlugins("2.3.0");
             _bridge = MessageBridge.Instance;
             Thread.Initialize();
             Platform.Initialize(_bridge);

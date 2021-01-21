@@ -15,11 +15,11 @@ export class NotificationBuilder {
         this._tag = 0;
     }
 
-    public get ticket(): string {
+    public get ticker(): string {
         return this._ticker;
     }
 
-    public set ticket(value: string) {
+    public set ticker(value: string) {
         this._ticker = value;
     }
 

@@ -21,6 +21,7 @@
 
 #if __has_include("ee/firebase_analytics/FirebaseAnalyticsBridge.hpp")
 #include "ee/firebase_analytics/FirebaseAnalyticsBridge.hpp"
+#include "ee/firebase_analytics/JsbFirebaseAnalytics.hpp"
 #endif
 
 #if __has_include("ee/firebase_dynamic_link/FirebaseDynamicLinkBridge.hpp")
@@ -33,6 +34,7 @@
 
 #if __has_include("ee/firebase_remote_config/FirebaseRemoteConfigBridge.hpp")
 #include "ee/firebase_remote_config/FirebaseRemoteConfigBridge.hpp"
+#include "ee/firebase_remote_config/JsbFirebaseRemoteConfig.hpp"
 #endif
 
 #if __has_include("ee/firebase_storage/FirebaseStorageBridge.hpp")

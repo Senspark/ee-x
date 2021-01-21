@@ -15,6 +15,7 @@
 #include "ee/facebook/IFacebookAccessToken.hpp"
 #include "ee/facebook/IFacebookBridge.hpp"
 #include "ee/facebook/IFacebookDelegate.hpp"
+#include "ee/facebook/JsbFacebook.hpp"
 
 #endif // __cplusplus
 

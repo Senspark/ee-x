@@ -15,6 +15,9 @@ namespace ee {
 namespace facebook {
 class Bridge final : public IBridge {
 public:
+    /// Used by JSB.
+    Bridge();
+
     explicit Bridge(IMessageBridge& bridge);
     virtual ~Bridge() override;
 

@@ -43,6 +43,6 @@ se::Object* Self::getChild(se::Object* parent, const std::string& name) {
         parent->setProperty(name.c_str(), se::Value(child));
     }
     return child;
-} // namespace core
+}
 } // namespace core
 } // namespace ee

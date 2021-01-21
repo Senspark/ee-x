@@ -7,7 +7,6 @@
 
 #include <ee/core/IMessageBridge.hpp>
 #include <ee/core/PluginManager.hpp>
-#include <ee/core/SwitchToLibraryThread.hpp>
 #include <ee/core/Task.hpp>
 #include <ee/core/Utils.hpp>
 #include <ee/nlohmann/json.hpp>
@@ -51,13 +50,11 @@ Task<bool> Self::logIn(bool silently) {
     nlohmann::json request;
     request["silently"] = silently;
     auto response = co_await bridge_.callAsync(kLogIn, request.dump());
-    co_await SwitchToLibraryThread();
     co_return core::toBool(response);
 }
 
 Task<bool> Self::logOut() {
     auto response = co_await bridge_.callAsync(kLogOut);
-    co_await SwitchToLibraryThread();
     co_return core::toBool(response);
 }
 

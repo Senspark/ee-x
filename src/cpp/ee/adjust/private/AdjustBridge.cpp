@@ -9,7 +9,6 @@
 
 #include <ee/core/IMessageBridge.hpp>
 #include <ee/core/PluginManager.hpp>
-#include <ee/core/SwitchToLibraryThread.hpp>
 #include <ee/core/Task.hpp>
 #include <ee/core/Utils.hpp>
 #include <ee/nlohmann/json.hpp>
@@ -63,7 +62,6 @@ void Self::setEnabled(bool enabled) {
 
 Task<std::string> Self::getAdvertisingIdentifier() const {
     auto response = co_await bridge_.callAsync(kGetAdvertisingIdentifier);
-    co_await SwitchToLibraryThread();
     co_return response;
 }
 

@@ -62,12 +62,6 @@ export class UnityAds implements IUnityAds {
         this._bridge.deregisterHandler(this.kOnClosed);
     }
 
-    //     [Serializable]
-    //     private struct InitializeRequest {
-    //             public string gameId;
-    //             public bool testModeEnabled;
-    // }
-
     public async initialize(gameId: string, testModeEnabled: boolean): Promise<boolean> {
         const request: {
             gameId: string,

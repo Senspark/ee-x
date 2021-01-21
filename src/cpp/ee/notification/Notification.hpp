@@ -13,7 +13,7 @@
 
 #include <ee/core/Core.hpp>
 
-#include "ee/notification/NotificationBridge.hpp"
+#include "ee/notification/INotificationBridge.hpp"
 #include "ee/notification/NotificationBuilder.hpp"
 
 #endif // __cplusplus

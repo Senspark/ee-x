@@ -6,7 +6,7 @@
 //
 //
 
-#include "ee/notification/NotificationBridge.hpp"
+#include "ee/notification/internal/NotificationBridge.hpp"
 
 #include <ee/core/IMessageBridge.hpp>
 #include <ee/core/Platform.hpp>
@@ -16,21 +16,29 @@
 #include "ee/notification/NotificationBuilder.hpp"
 
 namespace ee {
+namespace core {
+template <>
+std::shared_ptr<INotification>
+PluginManager::createPluginImpl(IMessageBridge& bridge) {
+    addPlugin(Plugin::Notification);
+    return std::make_shared<notification::Bridge>(bridge);
+}
+} // namespace core
+
 namespace notification {
 namespace {
 const std::string kPrefix = "NotificationBridge";
 const auto kSchedule = kPrefix + "Schedule";
 const auto kUnschedule = kPrefix + "Unschedule";
-const auto kUnscheduleAll = kPrefix + "UnscheduleAll";
 const auto kClearAll = kPrefix + "ClearAll";
 } // namespace
 
 using Self = Bridge;
 
-Self::Bridge()
-    : bridge_(PluginManager::getBridge()) {
-    PluginManager::addPlugin(Plugin::Notification);
-}
+Self::Bridge(IMessageBridge& bridge)
+    : bridge_(bridge) {}
+
+Self::~Bridge() = default;
 
 void Self::destroy() {
     PluginManager::removePlugin(Plugin::Notification);
@@ -39,8 +47,8 @@ void Self::destroy() {
 void Self::schedule(const NotificationBuilder& builder) {
     nlohmann::json json;
     json["ticker"] = builder.ticker_;
-    json["title"] =
-        builder.title_.empty() ? getApplicationName() : builder.title_;
+    json["title"] = builder.title_.empty() ? Platform::getApplicationName()
+                                           : builder.title_;
     json["body"] = builder.body_;
     json["delay"] = builder.delay_;
     json["interval"] = builder.interval_;
@@ -61,10 +69,6 @@ void Self::unschedule(int tag) {
     nlohmann::json json;
     json["tag"] = tag;
     bridge_.call(kUnschedule, json.dump());
-}
-
-void Self::unscheduleAll() {
-    bridge_.call(kUnscheduleAll);
 }
 
 void Self::clearAll() {

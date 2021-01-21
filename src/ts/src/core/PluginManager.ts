@@ -3,6 +3,7 @@ import { AdMob } from "../ad_mob/internal";
 import { FacebookAds } from "../facebook_ads/internal/FacebookAds";
 import { FirebaseCrashlytics } from "../firebase_crashlytics/internal";
 import { IronSource } from "../iron_source/internal";
+import { Notification } from "../notification/internal";
 import { UnityAds } from "../unity_ads/internal";
 import { IMessageBridge } from "./IMessageBridge"
 import {
@@ -28,6 +29,7 @@ export enum Plugin {
     FacebookAds = 6,
     FirebaseCrashlytics = 8,
     IronSource = 11,
+    Notification,
     UnityAds = 16,
 }
 
@@ -38,6 +40,7 @@ export class PluginManager {
         [Plugin.FacebookAds]: bridge => new FacebookAds(bridge),
         [Plugin.FirebaseCrashlytics]: bridge => new FirebaseCrashlytics(bridge),
         [Plugin.IronSource]: bridge => new IronSource(bridge),
+        [Plugin.Notification]: bridge => new Notification(bridge),
         [Plugin.UnityAds]: bridge => new UnityAds(bridge),
     };
 

@@ -15,11 +15,12 @@
 
 namespace ee {
 namespace notification {
+class IBridge;
 class Bridge;
 class NotificationBuilder;
 } // namespace notification
 
-using Notification = notification::Bridge;
+using INotification = notification::IBridge;
 using notification::NotificationBuilder;
 } // namespace ee
 

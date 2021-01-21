@@ -2,6 +2,7 @@ import { Adjust } from "../adjust/internal/Adjust";
 import { AdMob } from "../ad_mob/internal";
 import { FacebookAds } from "../facebook_ads/internal/FacebookAds";
 import { FirebaseCrashlytics } from "../firebase_crashlytics/internal";
+import { FirebasePerformance } from "../firebase_performance/internal";
 import { IronSource } from "../iron_source/internal";
 import { Notification } from "../notification/internal";
 import { UnityAds } from "../unity_ads/internal";
@@ -28,6 +29,7 @@ export enum Plugin {
     AdMob,
     FacebookAds = 6,
     FirebaseCrashlytics = 8,
+    FirebasePerformance,
     IronSource = 11,
     Notification,
     UnityAds = 16,
@@ -39,6 +41,7 @@ export class PluginManager {
         [Plugin.AdMob]: bridge => new AdMob(bridge),
         [Plugin.FacebookAds]: bridge => new FacebookAds(bridge),
         [Plugin.FirebaseCrashlytics]: bridge => new FirebaseCrashlytics(bridge),
+        [Plugin.FirebasePerformance]: bridge => new FirebasePerformance(bridge),
         [Plugin.IronSource]: bridge => new IronSource(bridge),
         [Plugin.Notification]: bridge => new Notification(bridge),
         [Plugin.UnityAds]: bridge => new UnityAds(bridge),

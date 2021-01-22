@@ -7,12 +7,15 @@
 
 namespace ee {
 namespace iron_source {
+enum class BannerAdSize;
 class IBridge;
 class Bridge;
+class BannerAd;
 class InterstitialAd;
 class RewardedAd;
 } // namespace iron_source
 
+using IronSourceBannerAdSize = iron_source::BannerAdSize;
 using IIronSource = iron_source::IBridge;
 } // namespace ee
 

@@ -3,11 +3,19 @@ package com.ee
 import android.app.Activity
 import android.app.Application
 import androidx.annotation.AnyThread
+import com.ee.internal.IronSourceBannerAd
+import com.ee.internal.IronSourceBannerHelper
+import com.ee.internal.deserialize
+import com.ee.internal.serialize
+import com.ironsource.mediationsdk.ISBannerSize
 import com.ironsource.mediationsdk.IronSource
 import com.ironsource.mediationsdk.logger.IronSourceError
 import com.ironsource.mediationsdk.model.Placement
 import com.ironsource.mediationsdk.sdk.InterstitialListener
 import com.ironsource.mediationsdk.sdk.RewardedVideoListener
+import kotlinx.serialization.InternalSerializationApi
+import kotlinx.serialization.Serializable
+import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.atomic.AtomicBoolean
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
@@ -15,6 +23,7 @@ import kotlin.coroutines.suspendCoroutine
 /**
  * Created by Pham Xuan Han on 17/05/17.
  */
+@InternalSerializationApi
 class IronSourceBridge(
     private val _bridge: IMessageBridge,
     private val _logger: ILogger,
@@ -25,6 +34,9 @@ class IronSourceBridge(
         private val kTag = IronSourceBridge::class.java.name
         private const val kPrefix = "IronSourceBridge"
         private const val kInitialize = "${kPrefix}Initialize"
+        private const val kGetBannerAdSize = "${kPrefix}GetBannerAdSize"
+        private const val kCreateBannerAd = "${kPrefix}CreateBannerAd"
+        private const val kDestroyBannerAd = "${kPrefix}DestroyBannerAd"
         private const val kHasInterstitialAd = "${kPrefix}HasInterstitialAd"
         private const val kLoadInterstitialAd = "${kPrefix}LoadInterstitialAd"
         private const val kShowInterstitialAd = "${kPrefix}ShowInterstitialAd"
@@ -42,6 +54,8 @@ class IronSourceBridge(
     }
 
     private var _initialized = false
+    private val _bannerHelper = IronSourceBannerHelper()
+    private val _bannerAds: MutableMap<String, IronSourceBannerAd> = ConcurrentHashMap()
     private val _isInterstitialAdLoaded = AtomicBoolean(false)
     private val _isRewardedAdLoaded = AtomicBoolean(false)
     private var _rewarded = false
@@ -54,6 +68,9 @@ class IronSourceBridge(
 
     override fun onCreate(activity: Activity) {
         _activity = activity
+        for (ad in _bannerAds.values) {
+            ad.onCreate(activity)
+        }
     }
 
     override fun onStart() {}
@@ -68,10 +85,19 @@ class IronSourceBridge(
         IronSource.onPause(_activity)
     }
 
-    override fun onDestroy() {}
+    override fun onDestroy() {
+        val activity = _activity ?: return
+        for (ad in _bannerAds.values) {
+            ad.onDestroy(activity)
+        }
+    }
 
     override fun destroy() {
         deregisterHandlers()
+        for (ad in _bannerAds.values) {
+            ad.destroy()
+        }
+        _bannerAds.clear()
         Thread.runOnMainThread {
             if (!_initialized) {
                 return@runOnMainThread
@@ -85,6 +111,33 @@ class IronSourceBridge(
     private fun registerHandlers() {
         _bridge.registerAsyncHandler(kInitialize) { message ->
             Utils.toString(initialize(message))
+        }
+        _bridge.registerHandler(kGetBannerAdSize) { message ->
+            @Serializable
+            @Suppress("unused")
+            class Response(
+                val width: Int,
+                val height: Int
+            )
+
+            val index = message.toInt()
+            val size = _bannerHelper.getSize(index)
+            val response = Response(size.x, size.y)
+            response.serialize()
+        }
+        _bridge.registerHandler(kCreateBannerAd) { message ->
+            @Serializable
+            class Request(
+                val adId: String,
+                val adSize: Int
+            )
+
+            val request = deserialize<Request>(message)
+            val adSize = _bannerHelper.getAdSize(request.adSize)
+            Utils.toString(createBannerAd(request.adId, adSize))
+        }
+        _bridge.registerHandler(kDestroyBannerAd) { message ->
+            Utils.toString(destroyBannerAd(message))
         }
         _bridge.registerHandler(kLoadInterstitialAd) {
             loadInterstitialAd()
@@ -109,6 +162,9 @@ class IronSourceBridge(
     @AnyThread
     private fun deregisterHandlers() {
         _bridge.deregisterHandler(kInitialize)
+        _bridge.deregisterHandler(kGetBannerAdSize)
+        _bridge.deregisterHandler(kCreateBannerAd)
+        _bridge.deregisterHandler(kDestroyBannerAd)
         _bridge.deregisterHandler(kLoadInterstitialAd)
         _bridge.deregisterHandler(kHasInterstitialAd)
         _bridge.deregisterHandler(kShowInterstitialAd)
@@ -136,11 +192,33 @@ class IronSourceBridge(
                 IronSource.setInterstitialListener(this)
                 IronSource.setRewardedVideoListener(this)
                 IronSource.setUserId(IronSource.getAdvertiserId(_application))
+                val banner = IronSource.createBanner(_activity, ISBannerSize.BANNER)
+                banner.size
                 _initialized = true
                 _logger.info("$kTag: initialize: done")
                 cont.resume(true)
             }
         }
+    }
+
+    @AnyThread
+    fun createBannerAd(adId: String, adSize: ISBannerSize): Boolean {
+        checkInitialized()
+        if (_bannerAds.containsKey(adId)) {
+            return false
+        }
+        val ad = IronSourceBannerAd(_bridge, _logger, _activity, adId, adSize, _bannerHelper)
+        _bannerAds[adId] = ad
+        return true
+    }
+
+    @AnyThread
+    fun destroyBannerAd(adId: String): Boolean {
+        checkInitialized()
+        val ad = _bannerAds[adId] ?: return false
+        ad.destroy()
+        _bannerAds.remove(adId)
+        return true
     }
 
     private val hasInterstitialAd: Boolean

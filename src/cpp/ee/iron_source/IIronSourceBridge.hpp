@@ -24,6 +24,9 @@ public:
     /// Initializes ironSource with the specified game ID.
     [[nodiscard]] virtual Task<bool> initialize(const std::string& appKey) = 0;
 
+    virtual std::shared_ptr<IBannerAd> createBannerAd(const std::string& adId,
+                                                      BannerAdSize adSize) = 0;
+
     /// Creates an interstitial ad with the specified placement ID.
     virtual std::shared_ptr<IFullScreenAd>
     createInterstitialAd(const std::string& adId) = 0;

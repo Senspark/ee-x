@@ -1,8 +1,10 @@
 import {
     FullScreenAdResult,
+    IBannerAd,
     IFullScreenAd,
 } from "../../ads";
 import {
+    GuardedBannerAd,
     GuardedFullScreenAd,
     IAsyncHelper,
     MediationManager,
@@ -12,28 +14,34 @@ import {
     Utils,
 } from "../../core";
 import { IIronSource } from "../IIronSource";
+import { IronSourceBannerAdSize } from "../IronSourceBannerAdSize";
+import { IronSourceBannerAd } from "./IronSourceBannerAd";
 import { IronSourceInterstitialAd } from "./IronSourceInterstitialAd";
 import { IronSourceRewardedAd } from "./IronSourceRewardedAd";
 
 export class IronSource implements IIronSource {
-    private readonly kPrefix = "IronSourceBridge";
-    private readonly kInitialize = this.kPrefix + "Initialize";
-    private readonly kHasInterstitialAd = this.kPrefix + "HasInterstitialAd";
-    private readonly kLoadInterstitialAd = this.kPrefix + "LoadInterstitialAd";
-    private readonly kShowInterstitialAd = this.kPrefix + "ShowInterstitialAd";
-    private readonly kHasRewardedAd = this.kPrefix + "HasRewardedAd";
-    private readonly kShowRewardedAd = this.kPrefix + "ShowRewardedAd";
-    private readonly kOnInterstitialAdLoaded = this.kPrefix + "OnInterstitialAdLoaded";
-    private readonly kOnInterstitialAdFailedToLoad = this.kPrefix + "OnInterstitialAdFailedToLoad";
-    private readonly kOnInterstitialAdFailedToShow = this.kPrefix + "OnInterstitialAdFailedToShow";
-    private readonly kOnInterstitialAdClicked = this.kPrefix + "OnInterstitialAdClicked";
-    private readonly kOnInterstitialAdClosed = this.kPrefix + "OnInterstitialAdClosed";
-    private readonly kOnRewardedAdLoaded = this.kPrefix + "OnRewardedAdLoaded";
-    private readonly kOnRewardedAdFailedToShow = this.kPrefix + "OnRewardedAdFailedToShow";
-    private readonly kOnRewardedAdClicked = this.kPrefix + "OnRewardedAdClicked";
-    private readonly kOnRewardedAdClosed = this.kPrefix + "OnRewardedAdClosed";
+    private readonly kPrefix = `IronSourceBridge`;
+    private readonly kInitialize = `${this.kPrefix}Initialize`;
+    private readonly kGetBannerAdSize = `${this.kPrefix}GetBannerAdSize`;
+    private readonly kCreateBannerAd = `${this.kPrefix}CreateBannerAd`;
+    private readonly kDestroyBannerAd = `${this.kPrefix}DestroyBannerAd`;
+    private readonly kHasInterstitialAd = `${this.kPrefix}HasInterstitialAd`;
+    private readonly kLoadInterstitialAd = `${this.kPrefix}LoadInterstitialAd`;
+    private readonly kShowInterstitialAd = `${this.kPrefix}ShowInterstitialAd`;
+    private readonly kHasRewardedAd = `${this.kPrefix}HasRewardedAd`;
+    private readonly kShowRewardedAd = `${this.kPrefix}ShowRewardedAd`;
+    private readonly kOnInterstitialAdLoaded = `${this.kPrefix}OnInterstitialAdLoaded`;
+    private readonly kOnInterstitialAdFailedToLoad = `${this.kPrefix}OnInterstitialAdFailedToLoad`;
+    private readonly kOnInterstitialAdFailedToShow = `${this.kPrefix}OnInterstitialAdFailedToShow`;
+    private readonly kOnInterstitialAdClicked = `${this.kPrefix}OnInterstitialAdClicked`;
+    private readonly kOnInterstitialAdClosed = `${this.kPrefix}OnInterstitialAdClosed`;
+    private readonly kOnRewardedAdLoaded = `${this.kPrefix}OnRewardedAdLoaded`;
+    private readonly kOnRewardedAdFailedToShow = `${this.kPrefix}OnRewardedAdFailedToShow`;
+    private readonly kOnRewardedAdClicked = `${this.kPrefix}OnRewardedAdClicked`;
+    private readonly kOnRewardedAdClosed = `${this.kPrefix}OnRewardedAdClosed`;
 
     private readonly _bridge: IMessageBridge;
+    private _bannerAd?: IBannerAd;
     private _interstitialAd?: IronSourceInterstitialAd;
     private _sharedInterstitialAd?: IFullScreenAd;
     private _rewardedAd?: IronSourceRewardedAd;
@@ -72,8 +80,42 @@ export class IronSource implements IIronSource {
         return Utils.toBool(response);
     }
 
+    private getBannerAdSize(adSize: IronSourceBannerAdSize): [number, number] {
+        const response = this._bridge.call(this.kGetBannerAdSize, `${adSize}`);
+        const json: {
+            width: number,
+            height: number,
+        } = JSON.parse(response);
+        return [json.width, json.height];
+    }
+
+    public createBannerAd(adId: string, adSize: IronSourceBannerAdSize): IBannerAd {
+        if (this._bannerAd !== undefined) {
+            return this._bannerAd;
+        }
+        const request = {
+            [`adId`]: adId,
+            [`adSize`]: parseInt(`${adSize}`),
+        };
+        const response = this._bridge.call(this.kCreateBannerAd, JSON.stringify(request));
+        if (!Utils.toBool(response)) {
+            throw new Error(`Failed to create banner ad: ${adId}`);
+        }
+        const size = this.getBannerAdSize(adSize);
+        this._bannerAd = new GuardedBannerAd(new IronSourceBannerAd(this._bridge, this, adId, size));
+        return this._bannerAd;
+    }
+
+    public destroyBannerAd(adId: string): boolean {
+        if (this._bannerAd === undefined) {
+            return false;
+        }
+        this._bannerAd = undefined;
+        return true;
+    }
+
     public createInterstitialAd(adId: string): IFullScreenAd {
-        if (this._sharedInterstitialAd != null) {
+        if (this._sharedInterstitialAd !== undefined) {
             return this._sharedInterstitialAd;
         }
         this._interstitialAd = new IronSourceInterstitialAd(this._displayer, this, adId);
@@ -91,7 +133,7 @@ export class IronSource implements IIronSource {
     }
 
     public createRewardedAd(adId: string): IFullScreenAd {
-        if (this._sharedRewardedAd != undefined) {
+        if (this._sharedRewardedAd !== undefined) {
             return this._sharedRewardedAd;
         }
         this._rewardedAd = new IronSourceRewardedAd(this._displayer, this, adId);
@@ -131,7 +173,7 @@ export class IronSource implements IIronSource {
     }
 
     private onInterstitialAdLoaded(): void {
-        if (this._interstitialAd != undefined) {
+        if (this._interstitialAd !== undefined) {
             this._interstitialAd.onLoaded();
         } else {
             // Assert.
@@ -139,7 +181,7 @@ export class IronSource implements IIronSource {
     }
 
     private onInterstitialAdFailedToLoad(message: string): void {
-        if (this._interstitialAd != undefined) {
+        if (this._interstitialAd !== undefined) {
             this._interstitialAd.onFailedToLoad(message);
         } else {
             // Assert.
@@ -147,7 +189,7 @@ export class IronSource implements IIronSource {
     }
 
     private onInterstitialAdFailedToShow(message: string): void {
-        if (this._interstitialAd != undefined) {
+        if (this._interstitialAd !== undefined) {
             this._interstitialAd.onFailedToShow(message);
         } else {
             // Assert.
@@ -155,7 +197,7 @@ export class IronSource implements IIronSource {
     }
 
     private onInterstitialAdClicked(): void {
-        if (this._interstitialAd != undefined) {
+        if (this._interstitialAd !== undefined) {
             this._interstitialAd.onClicked();
         } else {
             // Assert.
@@ -163,7 +205,7 @@ export class IronSource implements IIronSource {
     }
 
     private onInterstitialAdClosed(): void {
-        if (this._interstitialAd != undefined) {
+        if (this._interstitialAd !== undefined) {
             this._interstitialAd.onClosed();
         } else {
             this.onMediationAdClosed(FullScreenAdResult.Completed);
@@ -171,7 +213,7 @@ export class IronSource implements IIronSource {
     }
 
     private onRewardedAdLoaded(): void {
-        if (this._rewardedAd != undefined) {
+        if (this._rewardedAd !== undefined) {
             this._rewardedAd.onLoaded();
         } else {
             // Automatically reloaded by SDK.
@@ -179,7 +221,7 @@ export class IronSource implements IIronSource {
     }
 
     private onRewardedAdFailedToShow(message: string): void {
-        if (this._rewardedAd != undefined) {
+        if (this._rewardedAd !== undefined) {
             this._rewardedAd.onFailedToShow(message);
         } else {
             // Assert.
@@ -187,7 +229,7 @@ export class IronSource implements IIronSource {
     }
 
     private onRewardedAdClicked(): void {
-        if (this._rewardedAd != undefined) {
+        if (this._rewardedAd !== undefined) {
             this._rewardedAd.onClicked();
         } else {
             // Assert.
@@ -195,7 +237,7 @@ export class IronSource implements IIronSource {
     }
 
     private onRewardedAdClosed(rewarded: boolean): void {
-        if (this._rewardedAd != undefined) {
+        if (this._rewardedAd !== undefined) {
             this._rewardedAd.onClosed(rewarded);
         } else {
             this.onMediationAdClosed(rewarded

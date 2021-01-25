@@ -77,7 +77,6 @@ export class AdMob implements IAdMob {
         return [json.width, json.height];
     }
 
-
     public createBannerAd(adId: string, adSize: AdMobBannerAdSize): IBannerAd {
         if (this._ads[adId]) {
             return this._ads[adId] as IBannerAd;

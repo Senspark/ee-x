@@ -18,7 +18,7 @@ class IronSourceBannerHelper {
     private val _indexToSize: MutableMap<Int, Point> = HashMap()
 
     init {
-        for (index in 0..3) {
+        for (index in 0..2) {
             val adSize = getAdSize(index)
             val size = convertAdSizeToSize(adSize)
             _indexToSize[index] = size

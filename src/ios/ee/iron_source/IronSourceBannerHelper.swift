@@ -14,7 +14,7 @@ internal class IronSourceBannerHelper {
     private var _indexToSize: [Int: CGSize] = [:]
 
     init() {
-        for index in 0...3 {
+        for index in 0...2 {
             let adSize = getAdSize(index)
             let size = IronSourceBannerHelper.convertAdSizeToSize(adSize)
             _indexToSize[index] = size
@@ -49,7 +49,7 @@ internal class IronSourceBannerHelper {
         return 0
     }
 
-    private func getSize(index: Int) -> CGSize {
+    func getSize(index: Int) -> CGSize {
         guard let size = _indexToSize[index] else {
             assert(false, "Invalid ad index")
             return CGSize.zero

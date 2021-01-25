@@ -98,13 +98,8 @@ class IronSourceBridge(
             ad.destroy()
         }
         _bannerAds.clear()
-        Thread.runOnMainThread {
-            if (!_initialized) {
-                return@runOnMainThread
-            }
-            IronSource.removeInterstitialListener()
-            IronSource.removeRewardedVideoListener()
-        }
+        IronSource.removeInterstitialListener()
+        IronSource.removeRewardedVideoListener()
     }
 
     @AnyThread

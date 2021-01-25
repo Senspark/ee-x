@@ -45,6 +45,13 @@ public:
     /// @param message The message.
     virtual Task<std::string> callAsync(const std::string& tag,
                                         const std::string& message = "") = 0;
+
+    /// Calls a handler from C++ with a message.
+    /// @warning This method should not be called manually.
+    /// @param tag The unique tag of the handler.
+    /// @param message The message.
+    virtual void callCpp(const std::string& tag,
+                         const std::string& message) = 0;
 };
 } // namespace core
 } // namespace ee

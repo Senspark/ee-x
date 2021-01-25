@@ -8,6 +8,7 @@
 
 #include "ee/cocos/EEUiWidgetLoader.hpp"
 
+#ifdef EE_X_COCOS_CPP
 #include <ui/UIWidget.h>
 
 #include "ee/cocos/EEUiWidgetCallback.hpp"
@@ -123,3 +124,5 @@ void UiWidgetLoader::onHandlePropTypeIntegerLabeled(
                                                  integerLabeled, reader);
 }
 } // namespace ee
+
+#endif // EE_X_COCOS_CPP

@@ -1,0 +1,65 @@
+//
+//  jsb_cc_purchase_with_market.cpp
+//  ee-x
+//
+//  Created by Nguyen Van Quynh on 9/18/18.
+//
+
+#include "ee/soomla/internal/jsb_cc_purchase_with_market.hpp"
+
+#ifdef EE_X_COCOS_JS
+#include <ee/core/JsbUtils.hpp>
+#include <soomla/PurchaseTypes/CCPurchaseWithMarket.h>
+
+namespace ee {
+namespace core {
+template <>
+void set_value(se::Value& value, soomla::CCPurchaseWithMarket* input) {
+    set_value_from_pointer(value, input);
+}
+
+template <>
+void set_value(se::Value& value, soomla::CCMarketItem* input) {
+    set_value_from_pointer(value, input);
+}
+} // namespace core
+} // namespace ee
+
+namespace soomla {
+se::Class* __jsb_CCPurchaseWithMarket_class = nullptr;
+
+const auto jsb_CCPurchaseWithMarket_finalize =
+    &ee::core::jsb_finalize<CCPurchaseWithMarket>;
+const auto jsb_CCPurchaseWithMarket_constructor =
+    &ee::core::jsb_constructor<CCPurchaseWithMarket>;
+const auto jsb_CCPurchaseWithMarket_getMarketItem = &ee::core::jsb_method_get<
+    CCPurchaseWithMarket, &CCPurchaseWithMarket::getMarketItem, CCMarketItem*>;
+
+SE_BIND_FINALIZE_FUNC(jsb_CCPurchaseWithMarket_finalize)
+SE_BIND_CTOR(jsb_CCPurchaseWithMarket_constructor,
+             __jsb_CCPurchaseWithMarket_class,
+             jsb_CCPurchaseWithMarket_finalize)
+SE_BIND_FUNC(jsb_CCPurchaseWithMarket_getMarketItem)
+
+bool register_cc_purchase_with_market_manual(se::Object* globalObj) {
+    auto __soomlaObj = ee::JsbUtils::getPath(globalObj, "soomla");
+
+    auto cls = se::Class::create("CCPurchaseWithMarket", __soomlaObj, nullptr,
+                                 _SE(jsb_CCPurchaseWithMarket_constructor));
+    cls->defineFinalizeFunction(_SE(jsb_CCPurchaseWithMarket_finalize));
+
+    cls->defineFunction("getMarketItem",
+                        _SE(jsb_CCPurchaseWithMarket_getMarketItem));
+
+    cls->install();
+
+    JSBClassType::registerClass<CCPurchaseWithMarket>(cls);
+
+    __jsb_CCPurchaseWithMarket_class = cls;
+
+    se::ScriptEngine::getInstance()->clearException();
+    return true;
+}
+} // namespace soomla
+
+#endif // EE_X_COCOS_JS

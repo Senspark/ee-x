@@ -11,6 +11,9 @@ import RxSwift
 private let kTag = "\(IronSourceBridge.self)"
 private let kPrefix = "IronSourceBridge"
 private let kInitialize = "\(kPrefix)Initialize"
+private let kGetBannerAdSize = "\(kPrefix)GetBannerAdSize"
+private let kCreateBannerAd = "\(kPrefix)CreateBannerAd"
+private let kDestroyBannerAd = "\(kPrefix)DestroyBannerAd"
 private let kHasInterstitialAd = "\(kPrefix)HasInterstitialAd"
 private let kLoadInterstitialAd = "\(kPrefix)LoadInterstitialAd"
 private let kShowInterstitialAd = "\(kPrefix)ShowInterstitialAd"
@@ -31,6 +34,8 @@ class IronSourceBridge: NSObject, IPlugin, ISRewardedVideoDelegate, ISInterstiti
     private let _bridge: IMessageBridge
     private let _logger: ILogger
     private var _initialized = false
+    private let _bannerHelper = IronSourceBannerHelper()
+    private var _bannerAds: [String: IronSourceBannerAd] = [:]
     private var _isInterstitialAdLoaded = false
     private var _isRewardedAdLoaded = false
     private var _rewarded = false
@@ -44,12 +49,9 @@ class IronSourceBridge: NSObject, IPlugin, ISRewardedVideoDelegate, ISInterstiti
 
     public func destroy() {
         deregisterHandlers()
-        Thread.runOnMainThread {
-            if !self._initialized {
-                return
-            }
-            // Cannot clear delegates.
-        }
+        _bannerAds.values.forEach { $0.destroy() }
+        _bannerAds.removeAll()
+        // Cannot clear delegates.
     }
 
     func registerHandlers() {
@@ -61,6 +63,29 @@ class IronSourceBridge: NSObject, IPlugin, ISRewardedVideoDelegate, ISInterstiti
                     }, onError: {
                         _ in resolver(Utils.toString(false))
                     })
+        }
+        _bridge.registerHandler(kGetBannerAdSize) { message in
+            let index = Int(message) ?? -1
+            let size = self._bannerHelper.getSize(index: index)
+            return EEJsonUtils.convertDictionary(toString: [
+                "width": size.width,
+                "height": size.height
+            ])
+        }
+        _bridge.registerHandler(kCreateBannerAd) { message in
+            let dict = EEJsonUtils.convertString(toDictionary: message)
+            guard
+                let adId = dict["adId"] as? String,
+                let index = dict["adSize"] as? Int
+            else {
+                assert(false, "Invalid argument")
+                return ""
+            }
+            let adSize = self._bannerHelper.getAdSize(index)
+            return Utils.toString(self.createBannerAd(adId, adSize))
+        }
+        _bridge.registerHandler(kDestroyBannerAd) { message in
+            Utils.toString(self.destroyBannerAd(message))
         }
         _bridge.registerHandler(kLoadInterstitialAd) { _ in
             self.loadInterstitialAd()
@@ -84,6 +109,9 @@ class IronSourceBridge: NSObject, IPlugin, ISRewardedVideoDelegate, ISInterstiti
 
     func deregisterHandlers() {
         _bridge.deregisterHandler(kInitialize)
+        _bridge.deregisterHandler(kGetBannerAdSize)
+        _bridge.deregisterHandler(kCreateBannerAd)
+        _bridge.deregisterHandler(kDestroyBannerAd)
         _bridge.deregisterHandler(kLoadInterstitialAd)
         _bridge.deregisterHandler(kHasInterstitialAd)
         _bridge.deregisterHandler(kShowInterstitialAd)
@@ -121,6 +149,26 @@ class IronSourceBridge: NSObject, IPlugin, ISRewardedVideoDelegate, ISInterstiti
             return Disposables.create()
         }
         .subscribeOn(MainScheduler())
+    }
+
+    func createBannerAd(_ adId: String, _ adSize: ISBannerSize) -> Bool {
+        checkInitialized()
+        if _bannerAds.contains(where: { key, _ in key == adId }) {
+            return false
+        }
+        let ad = IronSourceBannerAd(_bridge, _logger, adId, adSize, _bannerHelper)
+        _bannerAds[adId] = ad
+        return true
+    }
+
+    func destroyBannerAd(_ adId: String) -> Bool {
+        checkInitialized()
+        guard let ad = _bannerAds[adId] else {
+            return false
+        }
+        ad.destroy()
+        _bannerAds.removeValue(forKey: adId)
+        return true
     }
 
     var hasInterstitialAd: Bool {

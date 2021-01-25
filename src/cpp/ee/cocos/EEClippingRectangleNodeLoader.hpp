@@ -13,6 +13,8 @@
 
 #include "ee/cocos/EENodeV3Loader.hpp"
 
+#ifdef EE_X_COCOS_CPP
+
 namespace ee {
 class ClippingRectangleNodeLoader : public NodeV3Loader {
 private:
@@ -39,6 +41,7 @@ protected:
 };
 } // namespace ee
 
+#endif // EE_X_COCOS_CPP
 #endif // __cplusplus
 
 #endif /* EE_LIBRARY_CLIPPING_RECTANGLE_NODE_LOADER_HPP_ */

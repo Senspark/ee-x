@@ -8,6 +8,8 @@
 
 #include "ee/cocos/EEUiWidgetCallback.hpp"
 
+#ifdef EE_X_COCOS_CPP
+
 namespace ee {
 namespace detail {
 UiWidgetCallback* UiWidgetCallback::getInstance() {
@@ -34,3 +36,5 @@ auto UiWidgetCallback::getActiveClickCallback() const -> const ClickCallback& {
 }
 } // namespace detail
 } // namespace ee
+
+#endif // EE_X_COCOS_CPP

@@ -8,6 +8,7 @@
 
 #include "ee/cocos/EEUiTextLoader.hpp"
 
+#ifdef EE_X_COCOS_CPP
 #include <2d/CCLabel.h>
 #include <ui/UIText.h>
 
@@ -235,3 +236,5 @@ void UiTextLoader::onHandlePropTypeSize(cocos2d::Node* node,
     Super::onHandlePropTypeSize(node, parent, propertyName, size, reader);
 }
 } // namespace ee
+
+#endif // EE_X_COCOS_CPP

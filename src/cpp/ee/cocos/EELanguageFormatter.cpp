@@ -8,6 +8,7 @@
 
 #include "ee/cocos/EELanguageFormatter.hpp"
 
+#ifdef EE_X_COCOS_CPP
 #include <platform/CCPlatformMacros.h>
 
 namespace ee {
@@ -87,3 +88,5 @@ std::string Self::format(const std::vector<std::string>& args) const {
 }
 } // namespace language
 } // namespace ee
+
+#endif // EE_X_COCOS_CPP

@@ -8,6 +8,7 @@
 
 #include "ee/cocos/EESpriteWithHsv.hpp"
 
+#ifdef EE_X_COCOS_CPP
 #include <cocos2d.h>
 #include <renderer/CCGLProgramState.h>
 
@@ -94,3 +95,5 @@ bool SpriteWithHsv::updateMatrix() {
     return false;
 }
 } // namespace ee
+
+#endif // EE_X_COCOS_CPP

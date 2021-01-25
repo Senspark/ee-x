@@ -8,6 +8,7 @@
 
 #include "ee/cocos/EEPoolUtils.hpp"
 
+#ifdef EE_X_COCOS_CPP
 #include <2d/CCParticleSystemQuad.h>
 #include <2d/CCSpriteFrameCache.h>
 
@@ -94,3 +95,5 @@ cocos2d::ParticleSystem* createParticle(const std::string& plistName,
     return particle;
 }
 } // namespace ee
+
+#endif // EE_X_COCOS_CPP

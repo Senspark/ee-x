@@ -27,27 +27,27 @@
 		6F59E6FC1FA6E75E007D3070 /* FunctionLogger.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F59E6F91FA6E75E007D3070 /* FunctionLogger.cpp */; };
 		6FDD65A11F94A3B400BAEA66 /* Utils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6FDD659F1F94A3B400BAEA66 /* Utils.cpp */; };
 		6FDD65A21F94A3B400BAEA66 /* Utils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6FDD659F1F94A3B400BAEA66 /* Utils.cpp */; };
-		6FDD65A51F94A4DB00BAEA66 /* FacebookAdsTester.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6FDD65A31F94A4DB00BAEA66 /* FacebookAdsTester.cpp */; };
-		6FDD65A91F94A7DF00BAEA66 /* AppLovinTester.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6FDD65A71F94A7DF00BAEA66 /* AppLovinTester.cpp */; };
-		6FDD65AD1F94A86B00BAEA66 /* UnityAdsTester.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6FDD65AB1F94A86B00BAEA66 /* UnityAdsTester.cpp */; };
-		6FDD65B11F94A93D00BAEA66 /* IronSourceTester.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6FDD65AF1F94A93D00BAEA66 /* IronSourceTester.cpp */; };
-		6FDD65B51F94A9C800BAEA66 /* VungleTester.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6FDD65B31F94A9C800BAEA66 /* VungleTester.cpp */; };
-		6FDD65B91F94AB4700BAEA66 /* AdMobTester.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6FDD65B71F94AB4700BAEA66 /* AdMobTester.cpp */; };
 		6FDD65BC1F95A9C300BAEA66 /* admob_native_spin.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6FDD65BB1F95A9C300BAEA66 /* admob_native_spin.xib */; };
 		AD0A589020ABE675001D4FD2 /* FirebaseDynamicLink.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AD0A588E20ABE675001D4FD2 /* FirebaseDynamicLink.cpp */; };
 		AD18E4082449C177002C7EEB /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = AD18E4062449C177002C7EEB /* GoogleService-Info.plist */; };
 		AD2CA22B24B3071C00542CB2 /* CoreTester.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AD2CA22924B3071C00542CB2 /* CoreTester.cpp */; };
 		AD2CA22C24B3071C00542CB2 /* CoreTester.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AD2CA22924B3071C00542CB2 /* CoreTester.cpp */; };
 		AD2CA22F24B3073D00542CB2 /* FirebaseCrashlyticsTester.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AD2CA22D24B3073D00542CB2 /* FirebaseCrashlyticsTester.cpp */; };
-		AD2CA23D24B311CD00542CB2 /* BannerAdTester.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AD2CA23B24B311CD00542CB2 /* BannerAdTester.cpp */; };
 		AD2CA24124B3135300542CB2 /* NativeAdTester.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AD2CA23F24B3135300542CB2 /* NativeAdTester.cpp */; };
-		AD2CA24524B316FD00542CB2 /* InterstitialAdTester.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AD2CA24324B316FD00542CB2 /* InterstitialAdTester.cpp */; };
-		AD2CA24924B3183900542CB2 /* RewardedAdTester.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AD2CA24724B3183900542CB2 /* RewardedAdTester.cpp */; };
-		AD4AE9A9252D68DD00FBA32C /* RewardedAdSceneTester.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AD4AE9A7252D68DD00FBA32C /* RewardedAdSceneTester.cpp */; };
 		AD56EF7A2021647A00DC9B56 /* videos in Resources */ = {isa = PBXBuildFile; fileRef = AD56EF792021647A00DC9B56 /* videos */; };
 		AD56EF7B2021647A00DC9B56 /* videos in Resources */ = {isa = PBXBuildFile; fileRef = AD56EF792021647A00DC9B56 /* videos */; };
 		AD56EF7E2021649B00DC9B56 /* VideoPlayerTestScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AD56EF7C2021649B00DC9B56 /* VideoPlayerTestScene.cpp */; };
 		AD56EF7F2021649B00DC9B56 /* VideoPlayerTestScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AD56EF7C2021649B00DC9B56 /* VideoPlayerTestScene.cpp */; };
+		AD9E6FDB25BEC3E30019EFB0 /* MainScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AD9E6FD925BEC3E30019EFB0 /* MainScene.cpp */; };
+		AD9E6FDC25BEC3E30019EFB0 /* MainScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AD9E6FD925BEC3E30019EFB0 /* MainScene.cpp */; };
+		AD9E6FE125BEC7390019EFB0 /* BannerAdScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AD9E6FDF25BEC7390019EFB0 /* BannerAdScene.cpp */; };
+		AD9E6FE225BEC7390019EFB0 /* BannerAdScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AD9E6FDF25BEC7390019EFB0 /* BannerAdScene.cpp */; };
+		AD9E6FEF25BECA0E0019EFB0 /* FullScreenAdScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AD9E6FED25BECA0E0019EFB0 /* FullScreenAdScene.cpp */; };
+		AD9E6FF025BECA0E0019EFB0 /* FullScreenAdScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AD9E6FED25BECA0E0019EFB0 /* FullScreenAdScene.cpp */; };
+		ADD0F44625BED66500692DF0 /* ads_config_ios.json in Resources */ = {isa = PBXBuildFile; fileRef = ADD0F44425BED66500692DF0 /* ads_config_ios.json */; };
+		ADD0F44725BED66500692DF0 /* ads_config_ios.json in Resources */ = {isa = PBXBuildFile; fileRef = ADD0F44425BED66500692DF0 /* ads_config_ios.json */; };
+		ADD0F44825BED66500692DF0 /* ads_config_android.json in Resources */ = {isa = PBXBuildFile; fileRef = ADD0F44525BED66500692DF0 /* ads_config_android.json */; };
+		ADD0F44925BED66500692DF0 /* ads_config_android.json in Resources */ = {isa = PBXBuildFile; fileRef = ADD0F44525BED66500692DF0 /* ads_config_android.json */; };
 		F74C48F59B281A9C7657ACD8 /* libPods-common-ee_x_test_mobile.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FC4A99CCFF33D8ACE28587F3 /* libPods-common-ee_x_test_mobile.a */; };
 /* End PBXBuildFile section */
 
@@ -122,18 +122,6 @@
 		6F5B40C81E8E33E200137F30 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = Info.plist; path = mac/Info.plist; sourceTree = "<group>"; };
 		6FDD659F1F94A3B400BAEA66 /* Utils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Utils.cpp; sourceTree = "<group>"; };
 		6FDD65A01F94A3B400BAEA66 /* Utils.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Utils.hpp; sourceTree = "<group>"; };
-		6FDD65A31F94A4DB00BAEA66 /* FacebookAdsTester.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FacebookAdsTester.cpp; sourceTree = "<group>"; };
-		6FDD65A41F94A4DB00BAEA66 /* FacebookAdsTester.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = FacebookAdsTester.hpp; sourceTree = "<group>"; };
-		6FDD65A71F94A7DF00BAEA66 /* AppLovinTester.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AppLovinTester.cpp; sourceTree = "<group>"; };
-		6FDD65A81F94A7DF00BAEA66 /* AppLovinTester.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = AppLovinTester.hpp; sourceTree = "<group>"; };
-		6FDD65AB1F94A86B00BAEA66 /* UnityAdsTester.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = UnityAdsTester.cpp; sourceTree = "<group>"; };
-		6FDD65AC1F94A86B00BAEA66 /* UnityAdsTester.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = UnityAdsTester.hpp; sourceTree = "<group>"; };
-		6FDD65AF1F94A93D00BAEA66 /* IronSourceTester.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = IronSourceTester.cpp; sourceTree = "<group>"; };
-		6FDD65B01F94A93D00BAEA66 /* IronSourceTester.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = IronSourceTester.hpp; sourceTree = "<group>"; };
-		6FDD65B31F94A9C800BAEA66 /* VungleTester.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = VungleTester.cpp; sourceTree = "<group>"; };
-		6FDD65B41F94A9C800BAEA66 /* VungleTester.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = VungleTester.hpp; sourceTree = "<group>"; };
-		6FDD65B71F94AB4700BAEA66 /* AdMobTester.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AdMobTester.cpp; sourceTree = "<group>"; };
-		6FDD65B81F94AB4700BAEA66 /* AdMobTester.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = AdMobTester.hpp; sourceTree = "<group>"; };
 		6FDD65BB1F95A9C300BAEA66 /* admob_native_spin.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = admob_native_spin.xib; sourceTree = "<group>"; };
 		82B010BBDE4CA3D417D178FF /* Pods-common-ee_x_test_mobile.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-common-ee_x_test_mobile.release.xcconfig"; path = "Pods/Target Support Files/Pods-common-ee_x_test_mobile/Pods-common-ee_x_test_mobile.release.xcconfig"; sourceTree = "<group>"; };
 		85B4D1CDDFC900412D1C245B /* libPods-ee_x_test_mobile.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-ee_x_test_mobile.a"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -148,19 +136,19 @@
 		AD2CA22E24B3073D00542CB2 /* FirebaseCrashlyticsTester.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = FirebaseCrashlyticsTester.hpp; sourceTree = "<group>"; };
 		AD2CA23224B3077E00542CB2 /* ITester.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = ITester.hpp; sourceTree = "<group>"; };
 		AD2CA23824B30A1400542CB2 /* AppMacro.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = AppMacro.hpp; sourceTree = "<group>"; };
-		AD2CA23B24B311CD00542CB2 /* BannerAdTester.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = BannerAdTester.cpp; sourceTree = "<group>"; };
-		AD2CA23C24B311CD00542CB2 /* BannerAdTester.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = BannerAdTester.hpp; sourceTree = "<group>"; };
 		AD2CA23F24B3135300542CB2 /* NativeAdTester.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = NativeAdTester.cpp; sourceTree = "<group>"; };
 		AD2CA24024B3135300542CB2 /* NativeAdTester.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = NativeAdTester.hpp; sourceTree = "<group>"; };
-		AD2CA24324B316FD00542CB2 /* InterstitialAdTester.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = InterstitialAdTester.cpp; sourceTree = "<group>"; };
-		AD2CA24424B316FD00542CB2 /* InterstitialAdTester.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = InterstitialAdTester.hpp; sourceTree = "<group>"; };
-		AD2CA24724B3183900542CB2 /* RewardedAdTester.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = RewardedAdTester.cpp; sourceTree = "<group>"; };
-		AD2CA24824B3183900542CB2 /* RewardedAdTester.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = RewardedAdTester.hpp; sourceTree = "<group>"; };
-		AD4AE9A7252D68DD00FBA32C /* RewardedAdSceneTester.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = RewardedAdSceneTester.cpp; sourceTree = "<group>"; };
-		AD4AE9A8252D68DD00FBA32C /* RewardedAdSceneTester.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = RewardedAdSceneTester.hpp; sourceTree = "<group>"; };
 		AD56EF792021647A00DC9B56 /* videos */ = {isa = PBXFileReference; lastKnownFileType = folder; path = videos; sourceTree = "<group>"; };
 		AD56EF7C2021649B00DC9B56 /* VideoPlayerTestScene.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = VideoPlayerTestScene.cpp; sourceTree = "<group>"; };
 		AD56EF7D2021649B00DC9B56 /* VideoPlayerTestScene.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = VideoPlayerTestScene.hpp; sourceTree = "<group>"; };
+		AD9E6FD925BEC3E30019EFB0 /* MainScene.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = MainScene.cpp; sourceTree = "<group>"; };
+		AD9E6FDA25BEC3E30019EFB0 /* MainScene.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = MainScene.hpp; sourceTree = "<group>"; };
+		AD9E6FDF25BEC7390019EFB0 /* BannerAdScene.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = BannerAdScene.cpp; sourceTree = "<group>"; };
+		AD9E6FE025BEC7390019EFB0 /* BannerAdScene.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = BannerAdScene.hpp; sourceTree = "<group>"; };
+		AD9E6FED25BECA0E0019EFB0 /* FullScreenAdScene.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = FullScreenAdScene.cpp; sourceTree = "<group>"; };
+		AD9E6FEE25BECA0E0019EFB0 /* FullScreenAdScene.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = FullScreenAdScene.hpp; sourceTree = "<group>"; };
+		ADD0F44425BED66500692DF0 /* ads_config_ios.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = ads_config_ios.json; sourceTree = "<group>"; };
+		ADD0F44525BED66500692DF0 /* ads_config_android.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = ads_config_android.json; sourceTree = "<group>"; };
 		BC44458B9751F576980C8B9D /* Pods-ee_x_test_mobile.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ee_x_test_mobile.release.xcconfig"; path = "Pods/Target Support Files/Pods-ee_x_test_mobile/Pods-ee_x_test_mobile.release.xcconfig"; sourceTree = "<group>"; };
 		EF08DE0B7A9A2F319B653225 /* Pods-common-ee_x_test_desktop.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-common-ee_x_test_desktop.debug.xcconfig"; path = "Pods/Target Support Files/Pods-common-ee_x_test_desktop/Pods-common-ee_x_test_desktop.debug.xcconfig"; sourceTree = "<group>"; };
 		FC4A99CCFF33D8ACE28587F3 /* libPods-common-ee_x_test_mobile.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-common-ee_x_test_mobile.a"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -239,6 +227,7 @@
 		46880B7519C43A67006E1F66 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				ADD0F43025BED34300692DF0 /* config */,
 				AD56EF792021647A00DC9B56 /* videos */,
 				6F54B3BF1FB0153800D821F1 /* images */,
 				6F426E2A1F8B5978009E202A /* layouts */,
@@ -264,6 +253,12 @@
 				AD56EF7D2021649B00DC9B56 /* VideoPlayerTestScene.hpp */,
 				AD0A588E20ABE675001D4FD2 /* FirebaseDynamicLink.cpp */,
 				AD0A588F20ABE675001D4FD2 /* FirebaseDynamicLink.hpp */,
+				AD9E6FD925BEC3E30019EFB0 /* MainScene.cpp */,
+				AD9E6FDA25BEC3E30019EFB0 /* MainScene.hpp */,
+				AD9E6FDF25BEC7390019EFB0 /* BannerAdScene.cpp */,
+				AD9E6FE025BEC7390019EFB0 /* BannerAdScene.hpp */,
+				AD9E6FED25BECA0E0019EFB0 /* FullScreenAdScene.cpp */,
+				AD9E6FEE25BECA0E0019EFB0 /* FullScreenAdScene.hpp */,
 			);
 			name = Classes;
 			path = ../Classes;
@@ -324,36 +319,25 @@
 			isa = PBXGroup;
 			children = (
 				AD2CA23224B3077E00542CB2 /* ITester.hpp */,
-				AD2CA23B24B311CD00542CB2 /* BannerAdTester.cpp */,
-				AD2CA23C24B311CD00542CB2 /* BannerAdTester.hpp */,
 				AD2CA23F24B3135300542CB2 /* NativeAdTester.cpp */,
 				AD2CA24024B3135300542CB2 /* NativeAdTester.hpp */,
-				AD2CA24324B316FD00542CB2 /* InterstitialAdTester.cpp */,
-				AD2CA24424B316FD00542CB2 /* InterstitialAdTester.hpp */,
-				AD2CA24724B3183900542CB2 /* RewardedAdTester.cpp */,
-				AD2CA24824B3183900542CB2 /* RewardedAdTester.hpp */,
 				AD2CA22924B3071C00542CB2 /* CoreTester.cpp */,
 				AD2CA22A24B3071C00542CB2 /* CoreTester.hpp */,
-				6FDD65B71F94AB4700BAEA66 /* AdMobTester.cpp */,
-				6FDD65B81F94AB4700BAEA66 /* AdMobTester.hpp */,
-				6FDD65A71F94A7DF00BAEA66 /* AppLovinTester.cpp */,
-				6FDD65A81F94A7DF00BAEA66 /* AppLovinTester.hpp */,
-				6FDD65A31F94A4DB00BAEA66 /* FacebookAdsTester.cpp */,
-				6FDD65A41F94A4DB00BAEA66 /* FacebookAdsTester.hpp */,
 				AD2CA22D24B3073D00542CB2 /* FirebaseCrashlyticsTester.cpp */,
 				AD2CA22E24B3073D00542CB2 /* FirebaseCrashlyticsTester.hpp */,
-				6FDD65AF1F94A93D00BAEA66 /* IronSourceTester.cpp */,
-				6FDD65B01F94A93D00BAEA66 /* IronSourceTester.hpp */,
 				6F2580301ECC019000B910F9 /* NotificationTester.cpp */,
 				6F2580311ECC019000B910F9 /* NotificationTester.hpp */,
-				6FDD65AB1F94A86B00BAEA66 /* UnityAdsTester.cpp */,
-				6FDD65AC1F94A86B00BAEA66 /* UnityAdsTester.hpp */,
-				6FDD65B31F94A9C800BAEA66 /* VungleTester.cpp */,
-				6FDD65B41F94A9C800BAEA66 /* VungleTester.hpp */,
-				AD4AE9A7252D68DD00FBA32C /* RewardedAdSceneTester.cpp */,
-				AD4AE9A8252D68DD00FBA32C /* RewardedAdSceneTester.hpp */,
 			);
 			path = tester;
+			sourceTree = "<group>";
+		};
+		ADD0F43025BED34300692DF0 /* config */ = {
+			isa = PBXGroup;
+			children = (
+				ADD0F44525BED66500692DF0 /* ads_config_android.json */,
+				ADD0F44425BED66500692DF0 /* ads_config_ios.json */,
+			);
+			path = config;
 			sourceTree = "<group>";
 		};
 		C76671CF600AAB2EDD769DA6 /* Pods */ = {
@@ -382,7 +366,7 @@
 				1D60588D0D05DD3D006BFB54 /* Resources */,
 				1D60588E0D05DD3D006BFB54 /* Sources */,
 				1D60588F0D05DD3D006BFB54 /* Frameworks */,
-				709ACDF02F89F450A7A69B86 /* [CP] Copy Pods Resources */,
+				29B89FD91C686BA07B51266E /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -402,6 +386,7 @@
 				5087E74817EB910900C73F5D /* Resources */,
 				5087E75617EB910900C73F5D /* Sources */,
 				5087E75C17EB910900C73F5D /* Frameworks */,
+				0FDF13B023412345D2973B6E /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -538,8 +523,10 @@
 				6F54B3C01FB0153800D821F1 /* images in Resources */,
 				6F426E2E1F8B5978009E202A /* fb_native_spin.xib in Resources */,
 				6FDD65BC1F95A9C300BAEA66 /* admob_native_spin.xib in Resources */,
+				ADD0F44825BED66500692DF0 /* ads_config_android.json in Resources */,
 				6F426E2D1F8B5978009E202A /* fb_native_pause.xib in Resources */,
 				AD18E4082449C177002C7EEB /* GoogleService-Info.plist in Resources */,
+				ADD0F44625BED66500692DF0 /* ads_config_ios.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -547,7 +534,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				ADD0F44925BED66500692DF0 /* ads_config_android.json in Resources */,
 				AD56EF7B2021647A00DC9B56 /* videos in Resources */,
+				ADD0F44725BED66500692DF0 /* ads_config_ios.json in Resources */,
 				6F54B3C11FB0153800D821F1 /* images in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -555,7 +544,31 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		709ACDF02F89F450A7A69B86 /* [CP] Copy Pods Resources */ = {
+		0FDF13B023412345D2973B6E /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-common-ee_x_test_desktop/Pods-common-ee_x_test_desktop-resources.sh",
+				"${PODS_ROOT}/../../../../res/stars_3_5.png",
+				"${PODS_ROOT}/../../../../res/stars_4.png",
+				"${PODS_ROOT}/../../../../res/stars_4_5.png",
+				"${PODS_ROOT}/../../../../res/stars_5.png",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/stars_3_5.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/stars_4.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/stars_4_5.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/stars_5.png",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-common-ee_x_test_desktop/Pods-common-ee_x_test_desktop-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		29B89FD91C686BA07B51266E /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -634,25 +647,18 @@
 				AD2CA22B24B3071C00542CB2 /* CoreTester.cpp in Sources */,
 				6F2580321ECC019000B910F9 /* NotificationTester.cpp in Sources */,
 				6F59E6FB1FA6E75E007D3070 /* FunctionLogger.cpp in Sources */,
-				6FDD65B11F94A93D00BAEA66 /* IronSourceTester.cpp in Sources */,
 				AD56EF7E2021649B00DC9B56 /* VideoPlayerTestScene.cpp in Sources */,
-				6FDD65A91F94A7DF00BAEA66 /* AppLovinTester.cpp in Sources */,
-				AD2CA24524B316FD00542CB2 /* InterstitialAdTester.cpp in Sources */,
+				AD9E6FEF25BECA0E0019EFB0 /* FullScreenAdScene.cpp in Sources */,
 				AD2CA22F24B3073D00542CB2 /* FirebaseCrashlyticsTester.cpp in Sources */,
-				6FDD65A51F94A4DB00BAEA66 /* FacebookAdsTester.cpp in Sources */,
-				6FDD65AD1F94A86B00BAEA66 /* UnityAdsTester.cpp in Sources */,
 				AD0A589020ABE675001D4FD2 /* FirebaseDynamicLink.cpp in Sources */,
-				AD4AE9A9252D68DD00FBA32C /* RewardedAdSceneTester.cpp in Sources */,
-				AD2CA24924B3183900542CB2 /* RewardedAdTester.cpp in Sources */,
 				6FDD65A11F94A3B400BAEA66 /* Utils.cpp in Sources */,
 				6F25803F1ECC2DC400B910F9 /* AppDelegate.cpp in Sources */,
-				6FDD65B91F94AB4700BAEA66 /* AdMobTester.cpp in Sources */,
-				AD2CA23D24B311CD00542CB2 /* BannerAdTester.cpp in Sources */,
 				AD2CA24124B3135300542CB2 /* NativeAdTester.cpp in Sources */,
-				6FDD65B51F94A9C800BAEA66 /* VungleTester.cpp in Sources */,
 				6F25802F1ECBFFAE00B910F9 /* main.m in Sources */,
 				6F426E211F8B56B2009E202A /* RootViewController.mm in Sources */,
+				AD9E6FDB25BEC3E30019EFB0 /* MainScene.cpp in Sources */,
 				6F25802D1ECBFF8C00B910F9 /* AppController.mm in Sources */,
+				AD9E6FE125BEC7390019EFB0 /* BannerAdScene.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -661,12 +667,15 @@
 			buildActionMask = 2147483647;
 			files = (
 				6F2C62151FB2E281000CEA38 /* NativeAdTestScene.cpp in Sources */,
+				AD9E6FF025BECA0E0019EFB0 /* FullScreenAdScene.cpp in Sources */,
 				6F2580241ECBFC9A00B910F9 /* main.mm in Sources */,
 				AD56EF7F2021649B00DC9B56 /* VideoPlayerTestScene.cpp in Sources */,
 				6F59E6FC1FA6E75E007D3070 /* FunctionLogger.cpp in Sources */,
+				AD9E6FDC25BEC3E30019EFB0 /* MainScene.cpp in Sources */,
 				AD2CA22C24B3071C00542CB2 /* CoreTester.cpp in Sources */,
 				6F2580401ECC2DC400B910F9 /* AppDelegate.cpp in Sources */,
 				6FDD65A21F94A3B400BAEA66 /* Utils.cpp in Sources */,
+				AD9E6FE225BEC7390019EFB0 /* BannerAdScene.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -19,7 +19,7 @@ func dictionaryOfNames(_ arr: UIView...) -> [String: UIView] {
     return d
 }
 
-internal class AdMobNativeAd: NSObject, IAdView,
+internal class AdMobNativeAd: NSObject, IBannerAd,
     GADUnifiedNativeAdLoaderDelegate,
     GADUnifiedNativeAdDelegate {
     private let _bridge: IMessageBridge
@@ -27,7 +27,7 @@ internal class AdMobNativeAd: NSObject, IAdView,
     private let _adId: String
     private let _layoutName: String
     private let _messageHelper: MessageHelper
-    private var _helper: AdViewHelper?
+    private var _helper: BannerAdHelper?
     private let _viewHelper: ViewHelper
     private var _isLoaded = false
     private var _ad: GADAdLoader?
@@ -44,7 +44,7 @@ internal class AdMobNativeAd: NSObject, IAdView,
         _messageHelper = MessageHelper("AdMobNativeAd", _adId)
         _viewHelper = ViewHelper(CGPoint.zero, CGSize.zero, false)
         super.init()
-        _helper = AdViewHelper(_bridge, self, _messageHelper)
+        _helper = BannerAdHelper(_bridge, self, _messageHelper)
         registerHandlers()
         createInternalAd()
         createView()

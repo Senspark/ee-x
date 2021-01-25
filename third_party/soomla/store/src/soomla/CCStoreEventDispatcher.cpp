@@ -6,8 +6,8 @@
 #include <soomla/CCSoomlaUtils.h>
 
 #include "soomla/CCStoreInventory.h"
-#include "soomla/data/CCStoreInfo.h"
 #include "soomla/PurchaseTypes/CCPurchaseWithMarket.h"
+#include "soomla/data/CCStoreInfo.h"
 
 #if __has_include(<base/CCDirector.h>)
 #define COCOSCREATOR_VERSION 1
@@ -18,7 +18,6 @@
 #if COCOSCREATOR_VERSION == 2
 #include "cocos/scripting/js-bindings/event/EventDispatcher.h"
 #endif
-
 
 namespace soomla {
 
@@ -314,8 +313,7 @@ bool CCStoreEventDispatcher::init() {
 
                 CCPurchasableVirtualItem* pvi =
                     CCStoreInfo::sharedStoreInfo()
-                        ->getPurchasableItemWithProductId(productId,
-                                                          &error);
+                        ->getPurchasableItemWithProductId(productId, &error);
                 if (error) {
                     CCSoomlaUtils::logException(
                         CCStoreConsts::EVENT_MARKET_ITEMS_REFRESHED, error);
@@ -455,7 +453,8 @@ bool CCStoreEventDispatcher::init() {
     return true;
 }
 
-void dispatchCustomEvent(const std::string& eventName, ValueMap* eventData = nullptr) {
+void dispatchCustomEvent(const std::string& eventName,
+                         ValueMap* eventData = nullptr) {
 #if COCOSCREATOR_VERSION == 2
     cocos2d::CustomEvent event;
     event.name = eventName;
@@ -468,7 +467,7 @@ void dispatchCustomEvent(const std::string& eventName, ValueMap* eventData = nul
         eventName, eventData);
 #endif
 }
-    
+
 void CCStoreEventDispatcher::onBillingNotSupported() {
     dispatchCustomEvent(CCStoreConsts::EVENT_BILLING_NOT_SUPPORTED);
 }
@@ -483,11 +482,13 @@ void CCStoreEventDispatcher::onCurrencyBalanceChanged(
         virtualCurrency, balance, amountAdded);
 
     ValueMap eventMap;
-    eventMap[CCStoreConsts::DICT_ELEMENT_CURRENCY] = virtualCurrency->toValueMap();
+    eventMap[CCStoreConsts::DICT_ELEMENT_CURRENCY] =
+        virtualCurrency->toValueMap();
     eventMap[CCStoreConsts::CCStoreConsts::DICT_ELEMENT_BALANCE] = balance;
     eventMap[CCStoreConsts::DICT_ELEMENT_AMOUNT_ADDED] = amountAdded;
-    
-    dispatchCustomEvent(CCStoreConsts::EVENT_CURRENCY_BALANCE_CHANGED, &eventMap);
+
+    dispatchCustomEvent(CCStoreConsts::EVENT_CURRENCY_BALANCE_CHANGED,
+                        &eventMap);
 }
 
 void CCStoreEventDispatcher::onGoodBalanceChanged(CCVirtualGood* virtualGood,
@@ -511,7 +512,7 @@ void CCStoreEventDispatcher::onGoodEquipped(CCEquippableVG* equippableVG) {
     ValueMap eventMap;
     eventMap[CCStoreConsts::DICT_ELEMENT_EQUIPPABLEVG] =
         equippableVG->toValueMap();
-    
+
     dispatchCustomEvent(CCStoreConsts::EVENT_GOOD_EQUIPPED, &eventMap);
 }
 
@@ -522,7 +523,7 @@ void CCStoreEventDispatcher::onGoodUnEquipped(CCEquippableVG* equippableVG) {
     ValueMap eventMap;
     eventMap[CCStoreConsts::DICT_ELEMENT_EQUIPPABLEVG] =
         equippableVG->toValueMap();
-    
+
     dispatchCustomEvent(CCStoreConsts::EVENT_GOOD_UNEQUIPPED, &eventMap);
 }
 
@@ -537,7 +538,7 @@ void CCStoreEventDispatcher::onGoodUpgrade(CCVirtualGood* virtualGood,
         eventMap[CCStoreConsts::DICT_ELEMENT_UPGRADEVG] =
             upgradeVG->toValueMap();
     }
-    
+
     dispatchCustomEvent(CCStoreConsts::EVENT_GOOD_UPGRADE, &eventMap);
 }
 
@@ -577,7 +578,8 @@ void CCStoreEventDispatcher::onItemPurchaseStarted(
 void CCStoreEventDispatcher::onItemPurchaseStarted(
     CCPurchasableVirtualItem* purchasableVirtualItem, bool alsoPush) {
     ValueMap eventMap;
-    eventMap[CCStoreConsts::DICT_ELEMENT_PURCHASABLE] = purchasableVirtualItem->toValueMap();
+    eventMap[CCStoreConsts::DICT_ELEMENT_PURCHASABLE] =
+        purchasableVirtualItem->toValueMap();
 
     dispatchCustomEvent(CCStoreConsts::EVENT_ITEM_PURCHASE_STARTED, &eventMap);
 
@@ -597,8 +599,9 @@ void CCStoreEventDispatcher::onMarketPurchaseCancelled(
     ValueMap eventDict;
     eventDict[CCStoreConsts::DICT_ELEMENT_PURCHASABLE] =
         purchasableVirtualItem->toValueMap();
-    
-    dispatchCustomEvent(CCStoreConsts::EVENT_MARKET_PURCHASE_CANCELED, &eventDict);
+
+    dispatchCustomEvent(CCStoreConsts::EVENT_MARKET_PURCHASE_CANCELED,
+                        &eventDict);
 }
 
 void CCStoreEventDispatcher::onMarketPurchaseDeferred(
@@ -608,8 +611,9 @@ void CCStoreEventDispatcher::onMarketPurchaseDeferred(
     eventDict[CCStoreConsts::DICT_ELEMENT_PURCHASABLE] =
         purchasableVirtualItem->toValueMap();
     eventDict[CCStoreConsts::DICT_ELEMENT_DEVELOPERPAYLOAD] = payload;
-    
-    dispatchCustomEvent(CCStoreConsts::EVENT_MARKET_PURCHASE_DEFERRED, &eventDict);
+
+    dispatchCustomEvent(CCStoreConsts::EVENT_MARKET_PURCHASE_DEFERRED,
+                        &eventDict);
 }
 
 void CCStoreEventDispatcher::onMarketPurchase(
@@ -629,8 +633,9 @@ void CCStoreEventDispatcher::onMarketPurchaseStarted(
     ValueMap eventDict;
     eventDict[CCStoreConsts::DICT_ELEMENT_PURCHASABLE] =
         purchasableVirtualItem->toValueMap();
-    
-    dispatchCustomEvent(CCStoreConsts::EVENT_MARKET_PURCHASE_STARTED, &eventDict);
+
+    dispatchCustomEvent(CCStoreConsts::EVENT_MARKET_PURCHASE_STARTED,
+                        &eventDict);
 }
 
 void CCStoreEventDispatcher::onVerificationStarted(
@@ -638,7 +643,7 @@ void CCStoreEventDispatcher::onVerificationStarted(
     ValueMap eventDict;
     eventDict[CCStoreConsts::DICT_ELEMENT_PURCHASABLE] =
         purchasableVirtualItem->toValueMap();
-    
+
     dispatchCustomEvent(CCStoreConsts::EVENT_VERIFICATION_STARTED, &eventDict);
 }
 
@@ -648,14 +653,16 @@ void CCStoreEventDispatcher::onMarketPurchaseVerification(
     eventDict[CCStoreConsts::DICT_ELEMENT_PURCHASABLE] =
         purchasableVirtualItem->toValueMap();
 
-    dispatchCustomEvent(CCStoreConsts::EVENT_MARKET_PURCHASE_VERIFICATION, &eventDict);
+    dispatchCustomEvent(CCStoreConsts::EVENT_MARKET_PURCHASE_VERIFICATION,
+                        &eventDict);
 }
 
 void CCStoreEventDispatcher::onRestoreTransactionsFinished(bool success) {
     ValueMap eventDict;
     eventDict[CCStoreConsts::DICT_ELEMENT_SUCCESS] = success;
-    
-    dispatchCustomEvent(CCStoreConsts::EVENT_RESTORE_TRANSACTION_FINISHED, &eventDict);
+
+    dispatchCustomEvent(CCStoreConsts::EVENT_RESTORE_TRANSACTION_FINISHED,
+                        &eventDict);
 }
 
 void CCStoreEventDispatcher::onRestoreTransactionsStarted() {
@@ -670,9 +677,10 @@ void CCStoreEventDispatcher::onUnexpectedStoreError(std::int32_t errorCode,
                                                     bool alsoPush) {
     ValueMap eventDict;
     eventDict[CCStoreConsts::DICT_ELEMENT_ERROR_CODE] = errorCode;
-    
-    dispatchCustomEvent(CCStoreConsts::EVENT_UNEXPECTED_STORE_ERROR, &eventDict);
-    
+
+    dispatchCustomEvent(CCStoreConsts::EVENT_UNEXPECTED_STORE_ERROR,
+                        &eventDict);
+
     if (alsoPush) {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS) ||                                 \
     (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
@@ -713,8 +721,9 @@ void CCStoreEventDispatcher::onMarketItemsRefreshed(
 
     ValueMap eventDict;
     eventDict[CCStoreConsts::DICT_ELEMENT_MARKET_ITEMS] = vvMarketItems;
-    
-    dispatchCustomEvent(CCStoreConsts::EVENT_MARKET_ITEMS_REFRESHED, &eventDict);
+
+    dispatchCustomEvent(CCStoreConsts::EVENT_MARKET_ITEMS_REFRESHED,
+                        &eventDict);
 }
 
 void CCStoreEventDispatcher::onMarketItemsRefreshStarted() {
@@ -725,8 +734,9 @@ void CCStoreEventDispatcher::onMarketItemsRefreshFailed(
     const std::string& errorMessage) {
     ValueMap eventDict;
     eventDict[CCStoreConsts::DICT_ELEMENT_ERROR_MESSAGE] = errorMessage;
-    
-    dispatchCustomEvent(CCStoreConsts::EVENT_MARKET_ITEMS_REFRESH_FAILED, &eventDict);
+
+    dispatchCustomEvent(CCStoreConsts::EVENT_MARKET_ITEMS_REFRESH_FAILED,
+                        &eventDict);
 }
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
@@ -735,7 +745,7 @@ void CCStoreEventDispatcher::onMarketRefund(
     ValueMap eventDict;
     eventDict[CCStoreConsts::DICT_ELEMENT_PURCHASABLE] =
         purchasableVirtualItem->toValueMap();
-    
+
     dispatchCustomEvent(CCStoreConsts::EVENT_MARKET_REFUND, &eventDict);
 }
 

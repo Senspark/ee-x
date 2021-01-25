@@ -1,12 +1,12 @@
 using System.Threading.Tasks;
 
 namespace EE.Internal {
-    internal class FacebookBannerAd : ObserverManager<AdObserver>, IAdView {
+    internal class FacebookBannerAd : ObserverManager<AdObserver>, IBannerAd {
         private readonly IMessageBridge _bridge;
         private readonly FacebookAds _plugin;
         private readonly string _adId;
         private readonly MessageHelper _messageHelper;
-        private readonly AdViewHelper _helper;
+        private readonly BannerAdHelper _helper;
         private readonly IAsyncHelper<bool> _loader;
 
         public FacebookBannerAd(
@@ -15,7 +15,7 @@ namespace EE.Internal {
             _plugin = plugin;
             _adId = adId;
             _messageHelper = new MessageHelper("FacebookBannerAd", adId);
-            _helper = new AdViewHelper(_bridge, _messageHelper, size);
+            _helper = new BannerAdHelper(_bridge, _messageHelper, size);
             _loader = new AsyncHelper<bool>();
 
             _bridge.RegisterHandler(_ => OnLoaded(), _messageHelper.OnLoaded);

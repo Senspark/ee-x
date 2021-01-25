@@ -8,6 +8,7 @@
 
 #include "ee/cocos/EEDialogUtils.hpp"
 
+#ifdef EE_X_COCOS_CPP
 #include <2d/CCActionEase.h>
 #include <2d/CCActionInstant.h>
 #include <2d/CCActionInterval.h>
@@ -68,3 +69,5 @@ Dialog* addBlurBackground(Dialog* dialog, float duration, float scale,
     return dialog;
 }
 } // namespace ee
+
+#endif // EE_X_COCOS_CPP

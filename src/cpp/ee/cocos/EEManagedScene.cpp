@@ -8,6 +8,7 @@
 
 #include "ee/cocos/EEManagedScene.hpp"
 
+#ifdef EE_X_COCOS_CPP
 #include <2d/CCSpriteFrameCache.h>
 #include <base/CCDirector.h>
 #include <renderer/CCTextureCache.h>
@@ -62,3 +63,5 @@ void ManagedScene::unloadItems() {
     }
 }
 } // namespace ee
+
+#endif // EE_X_COCOS_CPP

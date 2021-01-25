@@ -6,8 +6,8 @@ namespace EE {
         string GetTestDeviceHash();
         void AddTestDevice(string hash);
         void ClearTestDevices();
-        IAdView CreateBannerAd(string adId, FacebookBannerAdSize adSize);
-        IFullScreenAd CreateInterstitialAd(string ad);
+        IBannerAd CreateBannerAd(string adId, FacebookBannerAdSize adSize);
+        IFullScreenAd CreateInterstitialAd(string adId);
         IFullScreenAd CreateRewardedAd(string adId);
     }
 }

@@ -1,6 +1,6 @@
 Pod::Spec.new do |spec|
   spec.name           = 'ee-x'
-  spec.version        = '2.2.3'
+  spec.version        = '2.3.0'
   spec.summary        = 'ee-x'
   spec.description    = 'Cross-platform library for cocos2d-x'
   spec.module_name    = 'ee'
@@ -16,7 +16,7 @@ Pod::Spec.new do |spec|
 
   spec.source = {
     :git => 'https://github.com/Senspark/ee-x.git',
-    :tag => 'v2.2.3'
+    :tag => 'v2.3.0'
   }
 
   spec.framework = 'Foundation'
@@ -91,7 +91,13 @@ Pod::Spec.new do |spec|
 
         # For macos.
         '${PODS_ROOT}/../../cocos2d/external/mac/include/glfw3', # Cocos Creator
-        '${PODS_ROOT}/../../cocos2d/external/glfw3/include/mac' # Cocos2d-x
+        '${PODS_ROOT}/../../cocos2d/external/glfw3/include/mac', # Cocos2d-x
+
+        # JS.
+        '${PODS_ROOT}/../../../cocos2d-x',
+        '${PODS_ROOT}/../../../cocos2d-x/cocos',
+        '${PODS_ROOT}/../../../cocos2d-x/external/sources',
+        '${PODS_ROOT}/../../../cocos2d-x/external/mac/include/v8'
       ].join(' ')
     }
 
@@ -492,24 +498,12 @@ Pod::Spec.new do |spec|
     s.dependency 'ee-x/keeva'
   end
 
-  spec.subspec 'soomla-core' do |s|
+  spec.subspec 'soomla-core-internal' do |s|
     s.source_files = 'third_party/soomla/core/src/soomla/**/*'
-    s.header_mappings_dir = 'third_party/soomla/core/src'
-
-    s.xcconfig = {
-      'HEADER_SEARCH_PATHS' => [
-        # For cocos2d-x
-        '${PODS_ROOT}/../../cocos2d',
-        '${PODS_ROOT}/../../cocos2d/cocos',
-
-        # For cocos creator.
-        '${PODS_ROOT}/../../../cocos2d-x',
-        '${PODS_ROOT}/../../../cocos2d-x/cocos'
-      ].join(' ')
-    }
-    
+    s.header_mappings_dir = 'third_party/soomla/core/src'    
     s.dependency 'ee-x/json'
     s.dependency 'ee-x/jansson'
+    s.dependency 'ee-x/cpp'
   end
 
   spec.subspec 'soomla-store-ios' do |s|
@@ -519,155 +513,22 @@ Pod::Spec.new do |spec|
     s.dependency 'ee-x/soomla-core-ios'
   end
 
-  spec.subspec 'soomla-store' do |s|
+  spec.subspec 'soomla-store-internal' do |s|
     s.source_files = 'third_party/soomla/store/src/soomla/**/*'
     s.header_mappings_dir = 'third_party/soomla/store/src'
-    s.xcconfig = {
-      'CLANG_CXX_LANGUAGE_STANDARD' => 'c++2a' # For std::optional.
-    }
-    s.dependency 'ee-x/soomla-core'
+    s.dependency 'ee-x/soomla-core-internal'
     s.ios.dependency 'ee-x/soomla-store-ios'
   end
 
-=begin
-  spec.subspec 'jsb-core' do |s|
-    s.source_files =
-      'src/ee/jsb/jsb_core*',
-      'src/ee/jsb/jsb_fwd.hpp',
-      'src/ee/jsb/core/*'
-
-    s.xcconfig = {
-      'HEADER_SEARCH_PATHS' => [
-        '${PODS_ROOT}/../../../cocos2d-x',
-        '${PODS_ROOT}/../../../cocos2d-x/cocos',
-        '${PODS_ROOT}/../../../cocos2d-x/cocos/editor-support',
-        '${PODS_ROOT}/../../../cocos2d-x/external/sources',
-
-        # For macos.
-        '${PODS_ROOT}/../../../cocos2d-x/external/mac/include/v8'
-      ].join(' ')
-    }
-    
-    s.dependency 'ee-x/core'
+  spec.subspec 'soomla-store' do |s|
+    s.source_files = 'src/cpp/ee/soomla/**/*'
+    s.private_header_files = 'src/cpp/ee/**/internal/*'
+    s.exclude_files =
+      'src/cpp/ee/**/Android.mk',
+      'src/cpp/ee/**/CMakeLists.txt',
+      'src/cpp/ee/**/generate.sh',
+      'src/cpp/ee/**/sourcelist.cmake'
+    s.header_mappings_dir = 'src/cpp'
+    s.dependency 'ee-x/soomla-store-internal'
   end
-
-  spec.subspec 'jsb-ads' do |s|
-    s.source_files =
-      'src/ee/jsb/jsb_ads*',
-      'src/ee/jsb/ads/*'
-
-    s.dependency 'ee-x/jsb-core'
-    s.dependency 'ee-x/ads'
-  end
-
-  spec.subspec 'jsb-admob' do |s|
-    s.source_files =
-      'src/ee/jsb/jsb_admob*',
-      'src/ee/jsb/admob/*'
-
-    s.dependency 'ee-x/jsb-core'
-    s.dependency 'ee-x/admob'
-  end
-
-  spec.subspec 'jsb-facebook-ads' do |s|
-    s.source_files =
-      'src/ee/jsb/jsb_facebook_ads*',
-      'src/ee/jsb/facebook_ads/*'
-
-    s.dependency 'ee-x/jsb-core'
-    s.dependency 'ee-x/facebook-ads'
-  end
-
-  spec.subspec 'jsb-iron-source' do |s|
-    s.source_files =
-      'src/ee/jsb/jsb_iron_source*',
-      'src/ee/jsb/iron_source/*'
-
-    s.dependency 'ee-x/jsb-core'
-    s.dependency 'ee-x/iron-source'
-  end
-
-  spec.subspec 'jsb-unity-ads' do |s|
-    s.source_files =
-      'src/ee/jsb/jsb_unity_ads*',
-      'src/ee/jsb/unity_ads/*'
-
-    s.dependency 'ee-x/jsb-core'
-    s.dependency 'ee-x/unity-ads'
-  end
-
-  spec.subspec 'jsb-vungle' do |s|
-    s.source_files =
-      'src/ee/jsb/jsb_vungle*',
-      'src/ee/jsb/vungle/*'
-
-    s.dependency 'ee-x/jsb-core'
-    s.dependency 'ee-x/vungle'
-  end
-
-  spec.subspec 'jsb-crashlytics' do |s|
-    s.source_files =
-      'src/ee/jsb/jsb_crashlytics*',
-      'src/ee/jsb/crashlytics/*'
-    
-    s.dependency 'ee-x/jsb-core'
-    s.dependency 'ee-x/crashlytics'
-  end
-
-  spec.subspec 'jsb-facebook' do |s|
-    s.source_files =
-      'src/ee/jsb/jsb_facebook*',
-      'src/ee/jsb/facebook/*'
-
-    s.dependency 'ee-x/jsb-core'
-    s.dependency 'ee-x/facebook'
-  end
-
-  spec.subspec 'jsb-firebase' do |s|
-    s.source_files =
-      'src/ee/jsb/jsb_firebase*',
-      'src/ee/jsb/firebase/*'
-
-    s.dependency 'ee-x/jsb-core'
-    s.dependency 'ee-x/firebase-analytics'
-    s.dependency 'ee-x/firebase-performance'
-    s.dependency 'ee-x/firebase-remote-config'
-  end
-
-  spec.subspec 'jsb-google-analytics' do |s|
-    s.source_files =
-      'src/ee/jsb/jsb_google_analytics*',
-      'src/ee/jsb/google/*'
-    
-    s.dependency 'ee-x/jsb-core'
-    s.dependency 'ee-x/google-analytics'
-  end
-  
-  spec.subspec 'jsb-notification' do |s|
-    s.source_files =
-      'src/ee/jsb/jsb_notification*',
-      'src/ee/jsb/notification/*'
-
-    s.dependency 'ee-x/jsb-core'
-    s.dependency 'ee-x/notification'
-  end
-
-  spec.subspec 'jsb-recorder' do |s|
-    s.source_files =
-      'src/ee/jsb/jsb_recorder.*',
-      'src/ee/jsb/recorder/*'
-
-    s.dependency 'ee-x/jsb-core'
-    s.dependency 'ee-x/recorder'
-  end
-  
-  spec.subspec 'jsb-soomla-store' do |s|
-    s.source_files =
-      'src/ee/jsb/jsb_soomla*',
-      'src/ee/jsb/soomla/*'
-    
-    s.dependency 'ee-x/jsb-core'
-    s.dependency 'ee-x/soomla-cocos2dx-store'
-  end
-=end
 end

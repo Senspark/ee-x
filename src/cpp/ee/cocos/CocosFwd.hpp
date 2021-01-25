@@ -7,6 +7,12 @@
 #include <string>
 #include <unordered_map>
 
+#if __has_include(<2d/CCComponent.h>)
+#define EE_X_COCOS_CPP
+#else
+#define EE_X_COCOS_JS
+#endif
+
 #include <platform/CCPlatformDefine.h> // For CC_DLL
 
 #include <ee/core/CoreFwd.hpp>
@@ -319,7 +325,7 @@ class Metrics;
 
 class SwitchToCocosThread;
 
-class CocosAdView;
+class CocosBannerAd;
 } // namespace cocos
 
 using cocos::Dialog;
@@ -328,7 +334,7 @@ using cocos::Metrics;
 
 using cocos::SwitchToCocosThread;
 
-using cocos::CocosAdView;
+using cocos::CocosBannerAd;
 } // namespace ee
 
 #endif // __cplusplus

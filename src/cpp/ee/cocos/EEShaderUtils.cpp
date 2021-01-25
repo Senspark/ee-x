@@ -8,6 +8,7 @@
 
 #include "ee/cocos/EEShaderUtils.hpp"
 
+#ifdef EE_X_COCOS_CPP
 #include <iomanip>
 
 #include <base/CCDirector.h>
@@ -381,3 +382,5 @@ void main() {
     return result;
 }
 } // namespace ee
+
+#endif // EE_X_COCOS_CPP

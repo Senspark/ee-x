@@ -32,7 +32,7 @@ namespace EE {
         private static int _mainThreadId = -1;
         private static IDispatcher _dispatcher;
 
-        public static void Initialize() {
+        internal static void Initialize() {
             _mainThreadId = GetCurrentThreadId();
             var go = new GameObject("EE-x Main Thread Dispatcher");
             UnityEngine.Object.DontDestroyOnLoad(go);

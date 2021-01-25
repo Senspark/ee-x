@@ -41,7 +41,6 @@ namespace EE.Internal {
 
         public async Task<bool> Initialize() {
             var response = await _bridge.CallAsync(kInitialize);
-            await Thread.SwitchToLibraryThread();
             return Utils.ToBool(response);
         }
 
@@ -75,9 +74,9 @@ namespace EE.Internal {
             return (json.width, json.height);
         }
 
-        public IAdView CreateBannerAd(string adId, FacebookBannerAdSize adSize) {
+        public IBannerAd CreateBannerAd(string adId, FacebookBannerAdSize adSize) {
             if (_ads.TryGetValue(adId, out var result)) {
-                return result as IAdView;
+                return result as IBannerAd;
             }
             var request = new CreateBannerAdRequest {
                 adId = adId,
@@ -89,7 +88,7 @@ namespace EE.Internal {
                 return null;
             }
             var size = GetBannerAdSize(adSize);
-            var ad = new GuardedAdView(new FacebookBannerAd(_bridge, this, adId, size));
+            var ad = new GuardedBannerAd(new FacebookBannerAd(_bridge, this, adId, size));
             _ads.Add(adId, ad);
             return ad;
         }

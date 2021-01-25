@@ -2,7 +2,7 @@
 
 #include <cassert>
 
-#include <ee/cocos/CocosAdView.hpp>
+#include <ee/cocos/CocosBannerAd.hpp>
 #include <ee/core/Delay.hpp>
 #include <ee/core/NoAwait.hpp>
 #include <ee/core/ObserverHandle.hpp>
@@ -11,7 +11,7 @@
 #include "ee/services/AdResult.hpp"
 #include "ee/services/internal/AdsConfig.hpp"
 #include "ee/services/internal/GenericAd.hpp"
-#include "ee/services/internal/LazyAdView.hpp"
+#include "ee/services/internal/LazyBannerAd.hpp"
 
 namespace ee {
 namespace services {
@@ -25,8 +25,8 @@ Self::DefaultAdsManager(const std::string& configJson) {
 }
 
 Task<bool> Self::initialize() {
-    bannerAds_[AdFormat::Banner] = std::make_shared<LazyAdView>();
-    bannerAds_[AdFormat::Rectangle] = std::make_shared<LazyAdView>();
+    bannerAds_[AdFormat::Banner] = std::make_shared<LazyBannerAd>();
+    bannerAds_[AdFormat::Rectangle] = std::make_shared<LazyBannerAd>();
     co_await config_->initialize();
     initializeBannerAd(AdFormat::Banner);
     initializeBannerAd(AdFormat::Rectangle);
@@ -38,7 +38,7 @@ Task<bool> Self::initialize() {
 }
 
 void Self::initializeBannerAd(AdFormat format) {
-    auto ad = std::dynamic_pointer_cast<IAdView>(config_->createAd(format));
+    auto ad = std::dynamic_pointer_cast<IBannerAd>(config_->createAd(format));
     if (ad == nullptr) {
         return;
     }

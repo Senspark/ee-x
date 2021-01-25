@@ -14,7 +14,6 @@
 #include <ee/core/IMessageBridge.hpp>
 #include <ee/core/Logger.hpp>
 #include <ee/core/PluginManager.hpp>
-#include <ee/core/SwitchToLibraryThread.hpp>
 #include <ee/core/Task.hpp>
 #include <ee/core/Thread.hpp>
 #include <ee/core/Utils.hpp>
@@ -95,7 +94,6 @@ Task<bool> Self::initialize(const std::string& gameId, bool testModeEnabled) {
     json["gameId"] = gameId;
     json["testModeEnabled"] = testModeEnabled;
     auto response = co_await bridge_.callAsync(kInitialize, json.dump());
-    co_await SwitchToLibraryThread();
     co_return core::toBool(response);
 }
 
@@ -144,7 +142,6 @@ bool Self::hasRewardedAd(const std::string& adId) const {
 Task<bool> Self::loadRewardedAd(const std::string& adId) {
     logger_.debug("%s: adId = %s", __PRETTY_FUNCTION__, adId.c_str());
     auto response = co_await bridge_.callAsync(kLoadRewardedAd, adId);
-    co_await SwitchToLibraryThread();
     co_return core::toBool(response);
 }
 

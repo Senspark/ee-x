@@ -9,7 +9,7 @@ namespace EE {
         private bool _initialized;
         private bool _fullScreenAdCapped;
         private readonly AdsConfig _config;
-        private readonly Dictionary<AdFormat, LazyAdView> _bannerAds;
+        private readonly Dictionary<AdFormat, LazyBannerAd> _bannerAds;
         private readonly Dictionary<AdFormat, GenericAd> _fullScreenAds;
         private readonly ObserverHandle _handle;
 
@@ -17,7 +17,7 @@ namespace EE {
             _initialized = false;
             _fullScreenAdCapped = false;
             _config = AdsConfig.Parse(configJson);
-            _bannerAds = new Dictionary<AdFormat, LazyAdView>();
+            _bannerAds = new Dictionary<AdFormat, LazyBannerAd>();
             _fullScreenAds = new Dictionary<AdFormat, GenericAd>();
             _handle = new ObserverHandle();
         }
@@ -25,8 +25,8 @@ namespace EE {
         public Task<bool> Initialize() => _initializer ?? (_initializer = InitializeImpl());
 
         private async Task<bool> InitializeImpl() {
-            _bannerAds[AdFormat.Banner] = new LazyAdView();
-            _bannerAds[AdFormat.Rectangle] = new LazyAdView();
+            _bannerAds[AdFormat.Banner] = new LazyBannerAd();
+            _bannerAds[AdFormat.Rectangle] = new LazyBannerAd();
             await _config.Initialize();
             InitializeBannerAd(AdFormat.Banner);
             InitializeBannerAd(AdFormat.Rectangle);
@@ -38,7 +38,7 @@ namespace EE {
         }
 
         private void InitializeBannerAd(AdFormat format) {
-            if (_config.CreateAd(format) is IAdView ad) {
+            if (_config.CreateAd(format) is IBannerAd ad) {
                 // OK.
             } else {
                 return;

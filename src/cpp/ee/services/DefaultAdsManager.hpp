@@ -54,7 +54,7 @@ private:
     bool initialized_;
     bool fullScreenAdCapped_;
     std::shared_ptr<AdsConfig> config_;
-    std::map<AdFormat, std::shared_ptr<LazyAdView>> bannerAds_;
+    std::map<AdFormat, std::shared_ptr<LazyBannerAd>> bannerAds_;
     std::map<AdFormat, std::shared_ptr<GenericAd>> fullScreenAds_;
 
     std::unique_ptr<ObserverHandle> handle_;

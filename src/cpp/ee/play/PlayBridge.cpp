@@ -5,11 +5,10 @@
 
 #include "ee/play/PlayBridge.hpp"
 
+#include <ee/core/IMessageBridge.hpp>
 #include <ee/core/PluginManager.hpp>
-#include <ee/core/SwitchToLibraryThread.hpp>
 #include <ee/core/Task.hpp>
 #include <ee/core/Utils.hpp>
-#include <ee/core/internal/MessageBridge.hpp>
 #include <ee/nlohmann/json.hpp>
 
 namespace ee {
@@ -32,7 +31,7 @@ const auto kSubmitScore          = kPrefix + "SubmitScore";
 using Self = Bridge;
 
 Self::Bridge()
-    : bridge_(MessageBridge::getInstance()) {
+    : bridge_(PluginManager::getBridge()) {
     PluginManager::addPlugin(Plugin::Play);
 }
 
@@ -51,13 +50,11 @@ Task<bool> Self::logIn(bool silently) {
     nlohmann::json request;
     request["silently"] = silently;
     auto response = co_await bridge_.callAsync(kLogIn, request.dump());
-    co_await SwitchToLibraryThread();
     co_return core::toBool(response);
 }
 
 Task<bool> Self::logOut() {
     auto response = co_await bridge_.callAsync(kLogOut);
-    co_await SwitchToLibraryThread();
     co_return core::toBool(response);
 }
 

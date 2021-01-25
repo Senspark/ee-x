@@ -32,6 +32,7 @@ if (rootProject.ext.has('buildMaven') && rootProject.buildMaven) {
 dependencies {
     implementation 'androidx.annotation:annotation:1.1.0'
 
+    // https://bintray.com/ironsource-mobile/android-sdk
     // https://developers.ironsrc.com/ironsource-mobile/android/sdk-change-log/
     // Use "api" to inherit manifest elements.
     api 'com.ironsource.sdk:mediationsdk:7.0.4.1'

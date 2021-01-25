@@ -13,6 +13,8 @@
 
 #include "ee/cocos/EEUiButtonLoader.hpp"
 
+#ifdef EE_X_COCOS_CPP
+
 namespace ee {
 class ButtonLoader : public UiButtonLoader {
 private:
@@ -33,6 +35,7 @@ protected:
 };
 } // namespace ee
 
+#endif // EE_X_COCOS_CPP
 #endif // __cplusplus
 
 #endif /* EE_LIBRARY_BUTTON_LOADER_HPP_ */

@@ -8,6 +8,7 @@
 
 #include "ee/cocos/EEPreferences.hpp"
 
+#ifdef EE_X_COCOS_CPP
 #include <ee/nlohmann/json.hpp>
 
 #include <base/CCDirector.h>
@@ -176,3 +177,5 @@ bool Preferences::merge(DataStorage& data) {
     return true;
 }
 } // namespace ee
+
+#endif // EE_X_COCOS_CPP

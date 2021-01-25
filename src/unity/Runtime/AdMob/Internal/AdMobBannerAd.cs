@@ -2,12 +2,12 @@ using System.Drawing;
 using System.Threading.Tasks;
 
 namespace EE.Internal {
-    internal class AdMobBannerAd : ObserverManager<AdObserver>, IAdView {
+    internal class AdMobBannerAd : ObserverManager<AdObserver>, IBannerAd {
         private readonly IMessageBridge _bridge;
         private readonly AdMob _plugin;
         private readonly string _adId;
         private readonly MessageHelper _messageHelper;
-        private readonly AdViewHelper _helper;
+        private readonly BannerAdHelper _helper;
         private readonly IAsyncHelper<bool> _loader;
 
         public AdMobBannerAd(
@@ -16,7 +16,7 @@ namespace EE.Internal {
             _plugin = plugin;
             _adId = adId;
             _messageHelper = new MessageHelper("AdMobBannerAd", adId);
-            _helper = new AdViewHelper(_bridge, _messageHelper, size);
+            _helper = new BannerAdHelper(_bridge, _messageHelper, size);
             _loader = new AsyncHelper<bool>();
 
             _bridge.RegisterHandler(_ => OnLoaded(), _messageHelper.OnLoaded);

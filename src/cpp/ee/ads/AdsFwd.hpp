@@ -20,16 +20,16 @@ enum class FullScreenAdResult;
 struct AdObserver;
 
 class IAd;
-class IAdView;
+class IBannerAd;
 class IFullScreenAd;
 
-class MultiAdView;
+class MultiBannerAd;
 class MultiFullScreenAd;
 
-class NullAdView;
+class NullBannerAd;
 class NullFullScreenAd;
 
-class GuardedAdView;
+class GuardedBannerAd;
 class GuardedFullScreenAd;
 
 class MessageHelper;
@@ -53,18 +53,21 @@ using IInterstitialAdObserver [[deprecated]] = AdObserver;
 using IRewardedAdObserver [[deprecated]] = AdObserver;
 
 using ads::IAd;
-using ads::IAdView;
+using ads::IBannerAd;
 using ads::IFullScreenAd;
+using IAdView [[deprecated]] = IBannerAd;
 using IInterstitialAd [[deprecated]] = IFullScreenAd;
 using IRewardedAd [[deprecated]] = IFullScreenAd;
 
-using ads::MultiAdView;
+using ads::MultiBannerAd;
 using ads::MultiFullScreenAd;
+using MultiAdView [[deprecated]] = MultiBannerAd;
 using MultiInterstitialAd [[deprecated]] = MultiFullScreenAd;
 using MultiRewardedAd [[deprecated]] = MultiFullScreenAd;
 
-using ads::NullAdView;
+using ads::NullBannerAd;
 using ads::NullFullScreenAd;
+using NullAdView [[deprecated]] = NullBannerAd;
 using NullInterstitialAd [[deprecated]] = NullFullScreenAd;
 using NullRewardedAd [[deprecated]] = NullFullScreenAd;
 

@@ -11,9 +11,10 @@
 
 #ifdef __cplusplus
 
-#include <ui/UIWidget.h>
-
 #include "ee/cocos/EEUiWidgetLoader.hpp"
+
+#ifdef EE_X_COCOS_CPP
+#include <ui/UIWidget.h>
 
 namespace ee {
 /// Cocosbuilder loader for @c cocos2d::ui::CheckBox.
@@ -58,6 +59,7 @@ private:
 };
 } // namespace ee
 
+#endif // EE_X_COCOS_CPP
 #endif // __cplusplus
 
 #endif /* EE_LIBRARY_UI_CHECK_BOX_LOADER_HPP_ */

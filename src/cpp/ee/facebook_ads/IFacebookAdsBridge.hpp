@@ -37,14 +37,14 @@ public:
     /// Creates a banner ad.
     /// @param[in] adId The banner ad ID.
     /// @param[in] adSize The banner ad predefined size.
-    virtual std::shared_ptr<IAdView> createBannerAd(const std::string& adId,
-                                                    BannerAdSize adSize) = 0;
+    virtual std::shared_ptr<IBannerAd> createBannerAd(const std::string& adId,
+                                                      BannerAdSize adSize) = 0;
 
     /// Creates a native ad.
     /// @param[in] adId The native ad ID.
     /// @param[in] layoutName The layout name (.xml for Android, .xib for iOS).
     /// @param[in] identifiers Android only.
-    virtual std::shared_ptr<IAdView>
+    virtual std::shared_ptr<IBannerAd>
     createNativeAd(const std::string& adId, const std::string& layoutName,
                    const NativeAdLayout& identifiers) = 0;
 

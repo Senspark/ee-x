@@ -193,7 +193,7 @@ public:
         const std::shared_ptr<INetworkConfigManager>& manager) const override;
 
 private:
-    std::shared_ptr<IAdInstanceConfig<IAdView>> instance_;
+    std::shared_ptr<IAdInstanceConfig<IBannerAd>> instance_;
 };
 
 class RectangleConfig : public IAdConfig {
@@ -206,7 +206,7 @@ public:
         const std::shared_ptr<INetworkConfigManager>& manager) const override;
 
 private:
-    std::shared_ptr<IAdInstanceConfig<IAdView>> instance_;
+    std::shared_ptr<IAdInstanceConfig<IBannerAd>> instance_;
 };
 
 class AppOpenConfig : public IAdConfig {

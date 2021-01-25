@@ -8,6 +8,7 @@
 
 #include "ee/cocos/EESkeletonBoneLoader.hpp"
 
+#ifdef EE_X_COCOS_CPP
 #include "ee/cocos/EESkeletonBone.hpp"
 
 namespace ee {
@@ -33,3 +34,5 @@ void SkeletonBoneLoader::onHandlePropTypeString(
     Super::onHandlePropTypeString(node, parent, propertyName, string, reader);
 }
 } // namespace ee
+
+#endif // EE_X_COCOS_CPP

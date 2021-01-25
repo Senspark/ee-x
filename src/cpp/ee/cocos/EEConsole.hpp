@@ -11,9 +11,10 @@
 
 #ifdef __cplusplus
 
-#include <ui/UIWidget.h>
-
 #include "ee/cocos/CocosFwd.hpp"
+
+#ifdef EE_X_COCOS_CPP
+#include <ui/UIWidget.h>
 
 namespace ee {
 namespace detail {
@@ -56,6 +57,7 @@ private:
 };
 } // namespace ee
 
+#endif // EE_X_COCOS_CPP
 #endif // __cplusplus
 
 #endif /* EE_LIBRARY_CONSOLE_HPP_ */

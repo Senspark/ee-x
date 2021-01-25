@@ -11,9 +11,10 @@
 
 #ifdef __cplusplus
 
-#include <2d/CCSprite.h>
-
 #include "ee/cocos/EEHsvProtocol.hpp"
+
+#ifdef EE_X_COCOS_CPP
+#include <2d/CCSprite.h>
 
 namespace ee {
 class SpriteWithHsv : public cocos2d::Sprite, public HsvProtocol {
@@ -70,6 +71,7 @@ private:
 };
 } // namespace ee
 
+#endif // EE_X_COCOS_CPP
 #endif // __cplusplus
 
 #endif /* EE_LIBRARY_SPRITE_WITH_HSV_HPP_ */

@@ -42,9 +42,9 @@ public:
 private:
     friend PluginManager;
 
-    static std::function<bool()> libraryThreadChecker_;
-    static std::function<bool(const Runnable<>& runnable)>
-        libraryThreadExecuter_;
+    static void initialize();
+
+    static std::shared_ptr<IThreadImpl> impl_;
 };
 
 /// Runs the specified runnable on the main thread and block the current

@@ -8,6 +8,7 @@
 
 #include "ee/cocos/EEButtonLoader.hpp"
 
+#ifdef EE_X_COCOS_CPP
 #include "ee/cocos/EEButton.hpp"
 
 namespace ee {
@@ -35,3 +36,5 @@ void ButtonLoader::onHandlePropTypeFloat(cocos2d::Node* node,
                                  reader);
 }
 } // namespace ee
+
+#endif // EE_X_COCOS_CPP

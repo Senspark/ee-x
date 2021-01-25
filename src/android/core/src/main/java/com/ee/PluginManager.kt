@@ -9,7 +9,6 @@ import com.ee.internal.MessageBridge
 import com.ee.internal.MessageBridgeHandler
 import com.ee.internal.NativeThread
 import com.ee.internal.ThreadImpl
-import com.ee.internal.ee_callCppInternal
 import kotlinx.serialization.InternalSerializationApi
 import java.util.concurrent.ConcurrentHashMap
 
@@ -142,7 +141,7 @@ class PluginManager private constructor() {
     @AnyThread
     @InternalSerializationApi
     fun initializePlugins(version: String, messageHandler: MessageBridgeHandler) {
-        val expectedVersion = "2.2.3"
+        val expectedVersion = "2.3.0"
         if (version != expectedVersion) {
             throw IllegalStateException("Version mismatched: found $version expected $expectedVersion")
         }
@@ -220,6 +219,9 @@ class PluginManager private constructor() {
         })
     }
 }
+
+@Suppress("FunctionName")
+private external fun ee_callCppInternal(tag: String, message: String)
 
 @InternalSerializationApi
 @NativeThread

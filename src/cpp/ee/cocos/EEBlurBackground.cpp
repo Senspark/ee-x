@@ -8,6 +8,7 @@
 
 #include "ee/cocos/EEBlurBackground.hpp"
 
+#ifdef EE_X_COCOS_CPP
 #include <2d/CCRenderTexture.h>
 #include <base/CCDirector.h>
 #include <renderer/CCRenderer.h>
@@ -223,3 +224,5 @@ void Self::visit(cocos2d::Renderer* renderer,
     Super::visit(renderer, parentTransforms, parentFlags);
 }
 } // namespace ee
+
+#endif // EE_X_COCOS_CPP

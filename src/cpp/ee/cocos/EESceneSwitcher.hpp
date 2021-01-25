@@ -13,9 +13,10 @@
 
 #include <queue>
 
-#include <2d/CCTransition.h>
-
 #include "ee/cocos/CocosFwd.hpp"
+
+#ifdef EE_X_COCOS_CPP
+#include <2d/CCTransition.h>
 
 namespace ee {
 /// Layout:
@@ -141,6 +142,7 @@ private:
 };
 } // namespace ee
 
+#endif // EE_X_COCOS_CPP
 #endif // __cplusplus
 
 #endif /* EE_LIBRARY_SCENE_SWITCHER_HPP_ */

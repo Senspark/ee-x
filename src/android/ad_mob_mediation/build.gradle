@@ -37,13 +37,13 @@ dependencies {
     api 'com.google.ads.mediation:applovin:9.14.7.0'
 
     // https://developers.google.com/admob/android/mediation/facebook#facebook-android-mediation-adapter-changelog
-    api 'com.google.ads.mediation:facebook:6.2.0.0'
+    api 'com.google.ads.mediation:facebook:6.2.0.1'
 
     // https://developers.google.com/admob/android/mediation/ironsource#ironsource-android-mediation-adapter-changelog
     api 'com.google.ads.mediation:ironsource:7.0.4.1.0'
 
     // https://developers.google.com/admob/android/mediation/unity#unity-ads-android-mediation-adapter-changelog
-    api 'com.google.ads.mediation:unity:3.5.1.1'
+    api 'com.google.ads.mediation:unity:3.6.0.0'
 
     // https://developers.google.com/admob/android/mediation/vungle#vungle-android-mediation-adapter-changelog
     api 'com.google.ads.mediation:vungle:6.8.1.1'

@@ -16,11 +16,6 @@
 
 namespace ee {
 namespace core {
-enum class Library {
-    Core,
-    Cocos,
-};
-
 enum class Plugin {
     AdColony,
     Adjust,
@@ -46,7 +41,6 @@ class PluginManager {
 public:
     /// Initializes plugins.
     /// Must be called first.
-    template <Library library = Library::Core>
     static void initializePlugins();
 
     template <class T>
@@ -79,6 +73,8 @@ public:
 private:
     template <class T>
     static std::shared_ptr<T> createPluginImpl(IMessageBridge& bridge);
+
+    static std::shared_ptr<IPluginManagerImpl> impl_;
 };
 } // namespace core
 } // namespace ee

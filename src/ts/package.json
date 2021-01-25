@@ -1,0 +1,29 @@
+{
+    "description": "utility library for cocos creator",
+    "version": "2.3.0",
+    "author": "senspark",
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/Senspark/ee-x/issues"
+    },
+    "main": "dist/index.js",
+    "homepage": "https://github.com/Senspark/ee-x#readme",
+    "keywords": [
+        "cocos2d",
+        "cocos",
+        "creator",
+        "utility",
+        "utils"
+    ],
+    "scripts": {
+        "build": "tsc"
+    },
+    "dependencies": {},
+    "types": "dist/index.d.ts",
+    "devDependencies": {},
+    "name": "@senspark/ee-x",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/Senspark/ee-x.git"
+    }
+}

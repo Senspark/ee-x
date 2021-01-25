@@ -26,12 +26,12 @@ enum class Library;
 enum class Plugin;
 class IPlugin;
 class PluginManager;
+class IPluginManagerImpl;
 
 struct LogLevel;
 class Logger;
 
 class IMessageBridge;
-class MessageBridge;
 
 class IService;
 class ServiceLocator;
@@ -43,6 +43,7 @@ struct SafeInset;
 
 class Platform;
 class Thread;
+class IThreadImpl;
 
 class VideoPlayer;
 class VideoPlayerManager;
@@ -84,6 +85,8 @@ class JniMethodInfo;
 class JniString;
 class JniUtils;
 #endif // EE_X_ANDROID
+
+class JsbUtils;
 } // namespace core
 
 using core::IPlugin;
@@ -95,7 +98,6 @@ using core::Logger;
 using core::LogLevel;
 
 using core::IMessageBridge;
-using core::MessageBridge;
 
 using core::IService;
 using core::ServiceLocator;
@@ -134,7 +136,16 @@ using core::JniMethodInfo;
 using core::JniString;
 using core::JniUtils;
 #endif // EE_X_ANDROID
+
+using core::JsbUtils;
 } // namespace ee
+
+/// JSB.
+namespace se {
+class Object;
+class Value;
+class Class;
+} // namespace se
 
 #endif // __cplusplus
 

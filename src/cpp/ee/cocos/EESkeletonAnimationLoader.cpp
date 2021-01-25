@@ -8,6 +8,7 @@
 
 #include "ee/cocos/EESkeletonAnimationLoader.hpp"
 
+#ifdef EE_X_COCOS_CPP
 #include <spine/SkeletonAnimation.h>
 
 #include "ee/cocos/EESpineFactory.hpp"
@@ -101,5 +102,6 @@ void SkeletonAnimationLoader::onHandlePropTypeFloatScale(
     Super::onHandlePropTypeFloatScale(node, parent, propertyName, floatScale,
                                       reader);
 }
-
 } // namespace ee
+
+#endif // EE_X_COCOS_CPP

@@ -8,6 +8,7 @@
 
 #include "ee/cocos/DialogGuard.hpp"
 
+#ifdef EE_X_COCOS_CPP
 #include "ee/cocos/Dialog.hpp"
 
 namespace ee {
@@ -17,3 +18,5 @@ DialogGuard::DialogGuard(Dialog* dialog_)
     , guard_(dialog->getContainer()) {}
 } // namespace cocos
 } // namespace ee
+
+#endif // EE_X_COCOS_CPP

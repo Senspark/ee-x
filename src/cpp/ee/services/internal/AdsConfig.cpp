@@ -4,10 +4,10 @@
 
 #include <ee/ad_mob/AdMobBannerAdSize.hpp>
 #include <ee/ad_mob/IAdMobBridge.hpp>
-#include <ee/ads/MultiAdView.hpp>
+#include <ee/ads/MultiBannerAd.hpp>
 #include <ee/ads/MultiFullScreenAd.hpp>
 #include <ee/app_lovin/IAppLovinBridge.hpp>
-#include <ee/cocos/CocosAdView.hpp>
+#include <ee/cocos/CocosBannerAd.hpp>
 #include <ee/core/Delay.hpp>
 #include <ee/core/PluginManager.hpp>
 #include <ee/core/Task.hpp>
@@ -15,6 +15,7 @@
 #include <ee/facebook_ads/FacebookBannerAdSize.hpp>
 #include <ee/facebook_ads/IFacebookAdsBridge.hpp>
 #include <ee/iron_source/IIronSourceBridge.hpp>
+#include <ee/iron_source/IronSourceBannerAdSize.hpp>
 #include <ee/nlohmann/json.hpp>
 #include <ee/unity_ads/IUnityAdsBridge.hpp>
 #include <ee/vungle/IVungleBridge.hpp>
@@ -172,6 +173,10 @@ Network IronSourceConfig::network() const {
 std::shared_ptr<IAd> IronSourceConfig::createAd(AdFormat format,
                                                 const std::string& id) {
     switch (format) {
+    case AdFormat::Banner:
+        return plugin_->createBannerAd(id, IronSourceBannerAdSize::Banner);
+    case AdFormat::Rectangle:
+        return plugin_->createBannerAd(id, IronSourceBannerAdSize::Rectangle);
     case AdFormat::Interstitial:
         return plugin_->createInterstitialAd(id);
     case AdFormat::Rewarded:
@@ -287,7 +292,7 @@ std::shared_ptr<IAdConfig> IAdConfig::parse(const nlohmann::json& node) {
 }
 
 BannerConfig::BannerConfig(const nlohmann::json& node) {
-    instance_ = IAdInstanceConfig<IAdView>::parse<MultiAdView>(
+    instance_ = IAdInstanceConfig<IBannerAd>::parse<MultiBannerAd>(
         AdFormat::Banner, node["instance"]);
 }
 
@@ -298,11 +303,11 @@ AdFormat BannerConfig::format() const {
 std::shared_ptr<IAd> BannerConfig::createAd(
     const std::shared_ptr<INetworkConfigManager>& manager) const {
     auto ad = instance_->createAd(manager);
-    return std::make_shared<CocosAdView>(ad);
+    return std::make_shared<CocosBannerAd>(ad);
 }
 
 RectangleConfig::RectangleConfig(const nlohmann::json& node) {
-    instance_ = IAdInstanceConfig<IAdView>::parse<MultiAdView>(
+    instance_ = IAdInstanceConfig<IBannerAd>::parse<MultiBannerAd>(
         AdFormat::Rectangle, node["instance"]);
 }
 
@@ -313,7 +318,7 @@ AdFormat RectangleConfig::format() const {
 std::shared_ptr<IAd> RectangleConfig::createAd(
     const std::shared_ptr<INetworkConfigManager>& manager) const {
     auto ad = instance_->createAd(manager);
-    return std::make_shared<CocosAdView>(ad);
+    return std::make_shared<CocosBannerAd>(ad);
 }
 
 AppOpenConfig::AppOpenConfig(const nlohmann::json& node) {

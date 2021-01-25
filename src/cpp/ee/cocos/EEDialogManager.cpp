@@ -8,6 +8,7 @@
 
 #include "ee/cocos/EEDialogManager.hpp"
 
+#ifdef EE_X_COCOS_CPP
 #include <2d/CCTransition.h>
 #include <base/CCDirector.h>
 
@@ -75,3 +76,5 @@ const std::shared_ptr<IDialogManager>& Self::getManager(cocos2d::Scene* scene) {
 }
 } // namespace cocos
 } // namespace ee
+
+#endif // EE_X_COCOS_CPP

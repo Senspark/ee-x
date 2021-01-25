@@ -21,7 +21,7 @@ constexpr int notification_2 = 2;
 using Self = Tester;
 
 void Self::initialize() {
-    plugin_ = std::make_shared<ee::Notification>();
+    plugin_ = ee::PluginManager::createPlugin<ee::INotification>();
 }
 
 void Self::destroy() {

@@ -50,6 +50,9 @@ const auto kShareVideoContent     = kPrefix + "ShareVideoContent";
 
 using Self = Bridge;
 
+Self::Bridge()
+    : Bridge(PluginManager::getBridge()) {}
+
 Self::Bridge(IMessageBridge& bridge)
     : bridge_(bridge) {
     PluginManager::addPlugin(Plugin::Facebook);

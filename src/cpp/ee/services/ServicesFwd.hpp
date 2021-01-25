@@ -11,7 +11,7 @@ enum class AdFormat;
 enum class AdResult;
 
 class AdsConfig;
-class LazyAdView;
+class LazyBannerAd;
 class GenericAd;
 class IAdsManager;
 class DefaultAdsManager;

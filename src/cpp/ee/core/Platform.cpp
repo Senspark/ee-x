@@ -10,7 +10,6 @@
 #include <ee/nlohmann/json.hpp>
 
 #include "ee/core/IMessageBridge.hpp"
-#include "ee/core/SwitchToLibraryThread.hpp"
 #include "ee/core/Task.hpp"
 #include "ee/core/Utils.hpp"
 
@@ -48,7 +47,7 @@ using Self = Platform;
 
 IMessageBridge* Self::bridge_ = nullptr;
 
-void Self::registerHandlers(IMessageBridge& bridge) {
+void Self::initialize(IMessageBridge& bridge) {
     bridge_ = &bridge;
 }
 
@@ -124,7 +123,6 @@ std::pair<int, int> Self::getScreenSize() {
 
 Task<std::string> Self::getDeviceId() {
     auto response = co_await bridge_->callAsync(kGetDeviceId);
-    co_await SwitchToLibraryThread();
     co_return response;
 }
 
@@ -163,7 +161,6 @@ Task<bool> Self::testConnection(const std::string& hostName, float timeOut) {
     json["host_name"] = hostName;
     json["time_out"] = timeOut;
     auto response = co_await bridge_->callAsync(kTestConnection, json.dump());
-    co_await SwitchToLibraryThread();
     co_return toBool(response);
 }
 
@@ -181,7 +178,6 @@ Task<InstallReferrer> Self::getInstallReferrer() {
     InstallReferrer result;
 #ifdef EE_X_ANDROID
     auto response = co_await bridge_->callAsync(kGetInstallReferrer);
-    co_await SwitchToLibraryThread();
     result.raw = response;
 #else  // EE_X_ANDROID
     result.raw = "";

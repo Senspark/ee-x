@@ -10,13 +10,13 @@ import FBAudienceNetwork
 private let kTag = "\(FacebookNativeAd.self)"
 
 internal class FacebookNativeAd:
-    NSObject, IAdView, FBNativeAdDelegate {
+    NSObject, IBannerAd, FBNativeAdDelegate {
     private let _bridge: IMessageBridge
     private let _logger: ILogger
     private let _adId: String
     private let _layoutName: String
     private let _messageHelper: MessageHelper
-    private var _helper: AdViewHelper?
+    private var _helper: BannerAdHelper?
     private let _viewHelper: ViewHelper
     private var _isLoaded = false
     private var _ad: FBNativeAd?
@@ -33,7 +33,7 @@ internal class FacebookNativeAd:
         _messageHelper = MessageHelper("FacebookNativeAd", _adId)
         _viewHelper = ViewHelper(CGPoint.zero, CGSize.zero, false)
         super.init()
-        _helper = AdViewHelper(_bridge, self, _messageHelper)
+        _helper = BannerAdHelper(_bridge, self, _messageHelper)
         registerHandlers()
         createInternalAd()
         createView()

@@ -1,0 +1,28 @@
+{
+    "compilerOptions": {
+        "module": "commonjs",
+        "lib": [
+            "es5",
+            "es2015.promise",
+            "dom"
+        ],
+        "target": "es5",
+        "declaration": true,
+        "typeRoots": [
+            "node_modules/@types",
+            "node_modules/@senspark"
+        ],
+        "outDir": "./dist",
+        "experimentalDecorators": true,
+        "alwaysStrict": true,
+        "noFallthroughCasesInSwitch": true,
+        "noImplicitAny": true,
+        "noImplicitReturns": true,
+        "noImplicitThis": true,
+        "skipLibCheck": true,
+        "strict": true
+    },
+    "include": [
+        "src/**/*.ts"
+    ]
+}

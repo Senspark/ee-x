@@ -15,15 +15,21 @@ public:
     virtual void destroy() override;
 
     virtual Task<bool> initialize(const std::string& appKey) override;
+    virtual std::shared_ptr<IBannerAd>
+    createBannerAd(const std::string& adId, BannerAdSize adSize) override;
     virtual std::shared_ptr<IFullScreenAd>
     createInterstitialAd(const std::string& adId) override;
     virtual std::shared_ptr<IFullScreenAd>
     createRewardedAd(const std::string& adId) override;
 
 private:
+    friend BannerAd;
     friend InterstitialAd;
     friend RewardedAd;
 
+    std::pair<int, int> getBannerAdSize(BannerAdSize adSize);
+
+    bool destroyBannerAd(const std::string& adId);
     bool destroyInterstitialAd(const std::string& adId);
     bool destroyRewardedAd(const std::string& adId);
 
@@ -51,6 +57,7 @@ private:
     const Logger& logger_;
 
     /// Share the same ad instance.
+    std::shared_ptr<IBannerAd> bannerAd_;
     std::shared_ptr<InterstitialAd> interstitialAd_;
     std::shared_ptr<IFullScreenAd> sharedInterstitialAd_;
     std::shared_ptr<RewardedAd> rewardedAd_;

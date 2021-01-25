@@ -13,6 +13,8 @@
 
 #include "ee/cocos/EEUiWidgetLoader.hpp"
 
+#ifdef EE_X_COCOS_CPP
+
 namespace ee {
 /// Cocosbuilder loader for @c cocos2d::ui::Text.
 ///
@@ -101,6 +103,7 @@ private:
 };
 } // namespace ee
 
+#endif // EE_X_COCOS_CPP
 #endif // __cplusplus
 
 #endif /* EE_LIBRARY_UI_TEXT_LOADER_HPP_ */

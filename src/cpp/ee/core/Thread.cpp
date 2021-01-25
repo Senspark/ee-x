@@ -11,7 +11,11 @@
 #include <queue>
 #include <unordered_map>
 
+#include <ee/cocos/CocosFwd.hpp>
+
 #include "ee/core/SpinLock.hpp"
+#include "ee/core/internal/ThreadImplCpp.hpp"
+#include "ee/core/internal/ThreadImplJs.hpp"
 
 #ifdef EE_X_ANDROID
 #include "ee/core/internal/JniMethodInfo.hpp"
@@ -116,15 +120,22 @@ void ee_runOnMainThreadDelayedCallback(int key) {
 
 using Self = Thread;
 
-std::function<bool()> Self::libraryThreadChecker_;
-std::function<bool(const Runnable<>& runnable)> Self::libraryThreadExecuter_;
+std::shared_ptr<IThreadImpl> Self::impl_;
+
+void Self::initialize() {
+#ifdef EE_X_COCOS_CPP
+    impl_ = std::make_shared<ThreadImplCpp>();
+#else  // EE_X_COCOS_CPP
+    impl_ = std::make_shared<ThreadImplJs>();
+#endif // EE_X_COCOS_CPP
+}
 
 bool Self::isLibraryThread() {
-    return libraryThreadChecker_();
+    return impl_->isLibraryThread();
 }
 
 bool Self::runOnLibraryThread(const Runnable<>& runnable) {
-    return libraryThreadExecuter_(runnable);
+    return impl_->runOnLibraryThread(runnable);
 }
 
 bool Self::isMainThread() {

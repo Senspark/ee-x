@@ -1,5 +1,6 @@
 #include "ee/cocos/SwitchToCocosThread.hpp"
 
+#ifdef EE_X_COCOS_CPP
 #include <base/CCDirector.h>
 #include <base/CCScheduler.h>
 
@@ -26,3 +27,5 @@ bool Self::await_ready() {
 void Self::await_resume() {}
 } // namespace cocos
 } // namespace ee
+
+#endif // EE_X_COCOS_CPP

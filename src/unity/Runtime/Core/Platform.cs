@@ -6,7 +6,7 @@ namespace EE {
     public static class Platform {
         private static IPlatformImpl _impl;
 
-        public static void RegisterHandlers(IMessageBridge bridge) {
+        internal static void Initialize(IMessageBridge bridge) {
 #if UNITY_EDITOR
             _impl = new PlatformImplEditor();
 #else // UNITY_EDITOR

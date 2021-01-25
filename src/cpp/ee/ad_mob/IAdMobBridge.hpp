@@ -37,10 +37,10 @@ public:
     /// @param[in] adSize The banner ad size.
     /// @return A reference to the banner ad if it created successfully, null
     /// otherwise.
-    virtual std::shared_ptr<IAdView> createBannerAd(const std::string& adId,
-                                                    BannerAdSize adSize) = 0;
+    virtual std::shared_ptr<IBannerAd> createBannerAd(const std::string& adId,
+                                                      BannerAdSize adSize) = 0;
 
-    virtual std::shared_ptr<IAdView>
+    virtual std::shared_ptr<IBannerAd>
     createNativeAd(const std::string& adId, const std::string& layoutName,
                    const NativeAdLayout& identifiers) = 0;
 

@@ -10,12 +10,18 @@
 #include <string>
 #include <unordered_map>
 
+#include <ee/cocos/CocosFwd.hpp>
+
+#include "ee/core/IMessageBridge.hpp"
 #include "ee/core/LogLevel.hpp"
 #include "ee/core/Platform.hpp"
 #include "ee/core/Thread.hpp"
-#include "ee/core/internal/MessageBridge.hpp"
+#include "ee/core/internal/PluginManagerImplCpp.hpp"
+#include "ee/core/internal/PluginManagerImplJs.hpp"
 
 #ifdef EE_X_ANDROID
+#include <jni/JniHelper.h>
+
 #include "ee/core/internal/JniMethodInfo.hpp"
 #include "ee/core/internal/JniString.hpp"
 #include "ee/core/internal/JniUtils.hpp"
@@ -44,11 +50,24 @@ std::unordered_map<Plugin, std::string> pluginNames_ = {{
     {Plugin::UnityAds, "UnityAds"},
     {Plugin::Vungle, "Vungle"},
 }};
-
-IMessageBridge* bridge_ = nullptr;
 } // namespace
 
 #if defined(EE_X_ANDROID)
+extern "C" {
+JNIEXPORT void JNICALL Java_com_ee_PluginManagerKt_ee_1callCppInternal(
+    JNIEnv* env, jclass clazz, jstring tag, jstring message) {
+    auto tag_cpp = env->GetStringUTFChars(tag, nullptr);
+    auto message_cpp = env->GetStringUTFChars(message, nullptr);
+    std::string tagStr = tag_cpp;
+    std::string messageStr = message_cpp;
+    env->ReleaseStringUTFChars(tag, tag_cpp);
+    env->ReleaseStringUTFChars(message, message_cpp);
+    Thread::runOnLibraryThread([tagStr, messageStr] { //
+        PluginManager::getBridge().callCpp(tagStr, messageStr);
+    });
+}
+} // extern "C"
+
 void ee_staticInitializePlugins(const char* version) {
     JniUtils::callStaticVoidMethod(   //
         "com/ee/PluginManagerKt",     //
@@ -97,6 +116,14 @@ void ee_staticRemovePlugin(const char* name) {
 
 #if defined(EE_X_IOS) || defined(EE_X_OSX)
 extern "C" {
+void ee_callCppInternal(const char* tag, const char* message) {
+    std::string tagStr = tag;
+    std::string messageStr = message;
+    Thread::runOnLibraryThread([tagStr, messageStr] { //
+        PluginManager::getBridge().callCpp(tagStr, messageStr);
+    });
+}
+
 void ee_staticInitializePlugins(const char* version);
 void ee_staticSetLogLevel(int level);
 void* ee_staticGetActivity();
@@ -107,24 +134,33 @@ void ee_staticRemovePlugin(const char* name);
 #endif // defined(EE_X_IOS) || defined(EE_X_OSX)
 using Self = PluginManager;
 
-template <>
-void Self::initializePlugins<Library::Core>() {
-    ee_staticInitializePlugins("2.2.3");
-    bridge_ = &MessageBridge::getInstance();
-    Platform::registerHandlers(*bridge_);
+std::shared_ptr<IPluginManagerImpl> Self::impl_;
 
-    // Default implementation: execute on the current thread.
-    Thread::libraryThreadChecker_ = [] { //
-        return true;
-    };
-    Thread::libraryThreadExecuter_ = [](const Runnable<>& runnable) {
-        runnable();
-        return true;
-    };
+void Self::initializePlugins() {
+#if defined(EE_X_ANDROID)
+    // Must set JavaVM and activity first.
+    auto vm = cocos2d::JniHelper::getJavaVM();
+    JniUtils::setVm(vm);
+
+    auto activity = cocos2d::JniHelper::getActivity();
+    setActivity(activity);
+#endif // defined(EE_X_ANDROID)
+
+    ee_staticInitializePlugins("2.3.0");
+
+#ifdef EE_X_COCOS_CPP
+    impl_ = std::make_shared<PluginManagerImplCpp>();
+#else  // EE_X_COCOS_CPP
+    impl_ = std::make_shared<PluginManagerImplJs>();
+#endif // EE_X_COCOS_CPP
+
+    impl_->initialize();
+    Thread::initialize();
+    Platform::initialize(impl_->getBridge());
 }
 
 IMessageBridge& Self::getBridge() {
-    return *bridge_;
+    return impl_->getBridge();
 }
 
 void Self::setLogLevel(const LogLevel& level) {

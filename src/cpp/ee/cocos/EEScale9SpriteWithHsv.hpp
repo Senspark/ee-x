@@ -11,9 +11,10 @@
 
 #ifdef __cplusplus
 
-#include <ui/UIScale9Sprite.h>
-
 #include "ee/cocos/EEHsvProtocol.hpp"
+
+#ifdef EE_X_COCOS_CPP
+#include <ui/UIScale9Sprite.h>
 
 namespace ee {
 class Scale9SpriteWithHsv : public cocos2d::ui::Scale9Sprite,
@@ -61,6 +62,7 @@ private:
 };
 } // namespace ee
 
+#endif // EE_X_COCOS_CPP
 #endif // __cplusplus
 
 #endif /* EE_LIBRARY_SCALE9SPRITE_WITH_HSV_HPP_ */

@@ -8,12 +8,12 @@
 
 #include "ee/store/StoreBridge.hpp"
 
+#include <ee/core/IMessageBridge.hpp>
 #include <ee/core/LambdaAwaiter.hpp>
 #include <ee/core/Logger.hpp>
 #include <ee/core/PluginManager.hpp>
 #include <ee/core/Task.hpp>
 #include <ee/core/Utils.hpp>
-#include <ee/core/internal/MessageBridge.hpp>
 #include <ee/nlohmann/json.hpp>
 
 #include "ee/store/StoreConfigurationBuilder.hpp"
@@ -77,7 +77,7 @@ Self::Bridge()
     : Self(Logger::getSystemLogger()) {}
 
 Self::Bridge(const Logger& logger)
-    : bridge_(MessageBridge::getInstance())
+    : bridge_(PluginManager::getBridge())
     , logger_(logger) {
     initialized_ = false;
     PluginManager::addPlugin(Plugin::Store);

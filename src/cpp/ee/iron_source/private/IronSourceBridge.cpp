@@ -1,17 +1,18 @@
 #include "ee/iron_source/private/IronSourceBridge.hpp"
 
+#include <ee/ads/internal/GuardedBannerAd.hpp>
 #include <ee/ads/internal/GuardedFullScreenAd.hpp>
 #include <ee/ads/internal/IAsyncHelper.hpp>
 #include <ee/ads/internal/MediationManager.hpp>
+#include <ee/core/IMessageBridge.hpp>
 #include <ee/core/Logger.hpp>
 #include <ee/core/PluginManager.hpp>
-#include <ee/core/SwitchToLibraryThread.hpp>
 #include <ee/core/Task.hpp>
 #include <ee/core/Thread.hpp>
 #include <ee/core/Utils.hpp>
-#include <ee/core/internal/MessageBridge.hpp>
 #include <ee/nlohmann/json.hpp>
 
+#include "ee/iron_source/private/IronSourceBannerAd.hpp"
 #include "ee/iron_source/private/IronSourceInterstitialAd.hpp"
 #include "ee/iron_source/private/IronSourceRewardedAd.hpp"
 
@@ -31,6 +32,10 @@ namespace {
 const std::string kPrefix                = "IronSourceBridge";
 
 const auto kInitialize                   = kPrefix + "Initialize";
+
+const auto kGetBannerAdSize              = kPrefix + "GetBannerAdSize";
+const auto kCreateBannerAd               = kPrefix + "CreateBannerAd";
+const auto kDestroyBannerAd              = kPrefix + "DestroyBannerAd";
 
 const auto kHasInterstitialAd            = kPrefix + "HasInterstitialAd";
 const auto kLoadInterstitialAd           = kPrefix + "LoadInterstitialAd";
@@ -133,8 +138,55 @@ void Self::destroy() {
 Task<bool> Self::initialize(const std::string& appKey) {
     logger_.debug("%s: appKey = %s", __PRETTY_FUNCTION__, appKey.c_str());
     auto response = co_await bridge_.callAsync(kInitialize, appKey);
-    co_await SwitchToLibraryThread();
     co_return core::toBool(response);
+}
+
+std::pair<int, int> Self::getBannerAdSize(BannerAdSize adSize) {
+    auto response = bridge_.call(kGetBannerAdSize,
+                                 std::to_string(static_cast<int>(adSize)));
+    auto json = nlohmann::json::parse(response);
+    int width = json["width"];
+    int height = json["height"];
+    return std::pair(width, height);
+}
+
+std::shared_ptr<IBannerAd> Self::createBannerAd(const std::string& adId,
+                                                BannerAdSize adSize) {
+    logger_.debug("%s: id = %s size = %d", __PRETTY_FUNCTION__, adId.c_str(),
+                  static_cast<int>(adSize));
+    if (bannerAd_) {
+        return bannerAd_;
+    }
+    nlohmann::json json;
+    json["adId"] = adId;
+    json["adSize"] = static_cast<int>(adSize);
+    auto response = bridge_.call(kCreateBannerAd, json.dump());
+    if (not core::toBool(response)) {
+        logger_.error("%s: There was an error when attempt to create an ad.",
+                      __PRETTY_FUNCTION__);
+        assert(false);
+        return nullptr;
+    }
+    auto size = getBannerAdSize(adSize);
+    bannerAd_ = std::make_shared<ads::GuardedBannerAd>(
+        std::make_shared<BannerAd>(bridge_, logger_, this, adId, size));
+    return bannerAd_;
+}
+
+bool Self::destroyBannerAd(const std::string& adId) {
+    logger_.debug("%s: adId = %s", __PRETTY_FUNCTION__, adId.c_str());
+    if (bannerAd_ == nullptr) {
+        return false;
+    }
+    auto&& response = bridge_.call(kDestroyBannerAd, adId);
+    if (not core::toBool(response)) {
+        logger_.error("%s: There was an error when attempt to destroy an ad.",
+                      __PRETTY_FUNCTION__);
+        assert(false);
+        return false;
+    }
+    bannerAd_.reset();
+    return true;
 }
 
 std::shared_ptr<IFullScreenAd>

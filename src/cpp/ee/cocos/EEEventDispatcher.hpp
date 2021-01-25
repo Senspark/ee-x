@@ -11,6 +11,9 @@
 
 #ifdef __cplusplus
 
+#include "ee/cocos/CocosFwd.hpp"
+
+#ifdef EE_X_COCOS_CPP
 #include <memory>
 #include <vector>
 
@@ -101,6 +104,7 @@ private:
 };
 } // namespace ee
 
+#endif // EE_X_COCOS_CPP
 #endif // __cplusplus
 
 #endif /* EE_LIBRARY_EVENT_DISPATCHER_HPP_ */

@@ -14,12 +14,11 @@
 
 #include "CoreTester.hpp"
 #include "Utils.hpp"
-#include "VideoPlayerTestScene.hpp"
+#include "MainScene.hpp"
 
 #if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID ||                               \
     CC_TARGET_PLATFORM == CC_PLATFORM_IOS
 #include "FirebaseCrashlyticsTester.hpp"
-#include "RewardedAdSceneTester.hpp"
 #endif
 
 namespace eetest {
@@ -72,7 +71,7 @@ bool AppDelegate::applicationDidFinishLaunching() {
     auto&& winSize = director->getWinSize();
     getLogger().info("winSize = %f %f", winSize.width, winSize.height);
 
-    ee::PluginManager::initializePlugins<ee::Library::Cocos>();
+    ee::PluginManager::initializePlugins();
 
     constexpr float points = 1;
     auto metrics = ee::Metrics::fromPoint(points);
@@ -92,12 +91,14 @@ bool AppDelegate::applicationDidFinishLaunching() {
 #if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID ||                               \
     CC_TARGET_PLATFORM == CC_PLATFORM_IOS
     testers.push_back(std::make_shared<FirebaseCrashlyticsTester>());
-    testers.push_back(std::make_shared<RewardedAdSceneTester>());
 #endif
     for (auto&& tester : testers) {
         tester->initialize();
         tester->start();
     }
+    
+    auto scene = MainScene::openScene();
+    director->replaceScene(scene);
     return true;
 }
 

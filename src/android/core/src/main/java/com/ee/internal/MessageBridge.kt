@@ -92,9 +92,6 @@ class MessageBridge(
     }
 }
 
-@Suppress("FunctionName")
-external fun ee_callCppInternal(tag: String, message: String)
-
 @NativeThread
 @Suppress("FunctionName", "unused")
 private fun ee_staticCall(tag: String, message: String): String {

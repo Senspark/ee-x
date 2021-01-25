@@ -70,7 +70,6 @@ namespace EE.Internal {
                 testModeEnabled = testModeEnabled
             };
             var response = await _bridge.CallAsync(kInitialize, JsonUtility.ToJson(request));
-            await Thread.SwitchToLibraryThread();
             return Utils.ToBool(response);
         }
 
@@ -111,7 +110,6 @@ namespace EE.Internal {
 
         internal async Task<bool> LoadRewardedAd(string adId) {
             var response = await _bridge.CallAsync(kLoadRewardedAd, adId);
-            await Thread.SwitchToLibraryThread();
             return Utils.ToBool(response);
         }
 

@@ -8,6 +8,7 @@
 
 #include "ee/cocos/EEShaderManager.hpp"
 
+#ifdef EE_X_COCOS_CPP
 #include <platform/CCPlatformMacros.h>
 
 #include "ee/cocos/EEShader.hpp"
@@ -51,3 +52,5 @@ ShaderManager::createProgramState(const std::string& name) const {
     return iter->second->createProgramState();
 }
 } // namespace ee
+
+#endif // EE_X_COCOS_CPP

@@ -11,9 +11,10 @@
 
 #ifdef __cplusplus
 
-#include <2d/CCComponent.h>
-
 #include "ee/cocos/CocosFwd.hpp"
+
+#ifdef EE_X_COCOS_CPP
+#include <2d/CCComponent.h>
 
 namespace ee {
 namespace cocos {
@@ -64,6 +65,7 @@ private:
 } // namespace cocos
 } // namespace ee
 
+#endif // EE_X_COCOS_CPP
 #endif // __cplusplus
 
 #endif /* EE_LIBRARY_DIALOG_COMPONENT_HPP_ */

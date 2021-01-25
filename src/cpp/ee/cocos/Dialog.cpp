@@ -8,6 +8,7 @@
 
 #include "ee/cocos/Dialog.hpp"
 
+#ifdef EE_X_COCOS_CPP
 #include <2d/CCAction.h>
 #include <base/CCDirector.h>
 
@@ -241,3 +242,5 @@ Self* Self::addHidingTransition(const TransitionType& transition) {
 }
 } // namespace cocos
 } // namespace ee
+
+#endif // EE_X_COCOS_CPP

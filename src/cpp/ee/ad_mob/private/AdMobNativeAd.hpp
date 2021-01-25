@@ -9,15 +9,15 @@
 #ifndef EE_X_ADMOB_NATIVE_AD_HPP
 #define EE_X_ADMOB_NATIVE_AD_HPP
 
-#include <ee/ads/IAdView.hpp>
-#include <ee/ads/internal/AdViewHelper.hpp>
+#include <ee/ads/IBannerAd.hpp>
+#include <ee/ads/internal/BannerAdHelper.hpp>
 #include <ee/core/ObserverManager.hpp>
 
 #include "ee/ad_mob/AdMobFwd.hpp"
 
 namespace ee {
 namespace admob {
-class NativeAd final : public IAdView, public ObserverManager<AdObserver> {
+class NativeAd final : public IBannerAd, public ObserverManager<AdObserver> {
 public:
     explicit NativeAd(IMessageBridge& bridge, const Logger& logger,
                       Bridge* plugin, const std::string& adId);
@@ -50,7 +50,7 @@ private:
     Bridge* plugin_;
     std::string adId_;
     ads::MessageHelper messageHelper_;
-    ads::AdViewHelper helper_;
+    ads::BannerAdHelper helper_;
 
     std::unique_ptr<ads::IAsyncHelper<bool>> loader_;
 };

@@ -8,6 +8,7 @@
 
 #include "ee/cocos/EEAction.hpp"
 
+#ifdef EE_X_COCOS_CPP
 #include <2d/CCActionInstant.h>
 #include <base/CCRefPtr.h>
 
@@ -196,3 +197,5 @@ void RelativeMoveTo::startWithTarget(cocos2d::Node* target) {
     deltaPosition_ = endPosition_ - target->getNormalizedPosition();
 }
 } // namespace ee
+
+#endif // EE_X_COCOS_CPP

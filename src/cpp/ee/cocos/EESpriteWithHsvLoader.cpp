@@ -8,6 +8,7 @@
 
 #include "ee/cocos/EESpriteWithHsvLoader.hpp"
 
+#ifdef EE_X_COCOS_CPP
 #include "ee/cocos/EESpriteWithHsv.hpp"
 
 namespace ee {
@@ -54,3 +55,5 @@ void SpriteWithHsvLoader::onHandlePropTypeFloat(
                                         reader);
 }
 } // namespace ee
+
+#endif // EE_X_COCOS_CPP

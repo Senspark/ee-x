@@ -1,7 +1,7 @@
 # Multi Ad
 - Purpose: use ad waterfall to optimize monetization.
 - Supported ad:
-    + Use `EE.MultiAdView` for banner and native ads.
+    + Use `EE.MultiBannerAd` for banner and native ads.
     + Use `EE.MultiInterstitialAd` for interstitial ads.
     + Use `EE.MultiRewardedAd` for rewarded ads.
 - Use `AddItem` to configure ad waterfall.
@@ -26,7 +26,7 @@ EE.Utils.NoAwait(async () => {
 });
 
 // Create a banner ad.
-var ad = new EE.MultiAdView()
+var ad = new EE.MultiBannerAd()
     .AddItem(admob.CreateBannerAd("ad_id", EE.AdMobBannerAdSize.Normal))
     .AddItem(facebook.CreateBannerAd("ad_id", EE.FacebookBannerAdSize.BannerHeight50));
 

@@ -11,9 +11,10 @@
 
 #ifdef __cplusplus
 
-#include <2d/CCComponent.h>
-
 #include "ee/cocos/CocosFwd.hpp"
+
+#ifdef EE_X_COCOS_CPP
+#include <2d/CCComponent.h>
 
 namespace ee {
 class BackButtonComponent : public cocos2d::Component {
@@ -45,6 +46,7 @@ private:
 };
 } // namespace ee
 
+#endif // EE_X_COCOS_CPP
 #endif // __cplusplus
 
 #endif /* EE_LIBRARY_BACK_BUTTON_COMPONENT_HPP_ */

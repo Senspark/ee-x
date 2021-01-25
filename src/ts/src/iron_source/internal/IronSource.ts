@@ -110,6 +110,11 @@ export class IronSource implements IIronSource {
         if (this._bannerAd === undefined) {
             return false;
         }
+        const response = this._bridge.call(this.kDestroyBannerAd, adId);
+        if (!Utils.toBool(response)) {
+            // Assert.
+            return false;
+        }
         this._bannerAd = undefined;
         return true;
     }

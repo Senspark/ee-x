@@ -1,11 +1,16 @@
+using System;
 using System.Threading.Tasks;
 
+using UnityEngine;
 using UnityEngine.Assertions;
 
 namespace EE.Internal {
     internal class IronSource : IIronSource {
         private const string kPrefix = "IronSourceBridge";
         private const string kInitialize = kPrefix + "Initialize";
+        private const string kGetBannerAdSize = kPrefix + "GetBannerAdSize";
+        private const string kCreateBannerAd = kPrefix + "CreateBannerAd";
+        private const string kDestroyBannerAd = kPrefix + "DestroyBannerAd";
         private const string kHasInterstitialAd = kPrefix + "HasInterstitialAd";
         private const string kLoadInterstitialAd = kPrefix + "LoadInterstitialAd";
         private const string kShowInterstitialAd = kPrefix + "ShowInterstitialAd";
@@ -22,6 +27,7 @@ namespace EE.Internal {
         private const string kOnRewardedAdClosed = kPrefix + "OnRewardedAdClosed";
 
         private readonly IMessageBridge _bridge;
+        private IBannerAd _bannerAd;
         private IronSourceInterstitialAd _interstitialAd;
         private IFullScreenAd _sharedInterstitialAd;
         private IronSourceRewardedAd _rewardedAd;
@@ -58,6 +64,55 @@ namespace EE.Internal {
         public async Task<bool> Initialize(string appKey) {
             var response = await _bridge.CallAsync(kInitialize, appKey);
             return Utils.ToBool(response);
+        }
+
+        [Serializable]
+        private struct GetBannerAdSizeResponse {
+            public int width;
+            public int height;
+        }
+
+        private (int, int) GetBannerAdSize(IronSourceBannerAdSize adSize) {
+            var response = _bridge.Call(kGetBannerAdSize, ((int) adSize).ToString());
+            var json = JsonUtility.FromJson<GetBannerAdSizeResponse>(response);
+            return (json.width, json.height);
+        }
+
+        [Serializable]
+        private struct CreateBannerAdRequest {
+            public string adId;
+            public int adSize;
+        }
+
+        public IBannerAd CreateBannerAd(string adId, IronSourceBannerAdSize adSize) {
+            if (_bannerAd != null) {
+                return _bannerAd;
+            }
+            var request = new CreateBannerAdRequest {
+                adId = adId,
+                adSize = (int) adSize
+            };
+            var response = _bridge.Call(kCreateBannerAd, JsonUtility.ToJson(request));
+            if (!Utils.ToBool(response)) {
+                Assert.IsTrue(false);
+                return null;
+            }
+            var size = GetBannerAdSize(adSize);
+            _bannerAd = new GuardedBannerAd(new IronSourceBannerAd(_bridge, this, adId, size));
+            return _bannerAd;
+        }
+
+        internal bool DestroyBannerAd(string adId) {
+            if (_bannerAd == null) {
+                return false;
+            }
+            var response = _bridge.Call(kDestroyBannerAd, adId);
+            if (!Utils.ToBool(response)) {
+                Assert.IsTrue(false);
+                return false;
+            }
+            _bannerAd = null;
+            return true;
         }
 
         public IFullScreenAd CreateInterstitialAd(string adId) {

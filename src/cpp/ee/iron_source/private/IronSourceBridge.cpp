@@ -178,6 +178,13 @@ bool Self::destroyBannerAd(const std::string& adId) {
     if (bannerAd_ == nullptr) {
         return false;
     }
+    auto&& response = bridge_.call(kDestroyBannerAd, adId);
+    if (not core::toBool(response)) {
+        logger_.error("%s: There was an error when attempt to destroy an ad.",
+                      __PRETTY_FUNCTION__);
+        assert(false);
+        return false;
+    }
     bannerAd_.reset();
     return true;
 }

@@ -35,7 +35,7 @@ bool Self::init() {
 #if CC_TARGET_PLATFORM == CC_PLATFORM_IOS
     auto&& fileName = "ads_config_ios.json";
 #else  // CC_TARGET_PLATFORM == CC_PLATFORM_IOS
-    auto&& fileName = "ads_config_android.json";
+    auto&& fileName = "config/ads_config_android.json";
 #endif // CC_TARGET_PLATFORM == CC_PLATFORM_IOS
     auto adsConfig = fileUtils->getStringFromFile(fileName);
     auto adsManager = std::make_shared<ee::DefaultAdsManager>(adsConfig);

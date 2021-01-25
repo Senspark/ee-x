@@ -132,10 +132,6 @@ void Self::destroy() {
     bridge_.deregisterHandler(kOnRewardedAdClicked);
     bridge_.deregisterHandler(kOnRewardedAdClosed);
 
-    for (auto&& [key, value] : ads_) {
-        value->destroy();
-    }
-
     PluginManager::removePlugin(Plugin::IronSource);
 }
 
@@ -158,9 +154,8 @@ std::shared_ptr<IBannerAd> Self::createBannerAd(const std::string& adId,
                                                 BannerAdSize adSize) {
     logger_.debug("%s: id = %s size = %d", __PRETTY_FUNCTION__, adId.c_str(),
                   static_cast<int>(adSize));
-    auto iter = ads_.find(adId);
-    if (iter != ads_.cend()) {
-        return std::dynamic_pointer_cast<IBannerAd>(iter->second);
+    if (bannerAd_) {
+        return bannerAd_;
     }
     nlohmann::json json;
     json["adId"] = adId;
@@ -173,10 +168,18 @@ std::shared_ptr<IBannerAd> Self::createBannerAd(const std::string& adId,
         return nullptr;
     }
     auto size = getBannerAdSize(adSize);
-    auto ad = std::make_shared<ads::GuardedBannerAd>(
+    bannerAd_ = std::make_shared<ads::GuardedBannerAd>(
         std::make_shared<BannerAd>(bridge_, logger_, this, adId, size));
-    ads_.emplace(adId, ad);
-    return ad;
+    return bannerAd_;
+}
+
+bool Self::destroyBannerAd(const std::string& adId) {
+    logger_.debug("%s: adId = %s", __PRETTY_FUNCTION__, adId.c_str());
+    if (bannerAd_ == nullptr) {
+        return false;
+    }
+    bannerAd_.reset();
+    return true;
 }
 
 std::shared_ptr<IFullScreenAd>
@@ -221,27 +224,6 @@ bool Self::destroyRewardedAd(const std::string& adId) {
     }
     rewardedAd_.reset();
     sharedRewardedAd_.reset();
-    return true;
-}
-
-bool Self::destroyBannerAd(const std::string& adId) {
-    return destroyAd(kDestroyBannerAd, adId);
-}
-
-bool Self::destroyAd(const std::string& handlerId, const std::string& adId) {
-    logger_.debug("%s: id = %s", __PRETTY_FUNCTION__, adId.c_str());
-    auto iter = ads_.find(adId);
-    if (iter == ads_.cend()) {
-        return false;
-    }
-    auto&& response = bridge_.call(handlerId, adId);
-    if (not core::toBool(response)) {
-        logger_.error("%s: There was an error when attempt to destroy an ad.",
-                      __PRETTY_FUNCTION__);
-        assert(false);
-        return false;
-    }
-    ads_.erase(iter);
     return true;
 }
 

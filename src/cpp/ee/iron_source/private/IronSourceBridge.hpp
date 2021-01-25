@@ -32,7 +32,6 @@ private:
     bool destroyBannerAd(const std::string& adId);
     bool destroyInterstitialAd(const std::string& adId);
     bool destroyRewardedAd(const std::string& adId);
-    bool destroyAd(const std::string& handlerId, const std::string& adId);
 
     bool hasInterstitialAd() const;
     void loadInterstitialAd();
@@ -57,9 +56,8 @@ private:
     IMessageBridge& bridge_;
     const Logger& logger_;
 
-    std::map<std::string, std::shared_ptr<IAd>> ads_;
-
     /// Share the same ad instance.
+    std::shared_ptr<IBannerAd> bannerAd_;
     std::shared_ptr<InterstitialAd> interstitialAd_;
     std::shared_ptr<IFullScreenAd> sharedInterstitialAd_;
     std::shared_ptr<RewardedAd> rewardedAd_;

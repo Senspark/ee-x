@@ -152,6 +152,10 @@ namespace EE.Internal {
 
         public IAd CreateAd(AdFormat format, string id) {
             switch (format) {
+                case AdFormat.Banner:
+                    return _plugin.CreateBannerAd(id, IronSourceBannerAdSize.Banner);
+                case AdFormat.Rectangle:
+                    return _plugin.CreateBannerAd(id, IronSourceBannerAdSize.Rectangle);
                 case AdFormat.Interstitial:
                     return _plugin.CreateInterstitialAd(id);
                 case AdFormat.Rewarded:

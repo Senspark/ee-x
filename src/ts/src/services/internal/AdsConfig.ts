@@ -20,7 +20,10 @@ import {
     FacebookBannerAdSize,
     IFacebookAds,
 } from "../../facebook_ads";
-import { IIronSource } from "../../iron_source";
+import {
+    IIronSource,
+    IronSourceBannerAdSize,
+} from "../../iron_source";
 import { IUnityAds } from "../../unity_ads";
 import { GenericAd } from "./GenericAd";
 
@@ -238,6 +241,10 @@ class IronSourceConfig implements INetworkConfig {
             throw Error(`Plugin not initialized`);
         }
         switch (format) {
+            case AdFormat.Banner:
+                return this._plugin.createBannerAd(id, IronSourceBannerAdSize.Banner);
+            case AdFormat.Rectangle:
+                return this._plugin.createBannerAd(id, IronSourceBannerAdSize.Rectangle);
             case AdFormat.Interstitial:
                 return this._plugin.createInterstitialAd(id);
             case AdFormat.Rewarded:

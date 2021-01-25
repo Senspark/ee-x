@@ -15,6 +15,7 @@
 #include <ee/facebook_ads/FacebookBannerAdSize.hpp>
 #include <ee/facebook_ads/IFacebookAdsBridge.hpp>
 #include <ee/iron_source/IIronSourceBridge.hpp>
+#include <ee/iron_source/IronSourceBannerAdSize.hpp>
 #include <ee/nlohmann/json.hpp>
 #include <ee/unity_ads/IUnityAdsBridge.hpp>
 #include <ee/vungle/IVungleBridge.hpp>
@@ -172,6 +173,10 @@ Network IronSourceConfig::network() const {
 std::shared_ptr<IAd> IronSourceConfig::createAd(AdFormat format,
                                                 const std::string& id) {
     switch (format) {
+    case AdFormat::Banner:
+        return plugin_->createBannerAd(id, IronSourceBannerAdSize::Banner);
+    case AdFormat::Rectangle:
+        return plugin_->createBannerAd(id, IronSourceBannerAdSize::Rectangle);
     case AdFormat::Interstitial:
         return plugin_->createInterstitialAd(id);
     case AdFormat::Rewarded:

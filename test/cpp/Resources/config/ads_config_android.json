@@ -1,0 +1,94 @@
+{
+    "networks": [
+        {
+            "network": "iron_source",
+            "app_id": "dbea7c59"
+        },
+        {
+            "network": "ad_mob",
+            "app_id": "ca-app-pub-2101587572072038~7060281508"
+        },
+        {
+            "network": "facebook_ads"
+        },
+        {
+            "network": "unity_ads",
+            "app_id": "2004287",
+            "time_out": 5
+        }
+    ],
+    "ads": [
+        {
+            "format": "banner",
+            "instance": [
+                {
+                    "network": "iron_source",
+                    "id": "DefaultBanner"
+                },
+                {
+                    "network": "ad_mob",
+                    "id": "ca-app-pub-2101587572072038/9895239504"
+                },
+                {
+                    "network": "facebook_ads",
+                    "id": "1816167371950267_2839729519594042"
+                }
+            ]
+        },
+        {
+            "format": "rect",
+            "instance": [
+                {
+                    "network": "ad_mob",
+                    "id": "ca-app-pub-2101587572072038/3749659313"
+                },
+                {
+                    "network": "facebook_ads",
+                    "id": "1816167371950267_2839729606260700"
+                }
+            ]
+        },
+        {
+            "format": "interstitial",
+            "instance": [
+                {
+                    "network": "ad_mob",
+                    "id": "ca-app-pub-2101587572072038/1013747905"
+                },
+                {
+                    "network": "facebook_ads",
+                    "id": "1816167371950267_2839729922927335"
+                },
+                {
+                    "network": "iron_source",
+                    "id": "DefaultInterstitial"
+                },
+                {
+                    "network": "unity_ads",
+                    "id": "video"
+                }
+            ]
+        },
+        {
+            "format": "rewarded",
+            "instance": [
+                {
+                    "network": "ad_mob",
+                    "id": "ca-app-pub-2101587572072038/6202887672"
+                },
+                {
+                    "network": "facebook_ads",
+                    "id": "1816167371950267_2839730036260657"
+                },
+                {
+                    "network": "iron_source",
+                    "id": "DefaultRewardedVideo"
+                },
+                {
+                    "network": "unity_ads",
+                    "id": "rewardedVideo"
+                }
+            ]
+        }
+    ]
+}

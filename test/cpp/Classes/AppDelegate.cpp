@@ -14,12 +14,11 @@
 
 #include "CoreTester.hpp"
 #include "Utils.hpp"
-#include "VideoPlayerTestScene.hpp"
+#include "MainScene.hpp"
 
 #if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID ||                               \
     CC_TARGET_PLATFORM == CC_PLATFORM_IOS
 #include "FirebaseCrashlyticsTester.hpp"
-#include "RewardedAdSceneTester.hpp"
 #endif
 
 namespace eetest {
@@ -92,12 +91,14 @@ bool AppDelegate::applicationDidFinishLaunching() {
 #if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID ||                               \
     CC_TARGET_PLATFORM == CC_PLATFORM_IOS
     testers.push_back(std::make_shared<FirebaseCrashlyticsTester>());
-    testers.push_back(std::make_shared<RewardedAdSceneTester>());
 #endif
     for (auto&& tester : testers) {
         tester->initialize();
         tester->start();
     }
+    
+    auto scene = MainScene::openScene();
+    director->replaceScene(scene);
     return true;
 }
 

@@ -14,7 +14,7 @@ namespace EE.Internal {
             _bridge = bridge;
             _plugin = plugin;
             _adId = adId;
-            _messageHelper = new MessageHelper("IronSourceAd", adId);
+            _messageHelper = new MessageHelper("IronSourceBannerAd", adId);
             _helper = new BannerAdHelper(_bridge, _messageHelper, size);
             _loader = new AsyncHelper<bool>();
 

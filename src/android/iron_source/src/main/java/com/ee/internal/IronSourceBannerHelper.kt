@@ -2,17 +2,16 @@ package com.ee.internal
 
 import android.graphics.Point
 import androidx.annotation.AnyThread
-import com.ee.Platform
+import com.ee.Utils
 import com.ironsource.mediationsdk.ISBannerSize
 
 class IronSourceBannerHelper {
     companion object {
         @AnyThread
         private fun convertAdSizeToSize(adSize: ISBannerSize): Point {
-            val density = Platform.getDensity()
-            val width = adSize.width * density
-            val height = adSize.height * density
-            return Point(width.toInt(), height.toInt())
+            return Point(
+                Utils.convertDpToPixel(adSize.width.toDouble()).toInt(),
+                Utils.convertDpToPixel(adSize.height.toDouble()).toInt())
         }
     }
 

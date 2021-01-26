@@ -77,8 +77,8 @@ void Self::setUserProperty(const std::string& name,
     ::firebase::analytics::SetUserProperty(name.c_str(), property.c_str());
 }
 
-void Self::setCurrentScreeen(const std::string& screenName,
-                             const std::optional<std::string>& screenClass) {
+void Self::setCurrentScreen(const std::string& screenName,
+                            const std::optional<std::string>& screenClass) {
     if (not initialized_) {
         return;
     }

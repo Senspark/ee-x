@@ -36,7 +36,7 @@ export enum Plugin {
 }
 
 export class PluginManager {
-    private static readonly _pluginConstructores: { [index: string]: (bridge: IMessageBridge) => IPlugin } = {
+    private static readonly _pluginConstructors: { [index: string]: (bridge: IMessageBridge) => IPlugin } = {
         [Plugin.Adjust]: bridge => new Adjust(bridge),
         [Plugin.AdMob]: bridge => new AdMob(bridge),
         [Plugin.FacebookAds]: bridge => new FacebookAds(bridge),
@@ -59,7 +59,7 @@ export class PluginManager {
     }
 
     public static createPlugin<T extends IPlugin>(plugin: Plugin): T {
-        const constructor = this._pluginConstructores[plugin];
+        const constructor = this._pluginConstructors[plugin];
         this.addPlugin(plugin);
         const instance = constructor(this._bridge);
         this._plugins[plugin] = instance;

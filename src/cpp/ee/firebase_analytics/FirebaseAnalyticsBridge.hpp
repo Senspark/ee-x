@@ -77,8 +77,8 @@ public:
     /// for this, it will use the default. On Android, the default is the class
     /// name of the current Activity. On iOS, the default is the class name of
     /// the current UIViewController. Limited to 100 characters.
-    void setCurrentScreeen(const std::string& screenName,
-                           const std::optional<std::string>& screenClass);
+    void setCurrentScreen(const std::string& screenName,
+                          const std::optional<std::string>& screenClass);
 
     /// Log an event with with associated parameters.
     /// @param[in] name Name of the event to log. Should contain 1 to 32

@@ -27,7 +27,8 @@ void Self::initialize() {
         return;
     }
 
-    PluginManager::addPlugin(Plugin::FirebaseCore);
+    // FIXME.
+    // PluginManager::addPlugin(Plugin::FirebaseCore);
 
     auto options = ::firebase::AppOptions();
 

@@ -14,7 +14,10 @@ namespace ee {
 namespace adjust {
 class Bridge final : public IBridge {
 public:
-    explicit Bridge(IMessageBridge& bridge);
+    using Destroyer = std::function<void()>;
+
+    explicit Bridge(IMessageBridge& bridge, ILogger& logger,
+                    const Destroyer& destroyer);
     virtual ~Bridge() override;
 
     virtual void destroy() override;
@@ -28,6 +31,8 @@ public:
 
 private:
     IMessageBridge& bridge_;
+    ILogger& logger_;
+    Destroyer destroyer_;
 };
 } // namespace adjust
 } // namespace ee

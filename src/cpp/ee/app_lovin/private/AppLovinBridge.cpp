@@ -12,25 +12,14 @@
 
 #include <ee/ads/internal/GuardedFullScreenAd.hpp>
 #include <ee/ads/internal/MediationManager.hpp>
+#include <ee/core/ILogger.hpp>
 #include <ee/core/IMessageBridge.hpp>
-#include <ee/core/Logger.hpp>
-#include <ee/core/PluginManager.hpp>
 #include <ee/core/Task.hpp>
-#include <ee/core/Thread.hpp>
 #include <ee/core/Utils.hpp>
 
 #include "ee/app_lovin/private/AppLovinRewardedAd.hpp"
 
 namespace ee {
-namespace core {
-template <>
-std::shared_ptr<IAppLovin>
-PluginManager::createPluginImpl(IMessageBridge& bridge) {
-    addPlugin(Plugin::AppLovin);
-    return std::make_shared<app_lovin::Bridge>(bridge);
-}
-} // namespace core
-
 namespace app_lovin {
 enum class Error {
     // Loading & Displaying Ads
@@ -134,9 +123,11 @@ const auto kOnRewardedAdClosed       = kPrefix + "OnRewardedAdClosed";
 
 using Self = Bridge;
 
-Self::Bridge(IMessageBridge& bridge)
+Self::Bridge(IMessageBridge& bridge, ILogger& logger,
+             const Destroyer& destroyer)
     : bridge_(bridge)
-    , logger_(Logger::getSystemLogger()) {
+    , logger_(logger)
+    , destroyer_(destroyer) {
     logger_.debug("%s", __PRETTY_FUNCTION__);
     auto&& mediation = ads::MediationManager::getInstance();
     displayer_ = mediation.getAdDisplayer();
@@ -197,8 +188,7 @@ void Self::destroy() {
     bridge_.deregisterHandler(kOnRewardedAdFailedToLoad);
     bridge_.deregisterHandler(kOnRewardedAdClicked);
     bridge_.deregisterHandler(kOnRewardedAdClosed);
-
-    PluginManager::removePlugin(Plugin::AppLovin);
+    destroyer_();
 }
 
 Task<bool> Self::initialize(const std::string& key) {

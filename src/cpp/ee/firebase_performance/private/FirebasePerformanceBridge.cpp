@@ -7,22 +7,13 @@
 
 #include "ee/firebase_performance/private/FirebasePerformanceBridge.hpp"
 
+#include <ee/core/ILogger.hpp>
 #include <ee/core/IMessageBridge.hpp>
-#include <ee/core/PluginManager.hpp>
 #include <ee/core/Utils.hpp>
 
 #include "ee/firebase_performance/private/FirebasePerformanceTrace.hpp"
 
 namespace ee {
-namespace core {
-template <>
-std::shared_ptr<IFirebasePerformance>
-PluginManager::createPluginImpl(IMessageBridge& bridge) {
-    addPlugin(Plugin::FirebasePerformance);
-    return std::make_shared<firebase::performance::Bridge>(bridge);
-}
-} // namespace core
-
 namespace firebase {
 namespace performance {
 namespace {
@@ -36,13 +27,16 @@ const auto kNewTrace                 = kPrefix + "NewTrace";
 
 using Self = Bridge;
 
-Self::Bridge(IMessageBridge& bridge)
-    : bridge_(bridge) {}
+Self::Bridge(IMessageBridge& bridge, ILogger& logger,
+             const Destroyer& destroyer)
+    : bridge_(bridge)
+    , logger_(logger)
+    , destroyer_(destroyer) {}
 
 Self::~Bridge() = default;
 
 void Self::destroy() {
-    PluginManager::removePlugin(Plugin::FirebasePerformance);
+    destroyer_();
 }
 
 void Self::setDataCollectionEnabled(bool enabled) {

@@ -9,42 +9,28 @@
 #ifndef EE_X_STORE_BRIDGE_HPP
 #define EE_X_STORE_BRIDGE_HPP
 
-#ifdef __cplusplus
-
-#include <string>
-
-#include <ee/core/IPlugin.hpp>
-
-#include "ee/store/StoreFwd.hpp"
+#include "ee/store/IStoreBridge.hpp"
 
 namespace ee {
 namespace store {
-class Bridge final : public IPlugin {
+class Bridge final : public IBridge {
 public:
-    Bridge();
-    ~Bridge();
+    using Destroyer = std::function<void()>;
 
-    explicit Bridge(const Logger& logger);
+    explicit Bridge(IMessageBridge& bridge, ILogger& logger,
+                    const Destroyer& destroyer);
+    virtual ~Bridge() override;
 
     virtual void destroy() override;
 
-    /// Initializes store plugin.
-    [[nodiscard]] Task<bool>
+    virtual Task<bool>
     initialize(const ConfigurationBuilder& builder,
-               const std::shared_ptr<ITransactionLog>& transactionLog);
-
-    /// Gets all registered products.
-    std::shared_ptr<ProductCollection> getProducts() const;
-
-    /// Gets subscription for the specified item.
-    std::shared_ptr<SubscriptionInfo>
-    getSubscriptionInfo(const std::string& itemId);
-
-    /// Asynchronously purchases an item.
-    [[nodiscard]] Task<bool> purchase(const std::string& itemId);
-
-    /// Asynchronously restore transactions.
-    [[nodiscard]] Task<bool> restoreTransactions();
+               const std::shared_ptr<ITransactionLog>& transactionLog) override;
+    virtual std::shared_ptr<ProductCollection> getProducts() const override;
+    virtual std::shared_ptr<SubscriptionInfo>
+    getSubscriptionInfo(const std::string& itemId) override;
+    virtual Task<bool> purchase(const std::string& itemId) override;
+    virtual Task<bool> restoreTransactions() override;
 
 private:
     class Listener;
@@ -52,7 +38,8 @@ private:
     void initializeListener();
 
     IMessageBridge& bridge_;
-    const Logger& logger_;
+    ILogger& logger_;
+    Destroyer destroyer_;
 
     std::shared_ptr<Listener> listener_;
     std::shared_ptr<IStoreController> controller_;
@@ -69,7 +56,5 @@ private:
 };
 } // namespace store
 } // namespace ee
-
-#endif // __cplusplus
 
 #endif /* EE_X_STORE_BRIDGE_HPP */

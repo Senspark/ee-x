@@ -7,7 +7,7 @@
 
 #include "ee/store/private/StorePurchasingManager.hpp"
 
-#include <ee/core/Logger.hpp>
+#include <ee/core/ILogger.hpp>
 #include <ee/nlohmann/json.hpp>
 
 #include "ee/store/StoreITransactionLog.hpp"
@@ -29,7 +29,7 @@ namespace store {
 using Self = PurchasingManager;
 
 Self::PurchasingManager(const std::shared_ptr<ITransactionLog>& transactionLog,
-                        const Logger& logger,
+                        ILogger& logger,
                         const std::shared_ptr<IStore>& store,
                         const std::string& storeName)
     : transactionLog_(transactionLog)

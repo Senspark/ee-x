@@ -18,60 +18,38 @@ public:
     /// Used by JSB.
     Bridge();
 
-    explicit Bridge(IMessageBridge& bridge);
+    using Destroyer = std::function<void()>;
+
+    explicit Bridge(IMessageBridge& bridge, ILogger& logger,
+                    const Destroyer& destroyer);
     virtual ~Bridge() override;
 
     virtual void destroy() override;
 
-    /// @see Super.
     virtual bool isLoggedIn() const override;
-
-    /// @see Super.
     virtual void
     logIn(const std::vector<std::string>& permissions,
           const std::shared_ptr<ILoginDelegate>& delegate) override;
-
-    /// @see Super.
     virtual std::shared_ptr<ILoginDelegate> createLoginDelegate() override;
-
-    /// @see Super.
     virtual void logOut() override;
-
-    /// @see Super.
     virtual std::shared_ptr<IAccessToken> getAccessToken() const override;
-
-    /// @see Super.
     virtual void
     graphRequest(const GraphRequest& request,
                  const std::shared_ptr<IGraphDelegate>& delegate) override;
-
-    /// @see Super.
     virtual std::shared_ptr<IGraphDelegate> createGraphDelegate() override;
-
-    /// @see Super.
     virtual void
     sendRequest(const RequestContent& content,
                 const std::shared_ptr<IRequestDelegate>& delegate) override;
-
-    /// @see Super.
     virtual std::shared_ptr<IRequestDelegate> createRequestDelegate() override;
-
-    /// @see Super.
     virtual void
     shareLinkContent(const std::string& url,
                      const std::shared_ptr<IShareDelegate>& delegate) override;
-
-    /// @see Super.
     virtual void
     sharePhotoContent(const std::string& url,
                       const std::shared_ptr<IShareDelegate>& delegate) override;
-
-    /// @see Super.
     virtual void
     shareVideoContent(const std::string& url,
                       const std::shared_ptr<IShareDelegate>& delegate) override;
-
-    /// @see Super.
     virtual std::shared_ptr<IShareDelegate> createShareDelegate() override;
 
 protected:
@@ -81,6 +59,8 @@ protected:
 private:
     int delegateId_;
     IMessageBridge& bridge_;
+    ILogger& logger_;
+    Destroyer destroyer_;
 };
 } // namespace facebook
 } // namespace ee

@@ -48,7 +48,7 @@ public:
     const std::string& getSkuDetails() const;
 
 private:
-    const Logger& logger_;
+    ILogger& logger_;
     Result isSubscribed_;
     Result isExpired_;
     Result isCancelled_;

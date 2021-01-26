@@ -18,7 +18,7 @@
 #include "ee/ad_mob/AdMobFwd.hpp"
 
 namespace ee {
-namespace admob {
+namespace ad_mob {
 class IBridge : public IPlugin {
 public:
     /// Optional.
@@ -59,7 +59,7 @@ public:
     virtual std::shared_ptr<IFullScreenAd>
     createRewardedAd(const std::string& adId) = 0;
 };
-} // namespace admob
+} // namespace ad_mob
 } // namespace ee
 
 #endif // __cplusplus

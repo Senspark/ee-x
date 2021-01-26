@@ -36,7 +36,7 @@ public:
     Bridge();
     ~Bridge();
 
-    explicit Bridge(const Logger& logger);
+    explicit Bridge(ILogger& logger);
 
     bool initialize();
 
@@ -53,7 +53,7 @@ private:
     class Listener;
 
     bool initialized_;
-    const Logger& logger_;
+    ILogger& logger_;
     LinkReceivedCallback callback_;
     std::unique_ptr<::firebase::dynamic_links::Listener> listener_;
 };

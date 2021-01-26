@@ -13,9 +13,8 @@
 #include <ee/ads/internal/GuardedBannerAd.hpp>
 #include <ee/ads/internal/GuardedFullScreenAd.hpp>
 #include <ee/ads/internal/MediationManager.hpp>
+#include <ee/core/ILogger.hpp>
 #include <ee/core/IMessageBridge.hpp>
-#include <ee/core/Logger.hpp>
-#include <ee/core/PluginManager.hpp>
 #include <ee/core/Task.hpp>
 #include <ee/core/Utils.hpp>
 #include <ee/nlohmann/json.hpp>
@@ -23,16 +22,7 @@
 #include "ee/ad_mob/AdMobNativeAdLayout.hpp"
 
 namespace ee {
-namespace core {
-template <>
-std::shared_ptr<IAdMob>
-PluginManager::createPluginImpl(IMessageBridge& bridge) {
-    addPlugin(Plugin::AdMob);
-    return std::make_shared<admob::Bridge>(bridge);
-}
-} // namespace core
-
-namespace admob {
+namespace ad_mob {
 namespace {
 // clang-format off
 const std::string kPrefix             = "AdMobBridge";
@@ -55,9 +45,11 @@ const auto kDestroyRewardedAd         = kPrefix + "DestroyRewardedAd";
 
 using Self = Bridge;
 
-Self::Bridge(IMessageBridge& bridge)
+Self::Bridge(IMessageBridge& bridge, ILogger& logger,
+             const Destroyer& destroyer)
     : bridge_(bridge)
-    , logger_(Logger::getSystemLogger()) {
+    , logger_(logger)
+    , destroyer_(destroyer) {
     logger_.debug("%s", __PRETTY_FUNCTION__);
     auto&& mediation = ads::MediationManager::getInstance();
     displayer_ = mediation.getAdDisplayer();
@@ -70,7 +62,7 @@ void Self::destroy() {
     for (auto&& [key, value] : ads_) {
         value->destroy();
     }
-    PluginManager::removePlugin(Plugin::AdMob);
+    destroyer_();
 }
 
 Task<bool> Self::initialize() {
@@ -116,11 +108,11 @@ std::shared_ptr<IBannerAd> Self::createBannerAd(const std::string& adId,
     auto size = getBannerAdSize(adSize);
     auto ad = std::make_shared<ads::GuardedBannerAd>(
         std::make_shared<ads::DefaultBannerAd>(
-            "AdMobBannerAd", bridge_, logger_, adId,
+            "AdMobBannerAd", bridge_, logger_,
             [this, adId] { //
                 destroyAd(kDestroyBannerAd, adId);
             },
-            size));
+            adId, size));
     ads_.emplace(adId, ad);
     return ad;
 }
@@ -146,11 +138,11 @@ Self::createNativeAd(const std::string& adId, const std::string& layoutName,
     }
     auto ad = std::make_shared<ads::GuardedBannerAd>(
         std::make_shared<ads::DefaultBannerAd>(
-            "AdMobNativeAd", bridge_, logger_, adId,
+            "AdMobNativeAd", bridge_, logger_,
             [this, adId] { //
                 destroyAd(kDestroyNativeAd, adId);
             },
-            std::pair(0, 0)));
+            adId, std::pair(0, 0)));
     ads_.emplace(adId, ad);
     return ad;
 }
@@ -235,5 +227,5 @@ bool Self::destroyAd(const std::string& handlerId, const std::string& adId) {
     ads_.erase(iter);
     return true;
 }
-} // namespace admob
+} // namespace ad_mob
 } // namespace ee

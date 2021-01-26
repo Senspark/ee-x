@@ -3,10 +3,9 @@
 //
 //
 
-#include "ee/play/PlayBridge.hpp"
+#include "ee/play/private/PlayBridge.hpp"
 
 #include <ee/core/IMessageBridge.hpp>
-#include <ee/core/PluginManager.hpp>
 #include <ee/core/Task.hpp>
 #include <ee/core/Utils.hpp>
 #include <ee/nlohmann/json.hpp>
@@ -30,15 +29,16 @@ const auto kSubmitScore          = kPrefix + "SubmitScore";
 
 using Self = Bridge;
 
-Self::Bridge()
-    : bridge_(PluginManager::getBridge()) {
-    PluginManager::addPlugin(Plugin::Play);
-}
+Self::Bridge(IMessageBridge& bridge, ILogger& logger,
+             const Destroyer& destroyer)
+    : bridge_(bridge)
+    , logger_(logger)
+    , destroyer_(destroyer) {}
 
 Self::~Bridge() = default;
 
 void Self::destroy() {
-    PluginManager::removePlugin(Plugin::Play);
+    destroyer_();
 }
 
 bool Self::isLoggedIn() const {

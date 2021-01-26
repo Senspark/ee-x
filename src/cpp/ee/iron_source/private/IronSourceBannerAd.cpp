@@ -3,9 +3,8 @@
 #include <cassert>
 
 #include <ee/ads/internal/AsyncHelper.hpp>
+#include <ee/core/ILogger.hpp>
 #include <ee/core/IMessageBridge.hpp>
-#include <ee/core/Logger.hpp>
-#include <ee/core/Thread.hpp>
 #include <ee/core/Utils.hpp>
 
 #include "ee/iron_source/private/IronSourceBridge.hpp"
@@ -14,7 +13,7 @@ namespace ee {
 namespace iron_source {
 using Self = BannerAd;
 
-Self::BannerAd(IMessageBridge& bridge, const Logger& logger, Bridge* plugin,
+Self::BannerAd(IMessageBridge& bridge, ILogger& logger, Bridge* plugin,
                const std::string& adId, const std::pair<int, int>& size)
     : bridge_(bridge)
     , logger_(logger)

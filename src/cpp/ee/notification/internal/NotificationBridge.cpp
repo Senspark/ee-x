@@ -10,21 +10,11 @@
 
 #include <ee/core/IMessageBridge.hpp>
 #include <ee/core/Platform.hpp>
-#include <ee/core/PluginManager.hpp>
 #include <ee/nlohmann/json.hpp>
 
 #include "ee/notification/NotificationBuilder.hpp"
 
 namespace ee {
-namespace core {
-template <>
-std::shared_ptr<INotification>
-PluginManager::createPluginImpl(IMessageBridge& bridge) {
-    addPlugin(Plugin::Notification);
-    return std::make_shared<notification::Bridge>(bridge);
-}
-} // namespace core
-
 namespace notification {
 namespace {
 const std::string kPrefix = "NotificationBridge";
@@ -35,13 +25,16 @@ const auto kClearAll = kPrefix + "ClearAll";
 
 using Self = Bridge;
 
-Self::Bridge(IMessageBridge& bridge)
-    : bridge_(bridge) {}
+Self::Bridge(IMessageBridge& bridge, ILogger& logger,
+             const Destroyer& destroyer)
+    : bridge_(bridge)
+    , logger_(logger)
+    , destroyer_(destroyer) {}
 
 Self::~Bridge() = default;
 
 void Self::destroy() {
-    PluginManager::removePlugin(Plugin::Notification);
+    destroyer_();
 }
 
 void Self::schedule(const NotificationBuilder& builder) {

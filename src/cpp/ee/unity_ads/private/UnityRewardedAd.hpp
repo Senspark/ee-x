@@ -21,7 +21,7 @@ namespace unity_ads {
 class RewardedAd : public IFullScreenAd, public ObserverManager<AdObserver> {
 public:
     explicit RewardedAd(
-        const Logger& logger,
+        ILogger& logger,
         const std::shared_ptr<ads::IAsyncHelper<FullScreenAdResult>>& displayer,
         Bridge* plugin, const std::string& adId);
 
@@ -40,7 +40,7 @@ private:
     void onFailedToShow(const std::string& message);
     void onClosed(bool rewarded);
 
-    const Logger& logger_;
+    ILogger& logger_;
     std::shared_ptr<ads::IAsyncHelper<FullScreenAdResult>> displayer_;
     Bridge* plugin_;
     std::string adId_;

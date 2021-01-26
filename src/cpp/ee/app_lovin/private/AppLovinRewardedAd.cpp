@@ -11,7 +11,7 @@
 #include <cassert>
 
 #include <ee/ads/internal/AsyncHelper.hpp>
-#include <ee/core/Logger.hpp>
+#include <ee/core/ILogger.hpp>
 #include <ee/core/Utils.hpp>
 
 #include "ee/app_lovin/private/AppLovinBridge.hpp"
@@ -21,7 +21,7 @@ namespace app_lovin {
 using Self = RewardedAd;
 
 Self::RewardedAd(
-    const Logger& logger,
+    ILogger& logger,
     const std::shared_ptr<ads::IAsyncHelper<FullScreenAdResult>>& displayer,
     Bridge* plugin)
     : logger_(logger)

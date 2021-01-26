@@ -11,7 +11,7 @@
 #include <cassert>
 
 #include <ee/ads/internal/AsyncHelper.hpp>
-#include <ee/core/Logger.hpp>
+#include <ee/core/ILogger.hpp>
 #include <ee/core/Task.hpp>
 #include <ee/core/Utils.hpp>
 
@@ -22,7 +22,7 @@ namespace vungle {
 using Self = RewardedAd;
 
 Self::RewardedAd(
-    const Logger& logger,
+    ILogger& logger,
     const std::shared_ptr<ads::IAsyncHelper<FullScreenAdResult>>& displayer,
     Bridge* plugin, const std::string& adId)
     : logger_(logger)

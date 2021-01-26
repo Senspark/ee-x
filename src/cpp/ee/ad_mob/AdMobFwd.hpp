@@ -14,17 +14,17 @@
 #include <ee/ads/AdsFwd.hpp>
 
 namespace ee {
-namespace admob {
+namespace ad_mob {
 enum class BannerAdSize;
 
 class IBridge;
 class Bridge;
 class NativeAdLayout;
-} // namespace admob
+} // namespace ad_mob
 
-using IAdMob = admob::IBridge;
-using AdMobBannerAdSize = admob::BannerAdSize;
-using AdMobNativeAdLayout = admob::NativeAdLayout;
+using IAdMob = ad_mob::IBridge;
+using AdMobBannerAdSize = ad_mob::BannerAdSize;
+using AdMobNativeAdLayout = ad_mob::NativeAdLayout;
 } // namespace ee
 
 #endif // __cplusplus

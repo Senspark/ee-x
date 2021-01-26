@@ -17,7 +17,10 @@ namespace ee {
 namespace unity_ads {
 class Bridge final : public IBridge {
 public:
-    explicit Bridge(IMessageBridge& bridge);
+    using Destroyer = std::function<void()>;
+
+    explicit Bridge(IMessageBridge& bridge, ILogger& logger,
+                    const Destroyer& destroyer);
     virtual ~Bridge() override;
 
     virtual void destroy() override;
@@ -53,7 +56,8 @@ private:
                              FullScreenAdResult result);
 
     IMessageBridge& bridge_;
-    const Logger& logger_;
+    ILogger& logger_;
+    Destroyer destroyer_;
 
     bool displaying_;
 

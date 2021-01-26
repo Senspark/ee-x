@@ -4,11 +4,9 @@
 #include <ee/ads/internal/GuardedFullScreenAd.hpp>
 #include <ee/ads/internal/IAsyncHelper.hpp>
 #include <ee/ads/internal/MediationManager.hpp>
+#include <ee/core/ILogger.hpp>
 #include <ee/core/IMessageBridge.hpp>
-#include <ee/core/Logger.hpp>
-#include <ee/core/PluginManager.hpp>
 #include <ee/core/Task.hpp>
-#include <ee/core/Thread.hpp>
 #include <ee/core/Utils.hpp>
 #include <ee/nlohmann/json.hpp>
 
@@ -17,15 +15,6 @@
 #include "ee/iron_source/private/IronSourceRewardedAd.hpp"
 
 namespace ee {
-namespace core {
-template <>
-std::shared_ptr<IIronSource>
-PluginManager::createPluginImpl(IMessageBridge& bridge) {
-    addPlugin(Plugin::IronSource);
-    return std::make_shared<iron_source::Bridge>(bridge);
-}
-} // namespace core
-
 namespace iron_source {
 namespace {
 // clang-format off
@@ -59,9 +48,11 @@ const auto kOnRewardedAdClosed       = kPrefix + "OnRewardedAdClosed";
 
 using Self = Bridge;
 
-Self::Bridge(IMessageBridge& bridge)
+Self::Bridge(IMessageBridge& bridge, ILogger& logger,
+             const Destroyer& destroyer)
     : bridge_(bridge)
-    , logger_(Logger::getSystemLogger()) {
+    , logger_(logger)
+    , destroyer_(destroyer) {
     logger_.debug("%s", __PRETTY_FUNCTION__);
     auto&& mediation = ads::MediationManager::getInstance();
     displayer_ = mediation.getAdDisplayer();
@@ -132,7 +123,7 @@ void Self::destroy() {
     bridge_.deregisterHandler(kOnRewardedAdClicked);
     bridge_.deregisterHandler(kOnRewardedAdClosed);
 
-    PluginManager::removePlugin(Plugin::IronSource);
+    destroyer_();
 }
 
 Task<bool> Self::initialize(const std::string& appKey) {

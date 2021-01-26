@@ -9,15 +9,16 @@
 #ifndef EE_X_APP_LOVIN_BRIDGE_HPP
 #define EE_X_APP_LOVIN_BRIDGE_HPP
 
-#include <string>
-
 #include "ee/app_lovin/IAppLovinBridge.hpp"
 
 namespace ee {
 namespace app_lovin {
 class Bridge final : public IBridge {
 public:
-    explicit Bridge(IMessageBridge& bridge);
+    using Destroyer = std::function<void()>;
+
+    explicit Bridge(IMessageBridge& bridge, ILogger& logger,
+                    const Destroyer& destroyer);
     virtual ~Bridge() override;
 
     virtual void destroy() override;
@@ -51,7 +52,8 @@ private:
     void onRewardedAdClosed(bool rewarded);
 
     IMessageBridge& bridge_;
-    const Logger& logger_;
+    ILogger& logger_;
+    Destroyer destroyer_;
 
     /// Share the same instance.
     RewardedAd* rewardedAd_;

@@ -27,11 +27,13 @@ using Self = Bridge;
 
 Self::Bridge()
     : bridge_(PluginManager::getBridge()) {
-    PluginManager::addPlugin(Plugin::Recorder);
+    // FIXME.
+    // PluginManager::addPlugin(Plugin::Recorder);
 }
 
 Self::~Bridge() {
-    PluginManager::removePlugin(Plugin::Recorder);
+    // FIXME.
+    // PluginManager::removePlugin(Plugin::Recorder);
 }
 
 bool Self::isSupported() const {

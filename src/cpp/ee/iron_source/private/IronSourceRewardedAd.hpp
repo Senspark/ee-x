@@ -21,7 +21,7 @@ namespace iron_source {
 class RewardedAd : public IFullScreenAd, public ObserverManager<AdObserver> {
 public:
     explicit RewardedAd(
-        const Logger& logger,
+        ILogger& logger,
         std::shared_ptr<ads::IAsyncHelper<FullScreenAdResult>>& displayer,
         Bridge* plugin, const std::string& adId);
     virtual ~RewardedAd() override;
@@ -40,7 +40,7 @@ private:
     void onClicked();
     void onClosed(bool rewarded);
 
-    const Logger& logger_;
+    ILogger& logger_;
     std::shared_ptr<ads::IAsyncHelper<FullScreenAdResult>> displayer_;
     Bridge* plugin_;
     std::string adId_;

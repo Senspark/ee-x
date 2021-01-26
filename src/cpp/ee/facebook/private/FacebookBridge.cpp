@@ -5,10 +5,8 @@
 
 #include "ee/facebook/private/FacebookBridge.hpp"
 
+#include <ee/core/ILogger.hpp>
 #include <ee/core/IMessageBridge.hpp>
-#include <ee/core/LogLevel.hpp>
-#include <ee/core/PluginManager.hpp>
-#include <ee/core/Thread.hpp>
 #include <ee/core/Utils.hpp>
 #include <ee/core/internal/SharedPtrUtils.hpp>
 #include <ee/nlohmann/json.hpp>
@@ -22,14 +20,6 @@
 #include "ee/facebook/private/FacebookShareDelegate.hpp"
 
 namespace ee {
-namespace core {
-template <>
-std::shared_ptr<IFacebook>
-PluginManager::createPluginImpl(IMessageBridge& bridge) {
-    return std::make_shared<facebook::Bridge>(bridge);
-}
-} // namespace core
-
 namespace facebook {
 namespace {
 // clang-format off
@@ -50,12 +40,11 @@ const auto kShareVideoContent     = kPrefix + "ShareVideoContent";
 
 using Self = Bridge;
 
-Self::Bridge()
-    : Bridge(PluginManager::getBridge()) {}
-
-Self::Bridge(IMessageBridge& bridge)
-    : bridge_(bridge) {
-    PluginManager::addPlugin(Plugin::Facebook);
+Self::Bridge(IMessageBridge& bridge, ILogger& logger,
+             const Destroyer& destroyer)
+    : bridge_(bridge)
+    , logger_(logger)
+    , destroyer_(destroyer) {
     delegateId_ = 0;
     bridge_.registerHandler(
         [this](const std::string& message) { //
@@ -69,7 +58,7 @@ Self::~Bridge() = default;
 
 void Self::destroy() {
     bridge_.deregisterHandler(kOnProfileChanged);
-    PluginManager::removePlugin(Plugin::Facebook);
+    destroyer_();
 }
 
 void Self::registerNotifications() {

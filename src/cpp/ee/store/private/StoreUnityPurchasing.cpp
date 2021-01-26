@@ -33,7 +33,7 @@ void Self::clearTransactionLog(
 void Self::initialize(const std::shared_ptr<IStoreListener>& listener,
                       const ConfigurationBuilder& builder,
                       const std::shared_ptr<ITransactionLog>& transactionLog,
-                      const Logger& logger) {
+                      ILogger& logger) {
     auto manager = std::make_shared<PurchasingManager>(
         transactionLog, logger, builder.factory_->service(),
         builder.factory_->storeName());

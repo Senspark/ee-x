@@ -23,7 +23,7 @@ public:
         std::function<FullScreenAdResult(const std::string& message)>;
 
     explicit DefaultFullScreenAd(
-        const std::string& prefix, IMessageBridge& bridge, const Logger& logger,
+        const std::string& prefix, IMessageBridge& bridge, ILogger& logger,
         const std::shared_ptr<IAsyncHelper<FullScreenAdResult>>& displayer,
         const Destroyer& destroyer, const ResultParser& resultParser,
         const std::string& adId);
@@ -45,7 +45,7 @@ private:
 
     std::string prefix_;
     IMessageBridge& bridge_;
-    const Logger& logger_;
+    ILogger& logger_;
     std::shared_ptr<IAsyncHelper<FullScreenAdResult>> displayer_;
     Destroyer destroyer_;
     ResultParser resultParser_;

@@ -22,7 +22,7 @@ class PurchasingManager
 public:
     explicit PurchasingManager(
         const std::shared_ptr<ITransactionLog>& transactionLog, //
-        const Logger& logger,                                   //
+        ILogger& logger,                                        //
         const std::shared_ptr<IStore>& store,                   //
         const std::string& storeName);
 
@@ -58,7 +58,7 @@ private:
                                      const std::string& transactionId);
 
     std::shared_ptr<ITransactionLog> transactionLog_;
-    const Logger& logger_;
+    ILogger& logger_;
     std::shared_ptr<IStore> store_;
     std::string storeName_;
     bool useTransactionLog_;

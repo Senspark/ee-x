@@ -7,8 +7,8 @@
 
 #include "ee/adjust/private/AdjustBridge.hpp"
 
+#include <ee/core/ILogger.hpp>
 #include <ee/core/IMessageBridge.hpp>
-#include <ee/core/PluginManager.hpp>
 #include <ee/core/Task.hpp>
 #include <ee/core/Utils.hpp>
 #include <ee/nlohmann/json.hpp>
@@ -16,15 +16,6 @@
 #include "ee/adjust/AdjustConfig.hpp"
 
 namespace ee {
-namespace core {
-template <>
-std::shared_ptr<IAdjust>
-PluginManager::createPluginImpl(IMessageBridge& bridge) {
-    addPlugin(Plugin::Adjust);
-    return std::make_shared<adjust::Bridge>(bridge);
-}
-} // namespace core
-
 namespace adjust {
 namespace {
 const std::string kPrefix = "AdjustBridge";
@@ -38,13 +29,16 @@ const auto kTrackEvent = kPrefix + "TrackEvent";
 
 using Self = Bridge;
 
-Self::Bridge(IMessageBridge& bridge)
-    : bridge_(bridge) {}
+Self::Bridge(IMessageBridge& bridge, ILogger& logger,
+             const Destroyer& destroyer)
+    : bridge_(bridge)
+    , logger_(logger)
+    , destroyer_(destroyer) {}
 
 Self::~Bridge() = default;
 
 void Self::destroy() {
-    PluginManager::removePlugin(Plugin::Adjust);
+    destroyer_();
 }
 
 void Self::initialize(const AdjustConfig& config) {

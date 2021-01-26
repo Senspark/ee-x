@@ -11,11 +11,9 @@
 #include <ee/ads/internal/GuardedFullScreenAd.hpp>
 #include <ee/ads/internal/IAsyncHelper.hpp>
 #include <ee/ads/internal/MediationManager.hpp>
+#include <ee/core/ILogger.hpp>
 #include <ee/core/IMessageBridge.hpp>
-#include <ee/core/Logger.hpp>
-#include <ee/core/PluginManager.hpp>
 #include <ee/core/Task.hpp>
-#include <ee/core/Thread.hpp>
 #include <ee/core/Utils.hpp>
 #include <ee/nlohmann/json.hpp>
 
@@ -23,15 +21,6 @@
 #include "ee/unity_ads/private/UnityRewardedAd.hpp"
 
 namespace ee {
-namespace core {
-template <>
-std::shared_ptr<IUnityAds>
-PluginManager::createPluginImpl(IMessageBridge& bridge) {
-    addPlugin(Plugin::UnityAds);
-    return std::make_shared<unity_ads::Bridge>(bridge);
-}
-} // namespace core
-
 namespace unity_ads {
 namespace {
 // clang-format off
@@ -49,9 +38,11 @@ const auto kOnClosed            = kPrefix + "OnClosed";
 
 using Self = Bridge;
 
-Self::Bridge(IMessageBridge& bridge)
+Self::Bridge(IMessageBridge& bridge, ILogger& logger,
+             const Destroyer& destroyer)
     : bridge_(bridge)
-    , logger_(Logger::getSystemLogger()) {
+    , logger_(logger)
+    , destroyer_(destroyer) {
     logger_.debug("%s", __PRETTY_FUNCTION__);
     displaying_ = false;
 
@@ -84,7 +75,7 @@ void Self::destroy() {
     bridge_.deregisterHandler(kOnLoaded);
     bridge_.deregisterHandler(kOnFailedToShow);
     bridge_.deregisterHandler(kOnClosed);
-    PluginManager::removePlugin(Plugin::UnityAds);
+    destroyer_();
 }
 
 Task<bool> Self::initialize(const std::string& gameId, bool testModeEnabled) {

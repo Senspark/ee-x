@@ -7,20 +7,12 @@
 
 #include "ee/apps_flyer/private/AppsFlyerBridge.hpp"
 
+#include <ee/core/ILogger.hpp>
 #include <ee/core/IMessageBridge.hpp>
-#include <ee/core/PluginManager.hpp>
 #include <ee/core/Utils.hpp>
 #include <ee/nlohmann/json.hpp>
 
 namespace ee {
-namespace core {
-template <>
-std::shared_ptr<IAppsFlyer>
-PluginManager::createPluginImpl(IMessageBridge& bridge) {
-    return std::make_shared<apps_flyer::Bridge>(bridge);
-}
-} // namespace core
-
 namespace apps_flyer {
 namespace {
 // clang-format off
@@ -36,15 +28,16 @@ const auto kTrackEvent      = kPrefix + "TrackEvent";
 
 using Self = Bridge;
 
-Self::Bridge(IMessageBridge& bridge)
-    : bridge_(bridge) {
-    PluginManager::addPlugin(Plugin::AppsFlyer);
-}
+Self::Bridge(IMessageBridge& bridge, ILogger& logger,
+             const Destroyer& destroyer)
+    : bridge_(bridge)
+    , logger_(logger)
+    , destroyer_(destroyer) {}
 
 Self::~Bridge() = default;
 
 void Self::destroy() {
-    PluginManager::removePlugin(Plugin::AppsFlyer);
+    destroyer_();
 }
 
 void Self::initialize(const std::string& devKey, const std::string& appId) {

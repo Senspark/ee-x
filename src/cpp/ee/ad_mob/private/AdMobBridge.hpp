@@ -14,10 +14,13 @@
 #include "ee/ad_mob/IAdMobBridge.hpp"
 
 namespace ee {
-namespace admob {
+namespace ad_mob {
 class Bridge final : public IBridge {
 public:
-    explicit Bridge(IMessageBridge& bridge);
+    using Destroyer = std::function<void()>;
+
+    explicit Bridge(IMessageBridge& bridge, ILogger& logger,
+                    const Destroyer& destroyer);
     virtual ~Bridge() override;
 
     virtual void destroy() override;
@@ -47,11 +50,12 @@ private:
     bool destroyAd(const std::string& handlerId, const std::string& adId);
 
     IMessageBridge& bridge_;
-    const Logger& logger_;
+    ILogger& logger_;
+    Destroyer destroyer_;
     std::map<std::string, std::shared_ptr<IAd>> ads_;
     std::shared_ptr<ads::IAsyncHelper<FullScreenAdResult>> displayer_;
 };
-} // namespace admob
+} // namespace ad_mob
 } // namespace ee
 
 #endif /* EE_X_ADMOB_BRIDGE_HPP */

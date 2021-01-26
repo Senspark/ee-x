@@ -8,8 +8,8 @@
 #include "ee/ads/internal/DefaultFullScreenAd.hpp"
 
 #include <ee/core/Delay.hpp>
+#include <ee/core/ILogger.hpp>
 #include <ee/core/IMessageBridge.hpp>
-#include <ee/core/Logger.hpp>
 #include <ee/core/Utils.hpp>
 
 #include "ee/ads/internal/AsyncHelper.hpp"
@@ -19,7 +19,7 @@ namespace ads {
 using Self = DefaultFullScreenAd;
 
 Self::DefaultFullScreenAd(
-    const std::string& prefix, IMessageBridge& bridge, const Logger& logger,
+    const std::string& prefix, IMessageBridge& bridge, ILogger& logger,
     const std::shared_ptr<IAsyncHelper<FullScreenAdResult>>& displayer,
     const Destroyer& destroyer, const ResultParser& resultParser,
     const std::string& adId)

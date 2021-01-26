@@ -43,14 +43,11 @@ public:
     /// Must be called first.
     static void initializePlugins();
 
-    template <class T>
-    static std::shared_ptr<T> createPlugin() {
-        auto&& bridge = getBridge();
-        return createPluginImpl<T>(bridge);
-    }
-
     /// Gets the current message bridge.
     static IMessageBridge& getBridge();
+
+    template <class T>
+    static std::shared_ptr<T> createPlugin();
 
     /// Sets the log level for the logger on Android/iOS.
     /// @param level The desired log level.
@@ -62,19 +59,12 @@ public:
     /// Sets the current activity.
     static void setActivity(void* activity);
 
-    /// Adds a cross-platform plugin.
-    /// @note Internal uses.
+private:
     static void addPlugin(Plugin plugin);
-
-    /// Remove a cross-platform plugin.
-    /// @note Internal uses.
     static void removePlugin(Plugin plugin);
 
-private:
-    template <class T>
-    static std::shared_ptr<T> createPluginImpl(IMessageBridge& bridge);
-
     static std::shared_ptr<IPluginManagerImpl> impl_;
+    static std::shared_ptr<ILogger> logger_;
 };
 } // namespace core
 } // namespace ee

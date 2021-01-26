@@ -35,7 +35,7 @@ private:
 Self::Bridge()
     : Self(Logger::getSystemLogger()) {}
 
-Self::Bridge(const Logger& logger)
+Self::Bridge(ILogger& logger)
     : logger_(logger) {
     initialized_ = false;
 }

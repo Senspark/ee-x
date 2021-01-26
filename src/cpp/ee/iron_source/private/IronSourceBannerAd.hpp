@@ -11,7 +11,7 @@ namespace ee {
 namespace iron_source {
 class BannerAd final : public IBannerAd, public ObserverManager<AdObserver> {
 public:
-    explicit BannerAd(IMessageBridge& bridge, const Logger& logger,
+    explicit BannerAd(IMessageBridge& bridge, ILogger& logger,
                       Bridge* plugin, const std::string& adId,
                       const std::pair<int, int>& size);
     virtual ~BannerAd() override;
@@ -39,7 +39,7 @@ private:
     void onClicked();
 
     IMessageBridge& bridge_;
-    const Logger& logger_;
+    ILogger& logger_;
     Bridge* plugin_;
     std::string adId_;
     ads::MessageHelper messageHelper_;

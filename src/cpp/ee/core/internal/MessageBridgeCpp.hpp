@@ -17,7 +17,7 @@ namespace ee {
 namespace core {
 class MessageBridgeCpp final : public IMessageBridge {
 public:
-    MessageBridgeCpp();
+    explicit MessageBridgeCpp(ILogger& logger);
     virtual ~MessageBridgeCpp() override;
 
     virtual void registerHandler(const MessageHandler& handler,
@@ -37,7 +37,7 @@ public:
 private:
     MessageHandler findHandler(const std::string& tag) const;
 
-    const Logger& logger_;
+    ILogger& logger_;
 
     int callbackCounter_;
 

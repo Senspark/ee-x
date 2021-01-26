@@ -6,12 +6,11 @@
 //
 //
 
-#include "ee/store/StoreBridge.hpp"
+#include "ee/store/private/StoreBridge.hpp"
 
+#include <ee/core/ILogger.hpp>
 #include <ee/core/IMessageBridge.hpp>
 #include <ee/core/LambdaAwaiter.hpp>
-#include <ee/core/Logger.hpp>
-#include <ee/core/PluginManager.hpp>
 #include <ee/core/Task.hpp>
 #include <ee/core/Utils.hpp>
 #include <ee/nlohmann/json.hpp>
@@ -73,20 +72,18 @@ private:
         onInitialized_;
 };
 
-Self::Bridge()
-    : Self(Logger::getSystemLogger()) {}
-
-Self::Bridge(const Logger& logger)
-    : bridge_(PluginManager::getBridge())
-    , logger_(logger) {
+Self::Bridge(IMessageBridge& bridge, ILogger& logger,
+             const Destroyer& destroyer)
+    : bridge_(bridge)
+    , logger_(logger)
+    , destroyer_(destroyer) {
     initialized_ = false;
-    PluginManager::addPlugin(Plugin::Store);
 }
 
 Self::~Bridge() = default;
 
 void Self::destroy() {
-    PluginManager::removePlugin(Plugin::Store);
+    destroyer_();
 }
 
 Task<bool>
@@ -127,8 +124,7 @@ void Self::initializeListener() {
         return PurchaseProcessingResult::Complete;
     };
     listener_->onPurchaseFailed_ = [this](auto&& product, auto&& reason) {
-        logger_.error("%s: onPurchaseFailed: %s %d",
-                      __PRETTY_FUNCTION__,
+        logger_.error("%s: onPurchaseFailed: %s %d", __PRETTY_FUNCTION__,
                       product->definition()->id().c_str(),
                       static_cast<int>(reason));
         if (purchaseResolver_) {

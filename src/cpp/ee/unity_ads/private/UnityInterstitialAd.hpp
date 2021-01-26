@@ -22,7 +22,7 @@ class InterstitialAd : public IFullScreenAd,
                        public ObserverManager<AdObserver> {
 public:
     explicit InterstitialAd(
-        const Logger& logger,
+        ILogger& logger,
         const std::shared_ptr<ads::IAsyncHelper<FullScreenAdResult>>& displayer,
         Bridge* plugin, const std::string& adId);
 
@@ -41,7 +41,7 @@ private:
     void onFailedToShow(const std::string& message);
     void onClosed();
 
-    const Logger& logger_;
+    ILogger& logger_;
     std::shared_ptr<ads::IAsyncHelper<FullScreenAdResult>> displayer_;
     Bridge* plugin_;
     std::string adId_;

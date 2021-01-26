@@ -7,6 +7,7 @@
 
 namespace ee {
 namespace store {
+class IBridge;
 class Bridge;
 
 enum class AppleStoreProductType;
@@ -53,7 +54,7 @@ class SubscriptionInfo;
 class UnityPurchasing;
 } // namespace store
 
-using Store = store::Bridge;
+using IStore = store::IBridge;
 using StoreType = store::AppStore;
 using StoreConfigurationBuilder = store::ConfigurationBuilder;
 using StoreITransactionLog = store::ITransactionLog;

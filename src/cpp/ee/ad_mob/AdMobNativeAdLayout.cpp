@@ -9,7 +9,7 @@
 #include "ee/ad_mob/AdMobNativeAdLayout.hpp"
 
 namespace ee {
-namespace admob {
+namespace ad_mob {
 namespace {
 // clang-format off
 constexpr auto k__body           = "body";
@@ -73,5 +73,5 @@ Self& Self::setStore(const std::string& id) {
     params_[k__store] = id;
     return *this;
 }
-} // namespace admob
+} // namespace ad_mob
 } // namespace ee

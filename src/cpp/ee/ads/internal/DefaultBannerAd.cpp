@@ -9,22 +9,20 @@
 
 #include <cassert>
 
-#include <ee/ads/internal/AsyncHelper.hpp>
+#include <ee/core/ILogger.hpp>
 #include <ee/core/IMessageBridge.hpp>
-#include <ee/core/Logger.hpp>
 #include <ee/core/Thread.hpp>
 #include <ee/core/Utils.hpp>
 
-#include "ee/ad_mob/private/AdMobBridge.hpp"
+#include "ee/ads/internal/AsyncHelper.hpp"
 
 namespace ee {
 namespace ads {
 using Self = DefaultBannerAd;
 
 Self::DefaultBannerAd(const std::string& prefix, IMessageBridge& bridge,
-                      const Logger& logger, const std::string& adId,
-                      const Destroyer& destroyer,
-                      const std::pair<int, int>& size)
+                      ILogger& logger, const Destroyer& destroyer,
+                      const std::string& adId, const std::pair<int, int>& size)
     : bridge_(bridge)
     , logger_(logger)
     , destroyer_(destroyer)

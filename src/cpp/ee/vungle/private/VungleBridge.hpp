@@ -9,7 +9,10 @@ namespace ee {
 namespace vungle {
 class Bridge final : public IBridge {
 public:
-    explicit Bridge(IMessageBridge& bridge);
+    using Destroyer = std::function<void()>;
+
+    explicit Bridge(IMessageBridge& bridge, ILogger& logger,
+                    const Destroyer& destroyer);
     virtual ~Bridge() override;
 
     virtual void destroy() override;
@@ -36,7 +39,8 @@ private:
     void onMediationAdClosed(const std::string& adId, bool rewarded);
 
     IMessageBridge& bridge_;
-    const Logger& logger_;
+    ILogger& logger_;
+    Destroyer destroyer_;
 
     template <class Ad, class Raw>
     struct Entry {

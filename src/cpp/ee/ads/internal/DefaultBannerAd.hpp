@@ -22,8 +22,8 @@ public:
     using Destroyer = std::function<void()>;
 
     explicit DefaultBannerAd(const std::string& prefix, IMessageBridge& bridge,
-                             const Logger& logger, const std::string& adId,
-                             const Destroyer& destroyer,
+                             ILogger& logger, const Destroyer& destroyer,
+                             const std::string& adId,
                              const std::pair<int, int>& size);
     virtual ~DefaultBannerAd() override;
 
@@ -51,7 +51,7 @@ private:
 
     std::string prefix_;
     IMessageBridge& bridge_;
-    const Logger& logger_;
+    ILogger& logger_;
     Destroyer destroyer_;
     std::string adId_;
     MessageHelper messageHelper_;

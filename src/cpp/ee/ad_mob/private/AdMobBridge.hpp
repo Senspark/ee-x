@@ -38,23 +38,12 @@ public:
     createRewardedAd(const std::string& adId) override;
 
 private:
-    friend BannerAd;
-    friend NativeAd;
-    friend InterstitialAd;
-    friend RewardedAd;
-    friend AppOpenAd;
-
     std::pair<int, int> getBannerAdSize(BannerAdSize adSize);
 
-    template <class Ad>
-    std::shared_ptr<IFullScreenAd>
-    createFullScreenAd(const std::string& handlerId, const std::string& adId);
+    std::shared_ptr<IFullScreenAd> createFullScreenAd(
+        const std::string& handlerId, const std::string& adId,
+        const std::function<std::shared_ptr<IFullScreenAd>()>& creator);
 
-    bool destroyBannerAd(const std::string& adId);
-    bool destroyNativeAd(const std::string& adId);
-    bool destroyAppOpenAd(const std::string& adId);
-    bool destroyInterstitialAd(const std::string& adId);
-    bool destroyRewardedAd(const std::string& adId);
     bool destroyAd(const std::string& handlerId, const std::string& adId);
 
     IMessageBridge& bridge_;

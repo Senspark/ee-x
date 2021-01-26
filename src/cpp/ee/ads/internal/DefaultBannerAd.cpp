@@ -1,12 +1,11 @@
 //
-//  FacebookNativeAd.cpp
-//  ee_x
+//  DefaultBannerAd.cpp
+//  Pods
 //
-//  Created by Zinge on 10/6/17.
-//
+//  Created by eps on 1/26/21.
 //
 
-#include "ee/facebook_ads/private/FacebookNativeAd.hpp"
+#include "ee/ads/internal/DefaultBannerAd.hpp"
 
 #include <cassert>
 
@@ -16,23 +15,25 @@
 #include <ee/core/Thread.hpp>
 #include <ee/core/Utils.hpp>
 
-#include "ee/facebook_ads/private/FacebookAdsBridge.hpp"
+#include "ee/ad_mob/private/AdMobBridge.hpp"
 
 namespace ee {
-namespace facebook_ads {
-using Self = NativeAd;
+namespace ads {
+using Self = DefaultBannerAd;
 
-Self::NativeAd(IMessageBridge& bridge, const Logger& logger, Bridge* plugin,
-               const std::string& adId)
+Self::DefaultBannerAd(const std::string& prefix, IMessageBridge& bridge,
+                      const Logger& logger, const std::string& adId,
+                      const Destroyer& destroyer,
+                      const std::pair<int, int>& size)
     : bridge_(bridge)
     , logger_(logger)
-    , plugin_(plugin)
+    , destroyer_(destroyer)
     , adId_(adId)
-    , messageHelper_("FacebookNativeAd", adId)
-    , helper_(bridge, messageHelper_, std::pair(0, 0)) {
-    logger_.debug("%s: adId = %s", __PRETTY_FUNCTION__, adId_.c_str());
-    attempted_ = false;
-    loader_ = std::make_unique<ads::AsyncHelper<bool>>();
+    , messageHelper_(prefix, adId)
+    , helper_(bridge, messageHelper_, size) {
+    logger_.debug("%s: prefix = %s adId = %s", __PRETTY_FUNCTION__,
+                  prefix_.c_str(), adId_.c_str());
+    loader_ = std::make_unique<AsyncHelper<bool>>();
 
     bridge_.registerHandler(
         [this](const std::string& message) { //
@@ -51,27 +52,17 @@ Self::NativeAd(IMessageBridge& bridge, const Logger& logger, Bridge* plugin,
         messageHelper_.onClicked());
 }
 
-Self::~NativeAd() = default;
+Self::~DefaultBannerAd() = default;
 
 void Self::destroy() {
-    logger_.debug("%s: adId = %s", __PRETTY_FUNCTION__, adId_.c_str());
+    logger_.debug("%s: prefix = %s adId = %s", __PRETTY_FUNCTION__,
+                  prefix_.c_str(), adId_.c_str());
 
     bridge_.deregisterHandler(messageHelper_.onLoaded());
     bridge_.deregisterHandler(messageHelper_.onFailedToLoad());
-    bridge_.deregisterHandler(messageHelper_.onClosed());
+    bridge_.deregisterHandler(messageHelper_.onClicked());
 
-    bool succeeded = plugin_->destroyNativeAd(adId_);
-    assert(succeeded);
-}
-
-void Self::createInternalAd() {
-    logger_.debug("%s: adId = %s", __PRETTY_FUNCTION__, adId_.c_str());
-    bridge_.call(messageHelper_.createInternalAd());
-}
-
-void Self::destroyInternalAd() {
-    logger_.debug("%s: adId = %s", __PRETTY_FUNCTION__, adId_.c_str());
-    bridge_.call(messageHelper_.destroyInternalAd());
+    destroyer_();
 }
 
 bool Self::isLoaded() const {
@@ -79,16 +70,11 @@ bool Self::isLoaded() const {
 }
 
 Task<bool> Self::load() {
-    logger_.debug("%s: adId = %s loading = %s", __PRETTY_FUNCTION__,
-                  adId_.c_str(),
+    logger_.debug("%s: prefix = %s adId = %s loading = %s", __PRETTY_FUNCTION__,
+                  prefix_.c_str(), adId_.c_str(),
                   core::toString(loader_->isProcessing()).c_str());
-    auto result = co_await loader_->process( //
-        [this] {
-            if (attempted_) {
-                destroyInternalAd();
-                createInternalAd();
-            }
-            attempted_ = true;
+    auto result = co_await loader_->process(
+        [this] { //
             helper_.load();
         },
         [](bool result) {
@@ -130,15 +116,13 @@ void Self::setVisible(bool visible) {
 }
 
 void Self::onLoaded() {
-    logger_.debug("%s: adId = %s loading = %s", __PRETTY_FUNCTION__,
-                  adId_.c_str(),
+    logger_.debug("%s: prefix = %s adId = %s loading = %s", __PRETTY_FUNCTION__,
+                  prefix_.c_str(), adId_.c_str(),
                   core::toString(loader_->isProcessing()).c_str());
     if (loader_->isProcessing()) {
         loader_->resolve(true);
     } else {
-        logger_.error("%s: this ad is expected to be loading",
-                      __PRETTY_FUNCTION__);
-        assert(false);
+        // Note: banner is auto-loading.
     }
     dispatchEvent([](auto&& observer) {
         if (observer.onLoaded) {
@@ -148,26 +132,25 @@ void Self::onLoaded() {
 }
 
 void Self::onFailedToLoad(const std::string& message) {
-    logger_.debug("%s: adId = %s loading = %s message = %s",
-                  __PRETTY_FUNCTION__, adId_.c_str(),
+    logger_.debug("%s: prefix = %s adId = %s loading = %s message = %s",
+                  __PRETTY_FUNCTION__, prefix_.c_str(), adId_.c_str(),
                   core::toString(loader_->isProcessing()).c_str(),
                   message.c_str());
     if (loader_->isProcessing()) {
         loader_->resolve(false);
     } else {
-        logger_.error("%s: this ad is expected to be loading",
-                      __PRETTY_FUNCTION__);
-        assert(false);
+        // Note: AdMob banner is auto-loading.
     }
 }
 
 void Self::onClicked() {
-    logger_.debug("%s: adId = %s", __PRETTY_FUNCTION__, adId_.c_str());
+    logger_.debug("%s: prefix = %s adId = %s", __PRETTY_FUNCTION__,
+                  prefix_.c_str(), adId_.c_str());
     dispatchEvent([](auto&& observer) {
         if (observer.onClicked) {
             observer.onClicked();
         }
     });
 }
-} // namespace facebook_ads
+} // namespace ads
 } // namespace ee

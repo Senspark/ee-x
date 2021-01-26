@@ -1,39 +1,40 @@
 //
-//  AdMobInterstitialAd.cpp
-//  ee_x
+//  DefaultFullScreenAd.cpp
+//  Pods
 //
-//  Created by Zinge on 10/12/17.
-//
+//  Created by eps on 1/26/21.
 //
 
-#include "ee/ad_mob/private/AdMobInterstitialAd.hpp"
+#include "ee/ads/internal/DefaultFullScreenAd.hpp"
 
-#include <cassert>
-
-#include <ee/ads/internal/AsyncHelper.hpp>
+#include <ee/core/Delay.hpp>
 #include <ee/core/IMessageBridge.hpp>
 #include <ee/core/Logger.hpp>
-#include <ee/core/Thread.hpp>
 #include <ee/core/Utils.hpp>
 
-#include "ee/ad_mob/private/AdMobBridge.hpp"
+#include "ee/ads/internal/AsyncHelper.hpp"
 
 namespace ee {
-namespace admob {
-using Self = InterstitialAd;
+namespace ads {
+using Self = DefaultFullScreenAd;
 
-Self::InterstitialAd(
-    IMessageBridge& bridge, const Logger& logger,
-    const std::shared_ptr<ads::IAsyncHelper<FullScreenAdResult>>& displayer,
-    Bridge* plugin, const std::string& adId)
-    : bridge_(bridge)
+Self::DefaultFullScreenAd(
+    const std::string& prefix, IMessageBridge& bridge, const Logger& logger,
+    const std::shared_ptr<IAsyncHelper<FullScreenAdResult>>& displayer,
+    const Destroyer& destroyer, const ResultParser& resultParser,
+    const std::string& adId)
+    : prefix_(prefix)
+    , bridge_(bridge)
     , logger_(logger)
     , displayer_(displayer)
-    , plugin_(plugin)
+    , destroyer_(destroyer)
+    , resultParser_(resultParser)
     , adId_(adId)
-    , messageHelper_("AdMobInterstitialAd", adId) {
-    logger_.debug("%s: adId = %s", __PRETTY_FUNCTION__, adId_.c_str());
-    loader_ = std::make_unique<ads::AsyncHelper<bool>>();
+    , messageHelper_(prefix, adId) {
+    logger_.debug("%s: prefix = %s adId = %s", __PRETTY_FUNCTION__,
+                  prefix_.c_str(), adId_.c_str());
+    loadingCapped_ = false;
+    loader_ = std::make_unique<AsyncHelper<bool>>();
 
     bridge_.registerHandler(
         [this](const std::string& message) { //
@@ -57,15 +58,17 @@ Self::InterstitialAd(
         messageHelper_.onClicked());
     bridge_.registerHandler(
         [this](const std::string& message) { //
-            onClosed();
+            auto result = resultParser_(message);
+            onClosed(result);
         },
         messageHelper_.onClosed());
 }
 
-Self::~InterstitialAd() = default;
+Self::~DefaultFullScreenAd() = default;
 
 void Self::destroy() {
-    logger_.debug("%s: adId = %s", __PRETTY_FUNCTION__, adId_.c_str());
+    logger_.debug("%s: prefix = %s adId = %s", __PRETTY_FUNCTION__,
+                  prefix_.c_str(), adId_.c_str());
 
     bridge_.deregisterHandler(messageHelper_.onLoaded());
     bridge_.deregisterHandler(messageHelper_.onFailedToLoad());
@@ -73,8 +76,7 @@ void Self::destroy() {
     bridge_.deregisterHandler(messageHelper_.onClicked());
     bridge_.deregisterHandler(messageHelper_.onClosed());
 
-    auto succeeded = plugin_->destroyInterstitialAd(adId_);
-    assert(succeeded);
+    destroyer_();
 }
 
 bool Self::isLoaded() const {
@@ -83,9 +85,17 @@ bool Self::isLoaded() const {
 }
 
 Task<bool> Self::load() {
-    logger_.debug("%s: adId = %s loading = %s", __PRETTY_FUNCTION__,
-                  adId_.c_str(),
+    logger_.debug("%s: prefix = %s adId = %s loading = %s", __PRETTY_FUNCTION__,
+                  prefix_.c_str(), adId_.c_str(),
                   core::toString(loader_->isProcessing()).c_str());
+    if (loadingCapped_) {
+        co_return false;
+    }
+    loadingCapped_ = true;
+    noAwait([this]() -> Task<> {
+        co_await Delay(30.0f);
+        loadingCapped_ = false;
+    });
     auto result = co_await loader_->process(
         [this] { //
             bridge_.call(messageHelper_.load());
@@ -97,8 +107,8 @@ Task<bool> Self::load() {
 }
 
 Task<FullScreenAdResult> Self::show() {
-    logger_.debug("%s: adId = %s displaying = %s", __PRETTY_FUNCTION__,
-                  adId_.c_str(),
+    logger_.debug("%s: prefix = %s adId = %s displaying = %s",
+                  __PRETTY_FUNCTION__, prefix_.c_str(), adId_.c_str(),
                   core::toString(displayer_->isProcessing()).c_str());
     auto result = co_await displayer_->process(
         [this] { //
@@ -111,8 +121,8 @@ Task<FullScreenAdResult> Self::show() {
 }
 
 void Self::onLoaded() {
-    logger_.debug("%s: adId = %s loading = %s", __PRETTY_FUNCTION__,
-                  adId_.c_str(),
+    logger_.debug("%s: prefix = %s adId = %s loading = %s", __PRETTY_FUNCTION__,
+                  prefix_.c_str(), adId_.c_str(),
                   core::toString(loader_->isProcessing()).c_str());
     if (loader_->isProcessing()) {
         loader_->resolve(true);
@@ -129,8 +139,8 @@ void Self::onLoaded() {
 }
 
 void Self::onFailedToLoad(const std::string& message) {
-    logger_.debug("%s: adId = %s loading = %s message = %s",
-                  __PRETTY_FUNCTION__, adId_.c_str(),
+    logger_.debug("%s: prefix = %s adId = %s loading = %s message = %s",
+                  __PRETTY_FUNCTION__, prefix_.c_str(), adId_.c_str(),
                   core::toString(loader_->isProcessing()).c_str(),
                   message.c_str());
     if (loader_->isProcessing()) {
@@ -143,8 +153,8 @@ void Self::onFailedToLoad(const std::string& message) {
 }
 
 void Self::onFailedToShow(const std::string& message) {
-    logger_.debug("%s: adId = %s displaying = %s message = %s",
-                  __PRETTY_FUNCTION__, adId_.c_str(),
+    logger_.debug("%s: prefix = %s adId = %s displaying = %s message = %s",
+                  __PRETTY_FUNCTION__, prefix_.c_str(), adId_.c_str(),
                   core::toString(displayer_->isProcessing()).c_str(),
                   message.c_str());
     if (displayer_->isProcessing()) {
@@ -157,7 +167,8 @@ void Self::onFailedToShow(const std::string& message) {
 }
 
 void Self::onClicked() {
-    logger_.debug("%s: adId = %s", __PRETTY_FUNCTION__, adId_.c_str());
+    logger_.debug("%s: prefix = %s adId = %s", __PRETTY_FUNCTION__,
+                  prefix_.c_str(), adId_.c_str());
     dispatchEvent([](auto&& observer) {
         if (observer.onClicked) {
             observer.onClicked();
@@ -165,17 +176,17 @@ void Self::onClicked() {
     });
 }
 
-void Self::onClosed() {
-    logger_.debug("%s: adId = %s displaying = %s", __PRETTY_FUNCTION__,
-                  adId_.c_str(),
+void Self::onClosed(FullScreenAdResult result) {
+    logger_.debug("%s: prefix = %s adId = %s displaying = %s",
+                  __PRETTY_FUNCTION__, prefix_.c_str(), adId_.c_str(),
                   core::toString(displayer_->isProcessing()).c_str());
     if (displayer_->isProcessing()) {
-        displayer_->resolve(FullScreenAdResult::Completed);
+        displayer_->resolve(result);
     } else {
         logger_.error("%s: this ad is expected to be displaying",
                       __PRETTY_FUNCTION__);
         assert(false);
     }
 }
-} // namespace admob
+} // namespace ads
 } // namespace ee

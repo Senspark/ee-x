@@ -10,7 +10,6 @@ namespace iron_source {
 enum class BannerAdSize;
 class IBridge;
 class Bridge;
-class BannerAd;
 class InterstitialAd;
 class RewardedAd;
 } // namespace iron_source

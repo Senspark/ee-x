@@ -26,7 +26,6 @@ public:
     createRewardedAd(const std::string& adId) override;
 
 private:
-    friend BannerAd;
     friend InterstitialAd;
     friend RewardedAd;
 

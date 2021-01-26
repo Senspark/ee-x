@@ -1,5 +1,6 @@
 #include "ee/iron_source/private/IronSourceBridge.hpp"
 
+#include <ee/ads/internal/DefaultBannerAd.hpp>
 #include <ee/ads/internal/GuardedBannerAd.hpp>
 #include <ee/ads/internal/GuardedFullScreenAd.hpp>
 #include <ee/ads/internal/IAsyncHelper.hpp>
@@ -10,7 +11,6 @@
 #include <ee/core/Utils.hpp>
 #include <ee/nlohmann/json.hpp>
 
-#include "ee/iron_source/private/IronSourceBannerAd.hpp"
 #include "ee/iron_source/private/IronSourceInterstitialAd.hpp"
 #include "ee/iron_source/private/IronSourceRewardedAd.hpp"
 
@@ -160,7 +160,12 @@ std::shared_ptr<IBannerAd> Self::createBannerAd(const std::string& adId,
     }
     auto size = getBannerAdSize(adSize);
     bannerAd_ = std::make_shared<ads::GuardedBannerAd>(
-        std::make_shared<BannerAd>(bridge_, logger_, this, adId, size));
+        std::make_shared<ads::DefaultBannerAd>(
+            "AdMobBannerAd", bridge_, logger_,
+            [this, adId] { //
+                destroyBannerAd(adId);
+            },
+            adId, size));
     return bannerAd_;
 }
 

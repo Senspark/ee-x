@@ -1,5 +1,6 @@
 package com.ee.internal
 
+import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Serializer
@@ -15,6 +16,7 @@ enum class ProductType {
     NonConsumable,
     Subscription;
 
+    @ExperimentalSerializationApi
     @Serializer(forClass = ProductType::class)
     companion object : KSerializer<ProductType> {
         override val descriptor: SerialDescriptor

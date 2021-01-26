@@ -5,6 +5,7 @@ import {
     IFullScreenAd,
 } from "../../ads";
 import {
+    DefaultFullScreenAd,
     GuardedBannerAd,
     GuardedFullScreenAd,
     IAsyncHelper,
@@ -17,8 +18,6 @@ import {
 import { AdMobBannerAdSize } from "../AdMobBannerAdSIze";
 import { IAdMob } from "../IAdMob";
 import { AdMobBannerAd } from "./AdMobBannerAd";
-import { AdMobInterstitialAd } from "./AdMobInterstitialAd";
-import { AdMobRewardedAd } from "./AdMobRewardedAd";
 
 export class AdMob implements IAdMob {
     private readonly kPrefix = "AdMobBridge";
@@ -96,20 +95,29 @@ export class AdMob implements IAdMob {
     }
 
     public createAppOpenAd(adId: string): IFullScreenAd {
-        // FIXME.
-        throw new Error(`Not supported`);
-        // return this.createFullScreenAd(this.kCreateAppOpenAd, adId,
-        //     () => new AdMobAppOpenAd(this._bridge, this._displayer, this, adId));
+        return this.createFullScreenAd(this.kCreateAppOpenAd, adId, () =>
+            new DefaultFullScreenAd("AdMobAppOpenAd", this._bridge, this._displayer,
+                () => this.destroyAd(this.kDestroyAppOpenAd, adId),
+                _ => FullScreenAdResult.Completed,
+                adId))
     }
 
     public createInterstitialAd(adId: string): IFullScreenAd {
-        return this.createFullScreenAd(this.kCreateInterstitialAd, adId,
-            () => new AdMobInterstitialAd(this._bridge, this._displayer, this, adId));
+        return this.createFullScreenAd(this.kCreateInterstitialAd, adId, () =>
+            new DefaultFullScreenAd("AdMobInterstitialAd", this._bridge, this._displayer,
+                () => this.destroyAd(this.kDestroyInterstitialAd, adId),
+                _ => FullScreenAdResult.Completed,
+                adId))
     }
 
     public createRewardedAd(adId: string): IFullScreenAd {
-        return this.createFullScreenAd(this.kCreateRewardedAd, adId,
-            () => new AdMobRewardedAd(this._bridge, this._displayer, this, adId));
+        return this.createFullScreenAd(this.kCreateRewardedAd, adId, () =>
+            new DefaultFullScreenAd("AdMobRewardedAd", this._bridge, this._displayer,
+                () => this.destroyAd(this.kDestroyRewardedAd, adId),
+                message => Utils.toBool(message)
+                    ? FullScreenAdResult.Completed
+                    : FullScreenAdResult.Canceled,
+                adId))
     }
 
     private createFullScreenAd(handlerId: string, adId: string, creator: () => IFullScreenAd): IFullScreenAd {
@@ -127,18 +135,6 @@ export class AdMob implements IAdMob {
 
     public destroyBannerAd(adId: string): boolean {
         return this.destroyAd(this.kDestroyBannerAd, adId);
-    }
-
-    public destroyAppOpenAd(adId: string): boolean {
-        return this.destroyAd(this.kDestroyAppOpenAd, adId);
-    }
-
-    public destroyInterstitialAd(adId: string): boolean {
-        return this.destroyAd(this.kDestroyInterstitialAd, adId);
-    }
-
-    public destroyRewardedAd(adId: string): boolean {
-        return this.destroyAd(this.kDestroyRewardedAd, adId);
     }
 
     private destroyAd(handlerId: string, adId: string): boolean {

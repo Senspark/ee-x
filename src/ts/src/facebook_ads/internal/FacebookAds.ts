@@ -5,6 +5,7 @@ import {
     IFullScreenAd,
 } from "../../ads";
 import {
+    DefaultFullScreenAd,
     GuardedBannerAd,
     GuardedFullScreenAd,
     IAsyncHelper,
@@ -17,8 +18,6 @@ import {
 import { FacebookBannerAdSize } from "../FacebookBannerAdSize";
 import { IFacebookAds } from "../IFacebookAds";
 import { FacebookBannerAd } from "./FacebookBannerAd";
-import { FacebookInterstitialAd } from "./FacebookInterstitialAd";
-import { FacebookRewardedAd } from "./FacebookRewardedAd";
 
 export class FacebookAds implements IFacebookAds {
     private readonly kPrefix = "FacebookAdsBridge";
@@ -100,13 +99,21 @@ export class FacebookAds implements IFacebookAds {
     }
 
     public createInterstitialAd(adId: string): IFullScreenAd {
-        return this.createFullScreenAd(this.kCreateInterstitialAd, adId,
-            () => new FacebookInterstitialAd(this._bridge, this._displayer, this, adId));
+        return this.createFullScreenAd(this.kCreateInterstitialAd, adId, () =>
+            new DefaultFullScreenAd("FacebookInterstitialAd", this._bridge, this._displayer,
+                () => this.destroyAd(this.kDestroyInterstitialAd, adId),
+                _ => FullScreenAdResult.Completed,
+                adId))
     }
 
     public createRewardedAd(adId: string): IFullScreenAd {
-        return this.createFullScreenAd(this.kCreateRewardedAd, adId,
-            () => new FacebookRewardedAd(this._bridge, this._displayer, this, adId));
+        return this.createFullScreenAd(this.kCreateRewardedAd, adId, () =>
+            new DefaultFullScreenAd("FacebookRewardedAd", this._bridge, this._displayer,
+                () => this.destroyAd(this.kDestroyRewardedAd, adId),
+                message => Utils.toBool(message)
+                    ? FullScreenAdResult.Completed
+                    : FullScreenAdResult.Canceled,
+                adId))
     }
 
     private createFullScreenAd(handlerId: string, adId: string, creator: () => IFullScreenAd): IFullScreenAd {
@@ -124,14 +131,6 @@ export class FacebookAds implements IFacebookAds {
 
     public destroyBannerAd(adId: string): boolean {
         return this.destroyAd(this.kDestroyBannerAd, adId);
-    }
-
-    public destroyInterstitialAd(adId: string): boolean {
-        return this.destroyAd(this.kDestroyInterstitialAd, adId);
-    }
-
-    public destroyRewardedAd(adId: string): boolean {
-        return this.destroyAd(this.kDestroyRewardedAd, adId);
     }
 
     private destroyAd(handlerId: string, adId: string): boolean {

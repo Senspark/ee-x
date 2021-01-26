@@ -5,6 +5,7 @@ import {
     IFullScreenAd,
 } from "../../ads";
 import {
+    DefaultBannerAd,
     DefaultFullScreenAd,
     GuardedBannerAd,
     GuardedFullScreenAd,
@@ -17,7 +18,6 @@ import {
 } from "../../core";
 import { FacebookBannerAdSize } from "../FacebookBannerAdSize";
 import { IFacebookAds } from "../IFacebookAds";
-import { FacebookBannerAd } from "./FacebookBannerAd";
 
 export class FacebookAds implements IFacebookAds {
     private readonly kPrefix = "FacebookAdsBridge";
@@ -93,7 +93,10 @@ export class FacebookAds implements IFacebookAds {
             throw new Error(`Failed to create banner ad: ${adId}`);
         }
         const size = this.getBannerAdSize(adSize);
-        const ad = new GuardedBannerAd(new FacebookBannerAd(this._bridge, this, adId, size));
+        const ad = new GuardedBannerAd(
+            new DefaultBannerAd("FacebookBannerAd", this._bridge,
+                () => this.destroyAd(this.kDestroyBannerAd, adId),
+                adId, size));
         this._ads[adId] = ad;
         return ad;
     }
@@ -127,10 +130,6 @@ export class FacebookAds implements IFacebookAds {
         const ad = new GuardedFullScreenAd(creator());
         this._ads[adId] = ad;
         return ad;
-    }
-
-    public destroyBannerAd(adId: string): boolean {
-        return this.destroyAd(this.kDestroyBannerAd, adId);
     }
 
     private destroyAd(handlerId: string, adId: string): boolean {

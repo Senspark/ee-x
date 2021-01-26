@@ -1,34 +1,37 @@
 import {
-    AdObserver,
-    IBannerAd,
-} from "../../ads";
-import {
-    AsyncHelper,
-    BannerAdHelper,
-    IAsyncHelper,
-    MessageHelper,
-} from "../../ads/internal";
-import {
     IMessageBridge,
     ObserverManager,
 } from "../../core";
-import { AdMob } from "./AdMob";
+import { AdObserver } from "../IAd";
+import { IBannerAd } from "../IBannerAd";
+import { AsyncHelper } from "./AsyncHelper";
+import { BannerAdHelper } from "./BannerAdHelper";
+import { IAsyncHelper } from "./IAsyncHelper";
+import { MessageHelper } from "./MessageHelper";
 
-export class AdMobBannerAd extends ObserverManager<AdObserver> implements IBannerAd {
+type Destroyer = () => void;
+
+export class DefaultBannerAd extends ObserverManager<AdObserver> implements IBannerAd {
+    private readonly _prefix: string;
     private readonly _bridge: IMessageBridge;
-    private readonly _plugin: AdMob;
+    private readonly _destroyer: Destroyer;
     private readonly _adId: string;
     private readonly _messageHelper: MessageHelper;
     private readonly _helper: BannerAdHelper;
     private readonly _loader: IAsyncHelper<boolean>;
 
     public constructor(
-        bridge: IMessageBridge, plugin: AdMob, adId: string, size: [number, number]) {
+        prefix: string,
+        bridge: IMessageBridge,
+        destroyer: Destroyer,
+        adId: string,
+        size: [number, number]) {
         super();
+        this._prefix = prefix;
         this._bridge = bridge;
-        this._plugin = plugin;
+        this._destroyer = destroyer;
         this._adId = adId;
-        this._messageHelper = new MessageHelper("AdMobBannerAd", adId);
+        this._messageHelper = new MessageHelper(prefix, adId);
         this._helper = new BannerAdHelper(this._bridge, this._messageHelper, size);
         this._loader = new AsyncHelper<boolean>();
 
@@ -41,7 +44,7 @@ export class AdMobBannerAd extends ObserverManager<AdObserver> implements IBanne
         this._bridge.deregisterHandler(this._messageHelper.onLoaded);
         this._bridge.deregisterHandler(this._messageHelper.onFailedToLoad);
         this._bridge.deregisterHandler(this._messageHelper.onClicked);
-        this._plugin.destroyBannerAd(this._adId);
+        this._destroyer();
     }
 
     public get isLoaded(): boolean {

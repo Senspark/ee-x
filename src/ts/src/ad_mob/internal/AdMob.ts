@@ -5,6 +5,7 @@ import {
     IFullScreenAd,
 } from "../../ads";
 import {
+    DefaultBannerAd,
     DefaultFullScreenAd,
     GuardedBannerAd,
     GuardedFullScreenAd,
@@ -17,7 +18,6 @@ import {
 } from "../../core";
 import { AdMobBannerAdSize } from "../AdMobBannerAdSIze";
 import { IAdMob } from "../IAdMob";
-import { AdMobBannerAd } from "./AdMobBannerAd";
 
 export class AdMob implements IAdMob {
     private readonly kPrefix = "AdMobBridge";
@@ -89,7 +89,10 @@ export class AdMob implements IAdMob {
             throw new Error(`Failed to create banner ad: ${adId}`);
         }
         const size = this.getBannerAdSize(adSize);
-        const ad = new GuardedBannerAd(new AdMobBannerAd(this._bridge, this, adId, size));
+        const ad = new GuardedBannerAd(
+            new DefaultBannerAd("AdMobBannerAd", this._bridge,
+                () => this.destroyAd(this.kDestroyBannerAd, adId),
+                adId, size));
         this._ads[adId] = ad;
         return ad;
     }

@@ -8,8 +8,10 @@ namespace EE.Internal {
     using ResultParser = Func<string, FullScreenAdResult>;
 
     internal class DefaultFullScreenAd : ObserverManager<AdObserver>, IFullScreenAd {
+        private const string kTag = nameof(DefaultFullScreenAd);
         private readonly string _prefix;
         private readonly IMessageBridge _bridge;
+        private readonly ILogger _logger;
         private readonly IAsyncHelper<FullScreenAdResult> _displayer;
         private readonly Destroyer _destroyer;
         private readonly ResultParser _resultParser;
@@ -21,12 +23,14 @@ namespace EE.Internal {
         public DefaultFullScreenAd(
             string prefix,
             IMessageBridge bridge,
+            ILogger logger,
             IAsyncHelper<FullScreenAdResult> displayer,
             Destroyer destroyer,
             ResultParser resultParser,
             string adId) {
             _prefix = prefix;
             _bridge = bridge;
+            _logger = logger;
             _displayer = displayer;
             _destroyer = destroyer;
             _resultParser = resultParser;
@@ -35,6 +39,7 @@ namespace EE.Internal {
             _loadingCapped = false;
             _loader = new AsyncHelper<bool>();
 
+            _logger.Debug($"{kTag}: constructor: prefix = ${_prefix} id = ${_adId}");
             _bridge.RegisterHandler(_ => OnLoaded(), _messageHelper.OnLoaded);
             _bridge.RegisterHandler(OnFailedToLoad, _messageHelper.OnFailedToLoad);
             _bridge.RegisterHandler(OnFailedToShow, _messageHelper.OnFailedToShow);
@@ -46,6 +51,7 @@ namespace EE.Internal {
         }
 
         public void Destroy() {
+            _logger.Debug($"{kTag}: {nameof(Destroy)}: prefix = {_prefix} id = {_adId}");
             _bridge.DeregisterHandler(_messageHelper.OnLoaded);
             _bridge.DeregisterHandler(_messageHelper.OnFailedToLoad);
             _bridge.DeregisterHandler(_messageHelper.OnFailedToShow);
@@ -62,6 +68,7 @@ namespace EE.Internal {
         }
 
         public async Task<bool> Load() {
+            _logger.Debug($"{kTag}: {nameof(Load)}: prefix = {_prefix} id = {_adId} loading = {_loader.IsProcessing}");
             if (_loadingCapped) {
                 return false;
             }
@@ -78,6 +85,8 @@ namespace EE.Internal {
         }
 
         public Task<FullScreenAdResult> Show() {
+            _logger.Debug(
+                $"{kTag}: {nameof(Show)}: prefix = {_prefix} id = {_adId} displaying = {_displayer.IsProcessing}");
             return _displayer.Process(
                 () => _bridge.Call(_messageHelper.Show),
                 result => {
@@ -86,6 +95,8 @@ namespace EE.Internal {
         }
 
         private void OnLoaded() {
+            _logger.Debug(
+                $"{kTag}: {nameof(OnLoaded)}: prefix = {_prefix} id = {_adId} loading = {_loader.IsProcessing}");
             if (_loader.IsProcessing) {
                 _loader.Resolve(true);
             } else {
@@ -95,6 +106,8 @@ namespace EE.Internal {
         }
 
         private void OnFailedToLoad(string message) {
+            _logger.Debug(
+                $"{kTag}: {nameof(OnFailedToLoad)}: prefix = {_prefix} id = {_adId} loading = {_loader.IsProcessing} message = {message}");
             if (_loader.IsProcessing) {
                 _loader.Resolve(false);
             } else {
@@ -103,6 +116,8 @@ namespace EE.Internal {
         }
 
         private void OnFailedToShow(string message) {
+            _logger.Debug(
+                $"{kTag}: {nameof(OnFailedToLoad)}: prefix = {_prefix} id = {_adId} displaying = {_displayer.IsProcessing} message = {message}");
             if (_displayer.IsProcessing) {
                 _displayer.Resolve(FullScreenAdResult.Failed);
             } else {
@@ -111,10 +126,13 @@ namespace EE.Internal {
         }
 
         private void OnClicked() {
+            _logger.Debug($"{kTag}: {nameof(OnClicked)}: prefix = {_prefix} id = {_adId}");
             DispatchEvent(observer => observer.OnClicked?.Invoke());
         }
 
         private void OnClosed(FullScreenAdResult result) {
+            _logger.Debug(
+                $"{kTag}: {nameof(OnClosed)}: prefix = {_prefix} id = {_adId} displaying = {_displayer.IsProcessing}");
             if (_displayer.IsProcessing) {
                 _displayer.Resolve(result);
             } else {

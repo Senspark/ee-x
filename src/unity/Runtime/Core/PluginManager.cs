@@ -7,15 +7,18 @@ namespace EE {
     public static class PluginManager {
         private static readonly Dictionary<Type, (string, Func<IMessageBridge, ILogger, Action, IPlugin>)> _pluginInfo
             = new Dictionary<Type, (string, Func<IMessageBridge, ILogger, Action, IPlugin>)> {
-                [typeof(IAdColony)] = ("AdColony", (bridge, logger, destroyer) => new AdColony(bridge)),
-                [typeof(IAdjust)] = ("Adjust", (bridge, logger, destroyer) => new Adjust(bridge)),
-                [typeof(IAdMob)] = ("AdMob", (bridge, logger, destroyer) => new AdMob(bridge)),
-                [typeof(IFacebookAds)] = ("FacebookAds", (bridge, logger, destroyer) => new FacebookAds(bridge)),
+                [typeof(IAdColony)] = ("AdColony",
+                    (bridge, logger, destroyer) => new AdColony(bridge, logger, destroyer)),
+                [typeof(IAdjust)] = ("Adjust", (bridge, logger, destroyer) => new Adjust(bridge, logger, destroyer)),
+                [typeof(IAdMob)] = ("AdMob", (bridge, logger, destroyer) => new AdMob(bridge, logger, destroyer)),
+                [typeof(IFacebookAds)] = ("FacebookAds",
+                    (bridge, logger, destroyer) => new FacebookAds(bridge, logger, destroyer)),
                 [typeof(IFirebaseCrashlytics)] = ("FirebaseCrashlytics",
-                    (bridge, logger, destroyer) => new FirebaseCrashlytics(bridge)),
+                    (bridge, logger, destroyer) => new FirebaseCrashlytics(bridge, logger, destroyer)),
                 [typeof(IFirebasePerformance)] = ("FirebasePerformance",
-                    (bridge, logger, destroyer) => new FirebasePerformance(bridge)),
-                [typeof(IIronSource)] = ("IronSource", (bridge, logger, destroyer) => new IronSource(bridge)),
+                    (bridge, logger, destroyer) => new FirebasePerformance(bridge, logger, destroyer)),
+                [typeof(IIronSource)] = ("IronSource",
+                    (bridge, logger, destroyer) => new IronSource(bridge, logger, destroyer)),
                 [typeof(IUnityAds)] = ("UnityAds", (bridge, logger, destroyer) => new UnityAds(bridge))
             };
 

@@ -9,6 +9,7 @@ import { NotificationBuilder } from "../NotificationBuilder";
 type Destroyer = () => void;
 
 export class Notification implements INotification {
+    private readonly kTag = `Notification`;
     private readonly kPrefix = `NotificationBridge`;
     private readonly kSchedule = `${this.kPrefix}Schedule`;
     private readonly kUnschedule = `${this.kPrefix}Unschedule`;
@@ -22,9 +23,11 @@ export class Notification implements INotification {
         this._bridge = bridge;
         this._logger = logger;
         this._destroyer = destroyer;
+        this._logger.debug(`${this.kTag}: constructor`);
     }
 
     public destroy(): void {
+        this._logger.debug(`${this.kTag}: destroy`);
         this._destroyer();
     }
 

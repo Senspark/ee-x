@@ -7,6 +7,7 @@ import { IFirebaseCrashlytics } from "../IFirebaseCrashlytics";
 type Destroyer = () => void;
 
 export class FirebaseCrashlytics implements IFirebaseCrashlytics {
+    private readonly kTag = `FirebaseCrashlytics`;
     private readonly kPrefix = "FirebaseCrashlyticsBridge";
     private readonly kLog = this.kPrefix + "Log";
 
@@ -18,9 +19,11 @@ export class FirebaseCrashlytics implements IFirebaseCrashlytics {
         this._bridge = bridge;
         this._logger = logger;
         this._destroyer = destroyer;
+        this._logger.debug(`${this.kTag}: constructor`);
     }
 
     public destroy(): void {
+        this._logger.debug(`${this.kTag}: destroy`);
         this._destroyer();
     }
 

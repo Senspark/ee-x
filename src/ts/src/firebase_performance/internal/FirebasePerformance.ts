@@ -10,6 +10,7 @@ import { FirebasePerformanceTrace } from "./FirebasePerformanceTrace";
 type Destroyer = () => void;
 
 export class FirebasePerformance implements IFirebasePerformance {
+    private readonly kTag = `FirebasePerformance`;
     private readonly kPrefix = "FirebasePerformanceBridge";
     private readonly kSetDataCollectionEnabled = `${this.kPrefix}SetDataCollectionEnabled`;
     private readonly kIsDataCollectionEnabled = `${this.kPrefix}IsDataCollectionEnabled`;
@@ -23,9 +24,11 @@ export class FirebasePerformance implements IFirebasePerformance {
         this._bridge = bridge;
         this._logger = logger;
         this._destroyer = destroyer;
+        this._logger.debug(`${this.kTag}: constructor`);
     }
 
     public destroy(): void {
+        this._logger.debug(`${this.kTag}: destroy`);
         this._destroyer();
     }
 

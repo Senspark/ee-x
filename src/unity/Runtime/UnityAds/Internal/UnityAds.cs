@@ -6,7 +6,10 @@ using UnityEngine;
 using UnityEngine.Assertions;
 
 namespace EE.Internal {
+    using Destroyer = Action;
+
     public class UnityAds : IUnityAds {
+        private const string kTag = nameof(UnityAds);
         private const string kPrefix = "UnityAdsBridge";
         private const string kInitialize = kPrefix + "Initialize";
         private const string kSetDebugModeEnabled = kPrefix + "SetDebugModeEnabled";
@@ -18,6 +21,8 @@ namespace EE.Internal {
         private const string kOnClosed = kPrefix + "OnClosed";
 
         private readonly IMessageBridge _bridge;
+        private readonly ILogger _logger;
+        private readonly Destroyer _destroyer;
         private bool _displaying;
         private string _adId;
         private readonly Dictionary<string, (IAd, IAd)> _ads;
@@ -35,8 +40,11 @@ namespace EE.Internal {
             public bool rewarded;
         }
 
-        public UnityAds(IMessageBridge bridge) {
+        public UnityAds(IMessageBridge bridge, ILogger logger, Destroyer destroyer) {
             _bridge = bridge;
+            _logger = logger;
+            _destroyer = destroyer;
+            _logger.Debug($"{kTag}: constructor");
             _displaying = false;
             _ads = new Dictionary<string, (IAd, IAd)>();
             _displayer = MediationManager.Instance.AdDisplayer;
@@ -53,9 +61,11 @@ namespace EE.Internal {
         }
 
         public void Destroy() {
+            _logger.Debug($"{kTag}: constructor");
             _bridge.DeregisterHandler(kOnLoaded);
             _bridge.DeregisterHandler(kOnFailedToShow);
             _bridge.DeregisterHandler(kOnClosed);
+            _destroyer();
         }
 
         [Serializable]

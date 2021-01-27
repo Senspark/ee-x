@@ -23,6 +23,7 @@ import { IAdMob } from "../IAdMob";
 type Destroyer = () => void;
 
 export class AdMob implements IAdMob {
+    private readonly kTag = `AdMob`;
     private readonly kPrefix = "AdMobBridge";
     private readonly kInitialize = this.kPrefix + "Initialize";
     private readonly kGetEmulatorTestDeviceHash = this.kPrefix + "GetEmulatorTestDeviceHash";
@@ -49,13 +50,13 @@ export class AdMob implements IAdMob {
         this._bridge = bridge;
         this._logger = logger;
         this._destroyer = destroyer;
-        this._logger.debug(`AdMob: constructor`);
+        this._logger.debug(`${this.kTag}: constructor`);
         this._ads = {};
         this._displayer = MediationManager.getInstance().adDisplayer;
     }
 
     public destroy(): void {
-        this._logger.debug(`AdMob: destroy`);
+        this._logger.debug(`${this.kTag}: destroy`);
         for (const id in this._ads) {
             const ad = this._ads[id];
             ad.destroy();
@@ -87,7 +88,7 @@ export class AdMob implements IAdMob {
     }
 
     public createBannerAd(adId: string, adSize: AdMobBannerAdSize): IBannerAd {
-        this._logger.debug(`AdMob: createBannerAd: id = ${adId} size = ${adSize}`);
+        this._logger.debug(`${this.kTag}: createBannerAd: id = ${adId} size = ${adSize}`);
         if (this._ads[adId]) {
             return this._ads[adId] as IBannerAd;
         }
@@ -101,7 +102,7 @@ export class AdMob implements IAdMob {
         }
         const size = this.getBannerAdSize(adSize);
         const ad = new GuardedBannerAd(
-            new DefaultBannerAd("AdMobBannerAd", this._bridge,
+            new DefaultBannerAd("AdMobBannerAd", this._bridge, this._logger,
                 () => this.destroyAd(this.kDestroyBannerAd, adId),
                 adId, size));
         this._ads[adId] = ad;
@@ -110,7 +111,7 @@ export class AdMob implements IAdMob {
 
     public createAppOpenAd(adId: string): IFullScreenAd {
         return this.createFullScreenAd(this.kCreateAppOpenAd, adId, () =>
-            new DefaultFullScreenAd("AdMobAppOpenAd", this._bridge, this._displayer,
+            new DefaultFullScreenAd("AdMobAppOpenAd", this._bridge, this._logger, this._displayer,
                 () => this.destroyAd(this.kDestroyAppOpenAd, adId),
                 _ => FullScreenAdResult.Completed,
                 adId))
@@ -118,7 +119,7 @@ export class AdMob implements IAdMob {
 
     public createInterstitialAd(adId: string): IFullScreenAd {
         return this.createFullScreenAd(this.kCreateInterstitialAd, adId, () =>
-            new DefaultFullScreenAd("AdMobInterstitialAd", this._bridge, this._displayer,
+            new DefaultFullScreenAd("AdMobInterstitialAd", this._bridge, this._logger, this._displayer,
                 () => this.destroyAd(this.kDestroyInterstitialAd, adId),
                 _ => FullScreenAdResult.Completed,
                 adId))
@@ -126,7 +127,7 @@ export class AdMob implements IAdMob {
 
     public createRewardedAd(adId: string): IFullScreenAd {
         return this.createFullScreenAd(this.kCreateRewardedAd, adId, () =>
-            new DefaultFullScreenAd("AdMobRewardedAd", this._bridge, this._displayer,
+            new DefaultFullScreenAd("AdMobRewardedAd", this._bridge, this._logger, this._displayer,
                 () => this.destroyAd(this.kDestroyRewardedAd, adId),
                 message => Utils.toBool(message)
                     ? FullScreenAdResult.Completed
@@ -135,7 +136,7 @@ export class AdMob implements IAdMob {
     }
 
     private createFullScreenAd(handlerId: string, adId: string, creator: () => IFullScreenAd): IFullScreenAd {
-        this._logger.debug(`AdMob: createFullScreenAd: id = ${adId}`);
+        this._logger.debug(`${this.kTag}: createFullScreenAd: id = ${adId}`);
         if (this._ads[adId]) {
             return this._ads[adId] as IFullScreenAd;
         }
@@ -148,12 +149,8 @@ export class AdMob implements IAdMob {
         return ad;
     }
 
-    public destroyBannerAd(adId: string): boolean {
-        return this.destroyAd(this.kDestroyBannerAd, adId);
-    }
-
     private destroyAd(handlerId: string, adId: string): boolean {
-        this._logger.debug(`AdMob: destroyAd: id = ${adId}`);
+        this._logger.debug(`${this.kTag}: destroyAd: id = ${adId}`);
         if (!this._ads[adId]) {
             return false;
         }

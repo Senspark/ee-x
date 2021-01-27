@@ -5,7 +5,10 @@ using UnityEngine;
 using UnityEngine.Assertions;
 
 namespace EE.Internal {
+    using Destroyer = Action;
+
     internal class IronSource : IIronSource {
+        private const string kTag = nameof(IronSource);
         private const string kPrefix = "IronSourceBridge";
         private const string kInitialize = kPrefix + "Initialize";
         private const string kGetBannerAdSize = kPrefix + "GetBannerAdSize";
@@ -27,6 +30,8 @@ namespace EE.Internal {
         private const string kOnRewardedAdClosed = kPrefix + "OnRewardedAdClosed";
 
         private readonly IMessageBridge _bridge;
+        private readonly ILogger _logger;
+        private readonly Destroyer _destroyer;
         private IBannerAd _bannerAd;
         private IronSourceInterstitialAd _interstitialAd;
         private IFullScreenAd _sharedInterstitialAd;
@@ -34,8 +39,11 @@ namespace EE.Internal {
         private IFullScreenAd _sharedRewardedAd;
         private readonly IAsyncHelper<FullScreenAdResult> _displayer;
 
-        public IronSource(IMessageBridge bridge) {
+        public IronSource(IMessageBridge bridge, ILogger logger, Destroyer destroyer) {
             _bridge = bridge;
+            _logger = logger;
+            _destroyer = destroyer;
+            _logger.Debug($"{kTag}: constructor");
             _displayer = MediationManager.Instance.AdDisplayer;
 
             _bridge.RegisterHandler(_ => OnInterstitialAdLoaded(), kOnInterstitialAdLoaded);
@@ -50,6 +58,7 @@ namespace EE.Internal {
         }
 
         public void Destroy() {
+            _logger.Debug($"{kTag}: constructor");
             _bridge.DeregisterHandler(kOnInterstitialAdLoaded);
             _bridge.DeregisterHandler(kOnInterstitialAdFailedToLoad);
             _bridge.DeregisterHandler(kOnInterstitialAdFailedToShow);
@@ -59,6 +68,7 @@ namespace EE.Internal {
             _bridge.DeregisterHandler(kOnRewardedAdFailedToShow);
             _bridge.DeregisterHandler(kOnRewardedAdClicked);
             _bridge.DeregisterHandler(kOnRewardedAdClosed);
+            _destroyer();
         }
 
         public async Task<bool> Initialize(string appKey) {
@@ -85,6 +95,7 @@ namespace EE.Internal {
         }
 
         public IBannerAd CreateBannerAd(string adId, IronSourceBannerAdSize adSize) {
+            _logger.Debug($"${kTag}: {nameof(CreateBannerAd)}: id = {adId} size = {adSize}");
             if (_bannerAd != null) {
                 return _bannerAd;
             }
@@ -98,11 +109,13 @@ namespace EE.Internal {
                 return null;
             }
             var size = GetBannerAdSize(adSize);
-            _bannerAd = new GuardedBannerAd(new IronSourceBannerAd(_bridge, this, adId, size));
+            _bannerAd = new GuardedBannerAd(new DefaultBannerAd("IronSourceBannerAd", _bridge, _logger,
+                () => DestroyBannerAd(adId), adId, size));
             return _bannerAd;
         }
 
-        internal bool DestroyBannerAd(string adId) {
+        private bool DestroyBannerAd(string adId) {
+            _logger.Debug($"${kTag}: {nameof(DestroyBannerAd)}: id = {adId}");
             if (_bannerAd == null) {
                 return false;
             }
@@ -116,6 +129,7 @@ namespace EE.Internal {
         }
 
         public IFullScreenAd CreateInterstitialAd(string adId) {
+            _logger.Debug($"${kTag}: {nameof(CreateInterstitialAd)}: id = {adId}");
             if (_sharedInterstitialAd != null) {
                 return _sharedInterstitialAd;
             }
@@ -125,6 +139,7 @@ namespace EE.Internal {
         }
 
         internal bool DestroyInterstitialAd(string adId) {
+            _logger.Debug($"${kTag}: {nameof(DestroyInterstitialAd)}: id = {adId}");
             if (_sharedInterstitialAd == null) {
                 return false;
             }
@@ -143,6 +158,7 @@ namespace EE.Internal {
         }
 
         internal bool DestroyRewardedAd(string adId) {
+            _logger.Debug($"${kTag}: {nameof(DestroyRewardedAd)}: id = {adId}");
             if (_sharedRewardedAd == null) {
                 return false;
             }

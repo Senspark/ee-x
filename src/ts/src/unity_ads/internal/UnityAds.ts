@@ -20,6 +20,7 @@ import { UnityRewardedAd } from "./UnityRewardedAd";
 type Destroyer = () => void;
 
 export class UnityAds implements IUnityAds {
+    private readonly kTag = `UnityAds;`
     private readonly kPrefix = "UnityAdsBridge";
     private readonly kInitialize = this.kPrefix + "Initialize";
     private readonly kSetDebugModeEnabled = this.kPrefix + "SetDebugModeEnabled";
@@ -46,6 +47,7 @@ export class UnityAds implements IUnityAds {
         this._ads = {};
         this._displayer = MediationManager.getInstance().adDisplayer;
 
+        this._logger.debug(`${this.kTag}: constructor`);
         this._bridge.registerHandler(this.onLoaded, this.kOnLoaded);
         this._bridge.registerHandler(message => {
             const response: {
@@ -64,6 +66,7 @@ export class UnityAds implements IUnityAds {
     }
 
     public destroy(): void {
+        this._logger.debug(`${this.kTag}: destroy`);
         this._bridge.deregisterHandler(this.kOnLoaded);
         this._bridge.deregisterHandler(this.kOnFailedToShow);
         this._bridge.deregisterHandler(this.kOnClosed);

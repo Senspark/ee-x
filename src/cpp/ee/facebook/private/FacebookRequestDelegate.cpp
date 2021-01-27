@@ -8,7 +8,6 @@
 #include "ee/facebook/private/FacebookRequestDelegate.hpp"
 
 #include <ee/core/IMessageBridge.hpp>
-#include <ee/core/Thread.hpp>
 #include <ee/nlohmann/json.hpp>
 
 namespace ee {

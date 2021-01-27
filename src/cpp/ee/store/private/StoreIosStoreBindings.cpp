@@ -8,7 +8,6 @@
 #include "ee/store/private/StoreIosStoreBindings.hpp"
 
 #include <ee/core/IMessageBridge.hpp>
-#include <ee/core/Thread.hpp>
 #include <ee/core/Utils.hpp>
 #include <ee/nlohmann/json.hpp>
 

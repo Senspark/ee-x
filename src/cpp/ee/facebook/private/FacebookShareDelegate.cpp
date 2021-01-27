@@ -8,7 +8,6 @@
 #include "ee/facebook/private/FacebookShareDelegate.hpp"
 
 #include <ee/core/IMessageBridge.hpp>
-#include <ee/core/Thread.hpp>
 
 namespace ee {
 namespace facebook {

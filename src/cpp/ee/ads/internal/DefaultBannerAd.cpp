@@ -11,7 +11,6 @@
 
 #include <ee/core/ILogger.hpp>
 #include <ee/core/IMessageBridge.hpp>
-#include <ee/core/Thread.hpp>
 #include <ee/core/Utils.hpp>
 
 #include "ee/ads/internal/AsyncHelper.hpp"

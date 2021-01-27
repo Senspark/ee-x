@@ -8,7 +8,6 @@
 #include "ee/facebook/private/FacebookLoginDelegate.hpp"
 
 #include <ee/core/IMessageBridge.hpp>
-#include <ee/core/Thread.hpp>
 #include <ee/core/internal/SharedPtrUtils.hpp>
 #include <ee/nlohmann/json.hpp>
 

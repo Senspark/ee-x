@@ -182,12 +182,11 @@ extern "C" {
 void ee_staticLog(const char* message);
 } // extern "C"
 
-void log(const LogLevel& level, const std::string& tag,
-         const std::string& message) {
+void log(LogLevel level, const std::string& tag, const std::string& message) {
     std::string buffer;
-    auto&& tag = getLogLevelTag(level);
-    buffer.reserve(tag.size() + 1 + tag.size() + 1 + message.size());
-    buffer += tag;
+    auto&& desc = getLogLevelTag(level);
+    buffer.reserve(desc.size() + 1 + tag.size() + 1 + message.size());
+    buffer += desc;
     buffer += " ";
     buffer += tag;
     buffer += " ";

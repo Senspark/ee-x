@@ -98,6 +98,15 @@ void ee_staticRemovePlugin(const char* name);
 using Self = PluginManagerUtils;
 
 void Self::initializePlugins(const std::string& version) {
+#if defined(EE_X_ANDROID)
+    // Must set JavaVM and activity first.
+    auto vm = cocos2d::JniHelper::getJavaVM();
+    JniUtils::setVm(vm);
+
+    auto activity = cocos2d::JniHelper::getActivity();
+    setActivity(activity);
+#endif // defined(EE_X_ANDROID)
+
     ee_staticInitializePlugins(version.c_str());
 }
 

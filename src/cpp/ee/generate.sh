@@ -4,6 +4,7 @@ $(find ./ad_mob               -type f | sed "s/^/  \${CMAKE_CURRENT_LIST_DIR}\//
 $(find ./adjust               -type f | sed "s/^/  \${CMAKE_CURRENT_LIST_DIR}\//")\n\
 $(find ./ads                  -type f | sed "s/^/  \${CMAKE_CURRENT_LIST_DIR}\//")\n\
 $(find ./app_lovin            -type f | sed "s/^/  \${CMAKE_CURRENT_LIST_DIR}\//")\n\
+$(find ./apps_flyer           -type f | sed "s/^/  \${CMAKE_CURRENT_LIST_DIR}\//")\n\
 $(find ./cocos                -type f | sed "s/^/  \${CMAKE_CURRENT_LIST_DIR}\//")\n\
 $(find ./core                 -type f | sed "s/^/  \${CMAKE_CURRENT_LIST_DIR}\//")\n\
 $(find ./facebook             -type f | sed "s/^/  \${CMAKE_CURRENT_LIST_DIR}\//")\n\

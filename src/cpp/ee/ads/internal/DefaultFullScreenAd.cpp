@@ -7,6 +7,8 @@
 
 #include "ee/ads/internal/DefaultFullScreenAd.hpp"
 
+#include <cassert>
+
 #include <ee/core/Delay.hpp>
 #include <ee/core/ILogger.hpp>
 #include <ee/core/IMessageBridge.hpp>

@@ -153,15 +153,6 @@ std::shared_ptr<IPluginManagerImpl> Self::impl_;
 std::shared_ptr<Logger> Self::logger_;
 
 void Self::initializePlugins() {
-#if defined(EE_X_ANDROID)
-    // Must set JavaVM and activity first.
-    auto vm = cocos2d::JniHelper::getJavaVM();
-    JniUtils::setVm(vm);
-
-    auto activity = cocos2d::JniHelper::getActivity();
-    setActivity(activity);
-#endif // defined(EE_X_ANDROID)
-
     PluginManagerUtils::initializePlugins("2.3.1");
     logger_ = std::make_shared<Logger>("ee-x");
 
@@ -181,10 +172,9 @@ std::shared_ptr<T> Self::createPlugin() {
     auto&& name = PluginInfo<T>::Name;
     PluginManagerUtils::addPlugin(name);
     using Bridge = typename PluginInfo<T>::Bridge;
-    auto instance =
-        std::make_shared<Bridge>(getBridge(), *logger_, [plugin] { //
-            PluginManagerUtils::removePlugin(name);
-        });
+    auto instance = std::make_shared<Bridge>(getBridge(), *logger_, [] { //
+        PluginManagerUtils::removePlugin(name);
+    });
     return instance;
 }
 

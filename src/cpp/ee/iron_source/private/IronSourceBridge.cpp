@@ -161,7 +161,7 @@ std::shared_ptr<IBannerAd> Self::createBannerAd(const std::string& adId,
     auto size = getBannerAdSize(adSize);
     bannerAd_ = std::make_shared<ads::GuardedBannerAd>(
         std::make_shared<ads::DefaultBannerAd>(
-            "AdMobBannerAd", bridge_, logger_,
+            "IronSourceBannerAd", bridge_, logger_,
             [this, adId] { //
                 destroyBannerAd(adId);
             },

@@ -10,6 +10,7 @@ import {
     MediationManager,
 } from "../../ads/internal";
 import {
+    ILogger,
     IMessageBridge,
     Utils,
 } from "../../core";
@@ -18,6 +19,8 @@ import { IronSourceBannerAdSize } from "../IronSourceBannerAdSize";
 import { IronSourceBannerAd } from "./IronSourceBannerAd";
 import { IronSourceInterstitialAd } from "./IronSourceInterstitialAd";
 import { IronSourceRewardedAd } from "./IronSourceRewardedAd";
+
+type Destroyer = () => void;
 
 export class IronSource implements IIronSource {
     private readonly kPrefix = `IronSourceBridge`;
@@ -41,6 +44,8 @@ export class IronSource implements IIronSource {
     private readonly kOnRewardedAdClosed = `${this.kPrefix}OnRewardedAdClosed`;
 
     private readonly _bridge: IMessageBridge;
+    private readonly _logger: ILogger;
+    private readonly _destroyer: Destroyer;
     private _bannerAd?: IBannerAd;
     private _interstitialAd?: IronSourceInterstitialAd;
     private _sharedInterstitialAd?: IFullScreenAd;
@@ -48,8 +53,10 @@ export class IronSource implements IIronSource {
     private _sharedRewardedAd?: IFullScreenAd;
     private readonly _displayer: IAsyncHelper<FullScreenAdResult>;
 
-    public constructor(bridge: IMessageBridge) {
+    public constructor(bridge: IMessageBridge, logger: ILogger, destroyer: Destroyer) {
         this._bridge = bridge;
+        this._logger = logger;
+        this._destroyer = destroyer;
         this._displayer = MediationManager.getInstance().adDisplayer;
 
         this._bridge.registerHandler(_ => this.onInterstitialAdLoaded(), this.kOnInterstitialAdLoaded);

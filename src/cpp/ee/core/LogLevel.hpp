@@ -11,26 +11,17 @@
 
 #ifdef __cplusplus
 
-#include <string>
-
 #include "ee/core/CoreFwd.hpp"
 
 namespace ee {
 namespace core {
-struct LogLevel {
-    static const LogLevel Verbose;
-    static const LogLevel Debug;
-    static const LogLevel Info;
-    static const LogLevel Warn;
-    static const LogLevel Error;
-    static const LogLevel Assert;
-
-    // Log level priorities are specified here:
-    // https://developer.android.com/reference/android/util/Log.html
-    explicit LogLevel(int priority, const std::string& desc);
-
-    int priority;
-    std::string desc;
+enum class LogLevel {
+    Verbose,
+    Debug,
+    Info,
+    Warn,
+    Error,
+    Assert,
 };
 } // namespace core
 } // namespace ee

@@ -28,7 +28,7 @@ class IPlugin;
 class PluginManager;
 class IPluginManagerImpl;
 
-struct LogLevel;
+enum class LogLevel;
 class ILogger;
 class Logger;
 

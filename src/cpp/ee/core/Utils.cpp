@@ -132,10 +132,48 @@ std::string dumpBacktrace(size_t count) {
     return oss.str();
 }
 
+int getLogLevelPriority(LogLevel level) {
+    switch (level) {
+    case LogLevel::Verbose:
+        return 2;
+    case LogLevel::Debug:
+        return 3;
+    case LogLevel::Info:
+        return 4;
+    case LogLevel::Warn:
+        return 5;
+    case LogLevel::Error:
+        return 6;
+    case LogLevel::Assert:
+        return 7;
+    }
+    return 0;
+}
+
+namespace {
+std::string getLogLevelTag(LogLevel level) {
+    switch (level) {
+    case LogLevel::Verbose:
+        return "[VERBOSE]";
+    case LogLevel::Debug:
+        return "[DEBUG]";
+    case LogLevel::Info:
+        return "[INFO]";
+    case LogLevel::Warn:
+        return "[WARN]";
+    case LogLevel::Error:
+        return "[ERROR";
+    case LogLevel::Assert:
+        return "[ASSERT]";
+    }
+    return "";
+}
+} // namespace
+
 #ifdef EE_X_ANDROID
-void log(const LogLevel& level, const std::string& tag,
-         const std::string& message) {
-    __android_log_print(level.priority, tag.c_str(), "%s", message.c_str());
+void log(LogLevel level, const std::string& tag, const std::string& message) {
+    auto&& priority = getLogLevelPriority(level);
+    __android_log_print(priority, tag.c_str(), "%s", message.c_str());
 }
 #endif // EE_X_ANDROID
 
@@ -147,8 +185,9 @@ void ee_staticLog(const char* message);
 void log(const LogLevel& level, const std::string& tag,
          const std::string& message) {
     std::string buffer;
-    buffer.reserve(level.desc.size() + 1 + tag.size() + 1 + message.size());
-    buffer += level.desc;
+    auto&& tag = getLogLevelTag(level);
+    buffer.reserve(tag.size() + 1 + tag.size() + 1 + message.size());
+    buffer += tag;
     buffer += " ";
     buffer += tag;
     buffer += " ";

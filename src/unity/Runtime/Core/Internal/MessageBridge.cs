@@ -9,13 +9,11 @@ namespace EE.Internal {
     using MessageHandler = Action<string>;
 
     internal class MessageBridge : IMessageBridge {
-        public static MessageBridge Instance { get; } = new MessageBridge();
-
         private int _callbackCounter;
         private readonly Dictionary<string, MessageHandler> _handlers;
         private readonly IMessageBridgeImpl _impl;
 
-        private MessageBridge() {
+        public MessageBridge() {
             _callbackCounter = 0;
             _handlers = new Dictionary<string, MessageHandler>();
             _impl =

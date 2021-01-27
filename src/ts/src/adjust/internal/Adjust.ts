@@ -1,9 +1,12 @@
 import {
+    ILogger,
     IMessageBridge,
     Utils,
 } from "../../core";
 import { AdjustConfig } from "../AdjustConfig";
 import { IAdjust } from "../IAdjust";
+
+type Destroyer = () => void;
 
 export class Adjust implements IAdjust {
     private readonly kPrefix = "AdjustBridge";
@@ -15,12 +18,17 @@ export class Adjust implements IAdjust {
     private readonly kTrackEvent = this.kPrefix + "TrackEvent";
 
     private readonly _bridge: IMessageBridge;
+    private readonly _logger: ILogger;
+    private readonly _destroyer: Destroyer;
 
-    public constructor(bridge: IMessageBridge) {
+    public constructor(bridge: IMessageBridge, logger: ILogger, destroyer: Destroyer) {
         this._bridge = bridge;
+        this._logger = logger;
+        this._destroyer = destroyer;
     }
 
     public destroy(): void {
+        this._destroyer();
     }
 
     public initialize(config: AdjustConfig): void {

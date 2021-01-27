@@ -56,9 +56,10 @@ inline Dest bitCast(const Source& source) {
     return dest;
 }
 
+int getLogLevelPriority(LogLevel level);
+
 /// Logs a message using __android_log_print (Android) and NSLog (iOS).
-void log(const LogLevel& level, const std::string& tag,
-         const std::string& message);
+void log(LogLevel level, const std::string& tag, const std::string& message);
 
 std::string dumpBacktrace(size_t count);
 } // namespace core

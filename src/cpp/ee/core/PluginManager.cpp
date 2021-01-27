@@ -32,220 +32,125 @@
 #include "ee/core/Logger.hpp"
 #include "ee/core/Platform.hpp"
 #include "ee/core/Thread.hpp"
+#include "ee/core/Utils.hpp"
 #include "ee/core/internal/PluginManagerImplCpp.hpp"
 #include "ee/core/internal/PluginManagerImplJs.hpp"
-
-#ifdef EE_X_ANDROID
-#include <jni/JniHelper.h>
-
-#include "ee/core/internal/JniMethodInfo.hpp"
-#include "ee/core/internal/JniString.hpp"
-#include "ee/core/internal/JniUtils.hpp"
-#endif // EE_X_ANDROID
+#include "ee/core/internal/PluginManagerUtils.hpp"
 
 namespace ee {
 namespace core {
-namespace {
-std::unordered_map<Plugin, std::string> pluginNames_ = {{
-    {Plugin::AdColony, "AdColony"},
-    {Plugin::Adjust, "Adjust"},
-    {Plugin::AdMob, "AdMob"},
-    {Plugin::AppLovin, "AppLovin"},
-    {Plugin::AppsFlyer, "AppsFlyer"},
-    {Plugin::Facebook, "Facebook"},
-    {Plugin::FacebookAds, "FacebookAds"},
-    {Plugin::FirebaseCore, "FirebaseCore"},
-    {Plugin::FirebaseCrashlytics, "FirebaseCrashlytics"},
-    {Plugin::FirebasePerformance, "FirebasePerformance"},
-    {Plugin::GoogleAnalytics, "GoogleAnalytics"},
-    {Plugin::IronSource, "IronSource"},
-    {Plugin::Notification, "Notification"},
-    {Plugin::Play, "Play"},
-    {Plugin::Recorder, "Recorder"},
-    {Plugin::Store, "Store"},
-    {Plugin::UnityAds, "UnityAds"},
-    {Plugin::Vungle, "Vungle"},
-}};
-} // namespace
-
 template <class T>
-struct PluginParser;
+struct PluginInfo;
 
 template <>
-struct PluginParser<IAdColony> {
+struct PluginInfo<IAdColony> {
     using Bridge = ad_colony::Bridge;
+    static constexpr auto Name = "AdColony";
     static constexpr auto Plugin = Plugin::AdColony;
 };
 
 template <>
-struct PluginParser<IAdjust> {
+struct PluginInfo<IAdjust> {
     using Bridge = adjust::Bridge;
+    static constexpr auto Name = "Adjust";
     static constexpr auto Plugin = Plugin::Adjust;
 };
 
 template <>
-struct PluginParser<IAdMob> {
+struct PluginInfo<IAdMob> {
     using Bridge = ad_mob::Bridge;
+    static constexpr auto Name = "AdMob";
     static constexpr auto Plugin = Plugin::AdMob;
 };
 
 template <>
-struct PluginParser<IAppLovin> {
+struct PluginInfo<IAppLovin> {
     using Bridge = app_lovin::Bridge;
+    static constexpr auto Name = "AppLovin";
     static constexpr auto Plugin = Plugin::AppLovin;
 };
 
 template <>
-struct PluginParser<IAppsFlyer> {
+struct PluginInfo<IAppsFlyer> {
     using Bridge = apps_flyer::Bridge;
+    static constexpr auto Name = "AppsFlyer";
     static constexpr auto Plugin = Plugin::AppsFlyer;
 };
 
 template <>
-struct PluginParser<IFacebook> {
+struct PluginInfo<IFacebook> {
     using Bridge = facebook::Bridge;
+    static constexpr auto Name = "Facebook";
     static constexpr auto Plugin = Plugin::Facebook;
 };
 
 template <>
-struct PluginParser<IFacebookAds> {
+struct PluginInfo<IFacebookAds> {
     using Bridge = facebook_ads::Bridge;
+    static constexpr auto Name = "FacebookAds";
     static constexpr auto Plugin = Plugin::FacebookAds;
 };
 
 template <>
-struct PluginParser<IFirebaseCrashlytics> {
+struct PluginInfo<IFirebaseCrashlytics> {
     using Bridge = firebase::crashlytics::Bridge;
+    static constexpr auto Name = "FirebaseCrashlytics";
     static constexpr auto Plugin = Plugin::FirebaseCrashlytics;
 };
 
 template <>
-struct PluginParser<IFirebasePerformance> {
+struct PluginInfo<IFirebasePerformance> {
     using Bridge = firebase::performance::Bridge;
+    static constexpr auto Name = "FirebasePerformance";
     static constexpr auto Plugin = Plugin::FirebasePerformance;
 };
 
 template <>
-struct PluginParser<IIronSource> {
+struct PluginInfo<IIronSource> {
     using Bridge = iron_source::Bridge;
+    static constexpr auto Name = "IronSource";
     static constexpr auto Plugin = Plugin::IronSource;
 };
 
 template <>
-struct PluginParser<INotification> {
+struct PluginInfo<INotification> {
     using Bridge = notification::Bridge;
+    static constexpr auto Name = "Notification";
     static constexpr auto Plugin = Plugin::Notification;
 };
 
 template <>
-struct PluginParser<IPlay> {
+struct PluginInfo<IPlay> {
     using Bridge = play::Bridge;
+    static constexpr auto Name = "Play";
     static constexpr auto Plugin = Plugin::Play;
 };
 
 template <>
-struct PluginParser<IStore> {
+struct PluginInfo<IStore> {
     using Bridge = store::Bridge;
+    static constexpr auto Name = "Store";
     static constexpr auto Plugin = Plugin::Store;
 };
 
 template <>
-struct PluginParser<IUnityAds> {
+struct PluginInfo<IUnityAds> {
     using Bridge = unity_ads::Bridge;
+    static constexpr auto Name = "UnityAds";
     static constexpr auto Plugin = Plugin::UnityAds;
 };
 
 template <>
-struct PluginParser<IVungle> {
+struct PluginInfo<IVungle> {
     using Bridge = vungle::Bridge;
+    static constexpr auto Name = "Vungle";
     static constexpr auto Plugin = Plugin::Vungle;
 };
-
-#if defined(EE_X_ANDROID)
-extern "C" {
-JNIEXPORT void JNICALL Java_com_ee_PluginManagerKt_ee_1callCppInternal(
-    JNIEnv* env, jclass clazz, jstring tag, jstring message) {
-    auto tag_cpp = env->GetStringUTFChars(tag, nullptr);
-    auto message_cpp = env->GetStringUTFChars(message, nullptr);
-    std::string tagStr = tag_cpp;
-    std::string messageStr = message_cpp;
-    env->ReleaseStringUTFChars(tag, tag_cpp);
-    env->ReleaseStringUTFChars(message, message_cpp);
-    Thread::runOnLibraryThread([tagStr, messageStr] { //
-        PluginManager::getBridge().callCpp(tagStr, messageStr);
-    });
-}
-} // extern "C"
-
-void ee_staticInitializePlugins(const char* version) {
-    JniUtils::callStaticVoidMethod(   //
-        "com/ee/PluginManagerKt",     //
-        "ee_staticInitializePlugins", //
-        "(Ljava/lang/String;)V",      //
-        JniUtils::toJavaString(version)->get());
-}
-
-void ee_staticSetLogLevel(int level) {
-    JniUtils::callStaticVoidMethod( //
-        "com/ee/PluginManagerKt",   //
-        "ee_staticSetLogLevel",     //
-        "(I)V",                     //
-        level);
-}
-
-void* ee_staticGetActivity() {
-    return JniUtils::callStaticObjectMethod( //
-        "com/ee/PluginManagerKt",            //
-        "ee_staticGetActivity",              //
-        "()Ljava/lang/Object;");
-}
-
-void ee_staticSetActivity(void* activity) {
-    JniUtils::callStaticVoidMethod( //
-        "com/ee/PluginManagerKt",   //
-        "ee_staticSetActivity",     //
-        "(Ljava/lang/Object;)V",    //
-        activity);
-}
-
-void ee_staticAddPlugin(const char* name) {
-    JniUtils::callStaticVoidMethod("com/ee/PluginManagerKt", //
-                                   "ee_staticAddPlugin",     //
-                                   "(Ljava/lang/String;)V",  //
-                                   JniUtils::toJavaString(name)->get());
-}
-
-void ee_staticRemovePlugin(const char* name) {
-    JniUtils::callStaticVoidMethod("com/ee/PluginManagerKt", //
-                                   "ee_staticRemovePlugin",  //
-                                   "(Ljava/lang/String;)V",  //
-                                   JniUtils::toJavaString(name)->get());
-}
-#endif // EE_X_ANDROID
-
-#if defined(EE_X_IOS) || defined(EE_X_OSX)
-extern "C" {
-void ee_callCppInternal(const char* tag, const char* message) {
-    std::string tagStr = tag;
-    std::string messageStr = message;
-    Thread::runOnLibraryThread([tagStr, messageStr] { //
-        PluginManager::getBridge().callCpp(tagStr, messageStr);
-    });
-}
-
-void ee_staticInitializePlugins(const char* version);
-void ee_staticSetLogLevel(int level);
-void* ee_staticGetActivity();
-void ee_staticSetActivity(void* activity);
-void ee_staticAddPlugin(const char* name);
-void ee_staticRemovePlugin(const char* name);
-} // extern "C"
-#endif // defined(EE_X_IOS) || defined(EE_X_OSX)
 
 using Self = PluginManager;
 
 std::shared_ptr<IPluginManagerImpl> Self::impl_;
-std::shared_ptr<ILogger> Self::logger_;
+std::shared_ptr<Logger> Self::logger_;
 
 void Self::initializePlugins() {
 #if defined(EE_X_ANDROID)
@@ -257,7 +162,7 @@ void Self::initializePlugins() {
     setActivity(activity);
 #endif // defined(EE_X_ANDROID)
 
-    ee_staticInitializePlugins("2.3.1");
+    PluginManagerUtils::initializePlugins("2.3.1");
     logger_ = std::make_shared<Logger>("ee-x");
 
 #ifdef EE_X_COCOS_CPP
@@ -271,42 +176,37 @@ void Self::initializePlugins() {
     Platform::initialize(impl_->getBridge());
 }
 
-IMessageBridge& Self::getBridge() {
-    return impl_->getBridge();
-}
-
 template <class T>
 std::shared_ptr<T> Self::createPlugin() {
-    auto&& plugin = PluginParser<T>::Plugin;
-    addPlugin(plugin);
-    using Bridge = typename PluginParser<T>::Bridge;
+    auto&& name = PluginInfo<T>::Name;
+    PluginManagerUtils::addPlugin(name);
+    using Bridge = typename PluginInfo<T>::Bridge;
     auto instance =
         std::make_shared<Bridge>(getBridge(), *logger_, [plugin] { //
-            removePlugin(plugin);
+            PluginManagerUtils::removePlugin(name);
         });
     return instance;
 }
 
-void Self::setLogLevel(const LogLevel& level) {
-    ee_staticSetLogLevel(level.priority);
+IMessageBridge& Self::getBridge() {
+    return impl_->getBridge();
+}
+
+ILogger& Self::getLogger() {
+    return *logger_;
+}
+
+void Self::setLogLevel(LogLevel level) {
+    auto&& priority = getLogLevelPriority(level);
+    PluginManagerUtils::setLogLevel(priority);
 }
 
 void* Self::getActivity() {
-    return ee_staticGetActivity();
+    return PluginManagerUtils::getActivity();
 }
 
 void Self::setActivity(void* activity) {
-    ee_staticSetActivity(activity);
-}
-
-void Self::addPlugin(Plugin plugin) {
-    auto&& name = pluginNames_.at(plugin);
-    ee_staticAddPlugin(name.c_str());
-}
-
-void Self::removePlugin(Plugin plugin) {
-    auto&& name = pluginNames_.at(plugin);
-    ee_staticRemovePlugin(name.c_str());
+    PluginManagerUtils::setActivity(activity);
 }
 
 template std::shared_ptr<IAdColony> Self::createPlugin<IAdColony>();

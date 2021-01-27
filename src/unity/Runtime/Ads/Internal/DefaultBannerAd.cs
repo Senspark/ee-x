@@ -5,7 +5,7 @@ namespace EE.Internal {
     using Destroyer = Action;
 
     internal class DefaultBannerAd : ObserverManager<AdObserver>, IBannerAd {
-        private readonly string _adId;
+        private readonly string _prefix;
         private readonly IMessageBridge _bridge;
         private readonly Destroyer _destroyer;
         private readonly string _adId;
@@ -14,11 +14,16 @@ namespace EE.Internal {
         private readonly IAsyncHelper<bool> _loader;
 
         public DefaultBannerAd(
-            IMessageBridge bridge, AdMob plugin, string adId, (int, int) size) {
+            string prefix,
+            IMessageBridge bridge,
+            Destroyer destroyer,
+            string adId,
+            (int, int) size) {
+            _prefix = prefix;
             _bridge = bridge;
-            _plugin = plugin;
+            _destroyer = destroyer;
             _adId = adId;
-            _messageHelper = new MessageHelper("AdMobBannerAd", adId);
+            _messageHelper = new MessageHelper(prefix, adId);
             _helper = new BannerAdHelper(_bridge, _messageHelper, size);
             _loader = new AsyncHelper<bool>();
 
@@ -31,7 +36,7 @@ namespace EE.Internal {
             _bridge.DeregisterHandler(_messageHelper.OnLoaded);
             _bridge.DeregisterHandler(_messageHelper.OnFailedToLoad);
             _bridge.DeregisterHandler(_messageHelper.OnClicked);
-            _plugin.DestroyBannerAd(_adId);
+            _destroyer();
         }
 
         public bool IsLoaded => _helper.IsLoaded;
@@ -63,8 +68,6 @@ namespace EE.Internal {
             get => _helper.IsVisible;
             set => _helper.IsVisible = value;
         }
-
-        s
 
         private void OnLoaded() {
             if (_loader.IsProcessing) {

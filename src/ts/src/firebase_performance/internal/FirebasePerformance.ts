@@ -1,7 +1,13 @@
-import { IMessageBridge, Utils } from "../../core";
+import {
+    ILogger,
+    IMessageBridge,
+    Utils,
+} from "../../core";
 import { IFirebasePerformance } from "../IFirebasePerformance";
 import { IFirebasePerformanceTrace } from "../IFirebasePerformanceTrace";
 import { FirebasePerformanceTrace } from "./FirebasePerformanceTrace";
+
+type Destroyer = () => void;
 
 export class FirebasePerformance implements IFirebasePerformance {
     private readonly kPrefix = "FirebasePerformanceBridge";
@@ -10,12 +16,17 @@ export class FirebasePerformance implements IFirebasePerformance {
     private readonly kNewTrace = `${this.kPrefix}NewTrace`;
 
     private readonly _bridge: IMessageBridge;
+    private readonly _logger: ILogger;
+    private readonly _destroyer: Destroyer;
 
-    public constructor(bridge: IMessageBridge) {
+    public constructor(bridge: IMessageBridge, logger: ILogger, destroyer: Destroyer) {
         this._bridge = bridge;
+        this._logger = logger;
+        this._destroyer = destroyer;
     }
 
     public destroy(): void {
+        this._destroyer();
     }
 
     public get isDataCollectionEnabled(): boolean {

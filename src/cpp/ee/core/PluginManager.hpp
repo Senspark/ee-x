@@ -43,15 +43,18 @@ public:
     /// Must be called first.
     static void initializePlugins();
 
-    /// Gets the current message bridge.
-    static IMessageBridge& getBridge();
-
     template <class T>
     static std::shared_ptr<T> createPlugin();
 
+    /// Gets the current message bridge.
+    static IMessageBridge& getBridge();
+
+    /// Gets the current logger.
+    static ILogger& getLogger();
+
     /// Sets the log level for the logger on Android/iOS.
     /// @param level The desired log level.
-    static void setLogLevel(const LogLevel& level);
+    static void setLogLevel(LogLevel level);
 
     /// Gets the current activity.
     static void* getActivity();
@@ -60,11 +63,8 @@ public:
     static void setActivity(void* activity);
 
 private:
-    static void addPlugin(Plugin plugin);
-    static void removePlugin(Plugin plugin);
-
     static std::shared_ptr<IPluginManagerImpl> impl_;
-    static std::shared_ptr<ILogger> logger_;
+    static std::shared_ptr<Logger> logger_;
 };
 } // namespace core
 } // namespace ee

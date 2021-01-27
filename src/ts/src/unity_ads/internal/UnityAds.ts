@@ -9,12 +9,15 @@ import {
     MediationManager,
 } from "../../ads/internal";
 import {
+    ILogger,
     IMessageBridge,
     Utils,
 } from "../../core";
 import { IUnityAds } from "../IUnityAds";
 import { UnityInterstitialAd } from "./UnityInterstitialAd";
 import { UnityRewardedAd } from "./UnityRewardedAd";
+
+type Destroyer = () => void;
 
 export class UnityAds implements IUnityAds {
     private readonly kPrefix = "UnityAdsBridge";
@@ -28,13 +31,17 @@ export class UnityAds implements IUnityAds {
     private readonly kOnClosed = this.kPrefix + "OnClosed";
 
     private readonly _bridge: IMessageBridge;
+    private readonly _logger: ILogger;
+    private readonly _destroyer: Destroyer;
     private _displaying: boolean;
     private _adId?: string;
     private readonly _ads: { [index: string]: [IAd, IAd] };
     private readonly _displayer: IAsyncHelper<FullScreenAdResult>;
 
-    public constructor(bridge: IMessageBridge) {
+    public constructor(bridge: IMessageBridge, logger: ILogger, destroyer: Destroyer) {
         this._bridge = bridge;
+        this._logger = logger;
+        this._destroyer = destroyer;
         this._displaying = false;
         this._ads = {};
         this._displayer = MediationManager.getInstance().adDisplayer;
@@ -60,6 +67,7 @@ export class UnityAds implements IUnityAds {
         this._bridge.deregisterHandler(this.kOnLoaded);
         this._bridge.deregisterHandler(this.kOnFailedToShow);
         this._bridge.deregisterHandler(this.kOnClosed);
+        this._destroyer();
     }
 
     public async initialize(gameId: string, testModeEnabled: boolean): Promise<boolean> {

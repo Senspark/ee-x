@@ -1,6 +1,12 @@
-import { IMessageBridge, Platform } from "../../core";
+import {
+    ILogger,
+    IMessageBridge,
+    Platform,
+} from "../../core";
 import { INotification } from "../INotification";
 import { NotificationBuilder } from "../NotificationBuilder";
+
+type Destroyer = () => void;
 
 export class Notification implements INotification {
     private readonly kPrefix = `NotificationBridge`;
@@ -9,12 +15,17 @@ export class Notification implements INotification {
     private readonly kClearAll = `${this.kPrefix}ClearAll`;
 
     private readonly _bridge: IMessageBridge;
+    private readonly _logger: ILogger;
+    private readonly _destroyer: Destroyer;
 
-    public constructor(bridge: IMessageBridge) {
+    public constructor(bridge: IMessageBridge, logger: ILogger, destroyer: Destroyer) {
         this._bridge = bridge;
+        this._logger = logger;
+        this._destroyer = destroyer;
     }
 
     public destroy(): void {
+        this._destroyer();
     }
 
     public schedule(builder: NotificationBuilder): void {

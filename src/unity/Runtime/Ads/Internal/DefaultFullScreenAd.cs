@@ -18,7 +18,7 @@ namespace EE.Internal {
         private bool _loadingCapped;
         private readonly IAsyncHelper<bool> _loader;
 
-        public AdMobInterstitialAd(
+        public DefaultFullScreenAd(
             string prefix,
             IMessageBridge bridge,
             IAsyncHelper<FullScreenAdResult> displayer,

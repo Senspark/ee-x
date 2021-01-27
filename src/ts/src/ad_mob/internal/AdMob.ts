@@ -13,11 +13,14 @@ import {
     MediationManager,
 } from "../../ads/internal";
 import {
+    ILogger,
     IMessageBridge,
     Utils,
 } from "../../core";
 import { AdMobBannerAdSize } from "../AdMobBannerAdSIze";
 import { IAdMob } from "../IAdMob";
+
+type Destroyer = () => void;
 
 export class AdMob implements IAdMob {
     private readonly kPrefix = "AdMobBridge";
@@ -37,11 +40,15 @@ export class AdMob implements IAdMob {
     private readonly kDestroyRewardedAd = this.kPrefix + "DestroyRewardedAd";
 
     private readonly _bridge: IMessageBridge;
+    private readonly _logger: ILogger;
+    private readonly _destroyer: Destroyer;
     private readonly _ads: { [index: string]: IAd };
     private readonly _displayer: IAsyncHelper<FullScreenAdResult>;
 
-    public constructor(bridge: IMessageBridge) {
+    public constructor(bridge: IMessageBridge, logger: ILogger, destroyer: Destroyer) {
         this._bridge = bridge;
+        this._logger = logger;
+        this._destroyer = destroyer;
         this._ads = {};
         this._displayer = MediationManager.getInstance().adDisplayer;
     }
@@ -52,6 +59,7 @@ export class AdMob implements IAdMob {
             ad.destroy();
             delete this._ads[id];
         }
+        this._destroyer();
     }
 
     public async initialize(): Promise<boolean> {

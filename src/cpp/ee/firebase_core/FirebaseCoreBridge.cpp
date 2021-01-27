@@ -10,7 +10,7 @@
 
 #include <firebase/app.h>
 
-#include <ee/core/PluginManager.hpp>
+#include <ee/core/internal/PluginManagerUtils.hpp>
 
 #ifdef EE_X_ANDROID
 #include <ee/core/internal/JniUtils.hpp>
@@ -27,8 +27,7 @@ void Self::initialize() {
         return;
     }
 
-    // FIXME.
-    // PluginManager::addPlugin(Plugin::FirebaseCore);
+    ee::core::PluginManagerUtils::addPlugin("FirebaseCore");
 
     auto options = ::firebase::AppOptions();
 

@@ -11,7 +11,7 @@ export class MessageBridge implements IMessageBridge {
     private readonly _impl: IMessageBridgeImpl;
 
     public constructor() {
-        this._impl = new MessageBridgeImplNative(this.callCpp);
+        this._impl = new MessageBridgeImplNative();
     }
 
     public registerHandler(handler: MessageHandler, tag: string): void {

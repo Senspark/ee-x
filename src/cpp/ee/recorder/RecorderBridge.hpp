@@ -19,7 +19,7 @@ namespace recorder {
 class Bridge final : public IPlugin {
 public:
     Bridge();
-    ~Bridge();
+    virtual ~Bridge() override;
 
     virtual void destroy() override;
 

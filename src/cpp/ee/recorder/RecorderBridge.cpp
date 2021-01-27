@@ -8,6 +8,7 @@
 #include <ee/core/IMessageBridge.hpp>
 #include <ee/core/PluginManager.hpp>
 #include <ee/core/Utils.hpp>
+#include <ee/core/internal/PluginManagerUtils.hpp>
 
 namespace ee {
 namespace recorder {
@@ -27,13 +28,13 @@ using Self = Bridge;
 
 Self::Bridge()
     : bridge_(PluginManager::getBridge()) {
-    // FIXME.
-    // PluginManager::addPlugin(Plugin::Recorder);
+    core::PluginManagerUtils::addPlugin("Recorder");
 }
 
-Self::~Bridge() {
-    // FIXME.
-    // PluginManager::removePlugin(Plugin::Recorder);
+Self::~Bridge() = default;
+
+void Self::destroy() {
+    core::PluginManagerUtils::removePlugin("Recorder");
 }
 
 bool Self::isSupported() const {

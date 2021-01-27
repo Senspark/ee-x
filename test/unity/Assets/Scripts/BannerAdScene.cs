@@ -20,7 +20,8 @@ namespace EETest {
                     Debug.Log($"Move to top-left");
                     AdsManager.BannerAdAnchor = (0, 1);
                     AdsManager.BannerAdPosition = (0, height);
-                }));
+                })
+                .SetLoops(-1));
             _tweens.Add(DOTween.Sequence()
                 .SetDelay(4.0f)
                 .AppendInterval(8.0f)
@@ -28,7 +29,8 @@ namespace EETest {
                     Debug.Log($"Move to top-right");
                     AdsManager.BannerAdAnchor = (1, 1);
                     AdsManager.BannerAdPosition = (width, height);
-                }));
+                })
+                .SetLoops(-1));
             _tweens.Add(DOTween.Sequence()
                 .SetDelay(6.0f)
                 .AppendInterval(8.0f)
@@ -36,7 +38,8 @@ namespace EETest {
                     Debug.Log($"Move to bottom-right");
                     AdsManager.BannerAdAnchor = (1, 0);
                     AdsManager.BannerAdPosition = (width, 0);
-                }));
+                })
+                .SetLoops(-1));
             _tweens.Add(DOTween.Sequence()
                 .SetDelay(8.0f)
                 .AppendInterval(8.0f)
@@ -44,7 +47,8 @@ namespace EETest {
                     Debug.Log($"Move to bottom-left");
                     AdsManager.BannerAdAnchor = (0, 0);
                     AdsManager.BannerAdPosition = (0, 0);
-                }));
+                })
+                .SetLoops(-1));
         }
 
         private void OnDestroy() {

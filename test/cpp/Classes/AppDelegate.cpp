@@ -23,7 +23,7 @@
 
 namespace eetest {
 namespace {
-const auto DesignResolution = cocos2d::Size(480, 320);
+const auto DesignResolution = cocos2d::Size(320, 480);
 } // namespace
 
 AppDelegate::AppDelegate() {}

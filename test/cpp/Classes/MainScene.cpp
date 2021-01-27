@@ -45,20 +45,22 @@ bool Self::init() {
     setContentSize(winSize);
 
     auto testBannerAdButton = cocos2d::ui::Button::create();
-    testBannerAdButton->setContentSize(cocos2d::Size(200, 60));
+    testBannerAdButton->setContentSize(cocos2d::Size(250, 80));
     testBannerAdButton->setPosition(
-        cocos2d::Point(winSize.width / 2, winSize.height / 2 + 25));
+        cocos2d::Point(winSize.width / 2, winSize.height / 2 + 50));
     testBannerAdButton->setTitleText("Test Banner Ad");
+    testBannerAdButton->setTitleFontSize(25);
     testBannerAdButton->addClickEventListener(std::bind([this, adsManager] {
         auto scene = BannerAdScene::openScene(adsManager);
         _director->replaceScene(scene);
     }));
 
     auto testFullScreenAdButton = cocos2d::ui::Button::create();
-    testFullScreenAdButton->setContentSize(cocos2d::Size(200, 60));
+    testFullScreenAdButton->setContentSize(cocos2d::Size(250, 80));
     testFullScreenAdButton->setPosition(
-        cocos2d::Point(winSize.width / 2, winSize.height / 2 - 25));
+        cocos2d::Point(winSize.width / 2, winSize.height / 2 - 50));
     testFullScreenAdButton->setTitleText("Test Full-screen Ad");
+    testFullScreenAdButton->setTitleFontSize(25);
     testFullScreenAdButton->addClickEventListener(std::bind([this, adsManager] {
         auto scene = FullScreenAdScene::openScene(adsManager);
         _director->replaceScene(scene);

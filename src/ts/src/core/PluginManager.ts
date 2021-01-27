@@ -11,6 +11,7 @@ import { IMessageBridge } from "./IMessageBridge"
 import {
     IPluginManagerImpl,
     MessageBridge,
+    PluginManagerImplEditor,
     PluginManagerImplNative,
 } from "./internal";
 import { IPlugin } from "./IPlugin";
@@ -19,6 +20,7 @@ import { LogLevel } from "./LogLevel";
 import { Platform } from "./Platform";
 
 declare const global: any;
+declare const CC_JSB: boolean;
 
 const _global = (typeof window === 'undefined' ? global : window) as any;
 _global.ee_x = _global.ee_x || {};
@@ -55,7 +57,11 @@ export class PluginManager {
 
     public static initializePlugins(): void {
         this._logger = new Logger(`ee-x`);
-        this._impl = new PluginManagerImplNative();
+        if (CC_JSB) {
+            this._impl = new PluginManagerImplNative();
+        } else {
+            this._impl = new PluginManagerImplEditor();
+        }
         this._bridge = new MessageBridge();
         Platform.initialize(this._bridge);
     }

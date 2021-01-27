@@ -72,7 +72,7 @@ bool Self::init() {
     showInterstitialAdButton->setContentSize(cocos2d::Size(150, 80));
     showInterstitialAdButton->setPosition(
         cocos2d::Point(winSize.width / 2, winSize.height / 2));
-    showInterstitialAdButton->setTitleText("Show Interstitial");
+    showInterstitialAdButton->setTitleText("Show Interstitial Ad");
     showInterstitialAdButton->addClickEventListener(
         std::bind([this, resultText, updateResult] {
             ee::noAwait([this, resultText, updateResult]() -> ee::Task<> {
@@ -86,7 +86,7 @@ bool Self::init() {
     showRewardedAdButton->setContentSize(cocos2d::Size(150, 80));
     showRewardedAdButton->setPosition(
         cocos2d::Point(winSize.width / 2, winSize.height / 2 - 50));
-    showRewardedAdButton->setTitleText("Show Rewarded");
+    showRewardedAdButton->setTitleText("Show Rewarded Ad");
     showRewardedAdButton->addClickEventListener(
         std::bind([this, resultText, updateResult] {
             ee::noAwait([this, resultText, updateResult]() -> ee::Task<> {

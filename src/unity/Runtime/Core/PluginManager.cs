@@ -19,7 +19,8 @@ namespace EE {
                     (bridge, logger, destroyer) => new FirebasePerformance(bridge, logger, destroyer)),
                 [typeof(IIronSource)] = ("IronSource",
                     (bridge, logger, destroyer) => new IronSource(bridge, logger, destroyer)),
-                [typeof(IUnityAds)] = ("UnityAds", (bridge, logger, destroyer) => new UnityAds(bridge))
+                [typeof(IUnityAds)] = ("UnityAds",
+                    (bridge, logger, destroyer) => new UnityAds(bridge, logger, destroyer))
             };
 
         private static readonly IPluginManagerImpl _impl =

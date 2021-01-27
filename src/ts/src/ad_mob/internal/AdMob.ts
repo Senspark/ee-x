@@ -49,11 +49,13 @@ export class AdMob implements IAdMob {
         this._bridge = bridge;
         this._logger = logger;
         this._destroyer = destroyer;
+        this._logger.debug(`AdMob: constructor`);
         this._ads = {};
         this._displayer = MediationManager.getInstance().adDisplayer;
     }
 
     public destroy(): void {
+        this._logger.debug(`AdMob: destroy`);
         for (const id in this._ads) {
             const ad = this._ads[id];
             ad.destroy();
@@ -85,6 +87,7 @@ export class AdMob implements IAdMob {
     }
 
     public createBannerAd(adId: string, adSize: AdMobBannerAdSize): IBannerAd {
+        this._logger.debug(`AdMob: createBannerAd: id = ${adId} size = ${adSize}`);
         if (this._ads[adId]) {
             return this._ads[adId] as IBannerAd;
         }
@@ -132,6 +135,7 @@ export class AdMob implements IAdMob {
     }
 
     private createFullScreenAd(handlerId: string, adId: string, creator: () => IFullScreenAd): IFullScreenAd {
+        this._logger.debug(`AdMob: createFullScreenAd: id = ${adId}`);
         if (this._ads[adId]) {
             return this._ads[adId] as IFullScreenAd;
         }
@@ -149,6 +153,7 @@ export class AdMob implements IAdMob {
     }
 
     private destroyAd(handlerId: string, adId: string): boolean {
+        this._logger.debug(`AdMob: destroyAd: id = ${adId}`);
         if (!this._ads[adId]) {
             return false;
         }

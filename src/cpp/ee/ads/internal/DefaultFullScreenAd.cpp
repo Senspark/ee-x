@@ -33,7 +33,7 @@ Self::DefaultFullScreenAd(
     , resultParser_(resultParser)
     , adId_(adId)
     , messageHelper_(prefix, adId) {
-    logger_.debug("%s: prefix = %s adId = %s", __PRETTY_FUNCTION__,
+    logger_.debug("%s: prefix = %s id = %s", __PRETTY_FUNCTION__,
                   prefix_.c_str(), adId_.c_str());
     loadingCapped_ = false;
     loader_ = std::make_unique<AsyncHelper<bool>>();
@@ -69,7 +69,7 @@ Self::DefaultFullScreenAd(
 Self::~DefaultFullScreenAd() = default;
 
 void Self::destroy() {
-    logger_.debug("%s: prefix = %s adId = %s", __PRETTY_FUNCTION__,
+    logger_.debug("%s: prefix = %s id = %s", __PRETTY_FUNCTION__,
                   prefix_.c_str(), adId_.c_str());
 
     bridge_.deregisterHandler(messageHelper_.onLoaded());
@@ -87,7 +87,7 @@ bool Self::isLoaded() const {
 }
 
 Task<bool> Self::load() {
-    logger_.debug("%s: prefix = %s adId = %s loading = %s", __PRETTY_FUNCTION__,
+    logger_.debug("%s: prefix = %s id = %s loading = %s", __PRETTY_FUNCTION__,
                   prefix_.c_str(), adId_.c_str(),
                   core::toString(loader_->isProcessing()).c_str());
     if (loadingCapped_) {
@@ -109,7 +109,7 @@ Task<bool> Self::load() {
 }
 
 Task<FullScreenAdResult> Self::show() {
-    logger_.debug("%s: prefix = %s adId = %s displaying = %s",
+    logger_.debug("%s: prefix = %s id = %s displaying = %s",
                   __PRETTY_FUNCTION__, prefix_.c_str(), adId_.c_str(),
                   core::toString(displayer_->isProcessing()).c_str());
     auto result = co_await displayer_->process(
@@ -123,7 +123,7 @@ Task<FullScreenAdResult> Self::show() {
 }
 
 void Self::onLoaded() {
-    logger_.debug("%s: prefix = %s adId = %s loading = %s", __PRETTY_FUNCTION__,
+    logger_.debug("%s: prefix = %s id = %s loading = %s", __PRETTY_FUNCTION__,
                   prefix_.c_str(), adId_.c_str(),
                   core::toString(loader_->isProcessing()).c_str());
     if (loader_->isProcessing()) {
@@ -141,7 +141,7 @@ void Self::onLoaded() {
 }
 
 void Self::onFailedToLoad(const std::string& message) {
-    logger_.debug("%s: prefix = %s adId = %s loading = %s message = %s",
+    logger_.debug("%s: prefix = %s id = %s loading = %s message = %s",
                   __PRETTY_FUNCTION__, prefix_.c_str(), adId_.c_str(),
                   core::toString(loader_->isProcessing()).c_str(),
                   message.c_str());
@@ -155,7 +155,7 @@ void Self::onFailedToLoad(const std::string& message) {
 }
 
 void Self::onFailedToShow(const std::string& message) {
-    logger_.debug("%s: prefix = %s adId = %s displaying = %s message = %s",
+    logger_.debug("%s: prefix = %s id = %s displaying = %s message = %s",
                   __PRETTY_FUNCTION__, prefix_.c_str(), adId_.c_str(),
                   core::toString(displayer_->isProcessing()).c_str(),
                   message.c_str());
@@ -169,7 +169,7 @@ void Self::onFailedToShow(const std::string& message) {
 }
 
 void Self::onClicked() {
-    logger_.debug("%s: prefix = %s adId = %s", __PRETTY_FUNCTION__,
+    logger_.debug("%s: prefix = %s id = %s", __PRETTY_FUNCTION__,
                   prefix_.c_str(), adId_.c_str());
     dispatchEvent([](auto&& observer) {
         if (observer.onClicked) {
@@ -179,7 +179,7 @@ void Self::onClicked() {
 }
 
 void Self::onClosed(FullScreenAdResult result) {
-    logger_.debug("%s: prefix = %s adId = %s displaying = %s",
+    logger_.debug("%s: prefix = %s id = %s displaying = %s",
                   __PRETTY_FUNCTION__, prefix_.c_str(), adId_.c_str(),
                   core::toString(displayer_->isProcessing()).c_str());
     if (displayer_->isProcessing()) {

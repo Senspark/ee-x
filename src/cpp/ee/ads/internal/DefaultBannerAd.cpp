@@ -28,7 +28,7 @@ Self::DefaultBannerAd(const std::string& prefix, IMessageBridge& bridge,
     , adId_(adId)
     , messageHelper_(prefix, adId)
     , helper_(bridge, messageHelper_, size) {
-    logger_.debug("%s: prefix = %s adId = %s", __PRETTY_FUNCTION__,
+    logger_.debug("%s: prefix = %s id = %s", __PRETTY_FUNCTION__,
                   prefix_.c_str(), adId_.c_str());
     loader_ = std::make_unique<AsyncHelper<bool>>();
 
@@ -52,7 +52,7 @@ Self::DefaultBannerAd(const std::string& prefix, IMessageBridge& bridge,
 Self::~DefaultBannerAd() = default;
 
 void Self::destroy() {
-    logger_.debug("%s: prefix = %s adId = %s", __PRETTY_FUNCTION__,
+    logger_.debug("%s: prefix = %s id = %s", __PRETTY_FUNCTION__,
                   prefix_.c_str(), adId_.c_str());
 
     bridge_.deregisterHandler(messageHelper_.onLoaded());
@@ -67,7 +67,7 @@ bool Self::isLoaded() const {
 }
 
 Task<bool> Self::load() {
-    logger_.debug("%s: prefix = %s adId = %s loading = %s", __PRETTY_FUNCTION__,
+    logger_.debug("%s: prefix = %s id = %s loading = %s", __PRETTY_FUNCTION__,
                   prefix_.c_str(), adId_.c_str(),
                   core::toString(loader_->isProcessing()).c_str());
     auto result = co_await loader_->process(
@@ -113,7 +113,7 @@ void Self::setVisible(bool visible) {
 }
 
 void Self::onLoaded() {
-    logger_.debug("%s: prefix = %s adId = %s loading = %s", __PRETTY_FUNCTION__,
+    logger_.debug("%s: prefix = %s id = %s loading = %s", __PRETTY_FUNCTION__,
                   prefix_.c_str(), adId_.c_str(),
                   core::toString(loader_->isProcessing()).c_str());
     if (loader_->isProcessing()) {
@@ -129,7 +129,7 @@ void Self::onLoaded() {
 }
 
 void Self::onFailedToLoad(const std::string& message) {
-    logger_.debug("%s: prefix = %s adId = %s loading = %s message = %s",
+    logger_.debug("%s: prefix = %s id = %s loading = %s message = %s",
                   __PRETTY_FUNCTION__, prefix_.c_str(), adId_.c_str(),
                   core::toString(loader_->isProcessing()).c_str(),
                   message.c_str());

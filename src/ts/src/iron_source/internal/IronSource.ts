@@ -4,6 +4,7 @@ import {
     IFullScreenAd,
 } from "../../ads";
 import {
+    DefaultBannerAd,
     GuardedBannerAd,
     GuardedFullScreenAd,
     IAsyncHelper,
@@ -16,7 +17,6 @@ import {
 } from "../../core";
 import { IIronSource } from "../IIronSource";
 import { IronSourceBannerAdSize } from "../IronSourceBannerAdSize";
-import { IronSourceBannerAd } from "./IronSourceBannerAd";
 import { IronSourceInterstitialAd } from "./IronSourceInterstitialAd";
 import { IronSourceRewardedAd } from "./IronSourceRewardedAd";
 
@@ -109,7 +109,10 @@ export class IronSource implements IIronSource {
             throw new Error(`Failed to create banner ad: ${adId}`);
         }
         const size = this.getBannerAdSize(adSize);
-        this._bannerAd = new GuardedBannerAd(new IronSourceBannerAd(this._bridge, this, adId, size));
+        this._bannerAd = new GuardedBannerAd(
+            new DefaultBannerAd("IronSourceBannerAd", this._bridge,
+                () => this.destroyBannerAd(adId),
+                adId, size));
         return this._bannerAd;
     }
 

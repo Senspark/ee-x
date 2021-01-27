@@ -1,4 +1,5 @@
 import {
+    ILogger,
     IMessageBridge,
     ObserverManager,
 } from "../../core";
@@ -12,8 +13,10 @@ import { MessageHelper } from "./MessageHelper";
 type Destroyer = () => void;
 
 export class DefaultBannerAd extends ObserverManager<AdObserver> implements IBannerAd {
+    private readonly kTag = `DefaultBannerAd`;
     private readonly _prefix: string;
     private readonly _bridge: IMessageBridge;
+    private readonly _logger: ILogger;
     private readonly _destroyer: Destroyer;
     private readonly _adId: string;
     private readonly _messageHelper: MessageHelper;
@@ -23,24 +26,28 @@ export class DefaultBannerAd extends ObserverManager<AdObserver> implements IBan
     public constructor(
         prefix: string,
         bridge: IMessageBridge,
+        logger: ILogger,
         destroyer: Destroyer,
         adId: string,
         size: [number, number]) {
         super();
         this._prefix = prefix;
         this._bridge = bridge;
+        this._logger = logger;
         this._destroyer = destroyer;
         this._adId = adId;
         this._messageHelper = new MessageHelper(prefix, adId);
         this._helper = new BannerAdHelper(this._bridge, this._messageHelper, size);
         this._loader = new AsyncHelper<boolean>();
 
+        this._logger.debug(`${this.kTag}: constructor: prefix = ${this._prefix} id = ${this._adId}`);
         this._bridge.registerHandler(_ => this.onLoaded(), this._messageHelper.onLoaded);
         this._bridge.registerHandler(this.onFailedToLoad, this._messageHelper.onFailedToLoad);
         this._bridge.registerHandler(_ => this.onClicked(), this._messageHelper.onClicked);
     }
 
     public destroy(): void {
+        this._logger.debug(`${this.kTag}: destroy: prefix = ${this._prefix} id = ${this._adId}`);
         this._bridge.deregisterHandler(this._messageHelper.onLoaded);
         this._bridge.deregisterHandler(this._messageHelper.onFailedToLoad);
         this._bridge.deregisterHandler(this._messageHelper.onClicked);
@@ -52,6 +59,7 @@ export class DefaultBannerAd extends ObserverManager<AdObserver> implements IBan
     }
 
     public load(): Promise<boolean> {
+        this._logger.debug(`${this.kTag}: load: prefix = ${this._prefix} id = ${this._adId} loading = ${this._loader.isProcessing}`);
         return this._loader.process(
             () => this._helper.load(),
             result => {
@@ -92,6 +100,7 @@ export class DefaultBannerAd extends ObserverManager<AdObserver> implements IBan
     }
 
     private onLoaded(): void {
+        this._logger.debug(`${this.kTag}: onLoaded: prefix = ${this._prefix} id = ${this._adId} loading = ${this._loader.isProcessing}`);
         if (this._loader.isProcessing) {
             this._loader.resolve(true);
         } else {
@@ -101,6 +110,7 @@ export class DefaultBannerAd extends ObserverManager<AdObserver> implements IBan
     }
 
     private onFailedToLoad(message: string): void {
+        this._logger.debug(`${this.kTag}: onFailedToLoad: prefix = ${this._prefix} id = ${this._adId} loading = ${this._loader.isProcessing} message = ${message}`);
         if (this._loader.isProcessing) {
             this._loader.resolve(false);
         } else {
@@ -109,6 +119,7 @@ export class DefaultBannerAd extends ObserverManager<AdObserver> implements IBan
     }
 
     private onClicked(): void {
+        this._logger.debug(`${this.kTag}: onClicked: prefix = ${this._prefix} id = ${this._adId}`);
         this.dispatchEvent(observer => observer.onClicked && observer.onClicked());
     }
 }

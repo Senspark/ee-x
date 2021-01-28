@@ -33,7 +33,7 @@ void Self::initialize() {
 
 #ifdef EE_X_ANDROID
     auto env = JniUtils::getEnv();
-    auto activity = PluginManager::getActivity();
+    auto activity = ee::core::PluginManagerUtils::getActivity();
     [[maybe_unused]] auto app =
         ::firebase::App::Create(options, env, static_cast<jobject>(activity));
 #endif // EE_X_ANDROID

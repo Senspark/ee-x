@@ -22,16 +22,12 @@ private:
     using Self = GraphRequest;
 
 public:
-    GraphRequest();
-
     Self& setPath(const std::string& path);
     Self& setParameter(const std::string& key, const std::string& value);
-    
+
     std::string toString() const;
 
 private:
-    friend Bridge;
-
     std::string path_;
     std::map<std::string, std::string> parameters_;
 };

@@ -16,13 +16,8 @@ class AccessToken : public IAccessToken {
 public:
     explicit AccessToken(const std::string& json);
 
-    /// @see Super.
     virtual std::string getToken() const override;
-
-    /// @see Super.
     virtual std::string getApplicationId() const override;
-
-    /// @see Super.
     virtual std::string getUserId() const override;
 
 private:

@@ -1,5 +1,6 @@
 import { Adjust } from "../adjust/internal/Adjust";
 import { AdMob } from "../ad_mob/internal";
+import { Facebook } from "../facebook/internal";
 import { FacebookAds } from "../facebook_ads/internal/FacebookAds";
 import { FirebaseCrashlytics } from "../firebase_crashlytics/internal";
 import { FirebasePerformance } from "../firebase_performance/internal";
@@ -29,20 +30,22 @@ _global.ee_x.ee_callCppInternal = (tag: string, message: string) => {
 }
 
 export enum Plugin {
-    Adjust = 1,
+    Adjust,
     AdMob,
-    FacebookAds = 6,
-    FirebaseCrashlytics = 8,
+    Facebook,
+    FacebookAds,
+    FirebaseCrashlytics,
     FirebasePerformance,
-    IronSource = 11,
+    IronSource,
     Notification,
-    UnityAds = 16,
+    UnityAds,
 }
 
 export class PluginManager {
     private static readonly _pluginInfo: { [index: string]: [string, (bridge: IMessageBridge, logger: ILogger, destroyer: () => void) => IPlugin] } = {
         [Plugin.Adjust]: [`Adjust`, (bridge, logger, destroyer) => new Adjust(bridge, logger, destroyer)],
         [Plugin.AdMob]: [`AdMob`, (bridge, logger, destroyer) => new AdMob(bridge, logger, destroyer)],
+        [Plugin.Facebook]: [`Facebook`, (bridge, logger, destroyer) => new Facebook(bridge, logger, destroyer)],
         [Plugin.FacebookAds]: [`FacebookAds`, (bridge, logger, destroyer) => new FacebookAds(bridge, logger, destroyer)],
         [Plugin.FirebaseCrashlytics]: [`FirebaseCrashlytics`, (bridge, logger, destroyer) => new FirebaseCrashlytics(bridge, logger, destroyer)],
         [Plugin.FirebasePerformance]: [`FirebasePerformance`, (bridge, logger, destroyer) => new FirebasePerformance(bridge, logger, destroyer)],

@@ -7,17 +7,13 @@
 
 #include <ee/core/ILogger.hpp>
 #include <ee/core/IMessageBridge.hpp>
+#include <ee/core/Task.hpp>
 #include <ee/core/Utils.hpp>
-#include <ee/core/internal/SharedPtrUtils.hpp>
 #include <ee/nlohmann/json.hpp>
 
 #include "ee/facebook/FacebookGraphRequest.hpp"
 #include "ee/facebook/FacebookRequestContent.hpp"
 #include "ee/facebook/private/FacebookAccessToken.hpp"
-#include "ee/facebook/private/FacebookGraphDelegate.hpp"
-#include "ee/facebook/private/FacebookLoginDelegate.hpp"
-#include "ee/facebook/private/FacebookRequestDelegate.hpp"
-#include "ee/facebook/private/FacebookShareDelegate.hpp"
 
 namespace ee {
 namespace facebook {
@@ -32,9 +28,7 @@ const auto kGetAccessToken        = kPrefix + "GetAccessToken";
 const auto kOnProfileChanged      = kPrefix + "OnProfileChanged";
 const auto kGraphRequest          = kPrefix + "GraphRequest";
 const auto kSendRequest           = kPrefix + "SendRequest";
-const auto kShareLinkContent      = kPrefix + "ShareLinkContent";
-const auto kSharePhotoContent     = kPrefix + "SharePhotoContent";
-const auto kShareVideoContent     = kPrefix + "ShareVideoContent";
+const auto kShareContent          = kPrefix + "ShareContent";
 // clang-format on
 } // namespace
 
@@ -45,7 +39,6 @@ Self::Bridge(IMessageBridge& bridge, ILogger& logger,
     : bridge_(bridge)
     , logger_(logger)
     , destroyer_(destroyer) {
-    delegateId_ = 0;
     bridge_.registerHandler(
         [this](const std::string& message) { //
             onProfileChanged(message);
@@ -74,22 +67,21 @@ bool Self::isLoggedIn() const {
     return core::toBool(response);
 }
 
-void Self::logIn(const std::vector<std::string>& permissions,
-                 const std::shared_ptr<ILoginDelegate>& delegate_) {
-    auto&& delegate = std::dynamic_pointer_cast<LoginDelegate>(delegate_);
-    delegate->self_ = delegate;
-    nlohmann::json json;
-    json["permissions"] = permissions;
-    json["tag"] = delegate->tag_;
-    bridge_.call(kLogIn, json.dump());
+Task<LoginResult> Self::logIn(const std::vector<std::string>& permissions) {
+    nlohmann::json request;
+    request["permissions"] = permissions;
+    auto response = co_await bridge_.callAsync(kLogIn, request.dump());
+    auto json = nlohmann::json::parse(response);
+    LoginResult result = {
+        .successful = json["successful"],
+        .canceled = json["canceled"],
+        .errorMessage = json["errorMessage"],
+    };
+    co_return result;
 }
 
-std::shared_ptr<ILoginDelegate> Self::createLoginDelegate() {
-    return core::makeShared<LoginDelegate>(bridge_, delegateId_++);
-}
-
-void Self::logOut() {
-    bridge_.call(kLogOut);
+Task<> Self::logOut() {
+    co_await bridge_.callAsync(kLogOut);
 }
 
 std::shared_ptr<IAccessToken> Self::getAccessToken() const {
@@ -97,68 +89,34 @@ std::shared_ptr<IAccessToken> Self::getAccessToken() const {
     if (response.empty()) {
         return nullptr;
     }
-    auto token = core::makeShared<AccessToken>(response);
+    auto token = std::make_shared<AccessToken>(response);
     return token;
 }
 
-void Self::graphRequest(const GraphRequest& request,
-                        const std::shared_ptr<IGraphDelegate>& delegate_) {
-    auto&& delegate = std::dynamic_pointer_cast<GraphDelegate>(delegate_);
-    delegate->self_ = delegate;
-    auto json = nlohmann::json::parse(request.toString());
-    json["tag"] = delegate->tag_;
-    bridge_.call(kGraphRequest, json.dump());
+Task<GraphResult> Self::graphRequest(const GraphRequest& request) {
+    auto response =
+        co_await bridge_.callAsync(kGraphRequest, request.toString());
+    auto json = nlohmann::json::parse(response);
+    GraphResult result = {
+        .successful = json["successful"],
+        .response = json["response"],
+        .errorMessage = json["errorMessage"],
+    };
+    co_return result;
 }
 
-std::shared_ptr<IGraphDelegate> Self::createGraphDelegate() {
-    return core::makeShared<GraphDelegate>(bridge_, delegateId_++);
-}
-
-void Self::sendRequest(const RequestContent& content,
-                       const std::shared_ptr<IRequestDelegate>& delegate_) {
-    auto&& delegate = std::dynamic_pointer_cast<RequestDelegate>(delegate_);
-    delegate->self_ = delegate;
-    auto json = nlohmann::json::parse(content.toString());
-    json["tag"] = delegate->tag_;
-    bridge_.call(kSendRequest, json.dump());
-}
-
-std::shared_ptr<IRequestDelegate> Self::createRequestDelegate() {
-    return core::makeShared<RequestDelegate>(bridge_, delegateId_++);
-}
-
-void Self::shareLinkContent(const std::string& url,
-                            const std::shared_ptr<IShareDelegate>& delegate_) {
-    auto&& delegate = std::dynamic_pointer_cast<ShareDelegate>(delegate_);
-    delegate->self_ = delegate;
-    nlohmann::json json;
-    json["url"] = url;
-    json["tag"] = delegate->tag_;
-    bridge_.call(kShareLinkContent, json.dump());
-}
-
-void Self::sharePhotoContent(const std::string& url,
-                             const std::shared_ptr<IShareDelegate>& delegate_) {
-    auto&& delegate = std::dynamic_pointer_cast<ShareDelegate>(delegate_);
-    delegate->self_ = delegate;
-    nlohmann::json json;
-    json["url"] = url;
-    json["tag"] = delegate->tag_;
-    bridge_.call(kSharePhotoContent, json.dump());
-}
-
-void Self::shareVideoContent(const std::string& url,
-                             const std::shared_ptr<IShareDelegate>& delegate_) {
-    auto&& delegate = std::dynamic_pointer_cast<ShareDelegate>(delegate_);
-    delegate->self_ = delegate;
-    nlohmann::json json;
-    json["url"] = url;
-    json["tag"] = delegate->tag_;
-    bridge_.call(kShareVideoContent, json.dump());
-}
-
-std::shared_ptr<IShareDelegate> Self::createShareDelegate() {
-    return core::makeShared<ShareDelegate>(bridge_, delegateId_++);
+Task<ShareResult> Self::shareContent(ShareType type, const std::string& url) {
+    nlohmann::json request;
+    request["type"] = static_cast<int>(type);
+    request["url"] = url;
+    auto response = co_await bridge_.callAsync(kShareContent, request.dump());
+    auto json = nlohmann::json::parse(response);
+    ShareResult result = {
+        .successful = json["successful"],
+        .canceled = json["canceled"],
+        .errorMessage = json["errorMessage"],
+    };
+    co_return result;
 }
 } // namespace facebook
 } // namespace ee

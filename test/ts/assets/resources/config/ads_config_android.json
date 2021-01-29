@@ -49,6 +49,15 @@
             ]
         },
         {
+            "format": "app_open",
+            "instance": [
+                {
+                    "network": "ad_mob",
+                    "id": "ca-app-pub-2101587572072038/6258927028"
+                }
+            ]
+        },
+        {
             "format": "interstitial",
             "instance": [
                 {

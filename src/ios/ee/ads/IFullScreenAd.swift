@@ -7,7 +7,7 @@
 
 import Foundation
 
-protocol IInterstitialAd {
+protocol IFullScreenAd {
     var isLoaded: Bool { get }
     func load()
     func show()

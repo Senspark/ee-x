@@ -1,16 +1,16 @@
 package com.ee.internal
 
 import androidx.annotation.AnyThread
-import com.ee.IInterstitialAd
+import com.ee.IFullScreenAd
 import com.ee.IMessageBridge
 import com.ee.Utils
 
 /**
  * Created by Zinge on 10/13/17.
  */
-class InterstitialAdHelper(private val _bridge: IMessageBridge,
-                           private val _ad: IInterstitialAd,
-                           private val _helper: MessageHelper) {
+class FullScreenAdHelper(private val _bridge: IMessageBridge,
+                         private val _ad: IFullScreenAd,
+                         private val _helper: MessageHelper) {
     @AnyThread
     fun registerHandlers() {
         _bridge.registerHandler(_helper.isLoaded) {

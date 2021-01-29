@@ -11,12 +11,12 @@ import Foundation
 private let kTag = "\(FacebookInterstitialAd.self)"
 
 internal class FacebookInterstitialAd:
-    NSObject, IInterstitialAd, FBInterstitialAdDelegate {
+    NSObject, IFullScreenAd, FBInterstitialAdDelegate {
     private let _bridge: IMessageBridge
     private let _logger: ILogger
     private let _adId: String
     private let _messageHelper: MessageHelper
-    private var _helper: InterstitialAdHelper?
+    private var _helper: FullScreenAdHelper?
     private var _isLoaded = false
     private var _displaying = false
     private var _ad: FBInterstitialAd?
@@ -29,7 +29,7 @@ internal class FacebookInterstitialAd:
         _adId = adId
         _messageHelper = MessageHelper("FacebookInterstitialAd", _adId)
         super.init()
-        _helper = InterstitialAdHelper(_bridge, self, _messageHelper)
+        _helper = FullScreenAdHelper(_bridge, self, _messageHelper)
         registerHandlers()
     }
     

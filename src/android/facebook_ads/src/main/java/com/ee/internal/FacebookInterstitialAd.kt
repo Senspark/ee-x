@@ -3,7 +3,7 @@ package com.ee.internal
 import android.app.Activity
 import androidx.annotation.AnyThread
 import androidx.annotation.UiThread
-import com.ee.IInterstitialAd
+import com.ee.IFullScreenAd
 import com.ee.ILogger
 import com.ee.IMessageBridge
 import com.ee.Thread
@@ -22,13 +22,13 @@ internal class FacebookInterstitialAd(
     private val _logger: ILogger,
     private var _activity: Activity?,
     private val _adId: String)
-    : IInterstitialAd, InterstitialAdListener {
+    : IFullScreenAd, InterstitialAdListener {
     companion object {
         private val kTag = FacebookInterstitialAd::class.java.name
     }
 
     private val _messageHelper = MessageHelper("FacebookInterstitialAd", _adId)
-    private val _helper = InterstitialAdHelper(_bridge, this, _messageHelper)
+    private val _helper = FullScreenAdHelper(_bridge, this, _messageHelper)
     private val _isLoaded = AtomicBoolean(false)
     private var _displaying = false
     private var _ad: InterstitialAd? = null

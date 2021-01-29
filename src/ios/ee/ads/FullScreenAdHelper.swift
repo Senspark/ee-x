@@ -7,13 +7,13 @@
 
 import Foundation
 
-class InterstitialAdHelper {
+class FullScreenAdHelper {
     private let _bridge: IMessageBridge
-    private let _ad: IInterstitialAd
+    private let _ad: IFullScreenAd
     private let _helper: MessageHelper
 
     init(_ bridge: IMessageBridge,
-         _ ad: IInterstitialAd,
+         _ ad: IFullScreenAd,
          _ helper: MessageHelper) {
         _bridge = bridge
         _ad = ad

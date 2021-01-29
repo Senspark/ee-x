@@ -3,7 +3,7 @@ package com.ee.internal
 import android.app.Activity
 import android.app.Application
 import androidx.annotation.AnyThread
-import com.ee.IInterstitialAd
+import com.ee.IFullScreenAd
 import com.ee.ILogger
 import com.ee.IMessageBridge
 import com.ee.Thread
@@ -22,13 +22,13 @@ internal class AdMobAppOpenAd(
     private val _application: Application,
     private var _activity: Activity?,
     private val _adId: String)
-    : IInterstitialAd {
+    : IFullScreenAd {
     companion object {
         private val kTag = AdMobAppOpenAd::class.java.name
     }
 
     private val _messageHelper = MessageHelper("AdMobAppOpenAd", _adId)
-    private val _helper = InterstitialAdHelper(_bridge, this, _messageHelper)
+    private val _helper = FullScreenAdHelper(_bridge, this, _messageHelper)
     private val _isLoaded = AtomicBoolean(false)
     private var _ad: AppOpenAd? = null
 

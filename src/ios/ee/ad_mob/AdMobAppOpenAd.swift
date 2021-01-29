@@ -9,12 +9,12 @@ import GoogleMobileAds
 
 private let kTag = "\(AdMobAppOpenAd.self)"
 
-internal class AdMobAppOpenAd: NSObject, IInterstitialAd, GADFullScreenContentDelegate {
+internal class AdMobAppOpenAd: NSObject, IFullScreenAd, GADFullScreenContentDelegate {
     private let _bridge: IMessageBridge
     private let _logger: ILogger
     private let _adId: String
     private let _messageHelper: MessageHelper
-    private var _helper: InterstitialAdHelper?
+    private var _helper: FullScreenAdHelper?
     private var _isLoaded = false
     private var _ad: GADAppOpenAd?
 
@@ -26,7 +26,7 @@ internal class AdMobAppOpenAd: NSObject, IInterstitialAd, GADFullScreenContentDe
         _adId = adId
         _messageHelper = MessageHelper("AdMobAppOpenAd", _adId)
         super.init()
-        _helper = InterstitialAdHelper(_bridge, self, _messageHelper)
+        _helper = FullScreenAdHelper(_bridge, self, _messageHelper)
     }
 
     func destroy() {}

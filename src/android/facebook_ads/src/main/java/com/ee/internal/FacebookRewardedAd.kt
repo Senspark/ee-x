@@ -3,6 +3,7 @@ package com.ee.internal
 import android.app.Activity
 import androidx.annotation.AnyThread
 import androidx.annotation.UiThread
+import com.ee.IFullScreenAd
 import com.ee.ILogger
 import com.ee.IMessageBridge
 import com.ee.Thread
@@ -21,12 +22,14 @@ internal class FacebookRewardedAd(
     private val _bridge: IMessageBridge,
     private val _logger: ILogger,
     private var _activity: Activity?,
-    private val _adId: String) : RewardedVideoAdListener {
+    private val _adId: String)
+    : IFullScreenAd, RewardedVideoAdListener {
     companion object {
         private val kTag = FacebookRewardedAd::class.java.name
     }
 
     private val _messageHelper = MessageHelper("FacebookRewardedAd", _adId)
+    private val _helper = FullScreenAdHelper(_bridge, this, _messageHelper)
     private val _isLoaded = AtomicBoolean(false)
     private var _displaying = false
     private var _rewarded = false
@@ -57,24 +60,12 @@ internal class FacebookRewardedAd(
 
     @AnyThread
     private fun registerHandlers() {
-        _bridge.registerHandler(_messageHelper.isLoaded) {
-            Utils.toString(isLoaded)
-        }
-        _bridge.registerHandler(_messageHelper.load) {
-            load()
-            ""
-        }
-        _bridge.registerHandler(_messageHelper.show) {
-            show()
-            ""
-        }
+        _helper.registerHandlers()
     }
 
     @AnyThread
     private fun deregisterHandlers() {
-        _bridge.deregisterHandler(_messageHelper.isLoaded)
-        _bridge.deregisterHandler(_messageHelper.load)
-        _bridge.deregisterHandler(_messageHelper.show)
+        _helper.deregisterHandlers()
     }
 
     @UiThread
@@ -96,11 +87,11 @@ internal class FacebookRewardedAd(
         }
     }
 
-    private val isLoaded: Boolean
+    override val isLoaded: Boolean
         @AnyThread get() = _isLoaded.get()
 
     @AnyThread
-    private fun load() {
+    override fun load() {
         Thread.runOnMainThread {
             _logger.debug("$kTag: ${this::load.name}: id = $_adId")
             val ad = createInternalAd()
@@ -112,7 +103,7 @@ internal class FacebookRewardedAd(
     }
 
     @AnyThread
-    private fun show() {
+    override fun show() {
         Thread.runOnMainThread {
             _logger.debug("$kTag: ${this::show.name}: id = $_adId")
             val ad = createInternalAd()

@@ -54,8 +54,8 @@ internal class AdMobRewardedInterstitialAd: NSObject, IFullScreenAd, GADFullScre
                     Thread.runOnMainThread {
                         self._logger.debug("\(kTag): \(#function): succeeded")
                         self._isLoaded = true
-                        ad?.fullScreenContentDelegate = self
                         self._ad = ad
+                        self._ad?.fullScreenContentDelegate = self
                         self._bridge.callCpp(self._messageHelper.onLoaded)
                     }
                 } else {
@@ -87,7 +87,7 @@ internal class AdMobRewardedInterstitialAd: NSObject, IFullScreenAd, GADFullScre
 
     func adDidPresentFullScreenContent(_ ad: GADFullScreenPresentingAd) {
         Thread.runOnMainThread {
-            self._ad = nil
+            self._logger.debug("\(kTag): \(#function)")
         }
     }
 

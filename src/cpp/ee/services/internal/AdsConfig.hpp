@@ -238,6 +238,20 @@ private:
     std::shared_ptr<IAdInstanceConfig<IFullScreenAd>> instance_;
 };
 
+class RewardedInterstitialConfig : public IAdConfig {
+public:
+    explicit RewardedInterstitialConfig(const nlohmann::json& node);
+
+    virtual AdFormat format() const override;
+
+    virtual std::shared_ptr<IAd> createAd(
+        const std::shared_ptr<INetworkConfigManager>& manager) const override;
+
+private:
+    int interval_;
+    std::shared_ptr<IAdInstanceConfig<IFullScreenAd>> instance_;
+};
+
 class RewardedConfig : public IAdConfig {
 public:
     explicit RewardedConfig(const nlohmann::json& node);

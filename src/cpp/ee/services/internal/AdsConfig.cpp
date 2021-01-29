@@ -286,6 +286,9 @@ std::shared_ptr<IAdConfig> IAdConfig::parse(const nlohmann::json& node) {
     if (format == "interstitial") {
         return std::make_shared<InterstitialConfig>(node);
     }
+    if (format == "rewarded_interstitial") {
+        return std::make_shared<RewardedInterstitialConfig>(node);
+    }
     if (format == "rewarded") {
         return std::make_shared<RewardedConfig>(node);
     }
@@ -350,6 +353,23 @@ AdFormat InterstitialConfig::format() const {
 }
 
 std::shared_ptr<IAd> InterstitialConfig::createAd(
+    const std::shared_ptr<INetworkConfigManager>& manager) const {
+    auto ad = instance_->createAd(manager);
+    return std::make_shared<GenericAd>(ad, interval_);
+}
+
+RewardedInterstitialConfig::RewardedInterstitialConfig(
+    const nlohmann::json& node) {
+    interval_ = node.value("interval", 0);
+    instance_ = IAdInstanceConfig<IFullScreenAd>::parse<MultiFullScreenAd>(
+        AdFormat::RewardedInterstitial, node["instance"]);
+}
+
+AdFormat RewardedInterstitialConfig::format() const {
+    return AdFormat::RewardedInterstitial;
+}
+
+std::shared_ptr<IAd> RewardedInterstitialConfig::createAd(
     const std::shared_ptr<INetworkConfigManager>& manager) const {
     auto ad = instance_->createAd(manager);
     return std::make_shared<GenericAd>(ad, interval_);

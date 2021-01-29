@@ -47,6 +47,7 @@ export class DefaultAdsManager extends ObserverManager<AdsObserver> implements I
         this.initializeBannerAd(AdFormat.Rectangle);
         this.initializeFullScreenAd(AdFormat.AppOpen);
         this.initializeFullScreenAd(AdFormat.Interstitial);
+        this.initializeFullScreenAd(AdFormat.RewardedInterstitial);
         this.initializeFullScreenAd(AdFormat.Rewarded);
         this._initialized = true;
         return true;
@@ -150,6 +151,10 @@ export class DefaultAdsManager extends ObserverManager<AdsObserver> implements I
 
     public async showInterstitialAd(): Promise<AdResult> {
         return await this.showFullScreenAd(AdFormat.Interstitial);
+    }
+
+    public async showRewardedInterstitialAd(): Promise<AdResult> {
+        return await this.showFullScreenAd(AdFormat.RewardedInterstitial);
     }
 
     public async showRewardedAd(): Promise<AdResult> {

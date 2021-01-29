@@ -32,6 +32,7 @@ Task<bool> Self::initialize() {
     initializeBannerAd(AdFormat::Rectangle);
     initializeFullScreenAd(AdFormat::AppOpen);
     initializeFullScreenAd(AdFormat::Interstitial);
+    initializeFullScreenAd(AdFormat::RewardedInterstitial);
     initializeFullScreenAd(AdFormat::Rewarded);
     initialized_ = true;
     co_return true;
@@ -155,6 +156,10 @@ Task<AdResult> Self::showAppOpenAd() {
 
 Task<AdResult> Self::showInterstitialAd() {
     co_return co_await showFullScreenAd(AdFormat::Interstitial);
+}
+
+Task<AdResult> Self::showRewardedInterstitialAd() {
+    co_return co_await showFullScreenAd(AdFormat::RewardedInterstitial);
 }
 
 Task<AdResult> Self::showRewardedAd() {

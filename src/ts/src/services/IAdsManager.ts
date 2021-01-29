@@ -18,5 +18,6 @@ export interface IAdsManager extends IObserverManager<AdsObserver> {
     rectangleAdSize: [number, number];
     showAppOpenAd(): Promise<AdResult>;
     showInterstitialAd(): Promise<AdResult>;
+    showRewardedInterstitialAd(): Promise<AdResult>;
     showRewardedAd(): Promise<AdResult>;
 }

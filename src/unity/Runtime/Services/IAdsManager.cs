@@ -19,6 +19,7 @@ namespace EE {
         (float, float) RectangleAdSize { get; set; }
         Task<AdResult> ShowAppOpenAd();
         Task<AdResult> ShowInterstitialAd();
+        Task<AdResult> ShowRewardedInterstitialAd();
         Task<AdResult> ShowRewardedAd();
     }
 }

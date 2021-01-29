@@ -43,6 +43,7 @@ public:
 
     virtual Task<AdResult> showAppOpenAd() override;
     virtual Task<AdResult> showInterstitialAd() override;
+    virtual Task<AdResult> showRewardedInterstitialAd() override;
     virtual Task<AdResult> showRewardedAd() override;
 
 private:

@@ -32,6 +32,7 @@ namespace EE {
             InitializeBannerAd(AdFormat.Rectangle);
             InitializeFullScreenAd(AdFormat.AppOpen);
             InitializeFullScreenAd(AdFormat.Interstitial);
+            InitializeFullScreenAd(AdFormat.RewardedInterstitial);
             InitializeFullScreenAd(AdFormat.Rewarded);
             _initialized = true;
             return true;
@@ -113,6 +114,10 @@ namespace EE {
 
         public async Task<AdResult> ShowInterstitialAd() {
             return await ShowFullScreenAd(AdFormat.Interstitial);
+        }
+
+        public async Task<AdResult> ShowRewardedInterstitialAd() {
+            return await ShowFullScreenAd(AdFormat.RewardedInterstitial);
         }
 
         public async Task<AdResult> ShowRewardedAd() {

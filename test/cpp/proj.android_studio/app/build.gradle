@@ -130,9 +130,9 @@ android {
         exclude 'META-INF/license.txt'
         exclude 'META-INF/dependencies.txt'
         exclude 'META-INF/LGPL2.1'
-        exclude 'lib/x86/libcrashlytics*'
-        exclude 'lib/x86_64/libcrashlytics*'
-        exclude 'lib/arm64-v8a/libcrashlytics*'
+        exclude 'lib/x86/*.so'
+        exclude 'lib/x86_64/*.so*'
+        exclude 'lib/arm64-v8a/*.so'
     }
 
     sourceSets {

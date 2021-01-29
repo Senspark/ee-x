@@ -105,7 +105,7 @@ internal class AdMobRewardedInterstitialAd: NSObject, IFullScreenAd, GADFullScre
             self._logger.debug("\(kTag): \(#function)")
             self._isLoaded = false
             self._ad = nil
-            self._bridge.callCpp(self._messageHelper.onClosed)
+            self._bridge.callCpp(self._messageHelper.onClosed, Utils.toString(self._rewarded))
         }
     }
 }

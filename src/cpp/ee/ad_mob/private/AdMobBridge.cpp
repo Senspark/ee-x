@@ -173,6 +173,23 @@ Self::createInterstitialAd(const std::string& adId) {
     });
 }
 
+std::shared_ptr<IFullScreenAd>
+Self::createRewardedInterstitialAd(const std::string& adId) {
+    return createFullScreenAd(
+        kCreateRewardedInterstitialAd, adId, [this, adId] {
+            return std::make_shared<ads::DefaultFullScreenAd>(
+                "AdMobRewardedInterstitialAd", bridge_, logger_, displayer_,
+                [this, adId] { //
+                    return destroyAd(adId);
+                },
+                [](const std::string& message) { //
+                    return core::toBool(message) ? FullScreenAdResult::Completed
+                                                 : FullScreenAdResult::Canceled;
+                },
+                adId);
+        });
+}
+
 std::shared_ptr<IFullScreenAd> Self::createRewardedAd(const std::string& adId) {
     return createFullScreenAd(kCreateRewardedAd, adId, [this, adId] {
         return std::make_shared<ads::DefaultFullScreenAd>(

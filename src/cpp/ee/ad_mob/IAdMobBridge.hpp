@@ -54,6 +54,9 @@ public:
     virtual std::shared_ptr<IFullScreenAd>
     createInterstitialAd(const std::string& adId) = 0;
 
+    virtual std::shared_ptr<IFullScreenAd>
+    createRewardedInterstitialAd(const std::string& adId) = 0;
+
     /// Creates an rewarded ad.
     /// @param[in] adId The ad unit ID.
     virtual std::shared_ptr<IFullScreenAd>

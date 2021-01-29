@@ -96,6 +96,7 @@ export enum AdFormat {
     Rectangle,
     AppOpen,
     Interstitial,
+    RewardedInterstitial,
     Rewarded,
 }
 
@@ -177,6 +178,8 @@ class AdMobConfig implements INetworkConfig {
                 return this._plugin.createAppOpenAd(id);
             case AdFormat.Interstitial:
                 return this._plugin.createInterstitialAd(id);
+            case AdFormat.RewardedInterstitial:
+                return this._plugin.createRewardedInterstitialAd(id);
             case AdFormat.Rewarded:
                 return this._plugin.createRewardedAd(id);
             default:

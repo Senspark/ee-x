@@ -27,6 +27,7 @@ enum class AdFormat {
     Rectangle,
     AppOpen,
     Interstitial,
+    RewardedInterstitial,
     Rewarded,
 };
 

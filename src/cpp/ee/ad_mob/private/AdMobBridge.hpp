@@ -38,6 +38,8 @@ public:
     virtual std::shared_ptr<IFullScreenAd>
     createInterstitialAd(const std::string& adId) override;
     virtual std::shared_ptr<IFullScreenAd>
+    createRewardedInterstitialAd(const std::string& adId) override;
+    virtual std::shared_ptr<IFullScreenAd>
     createRewardedAd(const std::string& adId) override;
 
 private:

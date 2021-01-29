@@ -122,6 +122,16 @@ export class AdMob implements IAdMob {
                 adId))
     }
 
+    public createRewardedInterstitialAd(adId: string): IFullScreenAd {
+        return this.createFullScreenAd(this.kCreateRewardedInterstitialAd, adId, () =>
+            new DefaultFullScreenAd("AdMobRewardedInterstitialAd", this._bridge, this._logger, this._displayer,
+                () => this.destroyAd(adId),
+                message => Utils.toBool(message)
+                    ? FullScreenAdResult.Completed
+                    : FullScreenAdResult.Canceled,
+                adId))
+    }
+
     public createRewardedAd(adId: string): IFullScreenAd {
         return this.createFullScreenAd(this.kCreateRewardedAd, adId, () =>
             new DefaultFullScreenAd("AdMobRewardedAd", this._bridge, this._logger, this._displayer,

@@ -95,6 +95,8 @@ std::shared_ptr<IAd> AdMobConfig::createAd(AdFormat format,
         return plugin_->createAppOpenAd(id);
     case AdFormat::Interstitial:
         return plugin_->createInterstitialAd(id);
+    case AdFormat::RewardedInterstitial:
+        return plugin_->createRewardedInterstitialAd(id);
     case AdFormat::Rewarded:
         return plugin_->createRewardedAd(id);
     default:

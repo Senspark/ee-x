@@ -5,13 +5,11 @@ import android.graphics.Point
 import android.view.Gravity
 import android.widget.FrameLayout
 import androidx.annotation.AnyThread
-import androidx.annotation.UiThread
 import com.ee.IBannerAd
 import com.ee.ILogger
 import com.ee.IMessageBridge
 import com.ee.Thread
 import com.ee.Utils
-import com.google.common.truth.Truth
 import com.ironsource.mediationsdk.ISBannerSize
 import com.ironsource.mediationsdk.IronSource
 import com.ironsource.mediationsdk.IronSourceBannerLayout
@@ -45,31 +43,23 @@ class IronSourceBannerAd(
         createInternalAd()
     }
 
-    @UiThread
-    fun onCreate(activity: Activity) {
+    override fun onCreate(activity: Activity) {
         _activity = activity
         addToActivity()
     }
 
-    @UiThread
-    fun onResume() {
-        Thread.checkMainThread()
+    override fun onResume() {
     }
 
-    @UiThread
-    fun onPause() {
-        Thread.checkMainThread()
+    override fun onPause() {
     }
 
-    @UiThread
-    fun onDestroy(activity: Activity) {
-        Truth.assertThat(_activity).isEqualTo(activity)
+    override fun onDestroy() {
         removeFromActivity()
         _activity = null
     }
 
-    @AnyThread
-    fun destroy() {
+    override fun destroy() {
         _logger.info("$kTag: ${this::destroy.name}: adId = $_adId")
         deregisterHandlers()
         destroyInternalAd()

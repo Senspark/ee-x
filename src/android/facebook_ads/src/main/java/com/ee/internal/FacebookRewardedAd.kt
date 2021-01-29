@@ -12,7 +12,6 @@ import com.facebook.ads.Ad
 import com.facebook.ads.AdError
 import com.facebook.ads.RewardedVideoAd
 import com.facebook.ads.RewardedVideoAdListener
-import com.google.common.truth.Truth.assertThat
 import java.util.concurrent.atomic.AtomicBoolean
 
 /**
@@ -40,19 +39,21 @@ internal class FacebookRewardedAd(
         registerHandlers()
     }
 
-    @UiThread
-    fun onCreate(activity: Activity) {
+    override fun onCreate(activity: Activity) {
         _activity = activity
     }
 
-    @UiThread
-    fun onDestroy(activity: Activity) {
-        assertThat(_activity).isEqualTo(activity)
+    override fun onResume() {
+    }
+
+    override fun onPause() {
+    }
+
+    override fun onDestroy() {
         _activity = null
     }
 
-    @AnyThread
-    fun destroy() {
+    override fun destroy() {
         _logger.info("$kTag: ${this::destroy.name}: adId = $_adId")
         deregisterHandlers()
         destroyInternalAd()

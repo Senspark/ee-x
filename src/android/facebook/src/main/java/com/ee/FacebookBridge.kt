@@ -112,6 +112,7 @@ class FacebookBridge(
     override fun onStop() {}
     override fun onResume() {}
     override fun onPause() {}
+
     override fun onDestroy() {
         _activity = null
     }

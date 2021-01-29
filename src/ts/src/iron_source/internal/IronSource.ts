@@ -28,7 +28,7 @@ export class IronSource implements IIronSource {
     private readonly kInitialize = `${this.kPrefix}Initialize`;
     private readonly kGetBannerAdSize = `${this.kPrefix}GetBannerAdSize`;
     private readonly kCreateBannerAd = `${this.kPrefix}CreateBannerAd`;
-    private readonly kDestroyBannerAd = `${this.kPrefix}DestroyBannerAd`;
+    private readonly kDestroyAd = `${this.kPrefix}DestroyAd`;
     private readonly kHasInterstitialAd = `${this.kPrefix}HasInterstitialAd`;
     private readonly kLoadInterstitialAd = `${this.kPrefix}LoadInterstitialAd`;
     private readonly kShowInterstitialAd = `${this.kPrefix}ShowInterstitialAd`;
@@ -126,7 +126,7 @@ export class IronSource implements IIronSource {
         if (this._bannerAd === undefined) {
             return false;
         }
-        const response = this._bridge.call(this.kDestroyBannerAd, adId);
+        const response = this._bridge.call(this.kDestroyAd, adId);
         if (!Utils.toBool(response)) {
             // Assert.
             return false;

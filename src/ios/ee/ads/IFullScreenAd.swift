@@ -5,10 +5,6 @@
 //  Created by eps on 6/24/20.
 //
 
-import Foundation
-
-protocol IFullScreenAd {
-    var isLoaded: Bool { get }
-    func load()
+protocol IFullScreenAd: IAd {
     func show()
 }

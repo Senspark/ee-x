@@ -36,7 +36,7 @@ class IronSourceBridge(
         private const val kInitialize = "${kPrefix}Initialize"
         private const val kGetBannerAdSize = "${kPrefix}GetBannerAdSize"
         private const val kCreateBannerAd = "${kPrefix}CreateBannerAd"
-        private const val kDestroyBannerAd = "${kPrefix}DestroyBannerAd"
+        private const val kDestroyAd = "${kPrefix}DestroyAd"
         private const val kHasInterstitialAd = "${kPrefix}HasInterstitialAd"
         private const val kLoadInterstitialAd = "${kPrefix}LoadInterstitialAd"
         private const val kShowInterstitialAd = "${kPrefix}ShowInterstitialAd"
@@ -55,7 +55,7 @@ class IronSourceBridge(
 
     private var _initialized = false
     private val _bannerHelper = IronSourceBannerHelper()
-    private val _bannerAds: MutableMap<String, IronSourceBannerAd> = ConcurrentHashMap()
+    private val _ads: MutableMap<String, IAd> = ConcurrentHashMap()
     private val _isInterstitialAdLoaded = AtomicBoolean(false)
     private val _isRewardedAdLoaded = AtomicBoolean(false)
     private var _rewarded = false
@@ -68,7 +68,7 @@ class IronSourceBridge(
 
     override fun onCreate(activity: Activity) {
         _activity = activity
-        for (ad in _bannerAds.values) {
+        for (ad in _ads.values) {
             ad.onCreate(activity)
         }
     }
@@ -78,26 +78,32 @@ class IronSourceBridge(
     override fun onResume() {
         Thread.checkMainThread()
         IronSource.onResume(_activity)
+        for (ad in _ads.values) {
+            ad.onResume()
+        }
     }
 
     override fun onPause() {
         Thread.checkMainThread()
         IronSource.onPause(_activity)
+        for (ad in _ads.values) {
+            ad.onPause()
+        }
     }
 
     override fun onDestroy() {
-        val activity = _activity ?: return
-        for (ad in _bannerAds.values) {
-            ad.onDestroy(activity)
+        for (ad in _ads.values) {
+            ad.onDestroy()
         }
+        _activity = null
     }
 
     override fun destroy() {
         deregisterHandlers()
-        for (ad in _bannerAds.values) {
+        for (ad in _ads.values) {
             ad.destroy()
         }
-        _bannerAds.clear()
+        _ads.clear()
         IronSource.removeInterstitialListener()
         IronSource.removeRewardedVideoListener()
     }
@@ -131,8 +137,8 @@ class IronSourceBridge(
             val adSize = _bannerHelper.getAdSize(request.adSize)
             Utils.toString(createBannerAd(request.adId, adSize))
         }
-        _bridge.registerHandler(kDestroyBannerAd) { message ->
-            Utils.toString(destroyBannerAd(message))
+        _bridge.registerHandler(kDestroyAd) { message ->
+            Utils.toString(destroyAd(message))
         }
         _bridge.registerHandler(kLoadInterstitialAd) {
             loadInterstitialAd()
@@ -159,7 +165,7 @@ class IronSourceBridge(
         _bridge.deregisterHandler(kInitialize)
         _bridge.deregisterHandler(kGetBannerAdSize)
         _bridge.deregisterHandler(kCreateBannerAd)
-        _bridge.deregisterHandler(kDestroyBannerAd)
+        _bridge.deregisterHandler(kDestroyAd)
         _bridge.deregisterHandler(kLoadInterstitialAd)
         _bridge.deregisterHandler(kHasInterstitialAd)
         _bridge.deregisterHandler(kShowInterstitialAd)
@@ -198,21 +204,28 @@ class IronSourceBridge(
 
     @AnyThread
     fun createBannerAd(adId: String, adSize: ISBannerSize): Boolean {
+        return createAd(adId) {
+            IronSourceBannerAd(_bridge, _logger, _activity, adId, adSize, _bannerHelper)
+        }
+    }
+
+    @AnyThread
+    fun createAd(adId: String, creator: () -> IAd): Boolean {
         checkInitialized()
-        if (_bannerAds.containsKey(adId)) {
+        if (_ads.containsKey(adId)) {
             return false
         }
-        val ad = IronSourceBannerAd(_bridge, _logger, _activity, adId, adSize, _bannerHelper)
-        _bannerAds[adId] = ad
+        val ad = creator()
+        _ads[adId] = ad
         return true
     }
 
     @AnyThread
-    fun destroyBannerAd(adId: String): Boolean {
+    fun destroyAd(adId: String): Boolean {
         checkInitialized()
-        val ad = _bannerAds[adId] ?: return false
+        val ad = _ads[adId] ?: return false
         ad.destroy()
-        _bannerAds.remove(adId)
+        _ads.remove(adId)
         return true
     }
 

@@ -5,7 +5,6 @@ import android.graphics.Point
 import android.view.Gravity
 import android.widget.FrameLayout
 import androidx.annotation.AnyThread
-import androidx.annotation.UiThread
 import com.ee.IBannerAd
 import com.ee.ILogger
 import com.ee.IMessageBridge
@@ -16,7 +15,6 @@ import com.facebook.ads.AdError
 import com.facebook.ads.AdListener
 import com.facebook.ads.AdSize
 import com.facebook.ads.AdView
-import com.google.common.truth.Truth.assertThat
 import kotlinx.serialization.InternalSerializationApi
 import java.util.concurrent.atomic.AtomicBoolean
 
@@ -48,21 +46,23 @@ internal class FacebookBannerAd(
         createInternalAd()
     }
 
-    @UiThread
-    fun onCreate(activity: Activity) {
+    override fun onCreate(activity: Activity) {
         _activity = activity
         addToActivity()
     }
 
-    @UiThread
-    fun onDestroy(activity: Activity) {
-        assertThat(_activity).isEqualTo(activity)
+    override fun onResume() {
+    }
+
+    override fun onPause() {
+    }
+
+    override fun onDestroy() {
         removeFromActivity()
         _activity = null
     }
 
-    @AnyThread
-    fun destroy() {
+    override fun destroy() {
         _logger.info("$kTag: ${this::destroy.name}: adId = $_adId")
         deregisterHandlers()
         destroyInternalAd()

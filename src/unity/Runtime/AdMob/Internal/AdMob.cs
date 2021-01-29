@@ -16,15 +16,12 @@ namespace EE.Internal {
         private const string kAddTestDevice = kPrefix + "AddTestDevice";
         private const string kGetBannerAdSize = kPrefix + "GetBannerAdSize";
         private const string kCreateBannerAd = kPrefix + "CreateBannerAd";
-        private const string kDestroyBannerAd = kPrefix + "DestroyBannerAd";
         private const string kCreateNativeAd = kPrefix + "CreateNativeAd";
-        private const string kDestroyNativeAd = kPrefix + "DestroyNativeAd";
         private const string kCreateAppOpenAd = kPrefix + "CreateAppOpenAd";
-        private const string kDestroyAppOpenAd = kPrefix + "DestroyAppOpenAd";
         private const string kCreateInterstitialAd = kPrefix + "CreateInterstitialAd";
-        private const string kDestroyInterstitialAd = kPrefix + "DestroyInterstitialAd";
+        private const string kCreateRewardedInterstitialAd = kPrefix + "CreateRewardedInterstitialAd";
         private const string kCreateRewardedAd = kPrefix + "CreateRewardedAd";
-        private const string kDestroyRewardedAd = kPrefix + "DestroyRewardedAd";
+        private const string kDestroyAd = kPrefix + "DestroyAd";
 
         private readonly IMessageBridge _bridge;
         private readonly ILogger _logger;
@@ -97,7 +94,7 @@ namespace EE.Internal {
             }
             var size = GetBannerAdSize(adSize);
             var ad = new GuardedBannerAd(new DefaultBannerAd("AdMobBannerAd", _bridge, _logger,
-                () => DestroyAd(kDestroyBannerAd, adId), adId, size));
+                () => DestroyAd(adId), adId, size));
             _ads.Add(adId, ad);
             return ad;
         }
@@ -105,7 +102,7 @@ namespace EE.Internal {
         public IFullScreenAd CreateAppOpenAd(string adId) {
             return CreateFullScreenAd(kCreateAppOpenAd, adId,
                 () => new DefaultFullScreenAd("AdMobAppOpenAd", _bridge, _logger, _displayer,
-                    () => DestroyAd(kDestroyAppOpenAd, adId),
+                    () => DestroyAd(adId),
                     _ => FullScreenAdResult.Completed,
                     adId));
         }
@@ -113,15 +110,25 @@ namespace EE.Internal {
         public IFullScreenAd CreateInterstitialAd(string adId) {
             return CreateFullScreenAd(kCreateInterstitialAd, adId,
                 () => new DefaultFullScreenAd("AdMobInterstitialAd", _bridge, _logger, _displayer,
-                    () => DestroyAd(kDestroyInterstitialAd, adId),
+                    () => DestroyAd(adId),
                     _ => FullScreenAdResult.Completed,
+                    adId));
+        }
+
+        public IFullScreenAd CreateRewardedInterstitialAd(string adId) {
+            return CreateFullScreenAd(kCreateRewardedInterstitialAd, adId,
+                () => new DefaultFullScreenAd("AdMobRewardedInterstitialAd", _bridge, _logger, _displayer,
+                    () => DestroyAd(adId),
+                    message => Utils.ToBool(message)
+                        ? FullScreenAdResult.Completed
+                        : FullScreenAdResult.Canceled,
                     adId));
         }
 
         public IFullScreenAd CreateRewardedAd(string adId) {
             return CreateFullScreenAd(kCreateRewardedAd, adId,
                 () => new DefaultFullScreenAd("AdMobRewardedAd", _bridge, _logger, _displayer,
-                    () => DestroyAd(kDestroyRewardedAd, adId),
+                    () => DestroyAd(adId),
                     message => Utils.ToBool(message)
                         ? FullScreenAdResult.Completed
                         : FullScreenAdResult.Canceled,
@@ -143,12 +150,12 @@ namespace EE.Internal {
             return ad;
         }
 
-        private bool DestroyAd(string handlerId, string adId) {
+        private bool DestroyAd(string adId) {
             _logger.Debug($"${kTag}: {nameof(DestroyAd)}: id = {adId}");
             if (!_ads.ContainsKey(adId)) {
                 return false;
             }
-            var response = _bridge.Call(handlerId, adId);
+            var response = _bridge.Call(kDestroyAd, adId);
             if (!Utils.ToBool(response)) {
                 Assert.IsTrue(false);
                 return false;

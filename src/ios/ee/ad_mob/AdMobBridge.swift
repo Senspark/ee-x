@@ -15,15 +15,12 @@ private let kGetEmulatorTestDeviceHash = "\(kPrefix)GetEmulatorTestDeviceHash"
 private let kAddTestDevice = "\(kPrefix)AddTestDevice"
 private let kGetBannerAdSize = "\(kPrefix)GetBannerAdSize"
 private let kCreateBannerAd = "\(kPrefix)CreateBannerAd"
-private let kDestroyBannerAd = "\(kPrefix)DestroyBannerAd"
 private let kCreateNativeAd = "\(kPrefix)CreateNativeAd"
-private let kDestroyNativeAd = "\(kPrefix)DestroyNativeAd"
-private let kCreateInterstitialAd = "\(kPrefix)CreateInterstitialAd"
-private let kDestroyInterstitialAd = "\(kPrefix)DestroyInterstitialAd"
-private let kCreateRewardedAd = "\(kPrefix)CreateRewardedAd"
-private let kDestroyRewardedAd = "\(kPrefix)DestroyRewardedAd"
 private let kCreateAppOpenAd = "\(kPrefix)CreateAppOpenAd"
-private let kDestroyAppOpenAd = "\(kPrefix)DestroyAppOpenAd"
+private let kCreateInterstitialAd = "\(kPrefix)CreateInterstitialAd"
+private let kCreateRewardedInterstitialAd = "\(kPrefix)CreateRewardedInterstitialAd"
+private let kCreateRewardedAd = "\(kPrefix)CreateRewardedAd"
+private let kDestroyAd = "\(kPrefix)DestroyAd"
 
 @objc(EEAdMobBridge)
 class AdMobBridge: NSObject, IPlugin {
@@ -33,11 +30,7 @@ class AdMobBridge: NSObject, IPlugin {
     private var _initialized = false
     private let _bannerHelper = AdMobBannerHelper()
     private var _testDevices: [String] = []
-    private var _bannerAds: [String: AdMobBannerAd] = [:]
-    private var _nativeAds: [String: AdMobNativeAd] = [:]
-    private var _interstitialAds: [String: AdMobInterstitialAd] = [:]
-    private var _rewardedAds: [String: AdMobRewardedAd] = [:]
-    private var _appOpenAds: [String: AdMobAppOpenAd] = [:]
+    private var _ads: [String: IAd] = [:]
 
     public required init(_ bridge: IMessageBridge, _ logger: ILogger) {
         _bridge = bridge
@@ -48,16 +41,8 @@ class AdMobBridge: NSObject, IPlugin {
 
     public func destroy() {
         deregisterHandlers()
-        _bannerAds.values.forEach { $0.destroy() }
-        _bannerAds.removeAll()
-        _nativeAds.values.forEach { $0.destroy() }
-        _nativeAds.removeAll()
-        _interstitialAds.values.forEach { $0.destroy() }
-        _interstitialAds.removeAll()
-        _rewardedAds.values.forEach { $0.destroy() }
-        _rewardedAds.removeAll()
-        _appOpenAds.values.forEach { $0.destroy() }
-        _appOpenAds.removeAll()
+        _ads.values.forEach { $0.destroy() }
+        _ads.removeAll()
     }
 
     func registerHandlers() {
@@ -97,9 +82,6 @@ class AdMobBridge: NSObject, IPlugin {
             let adSize = self._bannerHelper.getAdSize(index)
             return Utils.toString(self.createBannerAd(adId, adSize))
         }
-        _bridge.registerHandler(kDestroyBannerAd) { message in
-            Utils.toString(self.destroyBannerAd(message))
-        }
         _bridge.registerHandler(kCreateNativeAd) { message in
             let dict = EEJsonUtils.convertString(toDictionary: message)
             guard
@@ -111,26 +93,20 @@ class AdMobBridge: NSObject, IPlugin {
             }
             return Utils.toString(self.createNativeAd(adId, layoutName))
         }
-        _bridge.registerHandler(kDestroyNativeAd) { message in
-            Utils.toString(self.destroyNativeAd(message))
+        _bridge.registerHandler(kCreateAppOpenAd) { message in
+            Utils.toString(self.createAppOpenAd(message))
         }
         _bridge.registerHandler(kCreateInterstitialAd) { message in
             Utils.toString(self.createInterstitialAd(message))
         }
-        _bridge.registerHandler(kDestroyInterstitialAd) { message in
-            Utils.toString(self.destroyInterstitialAd(message))
+        _bridge.registerHandler(kCreateRewardedInterstitialAd) { message in
+            Utils.toString(self.createRewardedInterstitialAd(message))
         }
         _bridge.registerHandler(kCreateRewardedAd) { message in
             Utils.toString(self.createRewardedAd(message))
         }
-        _bridge.registerHandler(kDestroyRewardedAd) { message in
-            Utils.toString(self.destroyRewardedAd(message))
-        }
-        _bridge.registerHandler(kCreateAppOpenAd) { message in
-            Utils.toString(self.createAppOpenAd(message))
-        }
-        _bridge.registerHandler(kDestroyAppOpenAd) { message in
-            Utils.toString(self.destroyAppOpenAd(message))
+        _bridge.registerHandler(kDestroyAd) { message in
+            Utils.toString(self.destroyAd(message))
         }
     }
 
@@ -140,15 +116,12 @@ class AdMobBridge: NSObject, IPlugin {
         _bridge.deregisterHandler(kAddTestDevice)
         _bridge.deregisterHandler(kGetBannerAdSize)
         _bridge.deregisterHandler(kCreateBannerAd)
-        _bridge.deregisterHandler(kDestroyBannerAd)
         _bridge.deregisterHandler(kCreateNativeAd)
-        _bridge.deregisterHandler(kDestroyNativeAd)
-        _bridge.deregisterHandler(kCreateInterstitialAd)
-        _bridge.deregisterHandler(kDestroyInterstitialAd)
-        _bridge.deregisterHandler(kCreateRewardedAd)
-        _bridge.deregisterHandler(kDestroyRewardedAd)
         _bridge.deregisterHandler(kCreateAppOpenAd)
-        _bridge.deregisterHandler(kDestroyAppOpenAd)
+        _bridge.deregisterHandler(kCreateInterstitialAd)
+        _bridge.deregisterHandler(kCreateRewardedInterstitialAd)
+        _bridge.deregisterHandler(kCreateRewardedAd)
+        _bridge.deregisterHandler(kDestroyAd)
     }
 
     func checkInitialized() {
@@ -198,102 +171,58 @@ class AdMobBridge: NSObject, IPlugin {
     }
 
     func createBannerAd(_ adId: String, _ adSize: GADAdSize) -> Bool {
-        checkInitialized()
-        if _bannerAds.contains(where: { key, _ in key == adId }) {
-            return false
+        return createAd(adId) {
+            AdMobBannerAd(_bridge, _logger, adId, adSize, _bannerHelper)
         }
-        let ad = AdMobBannerAd(_bridge, _logger, adId, adSize, _bannerHelper)
-        _bannerAds[adId] = ad
-        return true
-    }
-
-    func destroyBannerAd(_ adId: String) -> Bool {
-        checkInitialized()
-        guard let ad = _bannerAds[adId] else {
-            return false
-        }
-        ad.destroy()
-        _bannerAds.removeValue(forKey: adId)
-        return true
     }
 
     func createNativeAd(_ adId: String, _ layoutName: String) -> Bool {
-        checkInitialized()
-        if _nativeAds.contains(where: { key, _ in key == adId }) {
-            return false
+        return createAd(adId) {
+            AdMobNativeAd(_bridge, _logger, adId, layoutName)
         }
-        let ad = AdMobNativeAd(_bridge, _logger, adId, layoutName)
-        _nativeAds[adId] = ad
-        return true
-    }
-
-    func destroyNativeAd(_ adId: String) -> Bool {
-        checkInitialized()
-        guard let ad = _nativeAds[adId] else {
-            return false
-        }
-        ad.destroy()
-        _nativeAds.removeValue(forKey: adId)
-        return true
-    }
-
-    func createInterstitialAd(_ adId: String) -> Bool {
-        checkInitialized()
-        if _interstitialAds.contains(where: { key, _ in key == adId }) {
-            return false
-        }
-        let ad = AdMobInterstitialAd(_bridge, _logger, adId)
-        _interstitialAds[adId] = ad
-        return true
-    }
-
-    func destroyInterstitialAd(_ adId: String) -> Bool {
-        checkInitialized()
-        guard let ad = _interstitialAds[adId] else {
-            return false
-        }
-        ad.destroy()
-        _interstitialAds.removeValue(forKey: adId)
-        return true
-    }
-
-    func createRewardedAd(_ adId: String) -> Bool {
-        checkInitialized()
-        if _rewardedAds.contains(where: { key, _ in key == adId }) {
-            return false
-        }
-        let ad = AdMobRewardedAd(_bridge, _logger, adId)
-        _rewardedAds[adId] = ad
-        return true
-    }
-
-    func destroyRewardedAd(_ adId: String) -> Bool {
-        checkInitialized()
-        guard let ad = _rewardedAds[adId] else {
-            return false
-        }
-        ad.destroy()
-        _rewardedAds.removeValue(forKey: adId)
-        return true
     }
 
     func createAppOpenAd(_ adId: String) -> Bool {
+        return createAd(adId) {
+            AdMobAppOpenAd(self._bridge, self._logger, adId)
+        }
+    }
+
+    func createInterstitialAd(_ adId: String) -> Bool {
+        return createAd(adId) {
+            AdMobInterstitialAd(self._bridge, self._logger, adId)
+        }
+    }
+
+    func createRewardedInterstitialAd(_ adId: String) -> Bool {
+        return createAd(adId) {
+            AdMobRewardedInterstitialAd(self._bridge, self._logger, adId)
+        }
+    }
+
+    func createRewardedAd(_ adId: String) -> Bool {
+        return createAd(adId) {
+            AdMobRewardedAd(self._bridge, self._logger, adId)
+        }
+    }
+
+    func createAd(_ adId: String, _ creator: () -> IAd) -> Bool {
         checkInitialized()
-        if _appOpenAds.contains(where: { key, _ in key == adId }) {
+        if _ads.contains(where: { key, _ in key == adId }) {
             return false
         }
-        let ad = AdMobAppOpenAd(_bridge, _logger, adId)
-        _appOpenAds[adId] = ad
+        let ad = creator()
+        _ads[adId] = ad
         return true
     }
 
-    func destroyAppOpenAd(_ adId: String) -> Bool {
+    func destroyAd(_ adId: String) -> Bool {
         checkInitialized()
-        guard let ad = _appOpenAds[adId] else {
+        guard let ad = _ads[adId] else {
             return false
         }
         ad.destroy()
-        _appOpenAds.removeValue(forKey: adId)
+        _ads.removeValue(forKey: adId)
         return true
     }
 }

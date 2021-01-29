@@ -13,7 +13,7 @@ private let kPrefix = "IronSourceBridge"
 private let kInitialize = "\(kPrefix)Initialize"
 private let kGetBannerAdSize = "\(kPrefix)GetBannerAdSize"
 private let kCreateBannerAd = "\(kPrefix)CreateBannerAd"
-private let kDestroyBannerAd = "\(kPrefix)DestroyBannerAd"
+private let kDestroyAd = "\(kPrefix)DestroyAd"
 private let kHasInterstitialAd = "\(kPrefix)HasInterstitialAd"
 private let kLoadInterstitialAd = "\(kPrefix)LoadInterstitialAd"
 private let kShowInterstitialAd = "\(kPrefix)ShowInterstitialAd"
@@ -35,7 +35,7 @@ class IronSourceBridge: NSObject, IPlugin, ISRewardedVideoDelegate, ISInterstiti
     private let _logger: ILogger
     private var _initialized = false
     private let _bannerHelper = IronSourceBannerHelper()
-    private var _bannerAds: [String: IronSourceBannerAd] = [:]
+    private var _ads: [String: IAd] = [:]
     private var _isInterstitialAdLoaded = false
     private var _isRewardedAdLoaded = false
     private var _rewarded = false
@@ -49,8 +49,8 @@ class IronSourceBridge: NSObject, IPlugin, ISRewardedVideoDelegate, ISInterstiti
 
     public func destroy() {
         deregisterHandlers()
-        _bannerAds.values.forEach { $0.destroy() }
-        _bannerAds.removeAll()
+        _ads.values.forEach { $0.destroy() }
+        _ads.removeAll()
         // Cannot clear delegates.
     }
 
@@ -84,8 +84,8 @@ class IronSourceBridge: NSObject, IPlugin, ISRewardedVideoDelegate, ISInterstiti
             let adSize = self._bannerHelper.getAdSize(index)
             return Utils.toString(self.createBannerAd(adId, adSize))
         }
-        _bridge.registerHandler(kDestroyBannerAd) { message in
-            Utils.toString(self.destroyBannerAd(message))
+        _bridge.registerHandler(kDestroyAd) { message in
+            Utils.toString(self.destroyAd(message))
         }
         _bridge.registerHandler(kLoadInterstitialAd) { _ in
             self.loadInterstitialAd()
@@ -111,7 +111,7 @@ class IronSourceBridge: NSObject, IPlugin, ISRewardedVideoDelegate, ISInterstiti
         _bridge.deregisterHandler(kInitialize)
         _bridge.deregisterHandler(kGetBannerAdSize)
         _bridge.deregisterHandler(kCreateBannerAd)
-        _bridge.deregisterHandler(kDestroyBannerAd)
+        _bridge.deregisterHandler(kDestroyAd)
         _bridge.deregisterHandler(kLoadInterstitialAd)
         _bridge.deregisterHandler(kHasInterstitialAd)
         _bridge.deregisterHandler(kShowInterstitialAd)
@@ -152,22 +152,28 @@ class IronSourceBridge: NSObject, IPlugin, ISRewardedVideoDelegate, ISInterstiti
     }
 
     func createBannerAd(_ adId: String, _ adSize: ISBannerSize) -> Bool {
+        return createAd(adId) {
+            IronSourceBannerAd(self._bridge, self._logger, adId, adSize, self._bannerHelper)
+        }
+    }
+
+    func createAd(_ adId: String, _ creator: () -> IAd) -> Bool {
         checkInitialized()
-        if _bannerAds.contains(where: { key, _ in key == adId }) {
+        if _ads.contains(where: { key, _ in key == adId }) {
             return false
         }
-        let ad = IronSourceBannerAd(_bridge, _logger, adId, adSize, _bannerHelper)
-        _bannerAds[adId] = ad
+        let ad = creator()
+        _ads[adId] = ad
         return true
     }
 
-    func destroyBannerAd(_ adId: String) -> Bool {
+    func destroyAd(_ adId: String) -> Bool {
         checkInitialized()
-        guard let ad = _bannerAds[adId] else {
+        guard let ad = _ads[adId] else {
             return false
         }
         ad.destroy()
-        _bannerAds.removeValue(forKey: adId)
+        _ads.removeValue(forKey: adId)
         return true
     }
 

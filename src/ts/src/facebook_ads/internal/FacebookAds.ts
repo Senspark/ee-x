@@ -31,13 +31,10 @@ export class FacebookAds implements IFacebookAds {
     private readonly kClearTestDevices = this.kPrefix + "ClearTestDevices";
     private readonly kGetBannerAdSize = this.kPrefix + "GetBannerAdSize";
     private readonly kCreateBannerAd = this.kPrefix + "CreateBannerAd";
-    private readonly kDestroyBannerAd = this.kPrefix + "DestroyBannerAd";
     private readonly kCreateNativeAd = this.kPrefix + "CreateNativeAd";
-    private readonly kDestroyNativeAd = this.kPrefix + "DestroyNativeAd";
     private readonly kCreateInterstitialAd = this.kPrefix + "CreateInterstitialAd";
-    private readonly kDestroyInterstitialAd = this.kPrefix + "DestroyInterstitialAd";
     private readonly kCreateRewardedAd = this.kPrefix + "CreateRewardedAd";
-    private readonly kDestroyRewardedAd = this.kPrefix + "DestroyRewardedAd";
+    private readonly kDestroyAd = this.kPrefix + "DestroyAd";
 
     private readonly _bridge: IMessageBridge;
     private readonly _logger: ILogger;
@@ -107,7 +104,7 @@ export class FacebookAds implements IFacebookAds {
         const size = this.getBannerAdSize(adSize);
         const ad = new GuardedBannerAd(
             new DefaultBannerAd("FacebookBannerAd", this._bridge, this._logger,
-                () => this.destroyAd(this.kDestroyBannerAd, adId),
+                () => this.destroyAd(adId),
                 adId, size));
         this._ads[adId] = ad;
         return ad;
@@ -116,7 +113,7 @@ export class FacebookAds implements IFacebookAds {
     public createInterstitialAd(adId: string): IFullScreenAd {
         return this.createFullScreenAd(this.kCreateInterstitialAd, adId, () =>
             new DefaultFullScreenAd("FacebookInterstitialAd", this._bridge, this._logger, this._displayer,
-                () => this.destroyAd(this.kDestroyInterstitialAd, adId),
+                () => this.destroyAd(adId),
                 _ => FullScreenAdResult.Completed,
                 adId))
     }
@@ -124,7 +121,7 @@ export class FacebookAds implements IFacebookAds {
     public createRewardedAd(adId: string): IFullScreenAd {
         return this.createFullScreenAd(this.kCreateRewardedAd, adId, () =>
             new DefaultFullScreenAd("FacebookRewardedAd", this._bridge, this._logger, this._displayer,
-                () => this.destroyAd(this.kDestroyRewardedAd, adId),
+                () => this.destroyAd(adId),
                 message => Utils.toBool(message)
                     ? FullScreenAdResult.Completed
                     : FullScreenAdResult.Canceled,
@@ -145,12 +142,12 @@ export class FacebookAds implements IFacebookAds {
         return ad;
     }
 
-    private destroyAd(handlerId: string, adId: string): boolean {
+    private destroyAd(adId: string): boolean {
         this._logger.debug(`${this.kTag}: destroyAd: id = ${adId}`);
         if (!this._ads[adId]) {
             return false;
         }
-        const response = this._bridge.call(handlerId, adId);
+        const response = this._bridge.call(this.kDestroyAd, adId);
         if (!Utils.toBool(response)) {
             // Assert.
             return false;

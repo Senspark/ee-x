@@ -9,6 +9,7 @@ import com.ee.internal.AdMobBannerHelper
 import com.ee.internal.AdMobInterstitialAd
 import com.ee.internal.AdMobNativeAd
 import com.ee.internal.AdMobRewardedAd
+import com.ee.internal.AdMobRewardedInterstitialAd
 import com.ee.internal.deserialize
 import com.ee.internal.serialize
 import com.google.android.gms.ads.AdRequest
@@ -38,26 +39,19 @@ class AdMobBridge(
         private const val kAddTestDevice = "${kPrefix}AddTestDevice"
         private const val kGetBannerAdSize = "${kPrefix}GetBannerAdSize"
         private const val kCreateBannerAd = "${kPrefix}CreateBannerAd"
-        private const val kDestroyBannerAd = "${kPrefix}DestroyBannerAd"
         private const val kCreateNativeAd = "${kPrefix}CreateNativeAd"
-        private const val kDestroyNativeAd = "${kPrefix}DestroyNativeAd"
-        private const val kCreateInterstitialAd = "${kPrefix}CreateInterstitialAd"
-        private const val kDestroyInterstitialAd = "${kPrefix}DestroyInterstitialAd"
-        private const val kCreateRewardedAd = "${kPrefix}CreateRewardedAd"
-        private const val kDestroyRewardedAd = "${kPrefix}DestroyRewardedAd"
         private const val kCreateAppOpenAd = "${kPrefix}CreateAppOpenAd"
-        private const val kDestroyAppOpenAd = "${kPrefix}DestroyAppOpenAd"
+        private const val kCreateInterstitialAd = "${kPrefix}CreateInterstitialAd"
+        private const val kCreateRewardedInterstitialAd = "${kPrefix}CreateRewardedInterstitialAd"
+        private const val kCreateRewardedAd = "${kPrefix}CreateRewardedAd"
+        private const val kDestroyAd = "${kPrefix}DestroyAd"
     }
 
     private var _initializing = false
     private var _initialized = false
     private val _bannerHelper = AdMobBannerHelper(_application)
     private val _testDevices: MutableList<String> = ArrayList()
-    private val _bannerAds: MutableMap<String, AdMobBannerAd> = ConcurrentHashMap()
-    private val _nativeAds: MutableMap<String, AdMobNativeAd> = ConcurrentHashMap()
-    private val _interstitialAds: MutableMap<String, AdMobInterstitialAd> = ConcurrentHashMap()
-    private val _rewardedAds: MutableMap<String, AdMobRewardedAd> = ConcurrentHashMap()
-    private val _appOpenAds: MutableMap<String, AdMobAppOpenAd> = ConcurrentHashMap()
+    private val _ads: MutableMap<String, IAd> = ConcurrentHashMap()
 
     init {
         _logger.info("$kTag: constructor begin: application = $_application activity = $_activity")
@@ -67,19 +61,7 @@ class AdMobBridge(
 
     override fun onCreate(activity: Activity) {
         _activity = activity
-        for (ad in _bannerAds.values) {
-            ad.onCreate(activity)
-        }
-        for (ad in _nativeAds.values) {
-            ad.onCreate(activity)
-        }
-        for (ad in _interstitialAds.values) {
-            ad.onCreate(activity)
-        }
-        for (ad in _rewardedAds.values) {
-            ad.onCreate(activity)
-        }
-        for (ad in _appOpenAds.values) {
+        for (ad in _ads.values) {
             ad.onCreate(activity)
         }
     }
@@ -88,58 +70,30 @@ class AdMobBridge(
     override fun onStop() {}
 
     override fun onResume() {
-        for (ad in _bannerAds.values) {
+        for (ad in _ads.values) {
             ad.onResume()
         }
     }
 
     override fun onPause() {
-        for (ad in _bannerAds.values) {
+        for (ad in _ads.values) {
             ad.onPause()
         }
     }
 
     override fun onDestroy() {
-        val activity = _activity ?: return
-        for (ad in _bannerAds.values) {
-            ad.onDestroy(activity)
+        for (ad in _ads.values) {
+            ad.onDestroy()
         }
-        for (ad in _nativeAds.values) {
-            ad.onDestroy(activity)
-        }
-        for (ad in _interstitialAds.values) {
-            ad.onDestroy(activity)
-        }
-        for (ad in _rewardedAds.values) {
-            ad.onDestroy(activity)
-        }
-        for (ad in _appOpenAds.values) {
-            ad.onDestroy(activity)
-        }
+        _activity = null
     }
 
     override fun destroy() {
         deregisterHandlers()
-        for (ad in _bannerAds.values) {
+        for (ad in _ads.values) {
             ad.destroy()
         }
-        _bannerAds.clear()
-        for (ad in _nativeAds.values) {
-            ad.destroy()
-        }
-        _nativeAds.clear()
-        for (ad in _interstitialAds.values) {
-            ad.destroy()
-        }
-        _interstitialAds.clear()
-        for (ad in _rewardedAds.values) {
-            ad.destroy()
-        }
-        _rewardedAds.clear()
-        for (ad in _appOpenAds.values) {
-            ad.destroy()
-        }
-        _rewardedAds.clear()
+        _ads.clear()
     }
 
     @AnyThread
@@ -178,9 +132,6 @@ class AdMobBridge(
             val adSize = _bannerHelper.getAdSize(request.adSize)
             Utils.toString(createBannerAd(request.adId, adSize))
         }
-        _bridge.registerHandler(kDestroyBannerAd) { message ->
-            Utils.toString(destroyBannerAd(message))
-        }
         _bridge.registerHandler(kCreateNativeAd) { message ->
             @Serializable
             class Request(
@@ -192,26 +143,20 @@ class AdMobBridge(
             val request = deserialize<Request>(message)
             Utils.toString(createNativeAd(request.adId, request.layoutName, request.identifiers))
         }
-        _bridge.registerHandler(kDestroyNativeAd) { message ->
-            Utils.toString(destroyNativeAd(message))
+        _bridge.registerHandler(kCreateAppOpenAd) { message ->
+            Utils.toString(createAppOpenAd(message))
         }
         _bridge.registerHandler(kCreateInterstitialAd) { message ->
             Utils.toString(createInterstitialAd(message))
         }
-        _bridge.registerHandler(kDestroyInterstitialAd) { message ->
-            Utils.toString(destroyInterstitialAd(message))
+        _bridge.registerHandler(kCreateRewardedInterstitialAd) { message ->
+            Utils.toString(createRewardedInterstitialAd(message))
         }
         _bridge.registerHandler(kCreateRewardedAd) { message ->
             Utils.toString(createRewardedAd(message))
         }
-        _bridge.registerHandler(kDestroyRewardedAd) { message ->
-            Utils.toString(destroyRewardedAd(message))
-        }
-        _bridge.registerHandler(kCreateAppOpenAd) { message ->
-            Utils.toString(createAppOpenAd(message))
-        }
-        _bridge.registerHandler(kDestroyAppOpenAd) { message ->
-            Utils.toString(destroyAppOpenAd(message))
+        _bridge.registerHandler(kDestroyAd) { message ->
+            Utils.toString(destroyAd(message))
         }
     }
 
@@ -222,15 +167,12 @@ class AdMobBridge(
         _bridge.deregisterHandler(kAddTestDevice)
         _bridge.deregisterHandler(kGetBannerAdSize)
         _bridge.deregisterHandler(kCreateBannerAd)
-        _bridge.deregisterHandler(kDestroyBannerAd)
         _bridge.deregisterHandler(kCreateNativeAd)
-        _bridge.deregisterHandler(kDestroyNativeAd)
-        _bridge.deregisterHandler(kCreateInterstitialAd)
-        _bridge.deregisterHandler(kDestroyInterstitialAd)
-        _bridge.deregisterHandler(kCreateRewardedAd)
-        _bridge.deregisterHandler(kDestroyRewardedAd)
         _bridge.deregisterHandler(kCreateAppOpenAd)
-        _bridge.deregisterHandler(kDestroyAppOpenAd)
+        _bridge.deregisterHandler(kCreateInterstitialAd)
+        _bridge.deregisterHandler(kCreateRewardedInterstitialAd)
+        _bridge.deregisterHandler(kCreateRewardedAd)
+        _bridge.deregisterHandler(kDestroyAd)
     }
 
     private fun checkInitialized() {
@@ -291,102 +233,64 @@ class AdMobBridge(
 
     @AnyThread
     fun createBannerAd(adId: String, adSize: AdSize): Boolean {
-        checkInitialized()
-        if (_bannerAds.containsKey(adId)) {
-            return false
+        return createAd(adId) {
+            AdMobBannerAd(_bridge, _logger, _activity, adId, adSize, _bannerHelper)
         }
-        val ad = AdMobBannerAd(_bridge, _logger, _activity, adId, adSize, _bannerHelper)
-        _bannerAds[adId] = ad
-        return true
-    }
-
-    @AnyThread
-    fun destroyBannerAd(adId: String): Boolean {
-        checkInitialized()
-        val ad = _bannerAds[adId] ?: return false
-        ad.destroy()
-        _bannerAds.remove(adId)
-        return true
     }
 
     @AnyThread
     fun createNativeAd(adId: String, layoutName: String,
                        identifiers: Map<String, String>): Boolean {
-        checkInitialized()
-        if (_nativeAds.containsKey(adId)) {
-            return false
+        return createAd(adId) {
+            AdMobNativeAd(_bridge, _logger, _application, _activity, adId, layoutName, identifiers)
         }
-        val ad = AdMobNativeAd(_bridge, _logger, _application, _activity, adId, layoutName, identifiers)
-        _nativeAds[adId] = ad
-        return true
-    }
-
-    @AnyThread
-    fun destroyNativeAd(adId: String): Boolean {
-        checkInitialized()
-        val ad = _nativeAds[adId] ?: return false
-        ad.destroy()
-        _nativeAds.remove(adId)
-        return true
-    }
-
-    @AnyThread
-    fun createInterstitialAd(adId: String): Boolean {
-        checkInitialized()
-        if (_interstitialAds.containsKey(adId)) {
-            return false
-        }
-        val ad = AdMobInterstitialAd(_bridge, _logger, _activity, adId)
-        _interstitialAds[adId] = ad
-        return true
-    }
-
-    @AnyThread
-    fun destroyInterstitialAd(adId: String): Boolean {
-        checkInitialized()
-        val ad = _interstitialAds[adId] ?: return false
-        ad.destroy()
-        _interstitialAds.remove(adId)
-        return true
-    }
-
-    @AnyThread
-    fun createRewardedAd(adId: String): Boolean {
-        checkInitialized()
-        if (_rewardedAds.containsKey(adId)) {
-            return false
-        }
-        val ad = AdMobRewardedAd(_bridge, _logger, _activity, adId)
-        _rewardedAds[adId] = ad
-        return true
-    }
-
-    @AnyThread
-    fun destroyRewardedAd(adId: String): Boolean {
-        checkInitialized()
-        val ad = _rewardedAds[adId] ?: return false
-        ad.destroy()
-        _rewardedAds.remove(adId)
-        return true
     }
 
     @AnyThread
     fun createAppOpenAd(adId: String): Boolean {
+        return createAd(adId) {
+            AdMobAppOpenAd(_bridge, _logger, _application, _activity, adId)
+        }
+    }
+
+    @AnyThread
+    fun createInterstitialAd(adId: String): Boolean {
+        return createAd(adId) {
+            AdMobInterstitialAd(_bridge, _logger, _activity, adId)
+        }
+    }
+
+    @AnyThread
+    fun createRewardedInterstitialAd(adId: String): Boolean {
+        return createAd(adId) {
+            AdMobRewardedInterstitialAd(_bridge, _logger, _activity, adId)
+        }
+    }
+
+    @AnyThread
+    fun createRewardedAd(adId: String): Boolean {
+        return createAd(adId) {
+            AdMobRewardedAd(_bridge, _logger, _activity, adId)
+        }
+    }
+
+    @AnyThread
+    fun createAd(adId: String, creator: () -> IAd): Boolean {
         checkInitialized()
-        if (_appOpenAds.containsKey(adId)) {
+        if (_ads.containsKey(adId)) {
             return false
         }
-        val ad = AdMobAppOpenAd(_bridge, _logger, _application, _activity, adId)
-        _appOpenAds[adId] = ad
+        val ad = creator()
+        _ads[adId] = ad
         return true
     }
 
     @AnyThread
-    fun destroyAppOpenAd(adId: String): Boolean {
+    fun destroyAd(adId: String): Boolean {
         checkInitialized()
-        val ad = _appOpenAds[adId] ?: return false
+        val ad = _ads[adId] ?: return false
         ad.destroy()
-        _appOpenAds.remove(adId)
+        _ads.remove(adId)
         return true
     }
 }

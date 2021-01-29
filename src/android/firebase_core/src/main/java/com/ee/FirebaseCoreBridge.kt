@@ -22,11 +22,17 @@ class FirebaseCoreBridge(
         _logger.info("$kTag: constructor end")
     }
 
-    override fun onCreate(activity: Activity) {}
+    override fun onCreate(activity: Activity) {
+        _activity = activity
+    }
+
     override fun onStart() {}
     override fun onStop() {}
     override fun onResume() {}
     override fun onPause() {}
     override fun onDestroy() {}
-    override fun destroy() {}
+
+    override fun destroy() {
+        _activity = null
+    }
 }

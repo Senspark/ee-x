@@ -13,7 +13,7 @@ namespace EE.Internal {
         private const string kInitialize = kPrefix + "Initialize";
         private const string kGetBannerAdSize = kPrefix + "GetBannerAdSize";
         private const string kCreateBannerAd = kPrefix + "CreateBannerAd";
-        private const string kDestroyBannerAd = kPrefix + "DestroyBannerAd";
+        private const string kDestroyAd = kPrefix + "DestroyAd";
         private const string kHasInterstitialAd = kPrefix + "HasInterstitialAd";
         private const string kLoadInterstitialAd = kPrefix + "LoadInterstitialAd";
         private const string kShowInterstitialAd = kPrefix + "ShowInterstitialAd";
@@ -119,7 +119,7 @@ namespace EE.Internal {
             if (_bannerAd == null) {
                 return false;
             }
-            var response = _bridge.Call(kDestroyBannerAd, adId);
+            var response = _bridge.Call(kDestroyAd, adId);
             if (!Utils.ToBool(response)) {
                 Assert.IsTrue(false);
                 return false;

@@ -24,7 +24,7 @@ const auto kInitialize                   = kPrefix + "Initialize";
 
 const auto kGetBannerAdSize              = kPrefix + "GetBannerAdSize";
 const auto kCreateBannerAd               = kPrefix + "CreateBannerAd";
-const auto kDestroyBannerAd              = kPrefix + "DestroyBannerAd";
+const auto kDestroyAd                    = kPrefix + "DestroyAd";
 
 const auto kHasInterstitialAd            = kPrefix + "HasInterstitialAd";
 const auto kLoadInterstitialAd           = kPrefix + "LoadInterstitialAd";
@@ -174,7 +174,7 @@ bool Self::destroyBannerAd(const std::string& adId) {
     if (bannerAd_ == nullptr) {
         return false;
     }
-    auto&& response = bridge_.call(kDestroyBannerAd, adId);
+    auto&& response = bridge_.call(kDestroyAd, adId);
     if (not core::toBool(response)) {
         logger_.error("%s: There was an error when attempt to destroy an ad.",
                       __PRETTY_FUNCTION__);

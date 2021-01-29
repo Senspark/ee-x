@@ -47,7 +47,7 @@ private:
         const std::string& handlerId, const std::string& adId,
         const std::function<std::shared_ptr<IFullScreenAd>()>& creator);
 
-    bool destroyAd(const std::string& handlerId, const std::string& adId);
+    bool destroyAd(const std::string& adId);
 
     IMessageBridge& bridge_;
     ILogger& logger_;

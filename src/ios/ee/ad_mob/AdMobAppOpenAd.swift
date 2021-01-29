@@ -27,9 +27,12 @@ internal class AdMobAppOpenAd: NSObject, IFullScreenAd, GADFullScreenContentDele
         _messageHelper = MessageHelper("AdMobAppOpenAd", _adId)
         super.init()
         _helper = FullScreenAdHelper(_bridge, self, _messageHelper)
+        registerHandlers()
     }
 
-    func destroy() {}
+    func destroy() {
+        deregisterHandlers()
+    }
 
     func registerHandlers() {
         _helper?.registerHandlers()
@@ -71,10 +74,11 @@ internal class AdMobAppOpenAd: NSObject, IFullScreenAd, GADFullScreenContentDele
 
     func show() {
         Thread.runOnMainThread {
-            guard
-                let ad = self._ad,
-                let rootView = Utils.getCurrentRootViewController()
-            else {
+            guard let ad = self._ad else {
+                self._bridge.callCpp(self._messageHelper.onFailedToShow, "Null ad")
+                return
+            }
+            guard let rootView = Utils.getCurrentRootViewController() else {
                 assert(false, "Ad is not initialized")
                 return
             }
@@ -91,6 +95,7 @@ internal class AdMobAppOpenAd: NSObject, IFullScreenAd, GADFullScreenContentDele
     func ad(_ ad: GADFullScreenPresentingAd, didFailToPresentFullScreenContentWithError error: Error) {
         Thread.runOnMainThread {
             self._logger.debug("\(kTag): \(#function): message = \(error.localizedDescription)")
+            self._isLoaded = false
             self._ad = nil
             self._bridge.callCpp(self._messageHelper.onFailedToShow, error.localizedDescription)
         }
@@ -99,6 +104,7 @@ internal class AdMobAppOpenAd: NSObject, IFullScreenAd, GADFullScreenContentDele
     func adDidDismissFullScreenContent(_ ad: GADFullScreenPresentingAd) {
         Thread.runOnMainThread {
             self._logger.debug("\(kTag): \(#function)")
+            self._isLoaded = false
             self._ad = nil
             self._bridge.callCpp(self._messageHelper.onClosed)
         }

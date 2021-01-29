@@ -70,6 +70,15 @@
             ]
         },
         {
+            "format": "rewarded_interstitial",
+            "instance": [
+                {
+                    "network": "ad_mob",
+                    "id": "ca-app-pub-2101587572072038/3571401542"
+                }
+            ]
+        },
+        {
             "format": "rewarded",
             "instance": [
                 {

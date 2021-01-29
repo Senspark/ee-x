@@ -124,7 +124,6 @@ internal class AdMobInterstitialAd(
     override fun onAdOpened() {
         Thread.runOnMainThread {
             _logger.debug("$kTag: ${this::onAdOpened.name}: id = $_adId")
-            _isLoaded.set(false)
         }
     }
 
@@ -144,6 +143,7 @@ internal class AdMobInterstitialAd(
     override fun onAdClosed() {
         Thread.runOnMainThread {
             _logger.debug("$kTag: ${this::onAdClosed.name}: id = $_adId")
+            _isLoaded.set(false)
             destroyInternalAd()
             _bridge.callCpp(_messageHelper.onClosed)
         }

@@ -251,6 +251,7 @@ class IronSourceBridge(
     }
 
     private fun handleRewardedAdResult() {
+        _isRewardedAdLoaded.set(false)
         _bridge.callCpp(kOnRewardedAdClosed, Utils.toString(_rewarded))
     }
 
@@ -272,13 +273,13 @@ class IronSourceBridge(
     override fun onInterstitialAdShowSucceeded() {
         Thread.runOnMainThread {
             _logger.debug("$kTag: ${this::onInterstitialAdShowSucceeded.name}")
-            _isInterstitialAdLoaded.set(false)
         }
     }
 
     override fun onInterstitialAdShowFailed(ironSourceError: IronSourceError) {
         Thread.runOnMainThread {
             _logger.debug("$kTag:${this::onInterstitialAdShowFailed.name}: ${ironSourceError.errorMessage}")
+            _isInterstitialAdLoaded.set(false)
             _bridge.callCpp(kOnInterstitialAdFailedToShow, ironSourceError.errorMessage)
         }
     }
@@ -299,6 +300,7 @@ class IronSourceBridge(
     override fun onInterstitialAdClosed() {
         Thread.runOnMainThread {
             _logger.debug("$kTag: ${this::onInterstitialAdClosed.name}")
+            _isInterstitialAdLoaded.set(false)
             _bridge.callCpp(kOnInterstitialAdClosed)
         }
     }
@@ -316,13 +318,13 @@ class IronSourceBridge(
     override fun onRewardedVideoAdShowFailed(ironSourceError: IronSourceError) {
         Thread.runOnMainThread {
             _logger.debug("$kTag: ${this::onRewardedVideoAdShowFailed.name}: ${ironSourceError.errorMessage}")
+            _isRewardedAdLoaded.set(false)
             _bridge.callCpp(kOnRewardedAdFailedToShow, ironSourceError.errorMessage)
         }
     }
 
     override fun onRewardedVideoAdOpened() {
         Thread.runOnMainThread {
-            _isRewardedAdLoaded.set(false)
             _logger.debug("$kTag: ${this::onRewardedVideoAdOpened.name}")
         }
     }

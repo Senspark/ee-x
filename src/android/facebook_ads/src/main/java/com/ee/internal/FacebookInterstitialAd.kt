@@ -109,6 +109,7 @@ internal class FacebookInterstitialAd(
             if (result) {
                 // OK.
             } else {
+                _isLoaded.set(false)
                 destroyInternalAd()
                 _bridge.callCpp(_messageHelper.onFailedToShow)
             }
@@ -129,6 +130,7 @@ internal class FacebookInterstitialAd(
             destroyInternalAd()
             if (_displaying) {
                 _displaying = false
+                _isLoaded.set(false)
                 _bridge.callCpp(_messageHelper.onFailedToShow, adError.errorMessage)
             } else {
                 _bridge.callCpp(_messageHelper.onFailedToLoad, adError.errorMessage)
@@ -139,7 +141,6 @@ internal class FacebookInterstitialAd(
     override fun onInterstitialDisplayed(ad: Ad) {
         Thread.runOnMainThread {
             _logger.debug("$kTag: ${this::onInterstitialDisplayed.name}: id = $_adId")
-            _isLoaded.set(false)
         }
     }
 
@@ -160,6 +161,7 @@ internal class FacebookInterstitialAd(
         Thread.runOnMainThread {
             _logger.debug("$kTag: ${this::onInterstitialDismissed.name}: id = $_adId")
             _displaying = false
+            _isLoaded.set(false)
             destroyInternalAd()
             _bridge.callCpp(_messageHelper.onClosed)
         }

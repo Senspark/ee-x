@@ -92,8 +92,8 @@ internal class FacebookRewardedAd: NSObject, IFullScreenAd, FBRewardedVideoAdDel
             let result = ad.show(fromRootViewController: rootView)
             if result {
                 // OK.
-                self._isLoaded = false
             } else {
+                self._isLoaded = false
                 self.destroyInternalAd()
                 self._bridge.callCpp(self._messageHelper.onFailedToShow)
             }
@@ -114,6 +114,7 @@ internal class FacebookRewardedAd: NSObject, IFullScreenAd, FBRewardedVideoAdDel
             self.destroyInternalAd()
             if self._displaying {
                 self._displaying = false
+                self._isLoaded = false
                 self._bridge.callCpp(self._messageHelper.onFailedToShow, error.localizedDescription)
             } else {
                 self._bridge.callCpp(self._messageHelper.onFailedToLoad, error.localizedDescription)
@@ -163,6 +164,7 @@ internal class FacebookRewardedAd: NSObject, IFullScreenAd, FBRewardedVideoAdDel
         Thread.runOnMainThread {
             self._logger.debug("\(kTag): \(#function): id = \(self._adId)")
             self._displaying = false
+            self._isLoaded = false
             self.destroyInternalAd()
             self._bridge.callCpp(self._messageHelper.onClosed, Utils.toString(self._rewarded))
         }

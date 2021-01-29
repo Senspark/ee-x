@@ -253,7 +253,6 @@ class UnityAdsBridge: NSObject, IPlugin, UnityAdsDelegate {
     func unityAdsDidStart(_ adId: String) {
         Thread.runOnMainThread {
             self._logger.debug("\(kTag): \(#function): id = \(adId)")
-            self._loadedAdIds.remove(adId)
         }
     }
 
@@ -261,6 +260,7 @@ class UnityAdsBridge: NSObject, IPlugin, UnityAdsDelegate {
         Thread.runOnMainThread {
             self._logger.debug("\(kTag): \(#function): id = \(adId) state = \(state)")
             UnityAds.remove(self)
+            self._loadedAdIds.remove(adId)
             if state == UnityAdsFinishState.error {
                 self._bridge.callCpp(kOnFailedToShow, EEJsonUtils.convertDictionary(toString: [
                     "ad_id": adId,

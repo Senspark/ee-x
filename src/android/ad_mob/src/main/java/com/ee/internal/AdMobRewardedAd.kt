@@ -132,6 +132,7 @@ internal class AdMobRewardedAd(
     override fun onRewardedAdFailedToShow(error: AdError?) {
         Thread.runOnMainThread {
             _logger.debug("$kTag: onRewardedAdFailedToShow: id = $_adId message = ${error?.message ?: ""}")
+            _isLoaded.set(false)
             destroyInternalAd()
             _bridge.callCpp(_messageHelper.onFailedToShow, error?.message ?: "")
         }
@@ -140,7 +141,6 @@ internal class AdMobRewardedAd(
     override fun onRewardedAdOpened() {
         Thread.runOnMainThread {
             _logger.debug("$kTag: ${this::onRewardedAdOpened.name}: id = $_adId")
-            _isLoaded.set(false)
         }
     }
 
@@ -154,6 +154,7 @@ internal class AdMobRewardedAd(
     override fun onRewardedAdClosed() {
         Thread.runOnMainThread {
             _logger.debug("$kTag: ${this::onRewardedAdClosed.name}: id = $_adId")
+            _isLoaded.set(false)
             destroyInternalAd()
             _bridge.callCpp(_messageHelper.onClosed, Utils.toString(_rewarded))
         }

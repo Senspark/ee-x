@@ -108,13 +108,13 @@ internal class AdMobInterstitialAd: NSObject, IFullScreenAd, GADInterstitialDele
     func interstitialWillPresentScreen(_ ad: GADInterstitial) {
         Thread.runOnMainThread {
             self._logger.debug("\(kTag): \(#function): id = \(self._adId)")
-            self._isLoaded = false
         }
     }
     
     func interstitialDidFail(toPresentScreen ad: GADInterstitial) {
         Thread.runOnMainThread {
             self._logger.debug("\(kTag): \(#function): id = \(self._adId)")
+            self._isLoaded = false
             self.destroyInternalAd()
             self._bridge.callCpp(self._messageHelper.onFailedToShow)
         }
@@ -136,6 +136,7 @@ internal class AdMobInterstitialAd: NSObject, IFullScreenAd, GADInterstitialDele
     func interstitialDidDismissScreen(_ ad: GADInterstitial) {
         Thread.runOnMainThread {
             self._logger.debug("\(kTag): \(#function): id = \(self._adId)")
+            self._isLoaded = false
             self.destroyInternalAd()
             self._bridge.callCpp(self._messageHelper.onClosed)
         }

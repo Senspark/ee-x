@@ -247,7 +247,6 @@ class UnityAdsBridge(
     override fun onUnityAdsStart(adId: String) {
         Thread.runOnMainThread {
             _logger.debug("$kTag: ${this::onUnityAdsStart.name}: id = $adId")
-            _loadedAdIds.remove(adId)
         }
     }
 
@@ -255,6 +254,7 @@ class UnityAdsBridge(
         Thread.runOnMainThread {
             _logger.debug("$kTag: ${this::onUnityAdsFinish.name}: id = $adId state = $state")
             UnityAds.removeListener(this)
+            _loadedAdIds.remove(adId)
             if (state == FinishState.ERROR) {
                 @Serializable
                 @Suppress("unused")

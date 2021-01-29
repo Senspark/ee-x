@@ -126,6 +126,7 @@ internal class FacebookRewardedAd(
             destroyInternalAd()
             if (_displaying) {
                 _displaying = false
+                _isLoaded.set(false)
                 _bridge.callCpp(_messageHelper.onFailedToShow, adError.errorMessage)
             } else {
                 _bridge.callCpp(_messageHelper.onFailedToLoad, adError.errorMessage)
@@ -165,6 +166,7 @@ internal class FacebookRewardedAd(
         Thread.runOnMainThread {
             _logger.debug("$kTag: ${this::onRewardedVideoClosed.name}: id = $_adId")
             _displaying = false
+            _isLoaded.set(false)
             destroyInternalAd()
             _bridge.callCpp(_messageHelper.onClosed, Utils.toString(_rewarded))
         }

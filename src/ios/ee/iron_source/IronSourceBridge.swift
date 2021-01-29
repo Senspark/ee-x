@@ -213,6 +213,7 @@ class IronSourceBridge: NSObject, IPlugin, ISRewardedVideoDelegate, ISInterstiti
     }
 
     func handleRewardedAdResult() {
+        _isRewardedAdLoaded = false
         _bridge.callCpp(kOnRewardedAdClosed, Utils.toString(_rewarded))
     }
 
@@ -234,13 +235,13 @@ class IronSourceBridge: NSObject, IPlugin, ISRewardedVideoDelegate, ISInterstiti
     public func interstitialDidShow() {
         Thread.runOnMainThread {
             self._logger.debug("\(kTag): \(#function)")
-            self._isRewardedAdLoaded = false
         }
     }
 
     public func interstitialDidFailToShowWithError(_ error: Error) {
         Thread.runOnMainThread {
             self._logger.debug("\(kTag): \(#function): \(error.localizedDescription)")
+            self._isInterstitialAdLoaded = false
             self._bridge.callCpp(kOnInterstitialAdFailedToShow, error.localizedDescription)
         }
     }
@@ -279,6 +280,7 @@ class IronSourceBridge: NSObject, IPlugin, ISRewardedVideoDelegate, ISInterstiti
     public func rewardedVideoDidFailToShowWithError(_ error: Error) {
         Thread.runOnMainThread {
             self._logger.debug("\(kTag): \(#function): \(error.localizedDescription)")
+            self._isRewardedAdLoaded = false
             self._bridge.callCpp(kOnRewardedAdFailedToShow, error.localizedDescription)
         }
     }

@@ -91,8 +91,8 @@ internal class FacebookInterstitialAd:
             let result = ad.show(fromRootViewController: rootView)
             if result {
                 // OK.
-                self._isLoaded = false
             } else {
+                self._isLoaded = false
                 self.destroyInternalAd()
                 self._bridge.callCpp(self._messageHelper.onFailedToShow)
             }
@@ -113,6 +113,7 @@ internal class FacebookInterstitialAd:
             self.destroyInternalAd()
             if self._displaying {
                 self._displaying = false
+                self._isLoaded = false
                 self._bridge.callCpp(self._messageHelper.onFailedToShow, error.localizedDescription)
             } else {
                 self._bridge.callCpp(self._messageHelper.onFailedToLoad, error.localizedDescription)
@@ -143,6 +144,7 @@ internal class FacebookInterstitialAd:
         Thread.runOnMainThread {
             self._logger.debug("\(kTag): \(#function): id = \(self._adId)")
             self._displaying = false
+            self._isLoaded = false
             self.destroyInternalAd()
             self._bridge.callCpp(self._messageHelper.onClosed)
         }

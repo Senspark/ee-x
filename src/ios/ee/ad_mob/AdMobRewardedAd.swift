@@ -105,13 +105,13 @@ internal class AdMobRewardedAd: NSObject, IFullScreenAd, GADRewardedAdDelegate {
     func rewardedAdDidPresent(_ rewardedAd: GADRewardedAd) {
         Thread.runOnMainThread {
             self._logger.debug("\(kTag): \(#function): id = \(self._adId)")
-            self._isLoaded = false
         }
     }
     
     func rewardedAd(_ rewardedAd: GADRewardedAd, didFailToPresentWithError error: Error) {
         Thread.runOnMainThread {
             self._logger.debug("\(kTag): \(#function): id = \(self._adId) message = \(error.localizedDescription)")
+            self._isLoaded = false
             self.destroyInternalAd()
             self._bridge.callCpp(self._messageHelper.onFailedToShow, error.localizedDescription)
         }
@@ -127,6 +127,7 @@ internal class AdMobRewardedAd: NSObject, IFullScreenAd, GADRewardedAdDelegate {
     func rewardedAdDidDismiss(_ rewardedAd: GADRewardedAd) {
         Thread.runOnMainThread {
             self._logger.debug("\(kTag): \(#function): id = \(self._adId)")
+            self._isLoaded = false
             self.destroyInternalAd()
             self._bridge.callCpp(self._messageHelper.onClosed, Utils.toString(self._rewarded))
         }

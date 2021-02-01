@@ -43,6 +43,7 @@ Pod::Spec.new do |spec|
       'src/cpp/ee/core/**/*',
       'src/cpp/ee/facebook/**/*',
       'src/cpp/ee/facebook_ads/**/*',
+      'src/cpp/ee/firebase_analytics/**/*',
       'src/cpp/ee/firebase_crashlytics/**/*',
       'src/cpp/ee/firebase_performance/**/*',
       'src/cpp/ee/iron_source/**/*',

@@ -9,27 +9,14 @@
 #ifndef EE_X_FIREBASE_ANALYTICS_BRIDGE_HPP
 #define EE_X_FIREBASE_ANALYTICS_BRIDGE_HPP
 
-#ifdef __cplusplus
-
-#include <cstdint>
-#include <optional>
-#include <string>
-#include <unordered_map>
-
-#include <ee/FirebaseFwd.hpp>
+#include "ee/firebase_analytics/IFirebaseAnalyticsBridge.hpp"
 
 namespace ee {
 namespace firebase {
 namespace analytics {
-using TrackingDict = std::unordered_map<std::string, std::string>;
-
-/// Wrapper for Firebase Analytics.
-/// Should have a single instance at a time.
-/// https://firebase.google.com/docs/analytics/cpp/start
-/// https://firebase.google.com/docs/reference/cpp/namespace/firebase/analytics
-class Bridge {
+class Bridge : public IBridge {
 public:
-    Bridge();
+    explicit Bridge(const );
     ~Bridge();
 
     /// Initializes the firebase analytics.

@@ -9,6 +9,7 @@ $(find ./cocos                -type f | sed "s/^/  \${CMAKE_CURRENT_LIST_DIR}\//
 $(find ./core                 -type f | sed "s/^/  \${CMAKE_CURRENT_LIST_DIR}\//")\n\
 $(find ./facebook             -type f | sed "s/^/  \${CMAKE_CURRENT_LIST_DIR}\//")\n\
 $(find ./facebook_ads         -type f | sed "s/^/  \${CMAKE_CURRENT_LIST_DIR}\//")\n\
+$(find ./firebase_analytics   -type f | sed "s/^/  \${CMAKE_CURRENT_LIST_DIR}\//")\n\
 $(find ./firebase_crashlytics -type f | sed "s/^/  \${CMAKE_CURRENT_LIST_DIR}\//")\n\
 $(find ./firebase_performance -type f | sed "s/^/  \${CMAKE_CURRENT_LIST_DIR}\//")\n\
 $(find ./iron_source          -type f | sed "s/^/  \${CMAKE_CURRENT_LIST_DIR}\//")\n\

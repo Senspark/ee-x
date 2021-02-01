@@ -5,7 +5,9 @@ import android.app.Application
 import android.os.Bundle
 import androidx.annotation.AnyThread
 import com.ee.internal.deserialize
+import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.ktx.analytics
+import com.google.firebase.analytics.ktx.logEvent
 import com.google.firebase.ktx.Firebase
 import kotlinx.serialization.Contextual
 import kotlinx.serialization.InternalSerializationApi
@@ -21,11 +23,13 @@ class FirebaseAnalyticsBridge(
         private val kTag = FirebaseAnalyticsBridge::class.java.name
         private const val kPrefix = "FirebaseAnalyticsBridge"
         private const val kSetUserProperty = "${kPrefix}SetUserProperty"
+        private const val kTrackScreen = "${kPrefix}TrackScreen"
         private const val kLogEvent = "${kPrefix}LogEvent"
     }
 
     init {
         _logger.info("$kTag: constructor begin: application = $_application activity = $_activity")
+        registerHandlers()
         _logger.info("$kTag: constructor end")
     }
 
@@ -37,10 +41,13 @@ class FirebaseAnalyticsBridge(
     override fun onStop() {}
     override fun onResume() {}
     override fun onPause() {}
-    override fun onDestroy() {}
+
+    override fun onDestroy() {
+        _activity = null
+    }
 
     override fun destroy() {
-        _activity = null
+        deregisterHandlers()
     }
 
     @AnyThread
@@ -54,6 +61,10 @@ class FirebaseAnalyticsBridge(
 
             val request = deserialize<Request>(message)
             setUserProperty(request.key, request.value)
+            ""
+        }
+        _bridge.registerHandler(kTrackScreen) { message ->
+            trackScreen(message)
             ""
         }
         _bridge.registerHandler(kLogEvent) { message ->
@@ -72,12 +83,23 @@ class FirebaseAnalyticsBridge(
     @AnyThread
     private fun deregisterHandlers() {
         _bridge.deregisterHandler(kSetUserProperty)
+        _bridge.deregisterHandler(kLogEvent)
+        _bridge.deregisterHandler(kTrackScreen)
     }
 
     @AnyThread
     private fun setUserProperty(key: String, value: String) {
         Thread.runOnMainThread {
             Firebase.analytics.setUserProperty(key, value)
+        }
+    }
+
+    @AnyThread
+    private fun trackScreen(name: String) {
+        Thread.runOnMainThread {
+            Firebase.analytics.logEvent(FirebaseAnalytics.Event.SCREEN_VIEW) {
+                param(FirebaseAnalytics.Param.SCREEN_NAME, name)
+            }
         }
     }
 

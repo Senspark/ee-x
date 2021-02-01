@@ -5,13 +5,16 @@ import android.app.Application
 import android.os.Bundle
 import androidx.annotation.AnyThread
 import com.ee.internal.deserialize
+import com.google.common.truth.Truth.assertThat
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.ktx.analytics
 import com.google.firebase.analytics.ktx.logEvent
 import com.google.firebase.ktx.Firebase
-import kotlinx.serialization.Contextual
 import kotlinx.serialization.InternalSerializationApi
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.json.JsonPrimitive
+import kotlinx.serialization.json.doubleOrNull
+import kotlinx.serialization.json.longOrNull
 
 @InternalSerializationApi
 class FirebaseAnalyticsBridge(
@@ -71,7 +74,7 @@ class FirebaseAnalyticsBridge(
             @Serializable
             class Request(
                 val name: String,
-                val parameters: Map<String, @Contextual FirebaseEventParameter>
+                val parameters: Map<String, JsonPrimitive>
             )
 
             val request = deserialize<Request>(message)
@@ -104,19 +107,25 @@ class FirebaseAnalyticsBridge(
     }
 
     @AnyThread
-    private fun logEvent(name: String, parameters: Map<String, FirebaseEventParameter>) {
+    private fun logEvent(name: String, parameters: Map<String, JsonPrimitive>) {
         Thread.runOnMainThread {
             val bundle = Bundle()
             for ((key, value) in parameters) {
-                if (value.type == FirebaseEventType.Long) {
-                    bundle.putLong(key, value.longValue)
+                if (value.isString) {
+                    bundle.putString(key, value.content)
+                    continue
                 }
-                if (value.type == FirebaseEventType.Double) {
-                    bundle.putDouble(key, value.doubleValue)
+                val long = value.longOrNull
+                if (long != null) {
+                    bundle.putLong(key, long)
+                    continue
                 }
-                if (value.type == FirebaseEventType.String) {
-                    bundle.putString(key, value.stringValue)
+                val double = value.doubleOrNull
+                if (double != null) {
+                    bundle.putDouble(key, double)
+                    continue
                 }
+                assertThat(false).isTrue()
             }
             Firebase.analytics.logEvent(name, bundle)
         }

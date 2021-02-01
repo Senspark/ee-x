@@ -62,12 +62,12 @@ export class IronSource implements IIronSource {
         this._displayer = MediationManager.getInstance().adDisplayer;
 
         this._bridge.registerHandler(_ => this.onInterstitialAdLoaded(), this.kOnInterstitialAdLoaded);
-        this._bridge.registerHandler(this.onInterstitialAdFailedToLoad, this.kOnInterstitialAdFailedToLoad);
-        this._bridge.registerHandler(this.onInterstitialAdFailedToShow, this.kOnInterstitialAdFailedToShow);
+        this._bridge.registerHandler(message => this.onInterstitialAdFailedToLoad(message), this.kOnInterstitialAdFailedToLoad);
+        this._bridge.registerHandler(message => this.onInterstitialAdFailedToShow(message), this.kOnInterstitialAdFailedToShow);
         this._bridge.registerHandler(_ => this.onInterstitialAdClicked(), this.kOnInterstitialAdClicked);
         this._bridge.registerHandler(_ => this.onInterstitialAdClosed(), this.kOnInterstitialAdClosed);
         this._bridge.registerHandler(_ => this.onRewardedAdLoaded(), this.kOnRewardedAdLoaded);
-        this._bridge.registerHandler(this.onRewardedAdFailedToShow, this.kOnRewardedAdFailedToShow);
+        this._bridge.registerHandler(message => this.onRewardedAdFailedToShow(message), this.kOnRewardedAdFailedToShow);
         this._bridge.registerHandler(_ => this.onRewardedAdClicked(), this.kOnRewardedAdClicked);
         this._bridge.registerHandler(message => this.onRewardedAdClosed(Utils.toBool(message)), this.kOnRewardedAdClosed);
     }

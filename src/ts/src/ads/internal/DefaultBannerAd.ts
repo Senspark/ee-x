@@ -42,7 +42,7 @@ export class DefaultBannerAd extends ObserverManager<AdObserver> implements IBan
 
         this._logger.debug(`${this.kTag}: constructor: prefix = ${this._prefix} id = ${this._adId}`);
         this._bridge.registerHandler(_ => this.onLoaded(), this._messageHelper.onLoaded);
-        this._bridge.registerHandler(this.onFailedToLoad, this._messageHelper.onFailedToLoad);
+        this._bridge.registerHandler(message => this.onFailedToLoad(message), this._messageHelper.onFailedToLoad);
         this._bridge.registerHandler(_ => this.onClicked(), this._messageHelper.onClicked);
     }
 

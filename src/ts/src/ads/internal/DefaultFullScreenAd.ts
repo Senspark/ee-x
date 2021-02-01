@@ -51,8 +51,8 @@ export class DefaultFullScreenAd extends ObserverManager<AdObserver> implements 
 
         this._logger.debug(`${this.kTag}: constructor: prefix = ${this._prefix} id = ${this._adId}`);
         this._bridge.registerHandler(_ => this.onLoaded(), this._messageHelper.onLoaded);
-        this._bridge.registerHandler(this.onFailedToLoad, this._messageHelper.onFailedToLoad);
-        this._bridge.registerHandler(this.onFailedToShow, this._messageHelper.onFailedToShow);
+        this._bridge.registerHandler(message => this.onFailedToLoad(message), this._messageHelper.onFailedToLoad);
+        this._bridge.registerHandler(message => this.onFailedToShow(message), this._messageHelper.onFailedToShow);
         this._bridge.registerHandler(_ => this.onClicked(), this._messageHelper.onClicked);
         this._bridge.registerHandler(message => {
             const result = this._resultParser(message);

@@ -48,7 +48,7 @@ export class UnityAds implements IUnityAds {
         this._displayer = MediationManager.getInstance().adDisplayer;
 
         this._logger.debug(`${this.kTag}: constructor`);
-        this._bridge.registerHandler(this.onLoaded, this.kOnLoaded);
+        this._bridge.registerHandler(message => this.onLoaded(message), this.kOnLoaded);
         this._bridge.registerHandler(message => {
             const response: {
                 ad_id: string,

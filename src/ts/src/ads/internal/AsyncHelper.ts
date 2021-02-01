@@ -21,6 +21,7 @@ export class AsyncHelper<Result> implements IAsyncHelper<Result> {
             this._promise = new Promise<Result>(resolver => {
                 this._processing = true;
                 this._finalizer = finalizer;
+                this._resolver = resolver;
                 processor();
             });
         }
@@ -34,5 +35,4 @@ export class AsyncHelper<Result> implements IAsyncHelper<Result> {
         this._resolver = undefined;
         this._processing = false;
     }
-
 }

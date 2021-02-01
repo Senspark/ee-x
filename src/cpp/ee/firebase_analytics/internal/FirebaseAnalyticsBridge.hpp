@@ -16,71 +16,30 @@ namespace firebase {
 namespace analytics {
 class Bridge : public IBridge {
 public:
-    explicit Bridge(const );
-    ~Bridge();
+    using Destroyer = std::function<void()>;
 
-    /// Initializes the firebase analytics.
-    /// @return True if successfully initialized, false otherwise.
-    bool initialize();
+    explicit Bridge(IMessageBridge& bridge, ILogger& logger,
+                    const Destroyer& destroyer);
+    virtual ~Bridge() override;
 
-    /// Sets whether analytics collection is enabled for this app on this
-    /// device.
-    /// This setting is persisted across app sessions. By default it is enabled.
-    /// @param[in] enabled true to enable analytics collection, false to
-    /// disable.
-    void analyticsCollectionEnabled(bool enabled);
+    virtual void destroy() override;
 
-    /// @brief Sets the duration of inactivity that terminates the current
-    /// session.
-    ///
-    /// @note The default value is 1800000 (30 minutes).
-    ///
-    /// @param milliseconds The duration of inactivity that terminates the
-    /// current session.
-    void setSessionTimeoutDuration(std::int64_t milliseconds);
-
-    /// Sets the user ID property.
-    /// This feature must be used in accordance with
-    /// <a href="https://www.google.com/policies/privacy">Google's Privacy
-    /// Policy</a>
-    /// @param[in] userId The user ID associated with the user of this app on
-    /// this device. The user ID must be non-empty and no more than 36
-    /// characters long. Setting user_id to NULL or nullptr removes the user ID.
-    void setUserId(const std::string& userId);
-
-    /// Set a user property to the given value.
-    /// @param[in] name Name of the user property to set.
-    /// @param[in] property Value to set the user property to.
-    void setUserProperty(const std::string& name, const std::string& property);
-
-    /// @brief Sets the current screen name and screen class, which specifies
-    /// the current visual context in your app. This helps identify the areas in
-    /// your app where users spend their time and how they interact with your
-    /// app.
-    ///
-    /// @param screenName The name of the current screen. Set to nullptr to
-    /// clear the current screen name. Limited to 100 characters.
-    /// @param screenClass The name of the screen class. If you specify nullptr
-    /// for this, it will use the default. On Android, the default is the class
-    /// name of the current Activity. On iOS, the default is the class name of
-    /// the current UIViewController. Limited to 100 characters.
-    void setCurrentScreen(const std::string& screenName,
-                          const std::optional<std::string>& screenClass);
-
-    /// Log an event with with associated parameters.
-    /// @param[in] name Name of the event to log. Should contain 1 to 32
-    /// alphanumeric characters or underscores. The name must start with an
-    /// alphabetic character. Some event names are reserved.
-    /// @param[in] dict Dictionary of Parameter structures.
-    void logEvent(const std::string& name, const TrackingDict& dict = {});
+    virtual void setUserProperty(const std::string& key,
+                                 const std::string& value) override;
+    virtual void trackScreen(const std::string& name) override;
+    virtual void
+    logEvent(const std::string& name,
+             const std::unordered_map<
+                 std::string, std::variant<std::int64_t, double, std::string>>&
+                 parameters) override;
 
 private:
-    bool initialized_;
+    IMessageBridge& bridge_;
+    ILogger& logger_;
+    Destroyer destroyer_;
 };
 } // namespace analytics
 } // namespace firebase
 } // namespace ee
-
-#endif // __cplusplus
 
 #endif /* EE_X_FIREBASE_ANALYTICS_BRIDGE_HPP */

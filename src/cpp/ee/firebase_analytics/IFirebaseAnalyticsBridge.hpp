@@ -3,6 +3,7 @@
 
 #ifdef __cplusplus
 
+#include <unordered_map>
 #include <variant>
 
 #include <ee/core/IPlugin.hpp>
@@ -17,10 +18,11 @@ public:
     virtual void setUserProperty(const std::string& key,
                                  const std::string& value) = 0;
     virtual void trackScreen(const std::string& name) = 0;
-    virtual void logEvent(
-        const std::string& name,
-        std::map<std::string, std::variant<std::int64_t, double, std::string>>&
-            parameters) = 0;
+    virtual void
+    logEvent(const std::string& name,
+             const std::unordered_map<
+                 std::string, std::variant<std::int64_t, double, std::string>>&
+                 parameters) = 0;
 };
 } // namespace analytics
 } // namespace firebase

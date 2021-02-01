@@ -6,105 +6,69 @@
 //
 //
 
-#include "ee/firebase_analytics/FirebaseAnalyticsBridge.hpp"
+#include "ee/firebase_analytics/internal/FirebaseAnalyticsBridge.hpp"
 
-#include <firebase/analytics.h>
-#include <firebase/analytics/parameter_names.h>
+#include <ee/core/ILogger.hpp>
+#include <ee/core/IMessageBridge.hpp>
+#include <ee/nlohmann/json.hpp>
 
-#include <ee/firebase_core/FirebaseCoreBridge.hpp>
+namespace nlohmann {
+template <typename... Args>
+struct adl_serializer<std::variant<Args...>> {
+    static void to_json(json& json, std::variant<Args...> const& value) {
+        std::visit(
+            [&json](auto&& v) { //
+                json = std::forward<decltype(v)>(v);
+            },
+            value);
+    }
+};
+} // namespace nlohmann
 
 namespace ee {
 namespace firebase {
 namespace analytics {
+namespace {
+const std::string kPrefix = "FirebaseAnalyticsBridge";
+const std::string kSetUserProperty = kPrefix + "SetUserProperty";
+const std::string kTrackScreen = kPrefix + "TrackScreen";
+const std::string kLogEvent = kPrefix + "LogEvent";
+} // namespace
+
 using Self = Bridge;
 
-Self::Bridge() {
-    initialized_ = false;
+Self::Bridge(IMessageBridge& bridge, ILogger& logger,
+             const Destroyer& destroyer)
+    : bridge_(bridge)
+    , logger_(logger)
+    , destroyer_(destroyer) {}
+
+Self::~Bridge() = default;
+
+void Self::destroy() {
+    destroyer_();
 }
 
-Self::~Bridge() {
-    if (initialized_) {
-        ::firebase::analytics::Terminate();
-    }
+void Self::setUserProperty(const std::string& key, const std::string& value) {
+    nlohmann::json request;
+    request["key"] = key;
+    request["value"] = value;
+    bridge_.call(kSetUserProperty, request.dump());
 }
 
-bool Self::initialize() {
-    if (initialized_) {
-        return true;
-    }
-
-    FirebaseCore::initialize();
-
-    auto app = ::firebase::App::GetInstance();
-    if (app == nullptr) {
-        return false;
-    }
-
-    ::firebase::analytics::Initialize(*app);
-    analyticsCollectionEnabled(true);
-    setSessionTimeoutDuration(1800000);
-
-    initialized_ = true;
-    return true;
+void Self::trackScreen(const std::string& name) {
+    bridge_.call(kTrackScreen, name);
 }
 
-void Self::analyticsCollectionEnabled(bool enabled) {
-    if (not initialized_) {
-        return;
-    }
-    ::firebase::analytics::SetAnalyticsCollectionEnabled(enabled);
-}
-
-void Self::setSessionTimeoutDuration(std::int64_t milliseconds) {
-    if (not initialized_) {
-        return;
-    }
-    ::firebase::analytics::SetSessionTimeoutDuration(milliseconds);
-}
-
-void Self::setUserId(const std::string& userId) {
-    if (not initialized_) {
-        return;
-    }
-    ::firebase::analytics::SetUserId(userId.c_str());
-}
-
-void Self::setUserProperty(const std::string& name,
-                           const std::string& property) {
-    if (not initialized_) {
-        return;
-    }
-    ::firebase::analytics::SetUserProperty(name.c_str(), property.c_str());
-}
-
-void Self::setCurrentScreen(const std::string& screenName,
-                            const std::optional<std::string>& screenClass) {
-    if (not initialized_) {
-        return;
-    }
-    ::firebase::analytics::SetCurrentScreen(
-        screenName.c_str(),
-        screenClass.has_value() ? screenClass->c_str() : nullptr);
-}
-
-void Self::logEvent(const std::string& name, const TrackingDict& dict) {
-    if (not initialized_) {
-        return;
-    }
-    if (dict.empty()) {
-        ::firebase::analytics::LogEvent(name.c_str());
-    } else {
-        auto parameters =
-            std::make_unique<::firebase::analytics::Parameter[]>(dict.size());
-        std::size_t index = 0;
-        for (const auto& item : dict) {
-            parameters[index++] = ::firebase::analytics::Parameter(
-                item.first.c_str(), item.second.c_str());
-        }
-
-        ::firebase::analytics::LogEvent(name.c_str(), parameters.get(),
-                                        dict.size());
-    }
+void Self::logEvent(
+    const std::string& name,
+    const std::unordered_map<std::string,
+                             std::variant<std::int64_t, double, std::string>>&
+        parameters) {
+    nlohmann::json request;
+    request["name"] = name;
+    request["parameters"] = parameters;
+    bridge_.call(kLogEvent, request.dump());
 }
 } // namespace analytics
 } // namespace firebase

@@ -3,7 +3,6 @@ LOCAL_PATH := $(call my-dir)
 $(call import-add-path, $(LOCAL_PATH))
 
 $(call import-module, src/cpp/ee)
-$(call import-module, src/cpp/ee/firebase_analytics)
 $(call import-module, src/cpp/ee/firebase_core)
 $(call import-module, src/cpp/ee/firebase_dynamic_link)
 $(call import-module, src/cpp/ee/firebase_messaging)

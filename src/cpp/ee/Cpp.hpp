@@ -13,6 +13,7 @@
 #include "ee/core/Core.hpp"
 #include "ee/facebook/Facebook.hpp"
 #include "ee/facebook_ads/FacebookAds.hpp"
+#include "ee/firebase_analytics/FirebaseAnalytics.hpp"
 #include "ee/firebase_crashlytics/FirebaseCrashlytics.hpp"
 #include "ee/firebase_performance/FirebasePerformance.hpp"
 #include "ee/iron_source/IronSource.hpp"

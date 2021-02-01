@@ -18,6 +18,7 @@ abstract_target 'common' do
         pod_ee_x('apps-flyer')
         pod_ee_x('facebook')
         pod_ee_x('facebook-ads')
+        pod_ee_x('firebase-analytics')
         pod_ee_x('firebase-crashlytics')
         pod_ee_x('firebase-performance')
         pod_ee_x('iron-source')

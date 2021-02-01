@@ -18,6 +18,7 @@
 #include <ee/cocos/CocosFwd.hpp>
 #include <ee/facebook/private/FacebookBridge.hpp>
 #include <ee/facebook_ads/private/FacebookAdsBridge.hpp>
+#include <ee/firebase_analytics/internal/FirebaseAnalyticsBridge.hpp>
 #include <ee/firebase_crashlytics/private/FirebaseCrashlyticsBridge.hpp>
 #include <ee/firebase_performance/private/FirebasePerformanceBridge.hpp>
 #include <ee/iron_source/private/IronSourceBridge.hpp>
@@ -46,105 +47,96 @@ template <>
 struct PluginInfo<IAdColony> {
     using Bridge = ad_colony::Bridge;
     static constexpr auto Name = "AdColony";
-    static constexpr auto Plugin = Plugin::AdColony;
 };
 
 template <>
 struct PluginInfo<IAdjust> {
     using Bridge = adjust::Bridge;
     static constexpr auto Name = "Adjust";
-    static constexpr auto Plugin = Plugin::Adjust;
 };
 
 template <>
 struct PluginInfo<IAdMob> {
     using Bridge = ad_mob::Bridge;
     static constexpr auto Name = "AdMob";
-    static constexpr auto Plugin = Plugin::AdMob;
 };
 
 template <>
 struct PluginInfo<IAppLovin> {
     using Bridge = app_lovin::Bridge;
     static constexpr auto Name = "AppLovin";
-    static constexpr auto Plugin = Plugin::AppLovin;
 };
 
 template <>
 struct PluginInfo<IAppsFlyer> {
     using Bridge = apps_flyer::Bridge;
     static constexpr auto Name = "AppsFlyer";
-    static constexpr auto Plugin = Plugin::AppsFlyer;
 };
 
 template <>
 struct PluginInfo<IFacebook> {
     using Bridge = facebook::Bridge;
     static constexpr auto Name = "Facebook";
-    static constexpr auto Plugin = Plugin::Facebook;
 };
 
 template <>
 struct PluginInfo<IFacebookAds> {
     using Bridge = facebook_ads::Bridge;
     static constexpr auto Name = "FacebookAds";
-    static constexpr auto Plugin = Plugin::FacebookAds;
+};
+
+template <>
+struct PluginInfo<IFirebaseAnalytics> {
+    using Bridge = firebase::analytics::Bridge;
+    static constexpr auto Name = "FirebaseAnalytics";
 };
 
 template <>
 struct PluginInfo<IFirebaseCrashlytics> {
     using Bridge = firebase::crashlytics::Bridge;
     static constexpr auto Name = "FirebaseCrashlytics";
-    static constexpr auto Plugin = Plugin::FirebaseCrashlytics;
 };
 
 template <>
 struct PluginInfo<IFirebasePerformance> {
     using Bridge = firebase::performance::Bridge;
     static constexpr auto Name = "FirebasePerformance";
-    static constexpr auto Plugin = Plugin::FirebasePerformance;
 };
 
 template <>
 struct PluginInfo<IIronSource> {
     using Bridge = iron_source::Bridge;
     static constexpr auto Name = "IronSource";
-    static constexpr auto Plugin = Plugin::IronSource;
 };
 
 template <>
 struct PluginInfo<INotification> {
     using Bridge = notification::Bridge;
     static constexpr auto Name = "Notification";
-    static constexpr auto Plugin = Plugin::Notification;
 };
 
 template <>
 struct PluginInfo<IPlay> {
     using Bridge = play::Bridge;
     static constexpr auto Name = "Play";
-    static constexpr auto Plugin = Plugin::Play;
 };
 
 template <>
 struct PluginInfo<IStore> {
     using Bridge = store::Bridge;
     static constexpr auto Name = "Store";
-    static constexpr auto Plugin = Plugin::Store;
 };
 
 template <>
 struct PluginInfo<IUnityAds> {
     using Bridge = unity_ads::Bridge;
     static constexpr auto Name = "UnityAds";
-    static constexpr auto Plugin = Plugin::UnityAds;
 };
 
 template <>
 struct PluginInfo<IVungle> {
     using Bridge = vungle::Bridge;
     static constexpr auto Name = "Vungle";
-    static constexpr auto Plugin = Plugin::Vungle;
 };
 
 using Self = PluginManager;
@@ -199,22 +191,26 @@ void Self::setActivity(void* activity) {
     PluginManagerUtils::setActivity(activity);
 }
 
-template std::shared_ptr<IAdColony> Self::createPlugin<IAdColony>();
-template std::shared_ptr<IAdjust> Self::createPlugin<IAdjust>();
-template std::shared_ptr<IAdMob> Self::createPlugin<IAdMob>();
-template std::shared_ptr<IAppLovin> Self::createPlugin<IAppLovin>();
-template std::shared_ptr<IAppsFlyer> Self::createPlugin<IAppsFlyer>();
-template std::shared_ptr<IFacebook> Self::createPlugin<IFacebook>();
-template std::shared_ptr<IFacebookAds> Self::createPlugin<IFacebookAds>();
-template std::shared_ptr<IFirebaseCrashlytics>
-Self::createPlugin<IFirebaseCrashlytics>();
-template std::shared_ptr<IFirebasePerformance>
-Self::createPlugin<IFirebasePerformance>();
-template std::shared_ptr<IIronSource> Self::createPlugin<IIronSource>();
-template std::shared_ptr<INotification> Self::createPlugin<INotification>();
-template std::shared_ptr<IPlay> Self::createPlugin<IPlay>();
-template std::shared_ptr<IStore> Self::createPlugin<IStore>();
-template std::shared_ptr<IUnityAds> Self::createPlugin<IUnityAds>();
-template std::shared_ptr<IVungle> Self::createPlugin<IVungle>();
+#define EE_DECLARE_PLUGIN(T)                                                   \
+    template std::shared_ptr<T> Self::createPlugin<T>();
+
+EE_DECLARE_PLUGIN(IAdColony)
+EE_DECLARE_PLUGIN(IAdjust)
+EE_DECLARE_PLUGIN(IAdMob)
+EE_DECLARE_PLUGIN(IAppLovin)
+EE_DECLARE_PLUGIN(IAppsFlyer)
+EE_DECLARE_PLUGIN(IFacebook)
+EE_DECLARE_PLUGIN(IFacebookAds)
+EE_DECLARE_PLUGIN(IFirebaseAnalytics)
+EE_DECLARE_PLUGIN(IFirebaseCrashlytics)
+EE_DECLARE_PLUGIN(IFirebasePerformance)
+EE_DECLARE_PLUGIN(IIronSource)
+EE_DECLARE_PLUGIN(INotification)
+EE_DECLARE_PLUGIN(IPlay)
+EE_DECLARE_PLUGIN(IStore)
+EE_DECLARE_PLUGIN(IUnityAds)
+EE_DECLARE_PLUGIN(IVungle)
+
+#undef EE_DECLARE_PLUGIN
 } // namespace core
 } // namespace ee

@@ -31,7 +31,6 @@ target_link_libraries(${PROJECT_NAME}
     cocos2d
     soomla_store
     ee_x
-    ee_x_firebase_analytics
     ee_x_firebase_dynamic_link
     ee_x_firebase_messaging
     ee_x_firebase_remote_config

@@ -16,27 +16,6 @@
 
 namespace ee {
 namespace core {
-enum class Plugin {
-    AdColony,
-    Adjust,
-    AdMob,
-    AppLovin,
-    AppsFlyer,
-    Facebook,
-    FacebookAds,
-    FirebaseCore,
-    FirebaseCrashlytics,
-    FirebasePerformance,
-    GoogleAnalytics,
-    IronSource,
-    Notification,
-    Play,
-    Recorder,
-    Store,
-    UnityAds,
-    Vungle,
-};
-
 class PluginManager {
 public:
     /// Initializes plugins.

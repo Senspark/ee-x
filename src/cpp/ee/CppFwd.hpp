@@ -13,6 +13,7 @@
 #include "ee/core/CoreFwd.hpp"
 #include "ee/facebook/FacebookFwd.hpp"
 #include "ee/facebook_ads/FacebookAdsFwd.hpp"
+#include "ee/firebase_analytics/FirebaseAnalyticsFwd.hpp"
 #include "ee/firebase_crashlytics/FirebaseCrashlyticsFwd.hpp"
 #include "ee/firebase_performance/FirebasePerformanceFwd.hpp"
 #include "ee/iron_source/IronSourceFwd.hpp"

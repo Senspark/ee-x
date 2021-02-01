@@ -3,7 +3,6 @@ cmake_minimum_required(VERSION 3.1)
 project(ee_x)
 
 add_subdirectory(src/cpp/ee)
-add_subdirectory(src/cpp/ee/firebase_analytics)
 add_subdirectory(src/cpp/ee/firebase_core)
 add_subdirectory(src/cpp/ee/firebase_dynamic_link)
 add_subdirectory(src/cpp/ee/firebase_messaging)

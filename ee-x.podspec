@@ -246,6 +246,13 @@ Pod::Spec.new do |spec|
     s.dependency 'Firebase/Core', '6.34'
   end
 
+  spec.subspec 'firebase-analytics' do |s|
+    s.source_files = 'src/ios/ee/firebase_analytics/**/*'
+    s.header_mappings_dir = 'src/ios'
+    s.dependency 'ee-x/firebase-x-core'
+    s.dependency 'Firebase/Analytics', '6.34'
+  end
+
   spec.subspec 'firebase-crashlytics' do |s|
     s.source_files = 'src/ios/ee/firebase_crashlytics/**/*'
     s.header_mappings_dir = 'src/ios'
@@ -399,21 +406,6 @@ Pod::Spec.new do |spec|
     s.dependency 'ee-x/core'
     s.dependency 'ee-x/firebase-x-core'
     s.dependency 'ee-x/firebase-headers'
-  end
-
-  spec.subspec 'firebase-analytics' do |s|
-    s.source_files = 'src/cpp/ee/firebase_analytics/*'
-
-    s.exclude_files =
-      'src/cpp/ee/firebase_analytics/Android.mk',
-      'src/cpp/ee/firebase_analytics/CMakeLists.txt',
-      'src/cpp/ee/firebase_analytics/generate.sh',
-      'src/cpp/ee/firebase_analytics/sourcelist.cmake'
-
-    s.header_mappings_dir = 'src/cpp'
-
-    s.vendored_library = 'third_party/firebase_cpp_sdk/libs/ios/universal/libfirebase_analytics.a'
-    s.dependency 'ee-x/firebase-core'
   end
 
   spec.subspec 'firebase-dynamic-link' do |s|

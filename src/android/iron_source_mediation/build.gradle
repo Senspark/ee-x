@@ -32,12 +32,12 @@ dependencies {
     // https://bintray.com/ironsource-mobile/android-adapters
     // https://developers.ironsrc.com/ironsource-mobile/android/adcolony-change-log/
     // Use "api" to inherit manifest elements.
-    api 'com.ironsource.adapters:adcolonyadapter:4.3.4'
-    api 'com.adcolony:sdk:4.2.4'
+    api 'com.ironsource.adapters:adcolonyadapter:4.3.5'
+    api 'com.adcolony:sdk:4.4.0'
 
     // https://developers.ironsrc.com/ironsource-mobile/android/admob-change-log/
     api 'com.ironsource.adapters:admobadapter:4.3.15'
-    api 'com.google.android.gms:play-services-ads:19.6.0'
+    api 'com.google.android.gms:play-services-ads:19.7.0'
 
     // https://developers.ironsrc.com/ironsource-mobile/android/applovin-change-log/
     api 'com.ironsource.adapters:applovinadapter:4.3.21'

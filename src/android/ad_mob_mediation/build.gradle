@@ -31,7 +31,7 @@ dependencies {
     // https://bintray.com/google/mobile-ads-adapters-android
     // https://developers.google.com/admob/android/mediation/adcolony#adcolony-android-mediation-adapter-changelog
     // Use "api" to inherit manifest elements.
-    api 'com.google.ads.mediation:adcolony:4.2.4.0'
+    api 'com.google.ads.mediation:adcolony:4.4.0.0'
 
     // https://developers.google.com/admob/android/mediation/applovin#applovin-android-mediation-adapter-changelog
     api 'com.google.ads.mediation:applovin:9.14.12.0'
@@ -40,7 +40,7 @@ dependencies {
     api 'com.google.ads.mediation:facebook:6.2.0.1'
 
     // https://developers.google.com/admob/android/mediation/ironsource#ironsource-android-mediation-adapter-changelog
-    api 'com.google.ads.mediation:ironsource:7.0.4.1.0'
+    api 'com.google.ads.mediation:ironsource:7.1.0.1.0'
 
     // https://developers.google.com/admob/android/mediation/unity#unity-ads-android-mediation-adapter-changelog
     api 'com.google.ads.mediation:unity:3.6.0.0'

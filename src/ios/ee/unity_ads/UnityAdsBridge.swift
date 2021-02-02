@@ -19,46 +19,43 @@ private let kOnLoaded = "\(kPrefix)OnLoaded"
 private let kOnFailedToShow = "\(kPrefix)OnFailedToShow"
 private let kOnClosed = "\(kPrefix)OnClosed"
 
-/*
-  FIXME: should use UnityAds 3.5.1
- private class InitializeDelegate: NSObject, UnityAdsInitializationDelegate {
-     private let _onCompleted: () -> Void
-     private let _onFailed: (UnityAdsInitializationError, String) -> Void
+private class InitializeDelegate: NSObject, UnityAdsInitializationDelegate {
+    private let _onCompleted: () -> Void
+    private let _onFailed: (UnityAdsInitializationError, String) -> Void
 
-     public init(_ onCompleted: @escaping () -> Void,
-                 _ onFailed: @escaping (UnityAdsInitializationError, String) -> Void) {
-         _onCompleted = onCompleted
-         _onFailed = onFailed
-     }
+    public init(_ onCompleted: @escaping () -> Void,
+                _ onFailed: @escaping (UnityAdsInitializationError, String) -> Void) {
+        _onCompleted = onCompleted
+        _onFailed = onFailed
+    }
 
-     func initializationComplete() {
-         _onCompleted()
-     }
+    func initializationComplete() {
+        _onCompleted()
+    }
 
-     func initializationFailed(_ error: UnityAdsInitializationError, withMessage message: String) {
-         _onFailed(error, message)
-     }
- }
+    func initializationFailed(_ error: UnityAdsInitializationError, withMessage message: String) {
+        _onFailed(error, message)
+    }
+}
 
- private class LoadDelegate: NSObject, UnityAdsLoadDelegate {
-     private let _onLoaded: (String) -> Void
-     private let _onFailed: (String) -> Void
+private class LoadDelegate: NSObject, UnityAdsLoadDelegate {
+    private let _onLoaded: (String) -> Void
+    private let _onFailed: (String) -> Void
 
-     public init(_ onLoaded: @escaping (String) -> Void,
-                 _ onFailed: @escaping (String) -> Void) {
-         _onLoaded = onLoaded
-         _onFailed = onFailed
-     }
+    public init(_ onLoaded: @escaping (String) -> Void,
+                _ onFailed: @escaping (String) -> Void) {
+        _onLoaded = onLoaded
+        _onFailed = onFailed
+    }
 
-     func unityAdsAdLoaded(_ placementId: String) {
-         _onLoaded(placementId)
-     }
+    func unityAdsAdLoaded(_ placementId: String) {
+        _onLoaded(placementId)
+    }
 
-     func unityAdsAdFailed(toLoad placementId: String) {
-         _onFailed(placementId)
-     }
- }
-  */
+    func unityAdsAdFailed(toLoad placementId: String) {
+        _onFailed(placementId)
+    }
+}
 
 @objc(EEUnityAdsBridge)
 class UnityAdsBridge: NSObject, IPlugin, UnityAdsDelegate {
@@ -156,24 +153,20 @@ class UnityAdsBridge: NSObject, IPlugin, UnityAdsDelegate {
                     return
                 }
                 self._initializing = true
-                UnityAds.initialize(gameId, testMode: testModeEnabled, enablePerPlacementLoad: true)
-                self._initializing = false
-                self._initialized = true
-                self._logger.info("\(kTag): \(#function): done")
-                single(.success(true))
-                /*
-                  Use UnityAds 3.5.1
-                 UnityAds.initialize(gameId, testMode: testModeEnabled, enablePerPlacementLoad: true, initializationDelegate: InitializeDelegate {
-                     self._logger.debug("\(kTag): initializationComplete")
-                     self._initializing = false
-                     self._initialized = true
-                     single(.success(true))
-                 } _: { error, message in
-                     self._logger.debug("\(kTag): initializationFailed: error = \(error) message = \(message)")
-                     self._initializing = false
-                     single(.success(false))
+                UnityAds.initialize(gameId, testMode: testModeEnabled, enablePerPlacementLoad: true, initializationDelegate: InitializeDelegate {
+                    Thread.runOnMainThread {
+                        self._logger.debug("\(kTag): initializationComplete")
+                        self._initializing = false
+                        self._initialized = true
+                        single(.success(true))
+                    }
+                } _: { error, message in
+                    Thread.runOnMainThread {
+                        self._logger.debug("\(kTag): initializationFailed: error = \(error) message = \(message)")
+                        self._initializing = false
+                        single(.success(false))
+                    }
                  })
-                 */
             }
             return Disposables.create()
         }
@@ -205,17 +198,17 @@ class UnityAdsBridge: NSObject, IPlugin, UnityAdsDelegate {
                     single(.success(false))
                     return
                 }
-                single(.success(false))
-                /*
-                  FIXME: use UnityAds 3.5.1
-                 UnityAds.load(adId, loadDelegate: LoadDelegate { _ in
-                     self._logger.debug("\(kTag): unityAdsAdLoaded: \(adId)")
-                     single(.success(true))
-                 } _: { _ in
-                     self._logger.debug("\(kTag): unityAdsAdFailed: \(adId)")
-                     single(.success(false))
+                UnityAds.load(adId, loadDelegate: LoadDelegate { _ in
+                    Thread.runOnMainThread {
+                        self._logger.debug("\(kTag): unityAdsAdLoaded: \(adId)")
+                        single(.success(true))
+                    }
+                } _: { _ in
+                    Thread.runOnMainThread {
+                        self._logger.debug("\(kTag): unityAdsAdFailed: \(adId)")
+                        single(.success(false))
+                    }
                  })
-                  */
             }
             return Disposables.create()
         }

@@ -12,6 +12,7 @@
 
 #include <ee/core/Core.hpp>
 
+#include "ee/firebase_remote_config/FirebaseFetchStatus.hpp"
 #include "ee/firebase_remote_config/IFirebaseRemoteConfigBridge.hpp"
 
 #endif // __cplusplus

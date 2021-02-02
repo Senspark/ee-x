@@ -2,8 +2,10 @@ import { Adjust } from "../adjust/internal/Adjust";
 import { AdMob } from "../ad_mob/internal";
 import { Facebook } from "../facebook/internal";
 import { FacebookAds } from "../facebook_ads/internal/FacebookAds";
+import { FirebaseAnalytics } from '../firebase_analytics/internal';
 import { FirebaseCrashlytics } from "../firebase_crashlytics/internal";
 import { FirebasePerformance } from "../firebase_performance/internal";
+import { FirebaseRemoteConfig } from "../firebase_remote_config/internal";
 import { IronSource } from "../iron_source/internal";
 import { Notification } from "../notification/internal";
 import { UnityAds } from "../unity_ads/internal";
@@ -34,8 +36,10 @@ export enum Plugin {
     AdMob,
     Facebook,
     FacebookAds,
+    FirebaseAnalytics,
     FirebaseCrashlytics,
     FirebasePerformance,
+    FirebaseRemoteConfig,
     IronSource,
     Notification,
     UnityAds,
@@ -47,8 +51,10 @@ export class PluginManager {
         [Plugin.AdMob]: [`AdMob`, (bridge, logger, destroyer) => new AdMob(bridge, logger, destroyer)],
         [Plugin.Facebook]: [`Facebook`, (bridge, logger, destroyer) => new Facebook(bridge, logger, destroyer)],
         [Plugin.FacebookAds]: [`FacebookAds`, (bridge, logger, destroyer) => new FacebookAds(bridge, logger, destroyer)],
+        [Plugin.FirebaseAnalytics]: [`FirebaseAnalytics`, (bridge, logger, destroyer) => new FirebaseAnalytics(bridge, logger, destroyer)],
         [Plugin.FirebaseCrashlytics]: [`FirebaseCrashlytics`, (bridge, logger, destroyer) => new FirebaseCrashlytics(bridge, logger, destroyer)],
         [Plugin.FirebasePerformance]: [`FirebasePerformance`, (bridge, logger, destroyer) => new FirebasePerformance(bridge, logger, destroyer)],
+        [Plugin.FirebaseRemoteConfig]: [`FirebaseRemoteConfig`, (bridge, logger, destroyer) => new FirebaseRemoteConfig(bridge, logger, destroyer)],
         [Plugin.IronSource]: [`IronSource`, (bridge, logger, destroyer) => new IronSource(bridge, logger, destroyer)],
         [Plugin.Notification]: [`Notification`, (bridge, logger, destroyer) => new Notification(bridge, logger, destroyer)],
         [Plugin.UnityAds]: [`UnityAds`, (bridge, logger, destroyer) => new UnityAds(bridge, logger, destroyer)],

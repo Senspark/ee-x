@@ -19,7 +19,7 @@ enum class FetchStatus {
     Success,
     NoFetchYet,
     Failure,
-    Throttle,
+    Throttled,
 };
 } // namespace remote_config
 } // namespace firebase

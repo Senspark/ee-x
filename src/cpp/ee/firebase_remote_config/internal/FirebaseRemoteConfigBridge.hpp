@@ -27,7 +27,7 @@ public:
     virtual Task<> initialize() override;
     virtual Task<> setSettings(std::int64_t fetchTimeOut,
                                std::int64_t fetchInterval) override;
-    virtual Task<> fetch(std::int64_t fetchTimeOut) override;
+    virtual Task<FetchStatus> fetch(std::int64_t fetchTimeOut) override;
     virtual Task<bool> activate() override;
     virtual Task<> setDefaults(
         const std::unordered_map<

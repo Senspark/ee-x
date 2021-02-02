@@ -14,6 +14,8 @@
 #include <ee/core/internal/JsonUtils.hpp>
 #include <ee/nlohmann/json.hpp>
 
+#include "ee/firebase_remote_config/FirebaseFetchStatus.hpp"
+
 namespace ee {
 namespace firebase {
 namespace remote_config {
@@ -56,10 +58,11 @@ Task<> Self::setSettings(std::int64_t fetchTimeOut,
     co_await bridge_.callAsync(kSetSettings, request.dump());
 }
 
-Task<> Self::fetch(std::int64_t fetchTimeOut) {
+Task<FetchStatus> Self::fetch(std::int64_t fetchTimeOut) {
     nlohmann::json request;
     request["fetchTimeOut"] = fetchTimeOut;
-    co_await bridge_.callAsync(kFetch, request.dump());
+    auto response = co_await bridge_.callAsync(kFetch, request.dump());
+    co_return static_cast<FetchStatus>(std::stoi(response));
 }
 
 Task<bool> Self::activate() {

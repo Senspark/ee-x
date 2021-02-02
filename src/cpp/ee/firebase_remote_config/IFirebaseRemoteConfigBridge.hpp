@@ -25,7 +25,7 @@ public:
     [[nodiscard]] virtual Task<> initialize() = 0;
     [[nodiscard]] virtual Task<> setSettings(std::int64_t fetchTimeOut,
                                              std::int64_t fetchInterval) = 0;
-    [[nodiscard]] virtual Task<> fetch(std::int64_t fetchTimeOut) = 0;
+    [[nodiscard]] virtual Task<FetchStatus> fetch(std::int64_t fetchTimeOut) = 0;
     [[nodiscard]] virtual Task<bool> activate() = 0;
     [[nodiscard]] virtual Task<> setDefaults(
         const std::unordered_map<

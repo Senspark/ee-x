@@ -15,12 +15,14 @@
 namespace ee {
 namespace firebase {
 namespace remote_config {
+enum class FetchStatus;
 class IBridge;
 class Bridge;
 } // namespace remote_config
 } // namespace firebase
 
 using IFirebaseRemoteConfig = firebase::remote_config::IBridge;
+using FirebaseFetchStatus = firebase::remote_config::FetchStatus;
 } // namespace ee
 
 #endif // __cplusplus

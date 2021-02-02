@@ -167,7 +167,14 @@ class FirebaseRemoteConfigBridge: NSObject, IPlugin {
             Thread.runOnMainThread {
                 self._config.fetch { status, _ in
                     Thread.runOnMainThread {
-                        single(.success(status.rawValue))
+                        switch status {
+                        case .success: single(.success(0))
+                        case .noFetchYet: single(.success(1))
+                        case .failure: single(.success(2))
+                        case .throttled: single(.success(3))
+                        @unknown default:
+                            single(.success(2))
+                        }
                     }
                 }
             }

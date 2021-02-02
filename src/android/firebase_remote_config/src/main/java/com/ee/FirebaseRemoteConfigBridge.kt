@@ -5,6 +5,7 @@ import android.app.Application
 import androidx.annotation.AnyThread
 import com.ee.internal.deserialize
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import com.google.firebase.remoteconfig.ktx.remoteConfig
 import com.google.firebase.remoteconfig.ktx.remoteConfigSettings
 import kotlinx.serialization.InternalSerializationApi
@@ -154,8 +155,12 @@ class FirebaseRemoteConfigBridge(
             Thread.runOnMainThread {
                 _config.fetch(fetchInterval).addOnCompleteListener {
                     Thread.runOnMainThread {
-                        val status = _config.info.lastFetchStatus
-                        cont.resume(status)
+                        when (_config.info.lastFetchStatus) {
+                            FirebaseRemoteConfig.LAST_FETCH_STATUS_SUCCESS -> cont.resume(0)
+                            FirebaseRemoteConfig.LAST_FETCH_STATUS_NO_FETCH_YET -> cont.resume(1)
+                            FirebaseRemoteConfig.LAST_FETCH_STATUS_FAILURE -> cont.resume(2)
+                            FirebaseRemoteConfig.LAST_FETCH_STATUS_THROTTLED -> cont.resume(3)
+                        }
                     }
                 }
             }

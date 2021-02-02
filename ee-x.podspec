@@ -46,6 +46,7 @@ Pod::Spec.new do |spec|
       'src/cpp/ee/firebase_analytics/**/*',
       'src/cpp/ee/firebase_crashlytics/**/*',
       'src/cpp/ee/firebase_performance/**/*',
+      'src/cpp/ee/firebase_remote_config/**/*',
       'src/cpp/ee/iron_source/**/*',
       'src/cpp/ee/notification/**/*',
       'src/cpp/ee/play/**/*',
@@ -267,6 +268,13 @@ Pod::Spec.new do |spec|
     s.dependency 'Firebase/Performance', '6.34'
   end
 
+  spec.subspec 'firebase-remote-config' do |s|
+    s.source_files = 'src/ios/ee/firebase_remote_config/*'
+    s.header_mappings_dir = 'src/ios'
+    s.dependency 'ee-x/firebase-x-core'
+    s.dependency 'Firebase/RemoteConfig', '6.34'
+  end
+
   spec.subspec 'iron-source' do |s|
     s.source_files = 'src/ios/ee/iron_source/**/*'
     s.header_mappings_dir = 'src/ios'
@@ -438,22 +446,6 @@ Pod::Spec.new do |spec|
     s.vendored_library = 'third_party/firebase_cpp_sdk/libs/ios/universal/libfirebase_messaging.a'
     s.dependency 'ee-x/firebase-core'
     s.dependency 'Firebase/Messaging', '6.34'
-  end
-
-  spec.subspec 'firebase-remote-config' do |s|
-    s.source_files = 'src/cpp/ee/firebase_remote_config/*'
-
-    s.exclude_files =
-      'src/cpp/ee/firebase_remote_config/Android.mk',
-      'src/cpp/ee/firebase_remote_config/CMakeLists.txt',
-      'src/cpp/ee/firebase_remote_config/generate.sh',
-      'src/cpp/ee/firebase_remote_config/sourcelist.cmake'
-
-    s.header_mappings_dir = 'src/cpp'
-
-    s.vendored_library = 'third_party/firebase_cpp_sdk/libs/ios/universal/libfirebase_remote_config.a'
-    s.dependency 'ee-x/firebase-core'
-    s.dependency 'Firebase/RemoteConfig', '6.34'
   end
 
   spec.subspec 'firebase-storage' do |s|

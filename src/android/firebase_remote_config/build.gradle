@@ -5,7 +5,7 @@ apply plugin: 'kotlinx-serialization'
 android {
     buildToolsVersion rootProject.buildToolsVersion
     compileSdkVersion rootProject.compileSdkVersion
-    
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
@@ -27,6 +27,7 @@ if (rootProject.ext.has('buildMaven') && rootProject.buildMaven) {
 
 dependencies {
     api platform("com.google.firebase:firebase-bom:$firebaseVersion")
+    api 'com.google.firebase:firebase-analytics-ktx'
     api 'com.google.firebase:firebase-config-ktx'
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"

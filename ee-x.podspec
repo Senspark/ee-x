@@ -122,7 +122,7 @@ Pod::Spec.new do |spec|
     s.dependency 'ee-x/ads'
 
     # https://github.com/AdColony/AdColony-iOS-SDK
-    s.dependency 'AdColony', '4.4.0'
+    s.dependency 'AdColony', '4.4.1'
   end
 
   spec.subspec 'ad-mob' do |s|
@@ -233,8 +233,7 @@ Pod::Spec.new do |spec|
     s.dependency 'ee-x/ads'
 
     # https://developers.facebook.com/docs/audience-network/changelog-ios/
-    # FIXME: use 6.2.0
-    s.dependency 'FBAudienceNetwork', '6.0.0'
+    s.dependency 'FBAudienceNetwork', '6.2.0'
   end
 
   spec.subspec 'firebase-x-core' do |s|
@@ -285,9 +284,8 @@ Pod::Spec.new do |spec|
     s.dependency 'ee-x/iron-source'
 
     # https://developers.ironsrc.com/ironsource-mobile/ios/adcolony-change-log/
-    # FIXME: use 4.3.4.1
-    s.dependency 'IronSourceAdColonyAdapter', '4.3.4.0'
-    s.dependency 'AdColony', '4.4.0'
+    s.dependency 'IronSourceAdColonyAdapter', '4.3.6'
+    s.dependency 'AdColony', '4.4.1'
 
     # https://developers.ironsrc.com/ironsource-mobile/ios/admob-change-log/
     s.dependency 'IronSourceAdMobAdapter', '4.3.18'

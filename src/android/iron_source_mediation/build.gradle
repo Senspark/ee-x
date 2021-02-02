@@ -46,6 +46,10 @@ dependencies {
     // https://developers.ironsrc.com/ironsource-mobile/android/21769-2/
     api 'com.ironsource.adapters:facebookadapter:4.3.23'
     api 'com.facebook.android:audience-network-sdk:6.2.0'
+    
+    // https://developers.ironsrc.com/ironsource-mobile/android/tapjoy-change-log/
+    api 'com.ironsource.adapters:tapjoyadapter:4.1.15'
+    api 'com.tapjoy:tapjoy-android-sdk:12.7.1'
 
     // https://developers.ironsrc.com/ironsource-mobile/android/unityads-change-log/
     api 'com.ironsource.adapters:unityadsadapter:4.3.9'

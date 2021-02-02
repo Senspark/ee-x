@@ -144,13 +144,15 @@ class AdMobBridge: NSObject, IPlugin {
                     return
                 }
                 GADMobileAds.sharedInstance().start { status in
-                    self._initializing = false
-                    self._initialized = true
-                    self._logger.info("\(kTag): initialize: done")
-                    for (key, value) in status.adapterStatusesByClassName {
-                        self._logger.info("\(kTag): adapter = \(key) state = \(value.state) latency = \(value.latency) description = \(value.description)")
+                    Thread.runOnMainThread {
+                        self._initializing = false
+                        self._initialized = true
+                        self._logger.info("\(kTag): initialize: done")
+                        for (key, value) in status.adapterStatusesByClassName {
+                            self._logger.info("\(kTag): adapter = \(key) state = \(value.state) latency = \(value.latency) description = \(value.description)")
+                        }
+                        single(.success(true))
                     }
-                    single(.success(true))
                 }
             }
             return Disposables.create()

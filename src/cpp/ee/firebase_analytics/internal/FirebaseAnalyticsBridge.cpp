@@ -10,20 +10,8 @@
 
 #include <ee/core/ILogger.hpp>
 #include <ee/core/IMessageBridge.hpp>
+#include <ee/core/internal/JsonUtils.hpp>
 #include <ee/nlohmann/json.hpp>
-
-namespace nlohmann {
-template <typename... Args>
-struct adl_serializer<std::variant<Args...>> {
-    static void to_json(json& json, std::variant<Args...> const& value) {
-        std::visit(
-            [&json](auto&& v) { //
-                json = std::forward<decltype(v)>(v);
-            },
-            value);
-    }
-};
-} // namespace nlohmann
 
 namespace ee {
 namespace firebase {

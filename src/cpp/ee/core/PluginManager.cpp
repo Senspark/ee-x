@@ -21,6 +21,7 @@
 #include <ee/firebase_analytics/internal/FirebaseAnalyticsBridge.hpp>
 #include <ee/firebase_crashlytics/private/FirebaseCrashlyticsBridge.hpp>
 #include <ee/firebase_performance/private/FirebasePerformanceBridge.hpp>
+#include <ee/firebase_remote_config/internal/FirebaseRemoteConfigBridge.hpp>
 #include <ee/iron_source/private/IronSourceBridge.hpp>
 #include <ee/notification/internal/NotificationBridge.hpp>
 #include <ee/play/private/PlayBridge.hpp>
@@ -101,6 +102,12 @@ template <>
 struct PluginInfo<IFirebasePerformance> {
     using Bridge = firebase::performance::Bridge;
     static constexpr auto Name = "FirebasePerformance";
+};
+
+template <>
+struct PluginInfo<IFirebaseRemoteConfig> {
+    using Bridge = firebase::remote_config::Bridge;
+    static constexpr auto Name = "FirebaseRemoteConfig";
 };
 
 template <>
@@ -204,6 +211,7 @@ EE_DECLARE_PLUGIN(IFacebookAds)
 EE_DECLARE_PLUGIN(IFirebaseAnalytics)
 EE_DECLARE_PLUGIN(IFirebaseCrashlytics)
 EE_DECLARE_PLUGIN(IFirebasePerformance)
+EE_DECLARE_PLUGIN(IFirebaseRemoteConfig)
 EE_DECLARE_PLUGIN(IIronSource)
 EE_DECLARE_PLUGIN(INotification)
 EE_DECLARE_PLUGIN(IPlay)

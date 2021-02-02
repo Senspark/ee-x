@@ -16,6 +16,7 @@
 #include "ee/firebase_analytics/FirebaseAnalyticsFwd.hpp"
 #include "ee/firebase_crashlytics/FirebaseCrashlyticsFwd.hpp"
 #include "ee/firebase_performance/FirebasePerformanceFwd.hpp"
+#include "ee/firebase_remote_config/FirebaseRemoteConfigFwd.hpp"
 #include "ee/iron_source/IronSourceFwd.hpp"
 #include "ee/notification/NotificationFwd.hpp"
 #include "ee/play/PlayFwd.hpp"

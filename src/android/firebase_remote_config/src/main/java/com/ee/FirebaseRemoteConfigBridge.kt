@@ -9,6 +9,7 @@ import com.google.firebase.remoteconfig.ktx.remoteConfig
 import com.google.firebase.remoteconfig.ktx.remoteConfigSettings
 import kotlinx.serialization.InternalSerializationApi
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.json.JsonPrimitive
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
@@ -21,14 +22,15 @@ class FirebaseRemoteConfigBridge(
     companion object {
         private val kTag = FirebaseRemoteConfigBridge::class.java.name
         private const val kPrefix = "FirebaseRemoteConfigBridge"
+        private const val kInitialize = "${kPrefix}Initialize"
         private const val kSetSettings = "${kPrefix}SetSettings"
         private const val kFetch = "${kPrefix}Fetch"
         private const val kActivate = "${kPrefix}Activate"
+        private const val kSetDefaults = "${kPrefix}SetDefaults"
         private const val kGetBool = "${kPrefix}GetBool"
         private const val kGetLong = "${kPrefix}GetLong"
         private const val kGetDouble = "${kPrefix}GetDouble"
         private const val kGetString = "${kPrefix}GetString"
-        private const val kSetDefaults = "${kPrefix}SetDefaults"
     }
 
     private val _config = Firebase.remoteConfig
@@ -58,6 +60,10 @@ class FirebaseRemoteConfigBridge(
 
     @AnyThread
     private fun registerHandlers() {
+        _bridge.registerAsyncHandler(kInitialize) {
+            initialize()
+            ""
+        }
         _bridge.registerAsyncHandler(kSetSettings) { message ->
             @Serializable
             class Request(
@@ -76,11 +82,20 @@ class FirebaseRemoteConfigBridge(
             )
 
             val request = deserialize<Request>(message)
-            fetch(request.fetchInterval)
-            ""
+            fetch(request.fetchInterval).toString()
         }
         _bridge.registerAsyncHandler(kActivate) {
             Utils.toString(activate())
+        }
+        _bridge.registerAsyncHandler(kSetDefaults) { message ->
+            @Serializable
+            class Request(
+                val defaults: Map<String, JsonPrimitive>,
+            )
+
+            val request = deserialize<Request>(message)
+            setDefaults(request.defaults)
+            ""
         }
         _bridge.registerAsyncHandler(kGetBool) { message ->
             Utils.toString(getBool(message))
@@ -94,28 +109,30 @@ class FirebaseRemoteConfigBridge(
         _bridge.registerAsyncHandler(kGetString) { message ->
             getString(message)
         }
-        _bridge.registerAsyncHandler(kSetDefaults) { message ->
-            @Serializable
-            class Request(
-                val defaults: Map<String, String>,
-            )
-
-            val request = deserialize<Request>(message)
-            setDefaults(request.defaults)
-            ""
-        }
     }
 
     @AnyThread
     private fun deregisterHandlers() {
+        _bridge.deregisterHandler(kInitialize)
         _bridge.deregisterHandler(kSetSettings)
         _bridge.deregisterHandler(kFetch)
         _bridge.deregisterHandler(kActivate)
+        _bridge.deregisterHandler(kSetDefaults)
         _bridge.deregisterHandler(kGetBool)
         _bridge.deregisterHandler(kGetLong)
         _bridge.deregisterHandler(kGetDouble)
         _bridge.deregisterHandler(kGetString)
-        _bridge.deregisterHandler(kSetDefaults)
+    }
+
+    @AnyThread
+    private suspend fun initialize() {
+        return suspendCoroutine { cont ->
+            Thread.runOnMainThread {
+                _config.ensureInitialized().addOnCompleteListener {
+                    cont.resume(Unit)
+                }
+            }
+        }
     }
 
     @AnyThread
@@ -132,12 +149,13 @@ class FirebaseRemoteConfigBridge(
     }
 
     @AnyThread
-    private suspend fun fetch(fetchInterval: Long) {
+    private suspend fun fetch(fetchInterval: Long): Int {
         return suspendCoroutine { cont ->
             Thread.runOnMainThread {
-                _config.fetch(fetchInterval).addOnSuccessListener {
+                _config.fetch(fetchInterval).addOnCompleteListener {
                     Thread.runOnMainThread {
-                        cont.resume(Unit)
+                        val status = _config.info.lastFetchStatus
+                        cont.resume(status)
                     }
                 }
             }
@@ -148,9 +166,22 @@ class FirebaseRemoteConfigBridge(
     private suspend fun activate(): Boolean {
         return suspendCoroutine { cont ->
             Thread.runOnMainThread {
-                _config.activate().addOnSuccessListener { result ->
+                _config.activate().addOnCompleteListener { result ->
                     Thread.runOnMainThread {
-                        cont.resume(result)
+                        cont.resume(result.isSuccessful && result.result)
+                    }
+                }
+            }
+        }
+    }
+
+    @AnyThread
+    private suspend fun setDefaults(defaults: Map<String, JsonPrimitive>) {
+        return suspendCoroutine { cont ->
+            Thread.runOnMainThread {
+                _config.setDefaultsAsync(defaults).addOnCompleteListener {
+                    Thread.runOnMainThread {
+                        cont.resume(Unit)
                     }
                 }
             }
@@ -189,16 +220,6 @@ class FirebaseRemoteConfigBridge(
         return suspendCoroutine { cont ->
             Thread.runOnMainThread {
                 cont.resume(_config.getString(key))
-            }
-        }
-    }
-
-    @AnyThread
-    private suspend fun setDefaults(defaults: Map<String, String>) {
-        return suspendCoroutine { cont ->
-            Thread.runOnMainThread {
-                _config.setDefaultsAsync(defaults)
-                cont.resume(Unit)
             }
         }
     }

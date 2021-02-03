@@ -110,4 +110,3 @@ class FirebasePerformanceBridge(
         return true
     }
 }
-}

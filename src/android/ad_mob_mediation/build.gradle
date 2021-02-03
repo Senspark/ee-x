@@ -38,6 +38,9 @@ dependencies {
 
     // https://developers.google.com/admob/android/mediation/facebook#facebook-android-mediation-adapter-changelog
     api 'com.google.ads.mediation:facebook:6.2.0.1'
+    
+    // https://developers.google.com/admob/android/mediation/inmobi#inmobi-android-mediation-adapter-changelog
+    api 'com.google.ads.mediation:inmobi:9.1.0.0'
 
     // https://developers.google.com/admob/android/mediation/ironsource#ironsource-android-mediation-adapter-changelog
     api 'com.google.ads.mediation:ironsource:7.1.0.1.0'

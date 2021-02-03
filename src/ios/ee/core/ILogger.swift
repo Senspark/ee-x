@@ -7,6 +7,7 @@
 
 import Foundation
 
+@objc(EEILogger)
 public protocol ILogger {
     func error(_ message: String)
     func warn(_ message: String)

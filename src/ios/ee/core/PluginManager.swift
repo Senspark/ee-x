@@ -13,7 +13,7 @@ public class PluginManager: NSObject {
     private static let _sharedInstance = PluginManager()
     
     private let _logger = Logger("ee-x")
-    private let _bridge = MessageBridge.getInstance()
+    private let _bridge = MessageBridge()
     private var _plugins: [String: IPlugin]
     
     #if os(iOS)

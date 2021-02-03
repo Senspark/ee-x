@@ -148,6 +148,9 @@ Pod::Spec.new do |spec|
 
     # https://developers.google.com/admob/ios/mediation/facebook#facebook-ios-mediation-adapter-changelog
     s.dependency 'GoogleMobileAdsMediationFacebook', '6.2.1.0'
+
+    # https://developers.google.com/admob/ios/mediation/inmobi#inmobi-ios-mediation-adapter-changelog
+    s.dependency 'GoogleMobileAdsMediationInMobi', '9.1.0.0'
     
     # https://developers.google.com/admob/ios/mediation/ironsource#ironsource-ios-mediation-adapter-changelog
     s.dependency 'GoogleMobileAdsMediationIronSource', '7.1.0.0'
@@ -295,6 +298,9 @@ Pod::Spec.new do |spec|
 
     # https://developers.ironsrc.com/ironsource-mobile/ios/21769-2/
     s.dependency 'IronSourceFacebookAdapter', '4.3.22'
+
+    # https://developers.ironsrc.com/ironsource-mobile/ios/inmobi-change-log/
+    s.dependency 'IronSourceInMobiAdapter', '4.3.8'
 
     # https://developers.ironsrc.com/ironsource-mobile/ios/tapjoy-change-log/
     s.dependency 'IronSourceTapjoyAdapter', '4.1.15'

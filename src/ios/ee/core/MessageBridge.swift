@@ -14,13 +14,8 @@ public class MessageBridge: NSObject, IMessageBridge {
     private var _handlers: [String: MessageHandler]
     private let _handleLock = "handle_lock"
     
-    @objc
-    public class func getInstance() -> IMessageBridge {
-        return _sharedInstance
-    }
-    
-    override private init() {
-        _handlers = [String: MessageHandler]()
+    override public init() {
+        _handlers = [:]
         super.init()
     }
     

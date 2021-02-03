@@ -10,6 +10,7 @@ $(find ./core                   -type f | sed "s/^/  \${CMAKE_CURRENT_LIST_DIR}\
 $(find ./facebook               -type f | sed "s/^/  \${CMAKE_CURRENT_LIST_DIR}\//")\n\
 $(find ./facebook_ads           -type f | sed "s/^/  \${CMAKE_CURRENT_LIST_DIR}\//")\n\
 $(find ./firebase_analytics     -type f | sed "s/^/  \${CMAKE_CURRENT_LIST_DIR}\//")\n\
+$(find ./firebase_core          -type f | sed "s/^/  \${CMAKE_CURRENT_LIST_DIR}\//")\n\
 $(find ./firebase_crashlytics   -type f | sed "s/^/  \${CMAKE_CURRENT_LIST_DIR}\//")\n\
 $(find ./firebase_performance   -type f | sed "s/^/  \${CMAKE_CURRENT_LIST_DIR}\//")\n\
 $(find ./firebase_remote_config -type f | sed "s/^/  \${CMAKE_CURRENT_LIST_DIR}\//")\n\

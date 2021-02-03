@@ -25,7 +25,6 @@ class FirebaseRemoteConfigBridge: NSObject, IPlugin {
     private let _config: RemoteConfig
     
     public required init(_ bridge: IMessageBridge, _ logger: ILogger) {
-        FirebaseApp.configure()
         _bridge = bridge
         _logger = logger
         _config = RemoteConfig.remoteConfig()

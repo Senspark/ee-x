@@ -18,6 +18,7 @@ LOCAL_SRC_FILES := \
     ${shell find $(LOCAL_PATH)/facebook               -print} \
     ${shell find $(LOCAL_PATH)/facebook_ads           -print} \
     ${shell find $(LOCAL_PATH)/firebase_analytics     -print} \
+    ${shell find $(LOCAL_PATH)/firebase_core          -print} \
     ${shell find $(LOCAL_PATH)/firebase_crashlytics   -print} \
     ${shell find $(LOCAL_PATH)/firebase_performance   -print} \
     ${shell find $(LOCAL_PATH)/firebase_remote_config -print} \

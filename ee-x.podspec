@@ -236,7 +236,7 @@ Pod::Spec.new do |spec|
     s.dependency 'FBAudienceNetwork', '6.2.0'
   end
 
-  spec.subspec 'firebase-x-core' do |s|
+  spec.subspec 'firebase-core' do |s|
     s.source_files = 'src/ios/ee/firebase_core/**/*'
     s.header_mappings_dir = 'src/ios'
     s.dependency 'ee-x/core'
@@ -246,28 +246,28 @@ Pod::Spec.new do |spec|
   spec.subspec 'firebase-analytics' do |s|
     s.source_files = 'src/ios/ee/firebase_analytics/**/*'
     s.header_mappings_dir = 'src/ios'
-    s.dependency 'ee-x/firebase-x-core'
+    s.dependency 'ee-x/firebase-core'
     s.dependency 'Firebase/Analytics', '7.5.0'
   end
 
   spec.subspec 'firebase-crashlytics' do |s|
     s.source_files = 'src/ios/ee/firebase_crashlytics/**/*'
     s.header_mappings_dir = 'src/ios'
-    s.dependency 'ee-x/firebase-x-core'
+    s.dependency 'ee-x/firebase-core'
     s.dependency 'Firebase/Crashlytics', '7.5.0'
   end
 
   spec.subspec 'firebase-performance' do |s|
     s.source_files = 'src/ios/ee/firebase_performance/**/*'
     s.header_mappings_dir = 'src/ios'
-    s.dependency 'ee-x/firebase-x-core'
+    s.dependency 'ee-x/firebase-core'
     s.dependency 'Firebase/Performance', '7.5.0'
   end
 
   spec.subspec 'firebase-remote-config' do |s|
     s.source_files = 'src/ios/ee/firebase_remote_config/*'
     s.header_mappings_dir = 'src/ios'
-    s.dependency 'ee-x/firebase-x-core'
+    s.dependency 'ee-x/firebase-core'
     s.dependency 'Firebase/RemoteConfig', '7.5.0'
   end
 
@@ -349,6 +349,7 @@ Pod::Spec.new do |spec|
     s.dependency 'VungleSDK-iOS', '6.8.1'
   end
 
+=begin
   # Fix duplicated UUID since there are many common.h files.
   spec.subspec 'firebase-headers-internal' do |s|
     s.source_files = 'third_party/firebase_cpp_sdk/include/firebase/internal/*'
@@ -454,6 +455,7 @@ Pod::Spec.new do |spec|
     s.dependency 'ee-x/firebase-core'
     s.dependency 'Firebase/Storage', '7.5.0'
   end
+=end
 
   spec.subspec 'jansson' do |s|
     s.source_files = 'third_party/jansson/src/**/*'

@@ -31,9 +31,9 @@ abstract_target 'common' do
         pod_ee_x('vungle')
         
         # Legacy.
-        pod_ee_x('firebase-dynamic-link')
-        pod_ee_x('firebase-messaging')
-        pod_ee_x('firebase-storage')
+        # pod_ee_x('firebase-dynamic-link')
+        # pod_ee_x('firebase-messaging')
+        # pod_ee_x('firebase-storage')
         
         pod 'Adjust', :modular_headers => true
     end

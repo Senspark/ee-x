@@ -12,7 +12,6 @@ public typealias AsyncMessageResolver = (_ message: String) -> Void
 public typealias AsyncMessageHandler =
     (_ message: String, _ resolver: @escaping AsyncMessageResolver) -> Void
 
-@objc(EEIMessageBridge)
 public protocol IMessageBridge {
     /// Registers a new handler to receive messages from C++.
     /// @param tag The unique tag of the handler.

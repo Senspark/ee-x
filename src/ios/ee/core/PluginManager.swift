@@ -9,7 +9,6 @@ import Foundation
 
 private typealias PluginExecutor = (_ plugin: IPlugin) -> Bool
 
-@objc(EEPluginManager)
 public class PluginManager: NSObject {
     private static let _sharedInstance = PluginManager()
     
@@ -21,7 +20,6 @@ public class PluginManager: NSObject {
     private var _delegate: UIApplicationDelegate?
     #endif // os(iOS)
     
-    @objc
     public class var instance: PluginManager {
         return _sharedInstance
     }

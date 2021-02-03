@@ -33,7 +33,7 @@ dependencies {
     // https://developers.ironsrc.com/ironsource-mobile/android/adcolony-change-log/
     // Use "api" to inherit manifest elements.
     api 'com.ironsource.adapters:adcolonyadapter:4.3.5'
-    api 'com.adcolony:sdk:4.4.0'
+    api 'com.adcolony:sdk:4.4.1'
 
     // https://developers.ironsrc.com/ironsource-mobile/android/admob-change-log/
     api 'com.ironsource.adapters:admobadapter:4.3.15'

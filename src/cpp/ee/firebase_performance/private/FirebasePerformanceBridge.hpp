@@ -23,8 +23,8 @@ public:
 
     virtual void destroy() override;
 
-    virtual void setDataCollectionEnabled(bool enabled) override;
     virtual bool isDataCollectionEnabled() override;
+    virtual void setDataCollectionEnabled(bool enabled) override;
     virtual std::shared_ptr<ITrace> newTrace(const std::string& name) override;
 
 private:

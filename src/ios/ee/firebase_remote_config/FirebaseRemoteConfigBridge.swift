@@ -22,12 +22,12 @@ private let kGetString = "\(kPrefix)GetString"
 class FirebaseRemoteConfigBridge: NSObject, IPlugin {
     private let _bridge: IMessageBridge
     private let _logger: ILogger
-    private let _config: RemoteConfig
+    private var _plugin: RemoteConfig?
     
     public required init(_ bridge: IMessageBridge, _ logger: ILogger) {
         _bridge = bridge
         _logger = logger
-        _config = RemoteConfig.remoteConfig()
+        _plugin = nil
         super.init()
         registerHandlers()
     }
@@ -41,9 +41,9 @@ class FirebaseRemoteConfigBridge: NSObject, IPlugin {
             self.initialize()
                 .subscribe(
                     onSuccess: {
-                        _ in resolver("")
+                        result in resolver(Utils.toString(result))
                     }, onError: {
-                        _ in resolver("")
+                        _ in resolver(Utils.toString(false))
                     })
         }
         _bridge.registerAsyncHandler(kFetch) { message, resolver in
@@ -133,12 +133,18 @@ class FirebaseRemoteConfigBridge: NSObject, IPlugin {
         _bridge.deregisterHandler(kGetString)
     }
     
-    func initialize() -> Single<Void> {
-        return Single<Void>.create { single in
+    func initialize() -> Single<Bool> {
+        return Single<Bool>.create { single in
             Thread.runOnMainThread {
-                self._config.ensureInitialized { _ in
+                if FirebaseInitializer.instance.initialize() {
+                    // OK.
+                } else {
+                    single(.success(false))
+                }
+                RemoteConfig.remoteConfig().ensureInitialized { _ in
                     Thread.runOnMainThread {
-                        single(.success(Void()))
+                        self._plugin = RemoteConfig.remoteConfig()
+                        single(.success(true))
                     }
                 }
             }
@@ -150,10 +156,14 @@ class FirebaseRemoteConfigBridge: NSObject, IPlugin {
     func setSettings(_ fetchTimeOut: Int64, _ fetchInterval: Int64) -> Single<Void> {
         return Single<Void>.create { single in
             Thread.runOnMainThread {
+                guard let plugin = self._plugin else {
+                    assert(false, "Please call initialize() first")
+                    return
+                }
                 let settings = RemoteConfigSettings()
                 settings.fetchTimeout = TimeInterval(fetchTimeOut)
                 settings.minimumFetchInterval = TimeInterval(fetchInterval)
-                self._config.configSettings = settings
+                plugin.configSettings = settings
                 single(.success(Void()))
             }
             return Disposables.create()
@@ -164,7 +174,11 @@ class FirebaseRemoteConfigBridge: NSObject, IPlugin {
     func fetch(_ fetchInterval: Int64) -> Single<Int> {
         return Single<Int>.create { single in
             Thread.runOnMainThread {
-                self._config.fetch { status, _ in
+                guard let plugin = self._plugin else {
+                    assert(false, "Please call initialize() first")
+                    return
+                }
+                plugin.fetch { status, _ in
                     Thread.runOnMainThread {
                         switch status {
                         case .success: single(.success(0))
@@ -185,7 +199,11 @@ class FirebaseRemoteConfigBridge: NSObject, IPlugin {
     func activate() -> Single<Bool> {
         return Single<Bool>.create { single in
             Thread.runOnMainThread {
-                self._config.activate { changed, _ in
+                guard let plugin = self._plugin else {
+                    assert(false, "Please call initialize() first")
+                    return
+                }
+                plugin.activate { changed, _ in
                     Thread.runOnMainThread {
                         single(.success(changed))
                     }
@@ -199,7 +217,11 @@ class FirebaseRemoteConfigBridge: NSObject, IPlugin {
     func setDefaults(_ defaults: [String: NSObject]) -> Single<Void> {
         return Single<Void>.create { single in
             Thread.runOnMainThread {
-                self._config.setDefaults(defaults)
+                guard let plugin = self._plugin else {
+                    assert(false, "Please call initialize() first")
+                    return
+                }
+                plugin.setDefaults(defaults)
                 single(.success(Void()))
             }
             return Disposables.create()
@@ -210,7 +232,12 @@ class FirebaseRemoteConfigBridge: NSObject, IPlugin {
     func getBool(_ key: String) -> Single<Bool> {
         return Single<Bool>.create { single in
             Thread.runOnMainThread {
-                single(.success(self._config.configValue(forKey: key).boolValue))
+                guard let plugin = self._plugin else {
+                    assert(false, "Please call initialize() first")
+                    return
+                }
+                let value = plugin.configValue(forKey: key)
+                single(.success(value.boolValue))
             }
             return Disposables.create()
         }
@@ -220,7 +247,12 @@ class FirebaseRemoteConfigBridge: NSObject, IPlugin {
     func getLong(_ key: String) -> Single<Int64> {
         return Single<Int64>.create { single in
             Thread.runOnMainThread {
-                single(.success(self._config.configValue(forKey: key).numberValue.int64Value))
+                guard let plugin = self._plugin else {
+                    assert(false, "Please call initialize() first")
+                    return
+                }
+                let value = plugin.configValue(forKey: key)
+                single(.success(value.numberValue.int64Value))
             }
             return Disposables.create()
         }
@@ -230,7 +262,12 @@ class FirebaseRemoteConfigBridge: NSObject, IPlugin {
     func getDouble(_ key: String) -> Single<Double> {
         return Single<Double>.create { single in
             Thread.runOnMainThread {
-                single(.success(self._config.configValue(forKey: key).numberValue.doubleValue))
+                guard let plugin = self._plugin else {
+                    assert(false, "Please call initialize() first")
+                    return
+                }
+                let value = plugin.configValue(forKey: key)
+                single(.success(value.numberValue.doubleValue))
             }
             return Disposables.create()
         }
@@ -240,7 +277,12 @@ class FirebaseRemoteConfigBridge: NSObject, IPlugin {
     func getString(_ key: String) -> Single<String> {
         return Single<String>.create { single in
             Thread.runOnMainThread {
-                single(.success(self._config.configValue(forKey: key).stringValue ?? ""))
+                guard let plugin = self._plugin else {
+                    assert(false, "Please call initialize() first")
+                    return
+                }
+                let value = plugin.configValue(forKey: key)
+                single(.success(value.stringValue ?? ""))
             }
             return Disposables.create()
         }

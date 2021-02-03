@@ -22,8 +22,8 @@ public:
     /// @property dataCollectionEnabled
     /// @see
     /// https://firebase.google.com/docs/reference/ios/firebaseperformance/api/reference/Classes/FirebasePerformance#/c:objc(cs)FIRPerformance(py)dataCollectionEnabled
-    virtual void setDataCollectionEnabled(bool enabled) = 0;
     virtual bool isDataCollectionEnabled() = 0;
+    virtual void setDataCollectionEnabled(bool enabled) = 0;
 
     /// Creates an instance of FIRTrace. This API does not start the trace. To
     /// start the trace, use the -start API on the returned |FIRTrace| object.

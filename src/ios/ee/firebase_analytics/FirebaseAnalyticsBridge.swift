@@ -1,4 +1,7 @@
+import RxSwift
+
 private let kPrefix = "FirebaseAnalyticsBridge"
+private let kInitialize = "\(kPrefix)Initialize"
 private let kSetUserProperty = "\(kPrefix)SetUserProperty"
 private let kTrackScreen = "\(kPrefix)TrackScreen"
 private let kLogEvent = "\(kPrefix)LogEvent"
@@ -10,7 +13,6 @@ class FirebaseAnalyticsBridge: NSObject, IPlugin {
     public required init(_ bridge: IMessageBridge, _ logger: ILogger) {
         _bridge = bridge
         super.init()
-        FirebaseApp.configure()
         registerHandlers()
     }
 
@@ -19,6 +21,9 @@ class FirebaseAnalyticsBridge: NSObject, IPlugin {
     }
 
     func registerHandlers() {
+        _bridge.registerAsyncHandler(kInitialize) { _, resolver in
+            resolver(Utils.toString(self.initialize()))
+        }
         _bridge.registerHandler(kSetUserProperty) { message in
             let dict = EEJsonUtils.convertString(toDictionary: message)
             guard
@@ -50,9 +55,14 @@ class FirebaseAnalyticsBridge: NSObject, IPlugin {
     }
 
     func deregisterHandlers() {
+        _bridge.deregisterHandler(kInitialize)
         _bridge.deregisterHandler(kSetUserProperty)
         _bridge.deregisterHandler(kTrackScreen)
         _bridge.deregisterHandler(kLogEvent)
+    }
+
+    func initialize() -> Bool {
+        return FirebaseInitializer.instance.initialize()
     }
 
     func setUserProperty(_ key: String, _ value: String) {

@@ -34,7 +34,7 @@ class FirebaseRemoteConfigBridge(
         private const val kGetString = "${kPrefix}GetString"
     }
 
-    private val _config = Firebase.remoteConfig
+    private var _plugin: FirebaseRemoteConfig? = null
 
     init {
         _logger.info("$kTag: constructor begin: application = $_application activity = $_activity")
@@ -62,7 +62,7 @@ class FirebaseRemoteConfigBridge(
     @AnyThread
     private fun registerHandlers() {
         _bridge.registerAsyncHandler(kInitialize) {
-            initialize()
+            Utils.toString(initialize())
             ""
         }
         _bridge.registerAsyncHandler(kSetSettings) { message ->
@@ -126,11 +126,12 @@ class FirebaseRemoteConfigBridge(
     }
 
     @AnyThread
-    private suspend fun initialize() {
-        return suspendCoroutine { cont ->
+    private suspend fun initialize(): Boolean {
+        return FirebaseInitializer.instance.initialize(true) && suspendCoroutine { cont ->
             Thread.runOnMainThread {
-                _config.ensureInitialized().addOnCompleteListener {
-                    cont.resume(Unit)
+                Firebase.remoteConfig.ensureInitialized().addOnCompleteListener {
+                    _plugin = Firebase.remoteConfig
+                    cont.resume(true)
                 }
             }
         }
@@ -140,7 +141,9 @@ class FirebaseRemoteConfigBridge(
     private suspend fun setSettings(fetchTimeOut: Long, fetchInterval: Long) {
         return suspendCoroutine { cont ->
             Thread.runOnMainThread {
-                _config.setConfigSettingsAsync(remoteConfigSettings {
+                val plugin = _plugin
+                    ?: throw IllegalStateException("Please call initialize() first")
+                plugin.setConfigSettingsAsync(remoteConfigSettings {
                     fetchTimeoutInSeconds = fetchTimeOut
                     minimumFetchIntervalInSeconds = fetchInterval
                 })
@@ -153,9 +156,11 @@ class FirebaseRemoteConfigBridge(
     private suspend fun fetch(fetchInterval: Long): Int {
         return suspendCoroutine { cont ->
             Thread.runOnMainThread {
-                _config.fetch(fetchInterval).addOnCompleteListener {
+                val plugin = _plugin
+                    ?: throw IllegalStateException("Please call initialize() first")
+                plugin.fetch(fetchInterval).addOnCompleteListener {
                     Thread.runOnMainThread {
-                        when (_config.info.lastFetchStatus) {
+                        when (Firebase.remoteConfig.info.lastFetchStatus) {
                             FirebaseRemoteConfig.LAST_FETCH_STATUS_SUCCESS -> cont.resume(0)
                             FirebaseRemoteConfig.LAST_FETCH_STATUS_NO_FETCH_YET -> cont.resume(1)
                             FirebaseRemoteConfig.LAST_FETCH_STATUS_FAILURE -> cont.resume(2)
@@ -171,7 +176,9 @@ class FirebaseRemoteConfigBridge(
     private suspend fun activate(): Boolean {
         return suspendCoroutine { cont ->
             Thread.runOnMainThread {
-                _config.activate().addOnCompleteListener { result ->
+                val plugin = _plugin
+                    ?: throw IllegalStateException("Please call initialize() first")
+                plugin.activate().addOnCompleteListener { result ->
                     Thread.runOnMainThread {
                         cont.resume(result.isSuccessful && result.result)
                     }
@@ -184,7 +191,9 @@ class FirebaseRemoteConfigBridge(
     private suspend fun setDefaults(defaults: Map<String, JsonPrimitive>) {
         return suspendCoroutine { cont ->
             Thread.runOnMainThread {
-                _config.setDefaultsAsync(defaults).addOnCompleteListener {
+                val plugin = _plugin
+                    ?: throw IllegalStateException("Please call initialize() first")
+                plugin.setDefaultsAsync(defaults).addOnCompleteListener {
                     Thread.runOnMainThread {
                         cont.resume(Unit)
                     }
@@ -197,7 +206,9 @@ class FirebaseRemoteConfigBridge(
     private suspend fun getBool(key: String): Boolean {
         return suspendCoroutine { cont ->
             Thread.runOnMainThread {
-                cont.resume(_config.getBoolean(key))
+                val plugin = _plugin
+                    ?: throw IllegalStateException("Please call initialize() first")
+                cont.resume(plugin.getBoolean(key))
             }
         }
     }
@@ -206,7 +217,9 @@ class FirebaseRemoteConfigBridge(
     private suspend fun getLong(key: String): Long {
         return suspendCoroutine { cont ->
             Thread.runOnMainThread {
-                cont.resume(_config.getLong(key))
+                val plugin = _plugin
+                    ?: throw IllegalStateException("Please call initialize() first")
+                cont.resume(plugin.getLong(key))
             }
         }
     }
@@ -215,7 +228,9 @@ class FirebaseRemoteConfigBridge(
     private suspend fun getDouble(key: String): Double {
         return suspendCoroutine { cont ->
             Thread.runOnMainThread {
-                cont.resume(_config.getDouble(key))
+                val plugin = _plugin
+                    ?: throw IllegalStateException("Please call initialize() first")
+                cont.resume(plugin.getDouble(key))
             }
         }
     }
@@ -224,7 +239,9 @@ class FirebaseRemoteConfigBridge(
     private suspend fun getString(key: String): String {
         return suspendCoroutine { cont ->
             Thread.runOnMainThread {
-                cont.resume(_config.getString(key))
+                val plugin = _plugin
+                    ?: throw IllegalStateException("Please call initialize() first")
+                cont.resume(plugin.getString(key))
             }
         }
     }

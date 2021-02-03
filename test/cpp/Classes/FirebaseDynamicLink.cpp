@@ -7,6 +7,7 @@
 
 #include "FirebaseDynamicLink.hpp"
 
+/*
 #include <ee/Firebase.hpp>
 
 #include "FunctionLogger.hpp"
@@ -25,3 +26,5 @@ Self::FirebaseDynamicLink() {
     plugin_->fetch();
 }
 } // namespace eetest
+
+ */

@@ -19,8 +19,8 @@ namespace performance {
 namespace {
 // clang-format off
 const std::string kPrefix = "FirebasePerformanceBridge";
-const auto kSetDataCollectionEnabled = kPrefix + "SetDataCollectionEnabled";
 const auto kIsDataCollectionEnabled  = kPrefix + "IsDataCollectionEnabled";
+const auto kSetDataCollectionEnabled = kPrefix + "SetDataCollectionEnabled";
 const auto kNewTrace                 = kPrefix + "NewTrace";
 // clang-format on
 } // namespace
@@ -39,13 +39,13 @@ void Self::destroy() {
     destroyer_();
 }
 
-void Self::setDataCollectionEnabled(bool enabled) {
-    bridge_.call(kSetDataCollectionEnabled, core::toString(enabled));
-}
-
 bool Self::isDataCollectionEnabled() {
     auto response = bridge_.call(kIsDataCollectionEnabled);
     return core::toBool(response);
+}
+
+void Self::setDataCollectionEnabled(bool enabled) {
+    bridge_.call(kSetDataCollectionEnabled, core::toString(enabled));
 }
 
 std::shared_ptr<ITrace> Self::newTrace(const std::string& name) {

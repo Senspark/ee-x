@@ -25,10 +25,13 @@ class FirebaseAnalyticsBridge(
     companion object {
         private val kTag = FirebaseAnalyticsBridge::class.java.name
         private const val kPrefix = "FirebaseAnalyticsBridge"
+        private const val kInitialize = "${kPrefix}Initialize"
         private const val kSetUserProperty = "${kPrefix}SetUserProperty"
         private const val kTrackScreen = "${kPrefix}TrackScreen"
         private const val kLogEvent = "${kPrefix}LogEvent"
     }
+
+    private var _plugin: FirebaseAnalytics? = null
 
     init {
         _logger.info("$kTag: constructor begin: application = $_application activity = $_activity")
@@ -55,6 +58,9 @@ class FirebaseAnalyticsBridge(
 
     @AnyThread
     private fun registerHandlers() {
+        _bridge.registerAsyncHandler(kInitialize) {
+            Utils.toString(initialize())
+        }
         _bridge.registerHandler(kSetUserProperty) { message ->
             @Serializable
             class Request(
@@ -85,22 +91,34 @@ class FirebaseAnalyticsBridge(
 
     @AnyThread
     private fun deregisterHandlers() {
+        _bridge.deregisterHandler(kInitialize)
         _bridge.deregisterHandler(kSetUserProperty)
         _bridge.deregisterHandler(kLogEvent)
         _bridge.deregisterHandler(kTrackScreen)
     }
 
     @AnyThread
+    private suspend fun initialize(): Boolean {
+        if (FirebaseInitializer.instance.initialize(false)) {
+            _plugin = Firebase.analytics
+            return true
+        }
+        return false
+    }
+
+    @AnyThread
     private fun setUserProperty(key: String, value: String) {
         Thread.runOnMainThread {
-            Firebase.analytics.setUserProperty(key, value)
+            val plugin = _plugin ?: throw IllegalStateException("Please call initialize() first")
+            plugin.setUserProperty(key, value)
         }
     }
 
     @AnyThread
     private fun trackScreen(name: String) {
         Thread.runOnMainThread {
-            Firebase.analytics.logEvent(FirebaseAnalytics.Event.SCREEN_VIEW) {
+            val plugin = _plugin ?: throw IllegalStateException("Please call initialize() first")
+            plugin.logEvent(FirebaseAnalytics.Event.SCREEN_VIEW) {
                 param(FirebaseAnalytics.Param.SCREEN_NAME, name)
             }
         }
@@ -109,6 +127,7 @@ class FirebaseAnalyticsBridge(
     @AnyThread
     private fun logEvent(name: String, parameters: Map<String, JsonPrimitive>) {
         Thread.runOnMainThread {
+            val plugin = _plugin ?: throw IllegalStateException("Please call initialize() first")
             val bundle = Bundle()
             for ((key, value) in parameters) {
                 if (value.isString) {
@@ -127,7 +146,7 @@ class FirebaseAnalyticsBridge(
                 }
                 assertThat(false).isTrue()
             }
-            Firebase.analytics.logEvent(name, bundle)
+            plugin.logEvent(name, bundle)
         }
     }
 }

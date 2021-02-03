@@ -114,7 +114,7 @@ object Platform {
                 val height: Int
             )
 
-            val activity = PluginManager.getInstance().getActivity()
+            val activity = PluginManager.instance.activity
             if (activity == null) {
                 assertThat(false).isTrue()
                 return@registerHandler ""
@@ -148,7 +148,7 @@ object Platform {
                 val bottom: Int
             )
 
-            val activity = PluginManager.getInstance().getActivity()
+            val activity = PluginManager.instance.activity
             if (activity == null) {
                 assertThat(false).isTrue()
                 return@registerHandler ""
@@ -185,7 +185,7 @@ object Platform {
             Utils.toString(result)
         }
         bridge.registerAsyncHandler(kGetInstallReferrer) {
-            val activity = PluginManager.getInstance().getActivity()
+            val activity = PluginManager.instance.activity
             if (activity == null) {
                 assertThat(false).isTrue()
                 return@registerAsyncHandler ""
@@ -200,7 +200,7 @@ object Platform {
             )
 
             val request = deserialize<Request>(message)
-            val activity = PluginManager.getInstance().getActivity()
+            val activity = PluginManager.instance.activity
             if (activity == null) {
                 assertThat(false).isTrue()
                 return@registerHandler ""

@@ -13,10 +13,11 @@ class FirebaseCrashlyticsBridge(
     companion object {
         private val kTag = FirebaseCrashlyticsBridge::class.java.name
         private const val kPrefix = "FirebaseCrashlyticsBridge"
+        private const val kInitialize = "${kPrefix}Initialize"
         private const val kLog = "${kPrefix}Log"
     }
 
-    private val _crashlytics = FirebaseCrashlytics.getInstance()
+    private var _plugin: FirebaseCrashlytics? = null
 
     init {
         _logger.info("$kTag: constructor begin: application = $_application activity = $_activity")
@@ -43,6 +44,9 @@ class FirebaseCrashlyticsBridge(
 
     @AnyThread
     private fun registerHandlers() {
+        _bridge.registerAsyncHandler(kInitialize) {
+            Utils.toString(initialize())
+        }
         _bridge.registerHandler(kLog) { message ->
             log(message)
             ""
@@ -51,13 +55,24 @@ class FirebaseCrashlyticsBridge(
 
     @AnyThread
     private fun deregisterHandlers() {
+        _bridge.deregisterHandler(kInitialize)
         _bridge.deregisterHandler(kLog)
+    }
+
+    @AnyThread
+    private suspend fun initialize(): Boolean {
+        if (FirebaseInitializer.instance.initialize(false)) {
+            _plugin = FirebaseCrashlytics.getInstance()
+            return true
+        }
+        return false
     }
 
     @AnyThread
     fun log(message: String) {
         Thread.runOnMainThread {
-            _crashlytics.log(message)
+            val plugin = _plugin ?: throw IllegalStateException("Please call initialize() first")
+            plugin.log(message)
         }
     }
 }

@@ -95,7 +95,6 @@ class MessageBridge(
 @NativeThread
 @Suppress("FunctionName", "unused")
 private fun ee_staticCall(tag: String, message: String): String {
-    val bridge = PluginManager.getInstance().getBridge()
-        ?: throw IllegalStateException("Bridge is null")
+    val bridge = PluginManager.instance.bridge ?: throw IllegalStateException("Bridge is null")
     return bridge.call(tag, message)
 }

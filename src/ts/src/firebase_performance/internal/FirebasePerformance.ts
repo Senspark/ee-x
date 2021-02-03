@@ -12,8 +12,8 @@ type Destroyer = () => void;
 export class FirebasePerformance implements IFirebasePerformance {
     private readonly kTag = `FirebasePerformance`;
     private readonly kPrefix = "FirebasePerformanceBridge";
-    private readonly kSetDataCollectionEnabled = `${this.kPrefix}SetDataCollectionEnabled`;
     private readonly kIsDataCollectionEnabled = `${this.kPrefix}IsDataCollectionEnabled`;
+    private readonly kSetDataCollectionEnabled = `${this.kPrefix}SetDataCollectionEnabled`;
     private readonly kNewTrace = `${this.kPrefix}NewTrace`;
 
     private readonly _bridge: IMessageBridge;

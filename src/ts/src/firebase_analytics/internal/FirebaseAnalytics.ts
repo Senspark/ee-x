@@ -1,6 +1,7 @@
 import {
     ILogger,
     IMessageBridge,
+    Utils,
 } from "../../core";
 import { IFirebaseAnalytics } from "../IFirebaseAnalytics";
 
@@ -9,6 +10,7 @@ type Destroyer = () => void;
 export class FirebaseAnalytics implements IFirebaseAnalytics {
     private readonly kTag = `FirebaseAnalytics`;
     private readonly kPrefix = "FirebaseAnalyticsBridge";
+    private readonly kInitialize = `${this.kPrefix}Initialize`;
     private readonly kSetUserProperty = `${this.kPrefix}SetUserProperty`;
     private readonly kTrackScreen = `${this.kPrefix}TrackScreen`;
     private readonly kLogEvent = `${this.kPrefix}LogEvent`;
@@ -27,6 +29,11 @@ export class FirebaseAnalytics implements IFirebaseAnalytics {
     public destroy(): void {
         this._logger.debug(`${this.kTag}: destroy`);
         this._destroyer();
+    }
+
+    public async initialize(): Promise<boolean> {
+        const response = await this._bridge.callAsync(this.kInitialize);
+        return Utils.toBool(response);
     }
 
     public setUserProperty(key: string, value: string): void {

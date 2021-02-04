@@ -21,10 +21,10 @@ public:
     explicit Bridge(IMessageBridge& bridge, ILogger& logger,
                     const Destroyer& destroyer);
     virtual ~Bridge() override;
-    
+
     virtual void destroy() override;
 
-    virtual Task<> initialize() override;
+    virtual Task<bool> initialize() override;
     virtual Task<> setSettings(std::int64_t fetchTimeOut,
                                std::int64_t fetchInterval) override;
     virtual Task<FetchStatus> fetch(std::int64_t fetchTimeOut) override;

@@ -19,6 +19,8 @@ namespace performance {
 /// https://firebase.google.com/docs/reference/ios/firebaseperformance/api/reference/Classes/FIRPerformance
 class IBridge : public IPlugin {
 public:
+    [[nodiscard]] virtual Task<bool> initialize() = 0;
+
     /// @property dataCollectionEnabled
     /// @see
     /// https://firebase.google.com/docs/reference/ios/firebaseperformance/api/reference/Classes/FirebasePerformance#/c:objc(cs)FIRPerformance(py)dataCollectionEnabled

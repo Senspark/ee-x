@@ -46,8 +46,9 @@ void Self::destroy() {
     destroyer_();
 }
 
-Task<> Self::initialize() {
-    co_await bridge_.callAsync(kInitialize);
+Task<bool> Self::initialize() {
+    auto response = co_await bridge_.callAsync(kInitialize);
+    return core::toBool(response);
 }
 
 Task<> Self::setSettings(std::int64_t fetchTimeOut,

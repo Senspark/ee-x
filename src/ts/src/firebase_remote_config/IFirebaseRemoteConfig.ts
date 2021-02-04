@@ -2,7 +2,7 @@ import { IPlugin } from "../core";
 import { FirebaseFetchStatus } from "./FirebaseFetchStatus";
 
 export interface IFirebaseRemoteConfig extends IPlugin {
-    initialize(): Promise<void>;
+    initialize(): Promise<boolean>;
     setSettings(fetchTimeOut: number, fetchInterval: number): Promise<void>;
     fetch(fetchTimeOut: number): Promise<FirebaseFetchStatus>;
     activate(): Promise<boolean>;

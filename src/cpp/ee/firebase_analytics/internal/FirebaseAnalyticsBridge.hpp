@@ -24,6 +24,7 @@ public:
 
     virtual void destroy() override;
 
+    virtual Task<bool> initialize() override;
     virtual void setUserProperty(const std::string& key,
                                  const std::string& value) override;
     virtual void trackScreen(const std::string& name) override;

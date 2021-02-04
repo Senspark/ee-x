@@ -10,6 +10,8 @@
 
 #include <ee/core/ILogger.hpp>
 #include <ee/core/IMessageBridge.hpp>
+#include <ee/core/Task.hpp>
+#include <ee/core/Utils.hpp>
 #include <ee/core/internal/JsonUtils.hpp>
 #include <ee/nlohmann/json.hpp>
 
@@ -18,6 +20,7 @@ namespace firebase {
 namespace analytics {
 namespace {
 const std::string kPrefix = "FirebaseAnalyticsBridge";
+const std::string kInitialize = kPrefix + "Initialize";
 const std::string kSetUserProperty = kPrefix + "SetUserProperty";
 const std::string kTrackScreen = kPrefix + "TrackScreen";
 const std::string kLogEvent = kPrefix + "LogEvent";
@@ -35,6 +38,11 @@ Self::~Bridge() = default;
 
 void Self::destroy() {
     destroyer_();
+}
+
+Task<bool> Self::initialize() {
+    auto response = co_await bridge_.callAsync(kInitialize);
+    return core::toBool(response);
 }
 
 void Self::setUserProperty(const std::string& key, const std::string& value) {

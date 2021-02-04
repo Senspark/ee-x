@@ -16,6 +16,7 @@ public:
 
     virtual void destroy() override;
 
+    virtual Task<bool> initialize() override;
     virtual void log(const std::string& message) override;
 
 private:

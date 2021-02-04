@@ -14,6 +14,7 @@ namespace firebase {
 namespace crashlytics {
 class IBridge : public IPlugin {
 public:
+    [[nodiscard]] virtual Task<bool> initialize() = 0;
     virtual void log(const std::string& message) = 0;
 };
 } // namespace crashlytics

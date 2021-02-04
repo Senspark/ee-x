@@ -12,6 +12,7 @@ type Destroyer = () => void;
 export class FirebasePerformance implements IFirebasePerformance {
     private readonly kTag = `FirebasePerformance`;
     private readonly kPrefix = "FirebasePerformanceBridge";
+    private readonly kInitialize = `${this.kPrefix}Initialize`;
     private readonly kIsDataCollectionEnabled = `${this.kPrefix}IsDataCollectionEnabled`;
     private readonly kSetDataCollectionEnabled = `${this.kPrefix}SetDataCollectionEnabled`;
     private readonly kNewTrace = `${this.kPrefix}NewTrace`;
@@ -30,6 +31,11 @@ export class FirebasePerformance implements IFirebasePerformance {
     public destroy(): void {
         this._logger.debug(`${this.kTag}: destroy`);
         this._destroyer();
+    }
+
+    public async initialize(): Promise<boolean> {
+        const response = await this._bridge.callAsync(this.kInitialize);
+        return Utils.toBool(response);
     }
 
     public get isDataCollectionEnabled(): boolean {

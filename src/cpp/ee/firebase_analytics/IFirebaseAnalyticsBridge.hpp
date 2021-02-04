@@ -15,6 +15,7 @@ namespace firebase {
 namespace analytics {
 class IBridge : public IPlugin {
 public:
+    [[nodiscard]] virtual Task<bool> initialize() = 0;
     virtual void setUserProperty(const std::string& key,
                                  const std::string& value) = 0;
     virtual void trackScreen(const std::string& name) = 0;

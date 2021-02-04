@@ -37,8 +37,9 @@ export class FirebaseRemoteConfig implements IFirebaseRemoteConfig {
         this._destroyer();
     }
 
-    public async initialize(): Promise<void> {
-        await this._bridge.callAsync(this.kInitialize);
+    public async initialize(): Promise<boolean> {
+        const response = await this._bridge.callAsync(this.kInitialize);
+        return Utils.toBool(response);
     }
 
     public async setSettings(fetchTimeOut: number, fetchInterval: number): Promise<void> {

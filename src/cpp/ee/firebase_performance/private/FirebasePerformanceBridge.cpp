@@ -19,6 +19,7 @@ namespace performance {
 namespace {
 // clang-format off
 const std::string kPrefix = "FirebasePerformanceBridge";
+const auto kInitialize               = kPrefix + "Initialize";
 const auto kIsDataCollectionEnabled  = kPrefix + "IsDataCollectionEnabled";
 const auto kSetDataCollectionEnabled = kPrefix + "SetDataCollectionEnabled";
 const auto kNewTrace                 = kPrefix + "NewTrace";
@@ -37,6 +38,11 @@ Self::~Bridge() = default;
 
 void Self::destroy() {
     destroyer_();
+}
+
+Task<bool> Self::initialize() {
+    auto response = co_await bridge_.callAsync(kInitialize);
+    return core::toBool(response);
 }
 
 bool Self::isDataCollectionEnabled() {

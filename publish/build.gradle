@@ -29,7 +29,7 @@ ext {
     compileSdkVersion = 30
     buildToolsVersion = '30.0.3'
     targetSdkVersion = 30
-    firebaseVersion = '25.13.0'
+    firebaseVersion = '26.4.0'
     buildPrefab = true
     buildMaven = true
     pluginVersion = '2.4.0'
@@ -51,11 +51,11 @@ ext {
         'firebase-core'         : ['core'],
         'firebase-analytics'    : ['firebase-core'],
         'firebase-crashlytics'  : ['firebase-core'],
-        'firebase-dynamic-link' : ['firebase-core'],
-        'firebase-messaging'    : ['firebase-core'],
-        'firebase-remote-config': ['firebase-core'],
-        'firebase-storage'      : ['firebase-core'],
+        // 'firebase-dynamic-link' : ['firebase-core'],
+        // 'firebase-messaging'    : ['firebase-core'],
         'firebase-performance'  : ['firebase-core'],
+        'firebase-remote-config': ['firebase-core'],
+        // 'firebase-storage'      : ['firebase-core'],
         'notification'          : ['core'],
         'play'                  : ['core'],
         'recorder'              : ['core'],

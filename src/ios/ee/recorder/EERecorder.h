@@ -3,6 +3,7 @@
 //
 //
 
+/*
 @protocol EEIPlugin;
 
 @interface EERecorder : NSObject <EEIPlugin>
@@ -14,3 +15,4 @@
 - (NSString* _Nonnull)getRecordingUrl;
 
 @end
+*/

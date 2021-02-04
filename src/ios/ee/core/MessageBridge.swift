@@ -7,7 +7,6 @@
 
 import Foundation
 
-@objc(EEMessageBridge)
 public class MessageBridge: NSObject, IMessageBridge {
     private static let _sharedInstance = MessageBridge()
     

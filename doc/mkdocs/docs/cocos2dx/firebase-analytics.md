@@ -4,7 +4,7 @@
 Modify `build.gradle`
 ```java
 dependencies {
-    implementation 'com.senspark.ee:firebase-analytics:2.3.1'
+    implementation 'com.senspark.ee:firebase-analytics:2.4.0'
 }
 ```
 
@@ -23,7 +23,7 @@ target_link_libraries(${PROJECT_NAME} ee_x_firebase_analytics)
 ### iOS
 Modify `Podfile`
 ```ruby
-pod 'ee-x/firebase-analytics', '2.3.1'
+pod 'ee-x/firebase-analytics', '2.4.0'
 ```
 
 ## Basic usage

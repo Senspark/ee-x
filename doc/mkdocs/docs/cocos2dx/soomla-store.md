@@ -4,7 +4,7 @@
 Modify `build.gradle`
 ```java
 dependencies {
-    implementation 'com.senspark.ee:soomla-store:2.3.1'
+    implementation 'com.senspark.ee:soomla-store:2.4.0'
 }
 ```
 
@@ -23,5 +23,5 @@ target_link_libraries(${PROJECT_NAME} soomla_store)
 ### iOS
 Modify `Podfile`
 ```ruby
-pod 'ee-x/soomla-store', '2.3.1'
+pod 'ee-x/soomla-store', '2.4.0'
 ```

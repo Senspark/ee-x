@@ -4,14 +4,14 @@
 Modify `build.gradle`
 ```java
 dependencies {
-    implementation 'com.senspark.ee:firebase-performance:2.3.1'
+    implementation 'com.senspark.ee:firebase-performance:2.4.0'
 }
 ```
 
 ### iOS
 Modify `Podfile`
 ```ruby
-pod 'ee-x/firebase-performance', '2.3.1'
+pod 'ee-x/firebase-performance', '2.4.0'
 ```
 
 ## Basic usage

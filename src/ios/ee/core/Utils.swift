@@ -7,7 +7,6 @@
 
 import Foundation
 
-@objc(EEUtils)
 public class Utils: NSObject {
     #if os(iOS)
     @objc

@@ -9,7 +9,6 @@ import Foundation
 
 private typealias PluginExecutor = (_ plugin: IPlugin) -> Bool
 
-@objc(EEPluginManager)
 public class PluginManager: NSObject {
     private static let _sharedInstance = PluginManager()
     

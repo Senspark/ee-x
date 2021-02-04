@@ -1,63 +1,93 @@
 # Multi Ad
-- Purpose: use ad waterfall to optimize monetization.
-- Supported ad:
-    + Use `ee::MultiBannerAd` for banner and native ads.
-    + Use `ee::MultiInterstitialAd` for interstitial ads.
-    + Use `ee::MultiRewardedAd` for rewarded ads.
-- Samples:
+## Configuration
+### Android
+Modify `build.gradle`
+```java
+dependencies {
+    implementation 'com.senspark.ee:ad-mob-mediation:2.4.0'
+    implementation 'com.senspark.ee:facebook-ads:2.4.0'
+    implementation 'com.senspark.ee:iron-source-mediation:2.4.0'
+    implementation 'com.senspark.ee:unity-ads:2.4.0'
+}
+```
+
+### iOS
+Modify `Podfile`
+```ruby
+pod 'ee-x/ad-mob-mediation', '2.4.0'
+pod 'ee-x/facebook-ads', '2.4.0'
+pod 'ee-x/iron-source-mediation', '2.4.0'
+pod 'ee-x/unity-ads', '2.4.0'
+```
+
+## Basic usage
+Initializes with JSON config
 ```cpp
-// Samples for using 4 ad networks:
-// - AdMob.
-// - Facebook Audience Network.
-// - IronSource
-// - Unity Ads
-
-auto admob = ee::PluginManager::createPlugin<ee::IAdMob>();
-auto facebook = ee::PluginManager::createPlugin<ee::IFacebookAds>();
-auto ironsource = ee::PluginManager::createPlugin<ee::IIronSource>();
-auto unity = ee::PluginManager::createPlugin<ee::IUnityAds>();
-
-ee::noAwait([admob, facebook, ironsource, unity]() -> ee::Task<> {
-    co_await admob->initialize();
-    co_await facebook->initialize();
-    co_await ironsource->initialize("app_id");
-    co_await unity->initialize("app_id", false);
+auto config = cocos2d::FileUtils::getInstance()->getStringFromFile("config_path");
+auto manager = std::make_shared<ee::DefaultAdsManager>(config);
+ee::noAwait([manager]() -> ee::Task<> {
+    co_await manager->initialize();
 });
+```
 
-// Create a banner ad.
-auto ad = std::make_shared<ee::MultiBannerAd>();
-ad->addItem(admob->createBannerAd("ad_id", ee::AdMobBannerAdSize::Normal));
-ad->addItem(facebook->createBannerAd("ad_id", ee::FacebookBannerAdSize::BannerHeight50));
+Normal banner ad
+```cpp
+// Show ad.
+manager->setBannerAdVisible(true);
 
-// Load the ad in background.
-ee::noAwait(ad->load());
+// Set ad position and anchor.
+auto winSize = cocos2d::Director::getInstance()->getWinSize();
+manager->setBannerAdPosition(winSize.width / 2, winSize.height / 2);
+manager->setBannerAdAnchor(0.5f, 0.5f);
+```
 
-// Show the ad.
-ad->setVisible(true);
+Rectangle banner ad
+```cpp
+// Show ad.
+manager->setRectangleAdVisible(true);
 
-// Create an interstitial ad.
-auto ad = std::make_shared<ee::MultiInterstitialAd>();
-ad->addItem(admob->createInterstitialAd("ad_id"));
-ad->addItem(facebook->createInterstitialAd("ad_id"));
-ad->addItem(ironsource->createInterstitialAd("ad_id"));
-ad->addItem(unity->createInterstitialAd("ad_id"));
+// Set ad position and anchor.
+auto winSize = cocos2d::Director::getInstance()->getWinSize();
+manager->setRectangleAdPosition(winSize.width / 2, winSize.height / 2);
+manager->setRectangleAdAnchor(0.5f, 0.5f);
+```
 
-// Load and show the ad.
-ee::noAwait([]() -> ee::Task<> {
-    co_await ad->load();
-    co_await ad->show();
-});
+App open ad
+```cpp
+auto result = co_await manager->showAppOpenAd();
+if (result == ee::AdResult::Completed) {
+    // Completed.
+} else {
+    // Failed.
+}
+```
 
-// Create a rewarded ad.
-auto ad = std::make_shared<ee::MultiRewardedAd>();
-ad->addItem(admob->createRewardedAd("ad_id"));
-ad->addItem(facebook->createRewardedAd("ad_id"));
-ad->addItem(ironsource->createRewardedAd("ad_id"));
-ad->addItem(unity->createRewardedAd("ad_id"));
+Interstitial ad
+```cpp
+auto result = co_await manager->showInterstitialAd();
+if (result == ee::AdResult::Completed) {
+    // Completed.
+} else {
+    // Failed.
+}
+```
 
-// Load and show the ad.
-ee::noAwait([]() -> ee::Task<> {
-    co_await ad->load();
-    co_await ad->show();
-});
+Rewarded interstitial ad
+```cpp
+auto result = co_await manager->showRewardedInterstitialAd();
+if (result == ee::AdResult::Completed) {
+    // Completed.
+} else {
+    // Failed.
+}
+```
+
+Rewarded ad
+```cpp
+auto result = co_await manager->showRewardedAd();
+if (result == ee::AdResult::Completed) {
+    // Completed.
+} else {
+    // Failed.
+}
 ```

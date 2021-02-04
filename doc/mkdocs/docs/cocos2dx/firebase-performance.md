@@ -20,6 +20,13 @@ Initialization
 #include <ee/Cpp.hpp>
 
 auto plugin = ee::PluginManager::createPlugin<ee::IFirebasePerformance>();
-auto trace = plugin->startTrace("default");
+ee::noAwait([plugin]() -> ee::Task<> {
+    co_await plugin->initialize();
+});
+```
+
+Starts a trace
+```cpp
+auto trace = plugin->newTrace("default");
 trace->start();
 ```

@@ -34,11 +34,11 @@ nav:
     - cocos2dx/multi-ad.md
     - cocos2dx/firebase-analytics.md
     - cocos2dx/firebase-crashlytics.md
-    - cocos2dx/firebase-dynamic-link.md
-    - cocos2dx/firebase-messaging.md
+    # - cocos2dx/firebase-dynamic-link.md
+    # - cocos2dx/firebase-messaging.md
     - cocos2dx/firebase-performance.md
     - cocos2dx/firebase-remote-config.md
-    - cocos2dx/firebase-storage.md
+    # - cocos2dx/firebase-storage.md
     - cocos2dx/ad-mob.md 
     - cocos2dx/app-lovin.md
     - cocos2dx/facebook-ads.md

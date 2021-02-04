@@ -8,18 +8,6 @@ dependencies {
 }
 ```
 
-#### For `ndk-build` users
-Modify `Android.mk`
-```
-LOCAL_STATIC_LIBRARIES += ee_x_firebase_remote_config
-```
-
-#### For `cmake` users
-Modify `CMakeLists.txt`
-```
-target_link_libraries(${PROJECT_NAME} ee_x_firebase_remote_config)
-```
-
 ### iOS
 Modify `Podfile`
 ```ruby
@@ -32,8 +20,38 @@ Initialization
 #include <ee/Firebase.hpp>
 
 auto plugin = ee::PluginManager::createPlugin<ee::IFirebaseRemoteConfig>();
-plugin->initialize();
-plugin->fetch(false, [](bool success) {
-    // Handle fetch result.
+ee::noAwait([plugin]() -> ee::Task<> {
+    co_await plugin->initialize();
 });
+```
+
+Fetch and activate configs
+```cpp
+co_await plugin->fetch(0);
+co_await plugin->activate();
+```
+
+Set default configs
+```cpp
+co_await plugin->setDefaults({
+    {"key1", true}
+    {"key2", 1},
+    {"key3", 2.0},
+    {"key4", "value4"}
+});
+```
+
+Get config values
+```cpp
+// Get bool value.
+auto value1 = co_await plugin->getBool("key1");
+
+// Get long value.
+auto value2 = co_await plugin->getLong("key2");
+
+// Get double value.
+auto value3 = co_await plugin->getDouble("key3");
+
+// Get string value.
+auto value4 = co_await plugin->getString("key4");
 ```

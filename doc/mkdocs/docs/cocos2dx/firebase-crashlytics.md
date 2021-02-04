@@ -20,6 +20,9 @@ Initialization
 #include <ee/Cpp.hpp>
 
 auto plugin = ee::PluginManager::createPlugin<ee::IFirebaseCrashlytics>();
+ee::noAwait([plugin]() -> ee::Task<> {
+    co_await plugin->initialize();
+});
 ```
 
 Logs a message

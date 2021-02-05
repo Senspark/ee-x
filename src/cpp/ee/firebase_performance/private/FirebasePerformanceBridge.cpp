@@ -9,6 +9,7 @@
 
 #include <ee/core/ILogger.hpp>
 #include <ee/core/IMessageBridge.hpp>
+#include <ee/core/Task.hpp>
 #include <ee/core/Utils.hpp>
 
 #include "ee/firebase_performance/private/FirebasePerformanceTrace.hpp"
@@ -42,7 +43,7 @@ void Self::destroy() {
 
 Task<bool> Self::initialize() {
     auto response = co_await bridge_.callAsync(kInitialize);
-    return core::toBool(response);
+    co_return core::toBool(response);
 }
 
 bool Self::isDataCollectionEnabled() {

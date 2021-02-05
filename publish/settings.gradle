@@ -11,6 +11,7 @@ include_lib('ads')
 include_lib('app-lovin')
 include_lib('apps-flyer')
 include_lib('core')
+// include_lib('cpp') Issue: cocos2d-x dependency.
 include_lib('facebook')
 include_lib('facebook-ads')
 include_lib('firebase-core')

@@ -1,0 +1,49 @@
+apply plugin: 'com.android.library'
+
+android {
+    buildToolsVersion rootProject.buildToolsVersion
+    compileSdkVersion rootProject.compileSdkVersion
+    ndkVersion '22.0.7026061'
+
+    buildFeatures {
+        prefabPublishing true
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    defaultConfig {
+        minSdkVersion 17
+        targetSdkVersion rootProject.targetSdkVersion
+    }
+
+    externalNativeBuild {
+        cmake {
+            path "$projectDir/CMakeLists.txt"
+        }
+    }
+
+    prefab {
+        "ee_x" {
+            headers "$projectDir/.generated_headers"
+        }
+    }
+}
+
+project.preBuild.dependsOn(tasks.create(name: "CppCopyHeaders") {
+    doFirst {
+        delete {
+            delete "$projectDir/.generated_headers"
+        }
+        copy {
+            from "$projectDir/../../cpp"
+            into "$projectDir/.generated_headers"
+            exclude 'ee/soomla/*'
+        }
+    }
+})
+
+dependencies {
+}

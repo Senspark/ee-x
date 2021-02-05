@@ -30,7 +30,10 @@ export class MultiBannerAd extends ObserverManager<AdObserver> implements IBanne
         item.isVisible = this._visible;
         this._handle.bind(item).addObserver({
             onLoaded: () => {
-                this._loadedItems.push(item);
+                if (this._loadedItems.indexOf(item) === -1) {
+                    this._loadedItems.push(item);
+                }
+                this.invalidate();
                 this.dispatchEvent(observer => observer.onLoaded && observer.onLoaded());
             },
             onClicked: () => this.dispatchEvent(observer => observer.onClicked && observer.onClicked()),
@@ -72,34 +75,11 @@ export class MultiBannerAd extends ObserverManager<AdObserver> implements IBanne
 
     public set isVisible(value: boolean) {
         this._visible = value;
+        this.invalidate();
         for (const item of this._items) {
-            item.isVisible = false;
-        }
-        if (value) {
-            if (this._loadedItems.length === 0) {
-                for (const item of this._items) {
-                    if (item !== this._activeItem && item.isLoaded) {
-                        this._activeItem = item;
-                        break;
-                    }
-                }
-            } else {
-                for (const item of this._items) {
-                    const index = this._loadedItems.indexOf(item);
-                    if (index !== -1) {
-                        this._loadedItems.splice(index, 1);
-                        this._activeItem = item;
-                        break;
-                    }
-                }
-            }
-            if (this._activeItem !== undefined) {
-                this._activeItem.isVisible = true;
-            }
-        } else {
-            if (this._activeItem !== undefined) {
-                // Reload the currently active ad.
-                const _ = this._activeItem.load();
+            if (this._loadedItems.indexOf(item) === -1) {
+                // Load in background.ss
+                const _ = item.load();
             }
         }
     }
@@ -140,6 +120,22 @@ export class MultiBannerAd extends ObserverManager<AdObserver> implements IBanne
     public set size(value: [number, number]) {
         for (const item of this._items) {
             item.size = value;
+        }
+    }
+
+    private invalidate(): void {
+        const lastActiveItem = this._activeItem;
+        for (const item of this._items) {
+            if (this._loadedItems.indexOf(item) !== -1) {
+                this._activeItem = item;
+                break;
+            }
+        }
+        if (this._activeItem !== undefined) {
+            this._activeItem.isVisible = this._visible;
+        }
+        if (lastActiveItem !== undefined && lastActiveItem !== this._activeItem) {
+            lastActiveItem.isVisible = false;
         }
     }
 }

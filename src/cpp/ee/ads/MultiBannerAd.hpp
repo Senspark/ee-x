@@ -50,6 +50,8 @@ public:
     virtual void setSize(float width, float height) override;
 
 private:
+    void invalidate();
+
     /// Whether visible.
     bool visible_;
 

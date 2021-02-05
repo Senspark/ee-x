@@ -34,6 +34,7 @@ Self& Self::addItem(const std::shared_ptr<IBannerAd>& item) {
             .onLoaded =
                 [this, item] {
                     loadedItems_.insert(item);
+                    invalidate();
 
                     // Propagation.
                     dispatchEvent([](auto&& observer) {
@@ -77,12 +78,8 @@ bool Self::isLoaded() const {
 Task<bool> Self::load() {
     bool result = false;
     for (auto&& item : items_) {
-        if (item == activeItem_ && visible_) {
-            // Ignore displaying item.
-            continue;
-        }
         if (loadedItems_.count(item) != 0) {
-            // Already loaded and not displayed.
+            // Already loaded.
             continue;
         }
         if (co_await item->load()) {
@@ -98,34 +95,11 @@ bool Self::isVisible() const {
 
 void Self::setVisible(bool visible) {
     visible_ = visible;
+    invalidate();
     for (auto&& item : items_) {
-        item->setVisible(false);
-    }
-    if (visible) {
-        if (loadedItems_.empty()) {
-            for (auto&& item : items_) {
-                if (item != activeItem_ && item->isLoaded()) {
-                    activeItem_ = item;
-                    break;
-                }
-            }
-        } else {
-            // Prefer to displaying loaded ad.
-            for (auto&& item : items_) {
-                if (loadedItems_.count(item) != 0) {
-                    loadedItems_.erase(item);
-                    activeItem_ = item;
-                    break;
-                }
-            }
-        }
-        if (activeItem_) {
-            activeItem_->setVisible(true);
-        }
-    } else {
-        if (activeItem_) {
-            // Reload the currently active ad.
-            noAwait(activeItem_->load());
+        if (loadedItems_.count(item) == 0) {
+            // Load in background.
+            noAwait(item->load());
         }
     }
 }
@@ -168,6 +142,22 @@ std::pair<float, float> Self::getSize() const {
 void Self::setSize(float width, float height) {
     for (auto&& item : items_) {
         item->setSize(width, height);
+    }
+}
+
+void Self::invalidate() {
+    auto lastActiveItem = activeItem_;
+    for (auto&& item : items_) {
+        if (loadedItems_.count(item) != 0) {
+            activeItem_ = item;
+            break;
+        }
+    }
+    if (activeItem_) {
+        activeItem_->setVisible(visible_);
+    }
+    if (lastActiveItem != nullptr && lastActiveItem != activeItem_) {
+        lastActiveItem->setVisible(false);
     }
 }
 } // namespace ads

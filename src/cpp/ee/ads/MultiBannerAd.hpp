@@ -37,6 +37,9 @@ public:
     virtual bool isLoaded() const override;
     virtual Task<bool> load() override;
 
+    virtual bool isVisible() const override;
+    virtual void setVisible(bool visible) override;
+
     virtual std::pair<float, float> getAnchor() const override;
     virtual void setAnchor(float x, float y) override;
 
@@ -46,18 +49,15 @@ public:
     virtual std::pair<float, float> getSize() const override;
     virtual void setSize(float width, float height) override;
 
-    virtual bool isVisible() const override;
-    virtual void setVisible(bool visible) override;
-
 private:
+    /// Whether visible.
+    bool visible_;
+
     /// Custom anchor.
     std::pair<float, float> anchor_;
 
     /// Custom position.
     std::pair<float, float> position_;
-
-    /// Whether visible.
-    bool visible_;
 
     std::vector<std::shared_ptr<IBannerAd>> items_;
     std::unique_ptr<ObserverHandle> handle_;

@@ -24,6 +24,9 @@ public:
     bool isLoaded() const;
     void load();
 
+    bool isVisible() const;
+    void setVisible(bool visible);
+
     std::pair<float, float> getAnchor() const;
     void setAnchor(float x, float y);
 
@@ -32,9 +35,6 @@ public:
 
     std::pair<float, float> getSize() const;
     void setSize(float width, float height);
-
-    bool isVisible() const;
-    void setVisible(bool visible);
 
 private:
     std::pair<float, float> getPositionTopLeft() const;

@@ -6,10 +6,10 @@ namespace EE.Internal {
     internal class BannerAdHelper {
         private readonly IMessageBridge _bridge;
         private readonly MessageHelper _helper;
+        private bool _visible;
         private (float, float) _anchor;
         private (float, float) _position;
         private (float, float) _size;
-        private bool _visible;
 
         public BannerAdHelper(IMessageBridge bridge, MessageHelper helper, (int, int) size) {
             _bridge = bridge;
@@ -26,6 +26,14 @@ namespace EE.Internal {
 
         public void Load() {
             _bridge.Call(_helper.Load);
+        }
+
+        public bool IsVisible {
+            get => _visible;
+            set {
+                _bridge.Call(_helper.SetVisible, Utils.ToString(value));
+                _visible = value;
+            }
         }
 
         [Serializable]
@@ -80,14 +88,6 @@ namespace EE.Internal {
                 };
                 _bridge.Call(_helper.SetSize, JsonUtility.ToJson(request));
                 _size = value;
-            }
-        }
-
-        public bool IsVisible {
-            get => _visible;
-            set {
-                _bridge.Call(_helper.SetVisible, Utils.ToString(value));
-                _visible = value;
             }
         }
     }

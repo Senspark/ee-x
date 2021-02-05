@@ -65,6 +65,20 @@ void Self::load() {
     bridge_.call(helper_.load());
 }
 
+bool Self::isVisible() const {
+    return isVisibleInternal();
+    /* Direct call.
+    assert(isMainThread());
+    auto response = bridge_.call(helper_.isVisible());
+    return core::toBool(response);
+     */
+}
+
+void Self::setVisible(bool visible) {
+    bridge_.call(helper_.setVisible(), core::toString(visible));
+    setVisibleInternal(visible);
+}
+
 std::pair<float, float> Self::getAnchor() const {
     return getAnchorInternal();
 }
@@ -135,20 +149,6 @@ void Self::setSize(float width, float height) {
     json["height"] = static_cast<int>(height);
     bridge_.call(helper_.setSize(), json.dump());
     setSizeInternal(width, height);
-}
-
-bool Self::isVisible() const {
-    return isVisibleInternal();
-    /* Direct call.
-    assert(isMainThread());
-    auto response = bridge_.call(helper_.isVisible());
-    return core::toBool(response);
-     */
-}
-
-void Self::setVisible(bool visible) {
-    bridge_.call(helper_.setVisible(), core::toString(visible));
-    setVisibleInternal(visible);
 }
 } // namespace ads
 } // namespace ee

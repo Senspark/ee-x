@@ -20,8 +20,6 @@ enum class FullScreenAdResult {
 
 class IFullScreenAd : public IAd {
 public:
-    virtual ~IFullScreenAd() = default;
-
     /// Attempts to show this ad.
     [[nodiscard]] virtual Task<FullScreenAdResult> show() = 0;
 };

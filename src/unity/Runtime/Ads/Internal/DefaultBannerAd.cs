@@ -56,6 +56,11 @@ namespace EE.Internal {
                 });
         }
 
+        public bool IsVisible {
+            get => _helper.IsVisible;
+            set => _helper.IsVisible = value;
+        }
+
         public (float, float) Anchor {
             get => _helper.Anchor;
             set => _helper.Anchor = value;
@@ -69,11 +74,6 @@ namespace EE.Internal {
         public (float, float) Size {
             get => _helper.Size;
             set => _helper.Size = value;
-        }
-
-        public bool IsVisible {
-            get => _helper.IsVisible;
-            set => _helper.IsVisible = value;
         }
 
         private void OnLoaded() {

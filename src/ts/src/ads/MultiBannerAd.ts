@@ -7,9 +7,9 @@ import { IBannerAd } from "./IBannerAd";
 import { IMultiAd } from "./IMultiAd";
 
 export class MultiBannerAd extends ObserverManager<AdObserver> implements IBannerAd, IMultiAd<IBannerAd> {
+    private _visible: boolean;
     private _anchor: [number, number];
     private _position: [number, number];
-    private _visible: boolean;
     private readonly _items: IBannerAd[];
     private readonly _handle: ObserverHandle;
     private _activeItem?: IBannerAd;
@@ -66,6 +66,44 @@ export class MultiBannerAd extends ObserverManager<AdObserver> implements IBanne
         return true;
     }
 
+    public get isVisible(): boolean {
+        return this._visible;
+    }
+
+    public set isVisible(value: boolean) {
+        this._visible = value;
+        for (const item of this._items) {
+            item.isVisible = false;
+        }
+        if (value) {
+            if (this._loadedItems.length === 0) {
+                for (const item of this._items) {
+                    if (item !== this._activeItem && item.isLoaded) {
+                        this._activeItem = item;
+                        break;
+                    }
+                }
+            } else {
+                for (const item of this._items) {
+                    const index = this._loadedItems.indexOf(item);
+                    if (index !== -1) {
+                        this._loadedItems.splice(index, 1);
+                        this._activeItem = item;
+                        break;
+                    }
+                }
+            }
+            if (this._activeItem !== undefined) {
+                this._activeItem.isVisible = true;
+            }
+        } else {
+            if (this._activeItem !== undefined) {
+                // Reload the currently active ad.
+                const _ = this._activeItem.load();
+            }
+        }
+    }
+
     public get anchor(): [number, number] {
         return this._anchor;
     }
@@ -102,44 +140,6 @@ export class MultiBannerAd extends ObserverManager<AdObserver> implements IBanne
     public set size(value: [number, number]) {
         for (const item of this._items) {
             item.size = value;
-        }
-    }
-
-    public get isVisible(): boolean {
-        return this._visible;
-    }
-
-    public set isVisible(value: boolean) {
-        this._visible = value;
-        for (const item of this._items) {
-            item.isVisible = false;
-        }
-        if (value) {
-            if (this._loadedItems.length === 0) {
-                for (const item of this._items) {
-                    if (item !== this._activeItem && item.isLoaded) {
-                        this._activeItem = item;
-                        break;
-                    }
-                }
-            } else {
-                for (const item of this._items) {
-                    const index = this._loadedItems.indexOf(item);
-                    if (index !== -1) {
-                        this._loadedItems.splice(index, 1);
-                        this._activeItem = item;
-                        break;
-                    }
-                }
-            }
-            if (this._activeItem !== undefined) {
-                this._activeItem.isVisible = true;
-            }
-        } else {
-            if (this._activeItem !== undefined) {
-                // Reload the currently active ad.
-                const _ = this._activeItem.load();
-            }
         }
     }
 }

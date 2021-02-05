@@ -92,6 +92,44 @@ Task<bool> Self::load() {
     co_return result;
 }
 
+bool Self::isVisible() const {
+    return visible_;
+}
+
+void Self::setVisible(bool visible) {
+    visible_ = visible;
+    for (auto&& item : items_) {
+        item->setVisible(false);
+    }
+    if (visible) {
+        if (loadedItems_.empty()) {
+            for (auto&& item : items_) {
+                if (item != activeItem_ && item->isLoaded()) {
+                    activeItem_ = item;
+                    break;
+                }
+            }
+        } else {
+            // Prefer to displaying loaded ad.
+            for (auto&& item : items_) {
+                if (loadedItems_.count(item) != 0) {
+                    loadedItems_.erase(item);
+                    activeItem_ = item;
+                    break;
+                }
+            }
+        }
+        if (activeItem_) {
+            activeItem_->setVisible(true);
+        }
+    } else {
+        if (activeItem_) {
+            // Reload the currently active ad.
+            noAwait(activeItem_->load());
+        }
+    }
+}
+
 std::pair<float, float> Self::getAnchor() const {
     return anchor_;
 }
@@ -130,44 +168,6 @@ std::pair<float, float> Self::getSize() const {
 void Self::setSize(float width, float height) {
     for (auto&& item : items_) {
         item->setSize(width, height);
-    }
-}
-
-bool Self::isVisible() const {
-    return visible_;
-}
-
-void Self::setVisible(bool visible) {
-    visible_ = visible;
-    for (auto&& item : items_) {
-        item->setVisible(false);
-    }
-    if (visible) {
-        if (loadedItems_.empty()) {
-            for (auto&& item : items_) {
-                if (item != activeItem_ && item->isLoaded()) {
-                    activeItem_ = item;
-                    break;
-                }
-            }
-        } else {
-            // Prefer to displaying loaded ad.
-            for (auto&& item : items_) {
-                if (loadedItems_.count(item) != 0) {
-                    loadedItems_.erase(item);
-                    activeItem_ = item;
-                    break;
-                }
-            }
-        }
-        if (activeItem_) {
-            activeItem_->setVisible(true);
-        }
-    } else {
-        if (activeItem_) {
-            // Reload the currently active ad.
-            noAwait(activeItem_->load());
-        }
     }
 }
 } // namespace ads

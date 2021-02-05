@@ -16,13 +16,13 @@ using Self = NullBannerAd;
 
 Self::NullBannerAd() {
     loaded_ = false;
+    visible_ = false;
     positionX_ = 0;
     positionY_ = 0;
     anchorX_ = 0.0f;
     anchorY_ = 0.0f;
     width_ = 0;
     height_ = 0;
-    visible_ = false;
 }
 
 void Self::destroy() {}
@@ -33,6 +33,14 @@ bool Self::isLoaded() const {
 
 Task<bool> Self::load() {
     co_return false;
+}
+
+bool Self::isVisible() const {
+    return visible_;
+}
+
+void Self::setVisible(bool visible) {
+    visible_ = visible;
 }
 
 std::pair<float, float> Self::getAnchor() const {
@@ -65,14 +73,6 @@ void Self::setSize(float width, float height) {
     positionY_ = positionY_ - static_cast<int>((height - height_) * anchorY_);
     width_ = width;
     height_ = height;
-}
-
-bool Self::isVisible() const {
-    return visible_;
-}
-
-void Self::setVisible(bool visible) {
-    visible_ = visible;
 }
 } // namespace ads
 } // namespace ee

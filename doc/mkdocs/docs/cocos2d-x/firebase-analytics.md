@@ -20,9 +20,7 @@ Initialization
 #include <ee/Cpp.hpp>
 
 auto plugin = ee::PluginManager::createPlugin<ee::IFirebaseAnalytics>();
-ee::noAwait([plugin]() -> ee::Task<> {
-    co_await plugin->initialize();
-});
+co_await plugin->initialize();
 ```
 
 Sets user property

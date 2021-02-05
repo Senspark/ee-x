@@ -17,12 +17,10 @@ pod 'ee-x/firebase-remote-config', '2.4.0'
 ## Basic usage
 Initialization
 ```cpp
-#include <ee/Firebase.hpp>
+#include <ee/Cpp.hpp>
 
 auto plugin = ee::PluginManager::createPlugin<ee::IFirebaseRemoteConfig>();
-ee::noAwait([plugin]() -> ee::Task<> {
-    co_await plugin->initialize();
-});
+co_await plugin->initialize();
 ```
 
 Fetch and activate configs

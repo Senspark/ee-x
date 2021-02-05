@@ -50,7 +50,7 @@ pod 'ee-x/cpp', '2.4.0'
 
 ## Initialization
 ```ts
-import * as ee_x from '@senspark/ee-x'
+import * as ee_x from '@senspark/ee-x';
 
 // Call this method only once.
 ee_x.PluginManager.initializePlugins();

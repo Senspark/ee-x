@@ -23,11 +23,11 @@ pod 'ee-x/unity-ads', '2.4.0'
 ## Basic usage
 Initializes with JSON config
 ```cpp
+#include <ee/Cpp.hpp>
+
 auto config = cocos2d::FileUtils::getInstance()->getStringFromFile("config_path");
 auto manager = std::make_shared<ee::DefaultAdsManager>(config);
-ee::noAwait([manager]() -> ee::Task<> {
-    co_await manager->initialize();
-});
+co_await manager->initialize();
 ```
 
 Normal banner ad

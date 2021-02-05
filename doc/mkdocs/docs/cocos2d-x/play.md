@@ -22,15 +22,11 @@ Initialization
 auto plugin = ee::PluginManager::createPlugin<ee::IPlay>();
 ```
 
-Login / logout
+Login and logout
 ```cpp
-ee::noAwait([plugin]() -> ee::Task<> {
-    auto result = co_await plugin->logIn();
-    // Handle result.
-});
+auto result = co_await plugin->logIn();
+// Handle result.
 
-ee::noAwait([plugin]() -> ee::Task<> {
-    auto result = co_await plugin->logOut();
-    // Handle result.
-});
+auto result = co_await plugin->logOut();
+// Handle result.
 ```

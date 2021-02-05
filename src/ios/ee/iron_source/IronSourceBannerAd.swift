@@ -65,6 +65,7 @@ internal class IronSourceBannerAd: NSObject, IBannerAd, ISBannerDelegate {
                 return
             }
             self._isLoaded = false
+            ad.removeFromSuperview()
             IronSource.destroyBanner(ad)
             self._ad = nil
             self._viewHelper.view = nil
@@ -106,6 +107,8 @@ internal class IronSourceBannerAd: NSObject, IBannerAd, ISBannerDelegate {
             self._logger.debug("\(kTag): \(#function): id = \(self._adId)")
             self._ad = bannerView
             self._viewHelper.view = bannerView
+            let rootView = Utils.getCurrentRootViewController()
+            rootView?.view.addSubview(bannerView)
             self._isLoaded = true
             self._bridge.callCpp(self._messageHelper.onLoaded)
         }

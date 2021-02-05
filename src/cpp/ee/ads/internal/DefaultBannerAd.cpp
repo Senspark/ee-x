@@ -22,7 +22,8 @@ using Self = DefaultBannerAd;
 Self::DefaultBannerAd(const std::string& prefix, IMessageBridge& bridge,
                       ILogger& logger, const Destroyer& destroyer,
                       const std::string& adId, const std::pair<int, int>& size)
-    : bridge_(bridge)
+    : prefix_(prefix)
+    , bridge_(bridge)
     , logger_(logger)
     , destroyer_(destroyer)
     , adId_(adId)

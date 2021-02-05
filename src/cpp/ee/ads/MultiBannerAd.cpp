@@ -17,9 +17,9 @@ namespace ads {
 using Self = MultiBannerAd;
 
 Self::MultiBannerAd() {
+    visible_ = false;
     anchor_ = std::pair(0, 0);
     position_ = std::pair(0, 0);
-    visible_ = false;
     handle_ = std::make_unique<ObserverHandle>();
 }
 

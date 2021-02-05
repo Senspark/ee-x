@@ -1,6 +1,6 @@
 # Getting Started
 ## Requirements
-- Cocos2d-x v3: <https://github.com/Senspark/cocos2d-x-lite-source>
+- Cocos Creator v2: <https://www.cocos.com/en/creator/download>
 - Android NDK r21+: <https://developer.android.com/ndk/downloads>
 - Xcode 11+: <https://developer.apple.com/download/more>
 - Android Studio 4+: <https://developer.android.com/studio>
@@ -9,6 +9,11 @@
 - macOS SDK: 10.14+
 
 ## Configuration
+Install TypeScript package
+```
+npm install @senspark/ee-x
+```
+
 ### Android
 Modify `build.gradle`
 ```java
@@ -44,13 +49,9 @@ pod 'ee-x/cpp', '2.4.0'
 ```
 
 ## Initialization
-Modify `AppDelegate.cpp`
-```cpp
-#include <ee/Cpp.hpp>
+```ts
+import * as ee_x from '@senspark/ee-x'
 
-bool AppDelegate::applicationDidFinishLaunching() {
-    // Call this method only once.
-    ee::PluginManager::initializePlugins();
-    return true;
-}
+// Call this method only once.
+ee_x.PluginManager.initializePlugins();
 ```

@@ -52,6 +52,11 @@ nav:
     - cocos2dx/play.md
     - cocos2dx/soomla-store.md
     - cocos2dx/store.md
+  - Cocos Creator:
+    - cocosjs/getting-started.md
+    - cocosjs/multi-ad.md
+    - cocosjs/adjust.md
+    - cocosjs/facebook.md
   - Unity:
     - unity/getting-started.md
     - unity/design-patterns.md

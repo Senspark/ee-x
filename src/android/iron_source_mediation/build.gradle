@@ -32,21 +32,34 @@ dependencies {
     // https://bintray.com/ironsource-mobile/android-adapters
     // https://developers.ironsrc.com/ironsource-mobile/android/adcolony-change-log/
     // Use "api" to inherit manifest elements.
-    api 'com.ironsource.adapters:adcolonyadapter:4.3.4'
-    api 'com.adcolony:sdk:4.2.4'
+    api 'com.ironsource.adapters:adcolonyadapter:4.3.5'
+    api 'com.adcolony:sdk:4.4.1'
 
     // https://developers.ironsrc.com/ironsource-mobile/android/admob-change-log/
     api 'com.ironsource.adapters:admobadapter:4.3.15'
+    api 'com.google.android.gms:play-services-ads:19.7.0'
 
     // https://developers.ironsrc.com/ironsource-mobile/android/applovin-change-log/
     api 'com.ironsource.adapters:applovinadapter:4.3.21'
+    api 'com.applovin:applovin-sdk:9.14.12'
 
     // https://developers.ironsrc.com/ironsource-mobile/android/21769-2/
     api 'com.ironsource.adapters:facebookadapter:4.3.23'
+    api 'com.facebook.android:audience-network-sdk:6.2.0'
+
+    // https://developers.ironsrc.com/ironsource-mobile/android/inmobi-change-log/
+    api 'com.ironsource.adapters:inmobiadapter:4.3.8'
+    api 'com.inmobi.monetization:inmobi-ads:9.1.0'
+    
+    // https://developers.ironsrc.com/ironsource-mobile/android/tapjoy-change-log/
+    api 'com.ironsource.adapters:tapjoyadapter:4.1.15'
+    api 'com.tapjoy:tapjoy-android-sdk:12.7.1'
 
     // https://developers.ironsrc.com/ironsource-mobile/android/unityads-change-log/
     api 'com.ironsource.adapters:unityadsadapter:4.3.9'
+    api 'com.unity3d.ads:unity-ads:3.6.0'
 
     // https://developers.ironsrc.com/ironsource-mobile/android/vungle-change-log/
     api 'com.ironsource.adapters:vungleadapter:4.3.7'
+    api 'com.vungle:publisher-sdk-android:6.8.1'
 }

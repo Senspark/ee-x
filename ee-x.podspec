@@ -1,6 +1,6 @@
 Pod::Spec.new do |spec|
   spec.name           = 'ee-x'
-  spec.version        = '2.3.0'
+  spec.version        = '2.4.1'
   spec.summary        = 'ee-x'
   spec.description    = 'Cross-platform library for cocos2d-x'
   spec.module_name    = 'ee'
@@ -16,7 +16,7 @@ Pod::Spec.new do |spec|
 
   spec.source = {
     :git => 'https://github.com/Senspark/ee-x.git',
-    :tag => 'v2.3.0'
+    :tag => 'v2.4.1'
   }
 
   spec.framework = 'Foundation'
@@ -43,8 +43,10 @@ Pod::Spec.new do |spec|
       'src/cpp/ee/core/**/*',
       'src/cpp/ee/facebook/**/*',
       'src/cpp/ee/facebook_ads/**/*',
+      'src/cpp/ee/firebase_analytics/**/*',
       'src/cpp/ee/firebase_crashlytics/**/*',
       'src/cpp/ee/firebase_performance/**/*',
+      'src/cpp/ee/firebase_remote_config/**/*',
       'src/cpp/ee/iron_source/**/*',
       'src/cpp/ee/notification/**/*',
       'src/cpp/ee/play/**/*',
@@ -120,7 +122,7 @@ Pod::Spec.new do |spec|
     s.dependency 'ee-x/ads'
 
     # https://github.com/AdColony/AdColony-iOS-SDK
-    s.dependency 'AdColony', '4.4.0'
+    s.dependency 'AdColony', '4.4.1'
   end
 
   spec.subspec 'ad-mob' do |s|
@@ -129,8 +131,7 @@ Pod::Spec.new do |spec|
     s.dependency 'ee-x/ads'
 
     # https://developers.google.com/admob/ios/rel-notes
-    # FIXME: use 7.68.0
-    s.dependency 'Google-Mobile-Ads-SDK', '7.67.0'
+    s.dependency 'Google-Mobile-Ads-SDK', '7.69.0'
   end
 
   spec.subspec 'ad-mob-mediation' do |s|
@@ -143,20 +144,22 @@ Pod::Spec.new do |spec|
     # s.dependency 'GoogleMobileAdsMediationAdColony', '4.4.0.0'
 
     # https://developers.google.com/admob/ios/mediation/applovin#applovin-ios-mediation-adapter-changelog
-    # FIXME: use 6.14.6.0
-    s.dependency 'GoogleMobileAdsMediationAppLovin', '6.14.4.0'
+    s.dependency 'GoogleMobileAdsMediationAppLovin', '6.14.11.0'
 
     # https://developers.google.com/admob/ios/mediation/facebook#facebook-ios-mediation-adapter-changelog
-    # FIXME: use 6.2.0.0
-    s.dependency 'GoogleMobileAdsMediationFacebook', '6.0.0.0'
+    s.dependency 'GoogleMobileAdsMediationFacebook', '6.2.1.0'
+
+    # https://developers.google.com/admob/ios/mediation/inmobi#inmobi-ios-mediation-adapter-changelog
+    s.dependency 'GoogleMobileAdsMediationInMobi', '9.1.0.0'
     
     # https://developers.google.com/admob/ios/mediation/ironsource#ironsource-ios-mediation-adapter-changelog
-    # FIXME: use 7.0.3.0
-    s.dependency 'GoogleMobileAdsMediationIronSource', '7.0.2.0'
+    s.dependency 'GoogleMobileAdsMediationIronSource', '7.1.0.0'
+
+    # https://developers.google.com/admob/ios/mediation/tapjoy#tapjoy-ios-mediation-adapter-changelog
+    s.dependency 'GoogleMobileAdsMediationTapjoy', '12.7.1.0'
 
     # https://developers.google.com/admob/ios/mediation/unity#unity-ads-ios-mediation-adapter-changelog
-    # FIXME: use 3.5.1.0
-    s.dependency 'GoogleMobileAdsMediationUnity', '3.4.8.0'
+    s.dependency 'GoogleMobileAdsMediationUnity', '3.6.0.0'
 
     # https://developers.google.com/admob/ios/mediation/vungle#vungle-ios-mediation-adapter-changelog
     s.dependency 'GoogleMobileAdsMediationVungle', '6.8.1.0'
@@ -183,8 +186,7 @@ Pod::Spec.new do |spec|
     s.dependency 'ee-x/core'
 
     # https://github.com/AppLovin/AppLovin-MAX-SDK-iOS/releases
-    # FIXME: use 6.14.6
-    s.dependency 'AppLovinSDK', '6.14.4'
+    s.dependency 'AppLovinSDK', '6.14.11'
   end
 
   spec.subspec 'apps-flyer' do |s|
@@ -234,29 +236,42 @@ Pod::Spec.new do |spec|
     s.dependency 'ee-x/ads'
 
     # https://developers.facebook.com/docs/audience-network/changelog-ios/
-    # FIXME: use 6.2.0
-    s.dependency 'FBAudienceNetwork', '6.0.0'
+    s.dependency 'FBAudienceNetwork', '6.2.0'
   end
 
-  spec.subspec 'firebase-x-core' do |s|
+  spec.subspec 'firebase-core' do |s|
     s.source_files = 'src/ios/ee/firebase_core/**/*'
     s.header_mappings_dir = 'src/ios'
     s.dependency 'ee-x/core'
-    s.dependency 'Firebase/Core', '6.34'
+    s.dependency 'Firebase/Core', '7.5.0'
+  end
+
+  spec.subspec 'firebase-analytics' do |s|
+    s.source_files = 'src/ios/ee/firebase_analytics/**/*'
+    s.header_mappings_dir = 'src/ios'
+    s.dependency 'ee-x/firebase-core'
+    s.dependency 'Firebase/Analytics', '7.5.0'
   end
 
   spec.subspec 'firebase-crashlytics' do |s|
     s.source_files = 'src/ios/ee/firebase_crashlytics/**/*'
     s.header_mappings_dir = 'src/ios'
-    s.dependency 'ee-x/firebase-x-core'
-    s.dependency 'Firebase/Crashlytics', '6.34'
+    s.dependency 'ee-x/firebase-core'
+    s.dependency 'Firebase/Crashlytics', '7.5.0'
   end
 
   spec.subspec 'firebase-performance' do |s|
     s.source_files = 'src/ios/ee/firebase_performance/**/*'
     s.header_mappings_dir = 'src/ios'
-    s.dependency 'ee-x/firebase-x-core'
-    s.dependency 'Firebase/Performance', '6.34'
+    s.dependency 'ee-x/firebase-core'
+    s.dependency 'Firebase/Performance', '7.5.0'
+  end
+
+  spec.subspec 'firebase-remote-config' do |s|
+    s.source_files = 'src/ios/ee/firebase_remote_config/*'
+    s.header_mappings_dir = 'src/ios'
+    s.dependency 'ee-x/firebase-core'
+    s.dependency 'Firebase/RemoteConfig', '7.5.0'
   end
 
   spec.subspec 'iron-source' do |s|
@@ -265,37 +280,36 @@ Pod::Spec.new do |spec|
     s.dependency 'ee-x/ads'
 
     # https://developers.ironsrc.com/ironsource-mobile/ios/sdk-change-log/
-    # FIXME: use 7.0.3.0
-    s.dependency 'IronSourceSDK', '7.0.2.0'
+    s.dependency 'IronSourceSDK', '7.1.0'
   end
 
   spec.subspec 'iron-source-mediation' do |s|
     s.dependency 'ee-x/iron-source'
 
     # https://developers.ironsrc.com/ironsource-mobile/ios/adcolony-change-log/
-    # FIXME: use 4.3.4.1
-    s.dependency 'IronSourceAdColonyAdapter', '4.3.4.0'
-    s.dependency 'AdColony', '4.4.0'
+    s.dependency 'IronSourceAdColonyAdapter', '4.3.6'
+    s.dependency 'AdColony', '4.4.1'
 
     # https://developers.ironsrc.com/ironsource-mobile/ios/admob-change-log/
-    # Wait for supported adapter.
-    # s.dependency 'IronSourceAdMobAdapter', '4.3.17.0'
+    s.dependency 'IronSourceAdMobAdapter', '4.3.18'
 
     # https://developers.ironsrc.com/ironsource-mobile/ios/applovin-change-log/
-    # FIXME: use 4.3.20.0
-    s.dependency 'IronSourceAppLovinAdapter', '4.3.19.0'
+    s.dependency 'IronSourceAppLovinAdapter', '4.3.21'
 
     # https://developers.ironsrc.com/ironsource-mobile/ios/21769-2/
-    # FIXME: use 4.3.21.0
-    s.dependency 'IronSourceFacebookAdapter', '4.3.20.0'
+    s.dependency 'IronSourceFacebookAdapter', '4.3.22'
+
+    # https://developers.ironsrc.com/ironsource-mobile/ios/inmobi-change-log/
+    s.dependency 'IronSourceInMobiAdapter', '4.3.8'
+
+    # https://developers.ironsrc.com/ironsource-mobile/ios/tapjoy-change-log/
+    s.dependency 'IronSourceTapjoyAdapter', '4.1.15'
 
     # https://developers.ironsrc.com/ironsource-mobile/ios/unityads-change-log/
-    # FIXME: use 4.3.6.0
-    s.dependency 'IronSourceUnityAdsAdapter', '4.3.4.3'
+    s.dependency 'IronSourceUnityAdsAdapter', '4.3.7'
 
     # https://developers.ironsrc.com/ironsource-mobile/ios/vungle-change-log/
-    # FIXME: use 4.3.7.1
-    s.dependency 'IronSourceVungleAdapter', '4.3.7.0'
+    s.dependency 'IronSourceVungleAdapter', '4.3.8'
   end
 
   spec.subspec 'notification' do |s|
@@ -329,8 +343,7 @@ Pod::Spec.new do |spec|
     s.dependency 'ee-x/ads'
 
     # https://github.com/Unity-Technologies/unity-ads-ios/releases
-    # FIXME: use 3.5.1
-    s.dependency 'UnityAds', '3.4.8'
+    s.dependency 'UnityAds', '3.6.0'
   end
 
   spec.subspec 'vungle' do |s|
@@ -339,9 +352,10 @@ Pod::Spec.new do |spec|
     s.dependency 'ee-x/ads'
 
     # https://github.com/Vungle/iOS-SDK/blob/master/CHANGELOG.md
-    s.dependency 'VungleSDK-iOS', '6.8.0'
+    s.dependency 'VungleSDK-iOS', '6.8.1'
   end
 
+=begin
   # Fix duplicated UUID since there are many common.h files.
   spec.subspec 'firebase-headers-internal' do |s|
     s.source_files = 'third_party/firebase_cpp_sdk/include/firebase/internal/*'
@@ -400,21 +414,6 @@ Pod::Spec.new do |spec|
     s.dependency 'ee-x/firebase-headers'
   end
 
-  spec.subspec 'firebase-analytics' do |s|
-    s.source_files = 'src/cpp/ee/firebase_analytics/*'
-
-    s.exclude_files =
-      'src/cpp/ee/firebase_analytics/Android.mk',
-      'src/cpp/ee/firebase_analytics/CMakeLists.txt',
-      'src/cpp/ee/firebase_analytics/generate.sh',
-      'src/cpp/ee/firebase_analytics/sourcelist.cmake'
-
-    s.header_mappings_dir = 'src/cpp'
-
-    s.vendored_library = 'third_party/firebase_cpp_sdk/libs/ios/universal/libfirebase_analytics.a'
-    s.dependency 'ee-x/firebase-core'
-  end
-
   spec.subspec 'firebase-dynamic-link' do |s|
     s.source_files = 'src/cpp/ee/firebase_dynamic_link/*'
 
@@ -428,7 +427,7 @@ Pod::Spec.new do |spec|
 
     s.vendored_library = 'third_party/firebase_cpp_sdk/libs/ios/universal/libfirebase_dynamic_links.a'
     s.dependency 'ee-x/firebase-core'
-    s.dependency 'Firebase/DynamicLinks', '6.34'
+    s.dependency 'Firebase/DynamicLinks', '7.5.0'
   end
 
   spec.subspec 'firebase-messaging' do |s|
@@ -444,23 +443,7 @@ Pod::Spec.new do |spec|
 
     s.vendored_library = 'third_party/firebase_cpp_sdk/libs/ios/universal/libfirebase_messaging.a'
     s.dependency 'ee-x/firebase-core'
-    s.dependency 'Firebase/Messaging', '6.34'
-  end
-
-  spec.subspec 'firebase-remote-config' do |s|
-    s.source_files = 'src/cpp/ee/firebase_remote_config/*'
-
-    s.exclude_files =
-      'src/cpp/ee/firebase_remote_config/Android.mk',
-      'src/cpp/ee/firebase_remote_config/CMakeLists.txt',
-      'src/cpp/ee/firebase_remote_config/generate.sh',
-      'src/cpp/ee/firebase_remote_config/sourcelist.cmake'
-
-    s.header_mappings_dir = 'src/cpp'
-
-    s.vendored_library = 'third_party/firebase_cpp_sdk/libs/ios/universal/libfirebase_remote_config.a'
-    s.dependency 'ee-x/firebase-core'
-    s.dependency 'Firebase/RemoteConfig', '6.34'
+    s.dependency 'Firebase/Messaging', '7.5.0'
   end
 
   spec.subspec 'firebase-storage' do |s|
@@ -476,8 +459,9 @@ Pod::Spec.new do |spec|
 
     s.vendored_library = 'third_party/firebase_cpp_sdk/libs/ios/universal/libfirebase_storage.a'
     s.dependency 'ee-x/firebase-core'
-    s.dependency 'Firebase/Storage', '6.34'
+    s.dependency 'Firebase/Storage', '7.5.0'
   end
+=end
 
   spec.subspec 'jansson' do |s|
     s.source_files = 'third_party/jansson/src/**/*'

@@ -34,10 +34,11 @@ bool Self::init() {
     setContentSize(winSize);
 
     auto resultText = cocos2d::ui::Text::create();
-    resultText->setContentSize(cocos2d::Size(200, 60));
+    resultText->setContentSize(cocos2d::Size(250, 80));
     resultText->setPosition(
-        cocos2d::Point(winSize.width / 2, winSize.height / 2 + 50));
+        cocos2d::Point(winSize.width / 2, winSize.height / 2 + 200));
     resultText->setString("---");
+    resultText->setFontSize(25);
 
     auto updateResult = [resultText](ee::AdResult result) {
         switch (result) {
@@ -68,11 +69,27 @@ bool Self::init() {
         }
     };
 
-    auto showInterstitialAdButton = cocos2d::ui::Button::create();
-    showInterstitialAdButton->setContentSize(cocos2d::Size(150, 80));
-    showInterstitialAdButton->setPosition(
-        cocos2d::Point(winSize.width / 2, winSize.height / 2));
-    showInterstitialAdButton->setTitleText("Show Interstitial");
+    auto createButton = [winSize](const std::string& title, float deltaY) {
+        auto button = cocos2d::ui::Button::create();
+        button->setContentSize(cocos2d::Size(250, 80));
+        button->setPosition(
+            cocos2d::Point(winSize.width / 2, winSize.height / 2 + deltaY));
+        button->setTitleText(title);
+        button->setTitleFontSize(25);
+        return button;
+    };
+
+    auto showAppOpenAdButton = createButton("Show App Open Ad", +100);
+    showAppOpenAdButton->addClickEventListener(
+        std::bind([this, resultText, updateResult] {
+            ee::noAwait([this, resultText, updateResult]() -> ee::Task<> {
+                resultText->setString("---");
+                auto result = co_await adsManager_->showAppOpenAd();
+                updateResult(result);
+            });
+        }));
+
+    auto showInterstitialAdButton = createButton("Show Interstitial Ad", +0);
     showInterstitialAdButton->addClickEventListener(
         std::bind([this, resultText, updateResult] {
             ee::noAwait([this, resultText, updateResult]() -> ee::Task<> {
@@ -82,11 +99,19 @@ bool Self::init() {
             });
         }));
 
-    auto showRewardedAdButton = cocos2d::ui::Button::create();
-    showRewardedAdButton->setContentSize(cocos2d::Size(150, 80));
-    showRewardedAdButton->setPosition(
-        cocos2d::Point(winSize.width / 2, winSize.height / 2 - 50));
-    showRewardedAdButton->setTitleText("Show Rewarded");
+    auto showRewardedInterstitialAdButton =
+        createButton("Show Rewarded Interstitial Ad", -100);
+    showRewardedInterstitialAdButton->addClickEventListener(
+        std::bind([this, resultText, updateResult] {
+            ee::noAwait([this, resultText, updateResult]() -> ee::Task<> {
+                resultText->setString("---");
+                auto result =
+                    co_await adsManager_->showRewardedInterstitialAd();
+                updateResult(result);
+            });
+        }));
+
+    auto showRewardedAdButton = createButton("Show Rewarded Ad", -200);
     showRewardedAdButton->addClickEventListener(
         std::bind([this, resultText, updateResult] {
             ee::noAwait([this, resultText, updateResult]() -> ee::Task<> {
@@ -97,7 +122,9 @@ bool Self::init() {
         }));
 
     addChild(resultText);
+    addChild(showAppOpenAdButton);
     addChild(showInterstitialAdButton);
+    addChild(showRewardedInterstitialAdButton);
     addChild(showRewardedAdButton);
     return true;
 }

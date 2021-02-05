@@ -3,7 +3,7 @@ package com.ee.internal
 import android.app.Activity
 import androidx.annotation.AnyThread
 import androidx.annotation.UiThread
-import com.ee.IInterstitialAd
+import com.ee.IFullScreenAd
 import com.ee.ILogger
 import com.ee.IMessageBridge
 import com.ee.Thread
@@ -11,7 +11,6 @@ import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.InterstitialAd
 import com.google.android.gms.ads.LoadAdError
-import com.google.common.truth.Truth.assertThat
 import java.util.concurrent.atomic.AtomicBoolean
 
 /**
@@ -22,13 +21,13 @@ internal class AdMobInterstitialAd(
     private val _logger: ILogger,
     private var _activity: Activity?,
     private val _adId: String)
-    : IInterstitialAd, AdListener() {
+    : IFullScreenAd, AdListener() {
     companion object {
         private val kTag = AdMobInterstitialAd::class.java.name
     }
 
     private val _messageHelper = MessageHelper("AdMobInterstitialAd", _adId)
-    private val _helper = InterstitialAdHelper(_bridge, this, _messageHelper)
+    private val _helper = FullScreenAdHelper(_bridge, this, _messageHelper)
     private val _isLoaded = AtomicBoolean(false)
     private var _ad: InterstitialAd? = null
 
@@ -37,17 +36,21 @@ internal class AdMobInterstitialAd(
         registerHandlers()
     }
 
-    fun onCreate(activity: Activity) {
+    override fun onCreate(activity: Activity) {
         _activity = activity
     }
 
-    fun onDestroy(activity: Activity) {
-        assertThat(_activity).isEqualTo(activity)
+    override fun onResume() {
+    }
+
+    override fun onPause() {
+    }
+
+    override fun onDestroy() {
         _activity = null
     }
 
-    @AnyThread
-    fun destroy() {
+    override fun destroy() {
         _logger.info("$kTag: ${this::destroy.name}: adId = $_adId")
         deregisterHandlers()
         destroyInternalAd()
@@ -124,7 +127,6 @@ internal class AdMobInterstitialAd(
     override fun onAdOpened() {
         Thread.runOnMainThread {
             _logger.debug("$kTag: ${this::onAdOpened.name}: id = $_adId")
-            _isLoaded.set(false)
         }
     }
 
@@ -144,6 +146,7 @@ internal class AdMobInterstitialAd(
     override fun onAdClosed() {
         Thread.runOnMainThread {
             _logger.debug("$kTag: ${this::onAdClosed.name}: id = $_adId")
+            _isLoaded.set(false)
             destroyInternalAd()
             _bridge.callCpp(_messageHelper.onClosed)
         }

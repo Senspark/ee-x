@@ -12,5 +12,6 @@ export interface IAdMob extends IPlugin {
     createBannerAd(adId: string, adSize: AdMobBannerAdSize): IBannerAd;
     createAppOpenAd(adId: string): IFullScreenAd;
     createInterstitialAd(adId: string): IFullScreenAd;
+    createRewardedInterstitialAd(adId: string): IFullScreenAd;
     createRewardedAd(adId: string): IFullScreenAd;
 }

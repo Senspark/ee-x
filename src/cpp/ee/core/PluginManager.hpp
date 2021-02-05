@@ -16,27 +16,6 @@
 
 namespace ee {
 namespace core {
-enum class Plugin {
-    AdColony,
-    Adjust,
-    AdMob,
-    AppLovin,
-    AppsFlyer,
-    Facebook,
-    FacebookAds,
-    FirebaseCore,
-    FirebaseCrashlytics,
-    FirebasePerformance,
-    GoogleAnalytics,
-    IronSource,
-    Notification,
-    Play,
-    Recorder,
-    Store,
-    UnityAds,
-    Vungle,
-};
-
 class PluginManager {
 public:
     /// Initializes plugins.
@@ -44,17 +23,17 @@ public:
     static void initializePlugins();
 
     template <class T>
-    static std::shared_ptr<T> createPlugin() {
-        auto&& bridge = getBridge();
-        return createPluginImpl<T>(bridge);
-    }
+    static std::shared_ptr<T> createPlugin();
 
     /// Gets the current message bridge.
     static IMessageBridge& getBridge();
 
+    /// Gets the current logger.
+    static ILogger& getLogger();
+
     /// Sets the log level for the logger on Android/iOS.
     /// @param level The desired log level.
-    static void setLogLevel(const LogLevel& level);
+    static void setLogLevel(LogLevel level);
 
     /// Gets the current activity.
     static void* getActivity();
@@ -62,19 +41,9 @@ public:
     /// Sets the current activity.
     static void setActivity(void* activity);
 
-    /// Adds a cross-platform plugin.
-    /// @note Internal uses.
-    static void addPlugin(Plugin plugin);
-
-    /// Remove a cross-platform plugin.
-    /// @note Internal uses.
-    static void removePlugin(Plugin plugin);
-
 private:
-    template <class T>
-    static std::shared_ptr<T> createPluginImpl(IMessageBridge& bridge);
-
     static std::shared_ptr<IPluginManagerImpl> impl_;
+    static std::shared_ptr<Logger> logger_;
 };
 } // namespace core
 } // namespace ee

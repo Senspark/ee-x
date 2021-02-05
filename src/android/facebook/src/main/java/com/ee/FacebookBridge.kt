@@ -5,17 +5,14 @@ import android.app.Application
 import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
-import android.util.SparseArray
 import androidx.annotation.AnyThread
-import com.ee.internal.FacebookLoginDelegate
-import com.ee.internal.FacebookRequestDelegate
-import com.ee.internal.FacebookShareDelegate
 import com.ee.internal.deserialize
 import com.ee.internal.serialize
 import com.facebook.AccessToken
 import com.facebook.AccessTokenTracker
 import com.facebook.CallbackManager
 import com.facebook.FacebookCallback
+import com.facebook.FacebookException
 import com.facebook.FacebookSdk
 import com.facebook.GraphRequest
 import com.facebook.HttpMethod
@@ -24,18 +21,20 @@ import com.facebook.ProfileTracker
 import com.facebook.login.LoginManager
 import com.facebook.login.LoginResult
 import com.facebook.share.Sharer
-import com.facebook.share.model.GameRequestContent
 import com.facebook.share.model.ShareContent
 import com.facebook.share.model.ShareLinkContent
 import com.facebook.share.model.SharePhoto
 import com.facebook.share.model.SharePhotoContent
 import com.facebook.share.model.ShareVideo
 import com.facebook.share.model.ShareVideoContent
-import com.facebook.share.widget.GameRequestDialog
 import com.facebook.share.widget.ShareDialog
 import kotlinx.serialization.InternalSerializationApi
 import kotlinx.serialization.Serializable
 import java.io.File
+import java.io.UnsupportedEncodingException
+import java.net.URLEncoder
+import kotlin.coroutines.resume
+import kotlin.coroutines.suspendCoroutine
 
 /**
  * Created by Pham Xuan Han on 17/05/17.
@@ -57,27 +56,7 @@ class FacebookBridge(
         private const val kOnProfileChanged = "${kPrefix}OnProfileChanged"
         private const val kGraphRequest = "${kPrefix}GraphRequest"
         private const val kSendRequest = "${kPrefix}SendRequest"
-        private const val kShareLinkContent = "${kPrefix}ShareLinkContent"
-        private const val kSharePhotoContent = "${kPrefix}SharePhotoContent"
-        private const val kShareVideoContent = "${kPrefix}ShareVideoContent"
-
-        @AnyThread
-        @InternalSerializationApi
-        fun convertAccessTokenToString(token: AccessToken?): String {
-            if (token == null) {
-                return ""
-            }
-            @Serializable
-            @Suppress("unused")
-            class Response(
-                val token: String,
-                val applicationId: String,
-                val userId: String
-            )
-
-            val response = Response(token.token, token.applicationId, token.userId)
-            return response.serialize()
-        }
+        private const val kShareContent = "${kPrefix}ShareContent"
     }
 
     private val _callbackManager = CallbackManager.Factory.create()
@@ -133,6 +112,7 @@ class FacebookBridge(
     override fun onStop() {}
     override fun onResume() {}
     override fun onPause() {}
+
     override fun onDestroy() {
         _activity = null
     }
@@ -155,63 +135,134 @@ class FacebookBridge(
         _bridge.registerHandler(kIsLoggedIn) {
             Utils.toString(isLoggedIn)
         }
-        _bridge.registerHandler(kLogIn) { message ->
+        _bridge.registerAsyncHandler(kLogIn) { message ->
             @Serializable
             class Request(
                 val permissions: List<String>,
-                val tag: Int
+            )
+
+            @Serializable
+            @Suppress("unused")
+            class Response(
+                val successful: Boolean,
+                val canceled: Boolean,
+                val errorMessage: String,
             )
 
             val request = deserialize<Request>(message)
-            logIn(request.permissions, FacebookLoginDelegate(_bridge, request.tag))
-            ""
+            val response = suspendCoroutine<Response> { cont ->
+                logIn(request.permissions, object : FacebookCallback<LoginResult> {
+                    override fun onSuccess(result: LoginResult) {
+                        cont.resume(Response(successful = true, canceled = false, ""))
+                    }
+
+                    override fun onCancel() {
+                        cont.resume(Response(successful = false, canceled = true, ""))
+                    }
+
+                    override fun onError(error: FacebookException) {
+                        cont.resume(Response(successful = false, canceled = false,
+                            error.localizedMessage ?: ""))
+                    }
+                })
+            }
+            response.serialize()
         }
-        _bridge.registerHandler(kLogOut) {
+        _bridge.registerAsyncHandler(kLogOut) {
             logOut()
             ""
         }
         _bridge.registerHandler(kGetAccessToken) {
-            val token = accessToken
-            convertAccessTokenToString(token)
+            @Serializable
+            @Suppress("unused")
+            class Response(
+                val token: String,
+                val applicationId: String,
+                val userId: String
+            )
+
+            val token = accessToken ?: return@registerHandler ""
+            val response = Response(
+                token.token,
+                token.applicationId,
+                token.userId)
+            response.serialize()
         }
-        _bridge.registerHandler(kGraphRequest) { message ->
-            graphRequest(message)
+        _bridge.registerAsyncHandler(kGraphRequest) { message ->
+            @Serializable
+            class Request(
+                val path: String,
+                val parameters: Map<String, String>,
+            )
+
+            @Serializable
+            @Suppress("unused")
+            class Response(
+                val successful: Boolean,
+                val response: String,
+                val errorMessage: String,
+            )
+
+            val request = deserialize<Request>(message)
+            val parameters = Bundle()
+            for ((key, value) in request.parameters) {
+                parameters.putString(key, value)
+            }
+            val response = suspendCoroutine<Response> { cont ->
+                graphRequest(request.path, parameters) { result ->
+                    if (result.error != null) {
+                        cont.resume(Response(false, "", result.error.errorMessage))
+                    } else {
+                        cont.resume(Response(true, result.rawResponse, ""))
+                    }
+                }
+            }
+            response.serialize()
         }
+        /*
         _bridge.registerHandler(kSendRequest) { message ->
             sendRequest(message)
         }
-        _bridge.registerHandler(kShareLinkContent) { message ->
+         */
+        _bridge.registerAsyncHandler(kShareContent) { message ->
             @Serializable
             class Request(
+                val type: Int,
                 val url: String,
-                val tag: Int
+            )
+
+            @Serializable
+            @Suppress("unused")
+            class Response(
+                val successful: Boolean,
+                val canceled: Boolean,
+                val errorMessage: String,
             )
 
             val request = deserialize<Request>(message)
-            shareLinkContent(request.url, FacebookShareDelegate(_bridge, request.tag))
-            ""
-        }
-        _bridge.registerHandler(kSharePhotoContent) { message ->
-            @Serializable
-            class Request(
-                val url: String,
-                val tag: Int
-            )
+            val response = suspendCoroutine<Response> { cont ->
+                val callback = object : FacebookCallback<Sharer.Result> {
+                    override fun onSuccess(result: Sharer.Result) {
+                        cont.resume(Response(successful = true, canceled = false, ""))
+                    }
 
-            val request = deserialize<Request>(message)
-            sharePhotoContent(request.url, FacebookShareDelegate(_bridge, request.tag))
-            ""
-        }
-        _bridge.registerHandler(kShareVideoContent) { message ->
-            @Serializable
-            class Request(
-                val url: String,
-                val tag: Int
-            )
+                    override fun onCancel() {
+                        cont.resume(Response(successful = false, canceled = true, ""))
+                    }
 
-            val request = deserialize<Request>(message)
-            shareVideoContent(request.url, FacebookShareDelegate(_bridge, request.tag))
-            ""
+                    override fun onError(error: FacebookException) {
+                        cont.resume(Response(successful = false, canceled = false,
+                            error.localizedMessage ?: ""))
+                    }
+                }
+                when (request.type) {
+                    0 -> shareLinkContent(request.url, callback)
+                    1 -> sharePhotoContent(request.url, callback)
+                    2 -> shareVideoContent(request.url, callback)
+                    else -> throw IllegalStateException("Invalid share type")
+                }
+            }
+            response.serialize()
         }
     }
 
@@ -223,73 +274,52 @@ class FacebookBridge(
         _bridge.deregisterHandler(kLogOut)
         _bridge.deregisterHandler(kGetAccessToken)
         _bridge.deregisterHandler(kGraphRequest)
-        _bridge.deregisterHandler(kSendRequest)
-        _bridge.deregisterHandler(kShareLinkContent)
-        _bridge.deregisterHandler(kSharePhotoContent)
-        _bridge.deregisterHandler(kShareVideoContent)
+        // _bridge.deregisterHandler(kSendRequest)
+        _bridge.deregisterHandler(kShareContent)
     }
 
     private val isLoggedIn: Boolean
-        get() = AccessToken.getCurrentAccessToken() != null
+        get() {
+            val token = AccessToken.getCurrentAccessToken()
+            return token != null && !token.isExpired
+        }
 
     private fun logIn(permissions: List<String>, callback: FacebookCallback<LoginResult>) {
-        val activity = _activity ?: throw IllegalStateException("Activity is null")
-        InvisibleActivity.Builder(activity)
-            .onStart { innerActivity ->
-                _loginManager.registerCallback(_callbackManager, callback)
-                _loginManager.logInWithReadPermissions(innerActivity, permissions)
-            }
-            .onFinish { requestCode, resultCode, data ->
-                _callbackManager.onActivityResult(requestCode, resultCode, data)
-            }
-            .process()
+        Thread.runOnMainThread {
+            val activity = _activity ?: throw IllegalStateException("Activity is null")
+            InvisibleActivity.Builder(activity)
+                .onStart { innerActivity ->
+                    _loginManager.registerCallback(_callbackManager, callback)
+                    _loginManager.logInWithReadPermissions(innerActivity, permissions)
+                }
+                .onFinish { requestCode, resultCode, data ->
+                    _callbackManager.onActivityResult(requestCode, resultCode, data)
+                }
+                .process()
+        }
     }
 
-    private fun logOut() {
-        _loginManager.logOut()
+    private suspend fun logOut() {
+        return suspendCoroutine { cont ->
+            Thread.runOnMainThread {
+                _loginManager.logOut()
+                cont.resume(Unit)
+            }
+        }
     }
 
     private
     val accessToken: AccessToken?
         get() = AccessToken.getCurrentAccessToken()
 
-    private fun k__onGraphSuccess(tag: Int): String {
-        return "FacebookGraphDelegate_onSuccess_$tag"
-    }
-
-    private fun k__onGraphFailure(tag: Int): String {
-        return "FacebookGraphDelegate_onFailure_$tag"
-    }
-
-    private fun graphRequest(message: String): String {
-        @Serializable
-        class Request(
-            val path: String,
-            val parameters: Map<String, String>,
-            val tag: Int
-        )
-
-        val request = deserialize<Request>(message)
-        val parameters = Bundle()
-        for ((key, value) in request.parameters) {
-            parameters.putString(key, value)
-        }
-        val callback = GraphRequest.Callback { response ->
-            if (response.error != null) {
-                _bridge.callCpp(k__onGraphFailure(request.tag), response.error.errorMessage)
-            } else {
-                _bridge.callCpp(k__onGraphSuccess(request.tag), response.rawResponse)
-            }
-        }
-        graphRequest(request.path, parameters, callback)
-        return ""
-    }
-
     private fun graphRequest(path: String, parameters: Bundle, callback: GraphRequest.Callback) {
-        val request = GraphRequest(accessToken, path, parameters, HttpMethod.GET, callback)
-        request.executeAsync()
+        Thread.runOnMainThread {
+            val request = GraphRequest(accessToken, path, parameters, HttpMethod.GET, callback)
+            request.executeAsync()
+        }
     }
 
+    /*
     private fun sendRequest(message: String): String {
         @Serializable
         class Request(
@@ -324,7 +354,9 @@ class FacebookBridge(
             FacebookRequestDelegate(_bridge, request.tag))
         return ""
     }
+     */
 
+    /*
     private fun sendRequest(actionType: GameRequestContent.ActionType,
                             filter: GameRequestContent.Filters,
                             title: String,
@@ -355,46 +387,54 @@ class FacebookBridge(
             }
             .process()
     }
+     */
 
-    private fun shareLinkContent(url: String, delegate: FacebookCallback<Sharer.Result>) {
-//        String encodedUrl;
-//        try {
-//            encodedUrl = URLEncoder.encode(url, "utf-8");
-//        } catch (UnsupportedEncodingException e) {
-//            encodedUrl = url;
-//        }
-        val content = ShareLinkContent.Builder()
-            .setContentUrl(Uri.parse(url))
-            .build()
-        shareContent(content, delegate)
-    }
-
-    private fun sharePhotoContent(url: String, delegate: FacebookCallback<Sharer.Result>) {
-        val image = BitmapFactory.decodeFile(url)
-        val photo = SharePhoto.Builder().setBitmap(image).build()
-        val content = SharePhotoContent.Builder().addPhoto(photo).build()
-        shareContent(content, delegate)
-    }
-
-    private fun shareVideoContent(url: String, delegate: FacebookCallback<Sharer.Result>) {
-        val video = File(url)
-        val videoFileUri = Uri.fromFile(video)
-        val videoContent = ShareVideo.Builder().setLocalUrl(videoFileUri).build()
-        val content = ShareVideoContent.Builder().setVideo(videoContent).build()
-        shareContent(content, delegate)
-    }
-
-    private fun shareContent(content: ShareContent<*, *>, delegate: FacebookCallback<Sharer.Result>) {
-        val activity = _activity ?: throw IllegalStateException("Activity is null")
-        InvisibleActivity.Builder(activity)
-            .onStart { innerActivity ->
-                val dialog = ShareDialog(innerActivity)
-                dialog.registerCallback(_callbackManager, delegate)
-                dialog.show(content, ShareDialog.Mode.AUTOMATIC)
+    private fun shareLinkContent(url: String, callback: FacebookCallback<Sharer.Result>) {
+        Thread.runOnMainThread {
+            val encodedUrl = try {
+                URLEncoder.encode(url, "utf-8");
+            } catch (ex: UnsupportedEncodingException) {
+                url
             }
-            .onFinish { requestCode, resultCode, data ->
-                _callbackManager.onActivityResult(requestCode, resultCode, data)
-            }
-            .process()
+            val content = ShareLinkContent.Builder()
+                .setContentUrl(Uri.parse(encodedUrl))
+                .build()
+            shareContent(content, callback)
+        }
+    }
+
+    private fun sharePhotoContent(url: String, callback: FacebookCallback<Sharer.Result>) {
+        Thread.runOnMainThread {
+            val image = BitmapFactory.decodeFile(url)
+            val photo = SharePhoto.Builder().setBitmap(image).build()
+            val content = SharePhotoContent.Builder().addPhoto(photo).build()
+            shareContent(content, callback)
+        }
+    }
+
+    private fun shareVideoContent(url: String, callback: FacebookCallback<Sharer.Result>) {
+        Thread.runOnMainThread {
+            val video = File(url)
+            val videoFileUri = Uri.fromFile(video)
+            val videoContent = ShareVideo.Builder().setLocalUrl(videoFileUri).build()
+            val content = ShareVideoContent.Builder().setVideo(videoContent).build()
+            shareContent(content, callback)
+        }
+    }
+
+    private fun shareContent(content: ShareContent<*, *>, callback: FacebookCallback<Sharer.Result>) {
+        Thread.runOnMainThread {
+            val activity = _activity ?: throw IllegalStateException("Activity is null")
+            InvisibleActivity.Builder(activity)
+                .onStart { innerActivity ->
+                    val dialog = ShareDialog(innerActivity)
+                    dialog.registerCallback(_callbackManager, callback)
+                    dialog.show(content, ShareDialog.Mode.AUTOMATIC)
+                }
+                .onFinish { requestCode, resultCode, data ->
+                    _callbackManager.onActivityResult(requestCode, resultCode, data)
+                }
+                .process()
+        }
     }
 }

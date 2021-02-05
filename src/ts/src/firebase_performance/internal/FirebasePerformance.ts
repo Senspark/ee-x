@@ -1,21 +1,41 @@
-import { IMessageBridge, Utils } from "../../core";
+import {
+    ILogger,
+    IMessageBridge,
+    Utils,
+} from "../../core";
 import { IFirebasePerformance } from "../IFirebasePerformance";
 import { IFirebasePerformanceTrace } from "../IFirebasePerformanceTrace";
 import { FirebasePerformanceTrace } from "./FirebasePerformanceTrace";
 
+type Destroyer = () => void;
+
 export class FirebasePerformance implements IFirebasePerformance {
+    private readonly kTag = `FirebasePerformance`;
     private readonly kPrefix = "FirebasePerformanceBridge";
-    private readonly kSetDataCollectionEnabled = `${this.kPrefix}SetDataCollectionEnabled`;
+    private readonly kInitialize = `${this.kPrefix}Initialize`;
     private readonly kIsDataCollectionEnabled = `${this.kPrefix}IsDataCollectionEnabled`;
+    private readonly kSetDataCollectionEnabled = `${this.kPrefix}SetDataCollectionEnabled`;
     private readonly kNewTrace = `${this.kPrefix}NewTrace`;
 
     private readonly _bridge: IMessageBridge;
+    private readonly _logger: ILogger;
+    private readonly _destroyer: Destroyer;
 
-    public constructor(bridge: IMessageBridge) {
+    public constructor(bridge: IMessageBridge, logger: ILogger, destroyer: Destroyer) {
         this._bridge = bridge;
+        this._logger = logger;
+        this._destroyer = destroyer;
+        this._logger.debug(`${this.kTag}: constructor`);
     }
 
     public destroy(): void {
+        this._logger.debug(`${this.kTag}: destroy`);
+        this._destroyer();
+    }
+
+    public async initialize(): Promise<boolean> {
+        const response = await this._bridge.callAsync(this.kInitialize);
+        return Utils.toBool(response);
     }
 
     public get isDataCollectionEnabled(): boolean {

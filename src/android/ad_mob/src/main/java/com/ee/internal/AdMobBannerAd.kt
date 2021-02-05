@@ -5,7 +5,6 @@ import android.graphics.Point
 import android.view.Gravity
 import android.widget.FrameLayout
 import androidx.annotation.AnyThread
-import androidx.annotation.UiThread
 import com.ee.IBannerAd
 import com.ee.ILogger
 import com.ee.IMessageBridge
@@ -16,7 +15,6 @@ import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.AdSize
 import com.google.android.gms.ads.AdView
 import com.google.android.gms.ads.LoadAdError
-import com.google.common.truth.Truth
 import kotlinx.serialization.InternalSerializationApi
 import java.util.concurrent.atomic.AtomicBoolean
 
@@ -48,33 +46,26 @@ internal class AdMobBannerAd(
         createInternalAd()
     }
 
-    @UiThread
-    fun onCreate(activity: Activity) {
-        _activity = activity
+    override fun onCreate(activity: Activity) {
         addToActivity()
     }
 
-    @UiThread
-    fun onResume() {
+    override fun onResume() {
         Thread.checkMainThread()
         _ad?.resume()
     }
 
-    @UiThread
-    fun onPause() {
+    override fun onPause() {
         Thread.checkMainThread()
         _ad?.pause()
     }
 
-    @UiThread
-    fun onDestroy(activity: Activity) {
-        Truth.assertThat(_activity).isEqualTo(activity)
+    override fun onDestroy() {
         removeFromActivity()
         _activity = null
     }
 
-    @AnyThread
-    fun destroy() {
+    override fun destroy() {
         _logger.info("$kTag: ${this::destroy.name}: adId = $_adId")
         deregisterHandlers()
         destroyInternalAd()

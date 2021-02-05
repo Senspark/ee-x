@@ -1,5 +1,7 @@
 export * from './AsyncHelper';
 export * from './BannerAdHelper';
+export * from './DefaultBannerAd';
+export * from './DefaultFullScreenAd';
 export * from './GuardedBannerAd';
 export * from './GuardedFullScreenAd';
 export * from './IAsyncHelper';

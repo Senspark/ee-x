@@ -27,8 +27,8 @@ MonoBehaviour:
   _isAdColonyEnabled: 1
   _isAdMobEnabled: 1
   _isAdMobMediationEnabled: 1
-  _adMobAndroidAppId: ca-app-pub-2101587572072038~4641899906
-  _adMobIosAppId: ca-app-pub-2101587572072038~7063009104
+  _adMobAndroidAppId: ca-app-pub-2101587572072038~7060281508
+  _adMobIosAppId: ca-app-pub-2101587572072038~3967214308
   _isFacebookAdsEnabled: 1
   _isIronSourceEnabled: 1
   _isIronSourceMediationEnabled: 1

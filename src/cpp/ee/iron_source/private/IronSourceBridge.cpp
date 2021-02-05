@@ -1,31 +1,20 @@
 #include "ee/iron_source/private/IronSourceBridge.hpp"
 
+#include <ee/ads/internal/DefaultBannerAd.hpp>
 #include <ee/ads/internal/GuardedBannerAd.hpp>
 #include <ee/ads/internal/GuardedFullScreenAd.hpp>
 #include <ee/ads/internal/IAsyncHelper.hpp>
 #include <ee/ads/internal/MediationManager.hpp>
+#include <ee/core/ILogger.hpp>
 #include <ee/core/IMessageBridge.hpp>
-#include <ee/core/Logger.hpp>
-#include <ee/core/PluginManager.hpp>
 #include <ee/core/Task.hpp>
-#include <ee/core/Thread.hpp>
 #include <ee/core/Utils.hpp>
 #include <ee/nlohmann/json.hpp>
 
-#include "ee/iron_source/private/IronSourceBannerAd.hpp"
 #include "ee/iron_source/private/IronSourceInterstitialAd.hpp"
 #include "ee/iron_source/private/IronSourceRewardedAd.hpp"
 
 namespace ee {
-namespace core {
-template <>
-std::shared_ptr<IIronSource>
-PluginManager::createPluginImpl(IMessageBridge& bridge) {
-    addPlugin(Plugin::IronSource);
-    return std::make_shared<iron_source::Bridge>(bridge);
-}
-} // namespace core
-
 namespace iron_source {
 namespace {
 // clang-format off
@@ -35,7 +24,7 @@ const auto kInitialize                   = kPrefix + "Initialize";
 
 const auto kGetBannerAdSize              = kPrefix + "GetBannerAdSize";
 const auto kCreateBannerAd               = kPrefix + "CreateBannerAd";
-const auto kDestroyBannerAd              = kPrefix + "DestroyBannerAd";
+const auto kDestroyAd                    = kPrefix + "DestroyAd";
 
 const auto kHasInterstitialAd            = kPrefix + "HasInterstitialAd";
 const auto kLoadInterstitialAd           = kPrefix + "LoadInterstitialAd";
@@ -59,9 +48,11 @@ const auto kOnRewardedAdClosed       = kPrefix + "OnRewardedAdClosed";
 
 using Self = Bridge;
 
-Self::Bridge(IMessageBridge& bridge)
+Self::Bridge(IMessageBridge& bridge, ILogger& logger,
+             const Destroyer& destroyer)
     : bridge_(bridge)
-    , logger_(Logger::getSystemLogger()) {
+    , logger_(logger)
+    , destroyer_(destroyer) {
     logger_.debug("%s", __PRETTY_FUNCTION__);
     auto&& mediation = ads::MediationManager::getInstance();
     displayer_ = mediation.getAdDisplayer();
@@ -132,7 +123,7 @@ void Self::destroy() {
     bridge_.deregisterHandler(kOnRewardedAdClicked);
     bridge_.deregisterHandler(kOnRewardedAdClosed);
 
-    PluginManager::removePlugin(Plugin::IronSource);
+    destroyer_();
 }
 
 Task<bool> Self::initialize(const std::string& appKey) {
@@ -169,7 +160,12 @@ std::shared_ptr<IBannerAd> Self::createBannerAd(const std::string& adId,
     }
     auto size = getBannerAdSize(adSize);
     bannerAd_ = std::make_shared<ads::GuardedBannerAd>(
-        std::make_shared<BannerAd>(bridge_, logger_, this, adId, size));
+        std::make_shared<ads::DefaultBannerAd>(
+            "IronSourceBannerAd", bridge_, logger_,
+            [this, adId] { //
+                destroyBannerAd(adId);
+            },
+            adId, size));
     return bannerAd_;
 }
 
@@ -178,7 +174,7 @@ bool Self::destroyBannerAd(const std::string& adId) {
     if (bannerAd_ == nullptr) {
         return false;
     }
-    auto&& response = bridge_.call(kDestroyBannerAd, adId);
+    auto&& response = bridge_.call(kDestroyAd, adId);
     if (not core::toBool(response)) {
         logger_.error("%s: There was an error when attempt to destroy an ad.",
                       __PRETTY_FUNCTION__);

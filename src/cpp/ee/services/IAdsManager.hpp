@@ -38,9 +38,10 @@ public:
     virtual std::pair<float, float> getRectangleAdSize() const = 0;
     virtual void setRectangleAdSize(float x, float y) = 0;
 
-    virtual Task<AdResult> showInterstitialAd() = 0;
-    virtual Task<AdResult> showRewardedAd() = 0;
     virtual Task<AdResult> showAppOpenAd() = 0;
+    virtual Task<AdResult> showInterstitialAd() = 0;
+    virtual Task<AdResult> showRewardedInterstitialAd() = 0;
+    virtual Task<AdResult> showRewardedAd() = 0;
 };
 } // namespace services
 } // namespace ee

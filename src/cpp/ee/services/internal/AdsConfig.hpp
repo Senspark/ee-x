@@ -27,6 +27,7 @@ enum class AdFormat {
     Rectangle,
     AppOpen,
     Interstitial,
+    RewardedInterstitial,
     Rewarded,
 };
 
@@ -226,6 +227,20 @@ private:
 class InterstitialConfig : public IAdConfig {
 public:
     explicit InterstitialConfig(const nlohmann::json& node);
+
+    virtual AdFormat format() const override;
+
+    virtual std::shared_ptr<IAd> createAd(
+        const std::shared_ptr<INetworkConfigManager>& manager) const override;
+
+private:
+    int interval_;
+    std::shared_ptr<IAdInstanceConfig<IFullScreenAd>> instance_;
+};
+
+class RewardedInterstitialConfig : public IAdConfig {
+public:
+    explicit RewardedInterstitialConfig(const nlohmann::json& node);
 
     virtual AdFormat format() const override;
 

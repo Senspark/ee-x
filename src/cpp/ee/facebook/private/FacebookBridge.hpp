@@ -3,8 +3,8 @@
 //
 //
 
-#ifndef EE_X_FACEBOOK_FACEBOOK_BRIDGE_HPP_
-#define EE_X_FACEBOOK_FACEBOOK_BRIDGE_HPP_
+#ifndef EE_X_FACEBOOK_BRIDGE_HPP
+#define EE_X_FACEBOOK_BRIDGE_HPP
 
 #include <functional>
 #include <string>
@@ -15,74 +15,33 @@ namespace ee {
 namespace facebook {
 class Bridge final : public IBridge {
 public:
-    /// Used by JSB.
-    Bridge();
+    using Destroyer = std::function<void()>;
 
-    explicit Bridge(IMessageBridge& bridge);
+    explicit Bridge(IMessageBridge& bridge, ILogger& logger,
+                    const Destroyer& destroyer);
     virtual ~Bridge() override;
 
     virtual void destroy() override;
 
-    /// @see Super.
     virtual bool isLoggedIn() const override;
-
-    /// @see Super.
-    virtual void
-    logIn(const std::vector<std::string>& permissions,
-          const std::shared_ptr<ILoginDelegate>& delegate) override;
-
-    /// @see Super.
-    virtual std::shared_ptr<ILoginDelegate> createLoginDelegate() override;
-
-    /// @see Super.
-    virtual void logOut() override;
-
-    /// @see Super.
+    virtual Task<LoginResult>
+    logIn(const std::vector<std::string>& permissions) override;
+    virtual Task<> logOut() override;
     virtual std::shared_ptr<IAccessToken> getAccessToken() const override;
+    virtual Task<GraphResult>
+    graphRequest(const GraphRequest& request) override;
+    virtual Task<ShareResult> shareContent(ShareType type,
+                                           const std::string& url) override;
 
-    /// @see Super.
-    virtual void
-    graphRequest(const GraphRequest& request,
-                 const std::shared_ptr<IGraphDelegate>& delegate) override;
-
-    /// @see Super.
-    virtual std::shared_ptr<IGraphDelegate> createGraphDelegate() override;
-
-    /// @see Super.
-    virtual void
-    sendRequest(const RequestContent& content,
-                const std::shared_ptr<IRequestDelegate>& delegate) override;
-
-    /// @see Super.
-    virtual std::shared_ptr<IRequestDelegate> createRequestDelegate() override;
-
-    /// @see Super.
-    virtual void
-    shareLinkContent(const std::string& url,
-                     const std::shared_ptr<IShareDelegate>& delegate) override;
-
-    /// @see Super.
-    virtual void
-    sharePhotoContent(const std::string& url,
-                      const std::shared_ptr<IShareDelegate>& delegate) override;
-
-    /// @see Super.
-    virtual void
-    shareVideoContent(const std::string& url,
-                      const std::shared_ptr<IShareDelegate>& delegate) override;
-
-    /// @see Super.
-    virtual std::shared_ptr<IShareDelegate> createShareDelegate() override;
-
-protected:
+private:
     void registerNotifications();
     void onProfileChanged(const std::string& profile);
 
-private:
-    int delegateId_;
     IMessageBridge& bridge_;
+    ILogger& logger_;
+    Destroyer destroyer_;
 };
 } // namespace facebook
 } // namespace ee
 
-#endif /* EE_X_FACEBOOK_FACEBOOK_BRIDGE_HPP_ */
+#endif /* EE_X_FACEBOOK_BRIDGE_HPP */

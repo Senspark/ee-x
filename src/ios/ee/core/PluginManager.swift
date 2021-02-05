@@ -9,20 +9,18 @@ import Foundation
 
 private typealias PluginExecutor = (_ plugin: IPlugin) -> Bool
 
-@objc(EEPluginManager)
 public class PluginManager: NSObject {
     private static let _sharedInstance = PluginManager()
     
     private let _logger = Logger("ee-x")
-    private let _bridge = MessageBridge.getInstance()
+    private let _bridge = MessageBridge()
     private var _plugins: [String: IPlugin]
     
     #if os(iOS)
     private var _delegate: UIApplicationDelegate?
     #endif // os(iOS)
     
-    @objc
-    public class func getInstance() -> PluginManager {
+    public class var instance: PluginManager {
         return _sharedInstance
     }
     
@@ -30,14 +28,17 @@ public class PluginManager: NSObject {
         _plugins = [:]
     }
     
-    @objc
-    public func getBridge() -> IMessageBridge {
+    public var bridge: IMessageBridge {
         return _bridge
+    }
+    
+    public var logger: ILogger {
+        return _logger
     }
     
     #if os(iOS)
     fileprivate func initializePlugins(_ version: String, _ delegate: UIApplicationDelegate) -> Bool {
-        let expectedVersion = "2.3.0"
+        let expectedVersion = "2.4.1"
         if version != expectedVersion {
             _logger.error("Version mismatched: found \(version) expected \(expectedVersion)")
             assert(false)
@@ -137,9 +138,9 @@ public class PluginManager: NSObject {
         let closure = ee_closureCast(#selector(PluginManager.application(_:open:options:)), Func.self)
         var response = closure(self, #selector(UIApplicationDelegate.application(_:open:options:)),
                                application, url, options)
-        if (PluginManager.getInstance().executePlugins { $0.application?(application,
-                                                                         open: url,
-                                                                         options: options) ?? false }) {
+        if (PluginManager.instance.executePlugins { $0.application?(application,
+                                                                    open: url,
+                                                                    options: options) ?? false }) {
             response = true
         }
         return response
@@ -154,10 +155,10 @@ public class PluginManager: NSObject {
         let closure = ee_closureCast(#selector(PluginManager.application(_:open:sourceApplication:annotation:)), Func.self)
         var response = closure(self, #selector(UIApplicationDelegate.application(_:open:sourceApplication:annotation:)),
                                application, url, sourceApplication, annotation)
-        if (PluginManager.getInstance().executePlugins { $0.application?(application,
-                                                                         open: url,
-                                                                         sourceApplication: sourceApplication,
-                                                                         annotation: annotation) ?? false }) {
+        if (PluginManager.instance.executePlugins { $0.application?(application,
+                                                                    open: url,
+                                                                    sourceApplication: sourceApplication,
+                                                                    annotation: annotation) ?? false }) {
             response = true
         }
         return response
@@ -171,9 +172,9 @@ public class PluginManager: NSObject {
         let closure = ee_closureCast(#selector(PluginManager.application(_:continue:restorationHandler:)), Func.self)
         var response = closure(self, #selector(UIApplicationDelegate.application(_:continue:restorationHandler:)),
                                application, userActivity, restorationHandler)
-        if (PluginManager.getInstance().executePlugins { $0.application?(application,
-                                                                         continue: userActivity,
-                                                                         restorationHandler: restorationHandler) ?? false }) {
+        if (PluginManager.instance.executePlugins { $0.application?(application,
+                                                                    continue: userActivity,
+                                                                    restorationHandler: restorationHandler) ?? false }) {
             response = true
         }
         return response
@@ -205,15 +206,15 @@ public func ee_staticInitializePlugins(_ version: UnsafePointer<CChar>) -> Bool 
         assert(false, "Delegate not assigned")
         return false
     }
-    return PluginManager.getInstance().initializePlugins(version_str, delegate)
+    return PluginManager.instance.initializePlugins(version_str, delegate)
     #else // os(iOS)
-    return PluginManager.getInstance().initializePlugins(version_str)
+    return PluginManager.instance.initializePlugins(version_str)
     #endif // os(iOS)
 }
 
 @_cdecl("ee_staticSetLogLevel")
 public func ee_staticSetLogLevel(_ level: Int) {
-    PluginManager.getInstance().setLogLevel(level)
+    PluginManager.instance.setLogLevel(level)
 }
 
 @_cdecl("ee_staticGetActivity")

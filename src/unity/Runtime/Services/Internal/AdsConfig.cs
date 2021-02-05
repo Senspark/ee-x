@@ -19,6 +19,7 @@ namespace EE.Internal {
         Rectangle,
         AppOpen,
         Interstitial,
+        RewardedInterstitial,
         Rewarded
     }
 
@@ -236,6 +237,7 @@ namespace EE.Internal {
                 case "rect": return new RectangleConfig(node);
                 case "app_open": return new AppOpenConfig(node);
                 case "interstitial": return new InterstitialConfig(node);
+                case "rewarded_interstitial": return new RewardedInterstitialConfig(node);
                 case "rewarded": return new RewardedConfig(node);
                 default:
                     throw new ArgumentOutOfRangeException();
@@ -301,6 +303,24 @@ namespace EE.Internal {
         }
 
         public AdFormat Format => AdFormat.Interstitial;
+
+        public IAd CreateAd(INetworkConfigManager manager) {
+            var ad = _instance.CreateAd(manager);
+            return new GenericAd(ad, _interval);
+        }
+    }
+
+    internal class RewardedInterstitialConfig : IAdConfig {
+        private readonly int _interval;
+        private readonly IAdInstanceConfig<IFullScreenAd> _instance;
+
+        public RewardedInterstitialConfig(JSONNode node) {
+            _interval = node.HasKey("interval") ? node["interval"].AsInt : 0;
+            _instance = AdInstanceConfig<IFullScreenAd>.Parse<MultiFullScreenAd>(AdFormat.RewardedInterstitial,
+                node["instance"]);
+        }
+
+        public AdFormat Format => AdFormat.RewardedInterstitial;
 
         public IAd CreateAd(INetworkConfigManager manager) {
             var ad = _instance.CreateAd(manager);

@@ -15,10 +15,11 @@
 
 namespace ee {
 namespace play {
+class IBridge;
 class Bridge;
 } // namespace play
 
-using Play = play::Bridge;
+using IPlay = play::IBridge;
 } // namespace ee
 
 #endif // __cplusplus

@@ -10,12 +10,12 @@ import Foundation
 
 private let kTag = "\(FacebookRewardedAd.self)"
 
-internal class FacebookRewardedAd:
-    NSObject, FBRewardedVideoAdDelegate {
+internal class FacebookRewardedAd: NSObject, IFullScreenAd, FBRewardedVideoAdDelegate {
     private let _bridge: IMessageBridge
     private let _logger: ILogger
     private let _adId: String
     private let _messageHelper: MessageHelper
+    private var _helper: FullScreenAdHelper?
     private var _isLoaded = false
     private var _displaying = false
     private var _rewarded = false
@@ -29,6 +29,7 @@ internal class FacebookRewardedAd:
         _adId = adId
         _messageHelper = MessageHelper("FacebookRewardedAd", _adId)
         super.init()
+        _helper = FullScreenAdHelper(_bridge, self, _messageHelper)
         registerHandlers()
     }
     
@@ -38,23 +39,11 @@ internal class FacebookRewardedAd:
     }
     
     func registerHandlers() {
-        _bridge.registerHandler(_messageHelper.isLoaded) { _ in
-            Utils.toString(self.isLoaded)
-        }
-        _bridge.registerHandler(_messageHelper.load) { _ in
-            self.load()
-            return ""
-        }
-        _bridge.registerHandler(_messageHelper.show) { _ in
-            self.show()
-            return ""
-        }
+        _helper?.registerHandlers()
     }
     
     func deregisterHandlers() {
-        _bridge.deregisterHandler(_messageHelper.isLoaded)
-        _bridge.deregisterHandler(_messageHelper.load)
-        _bridge.deregisterHandler(_messageHelper.show)
+        _helper?.deregisterHandlers()
     }
     
     func createInternalAd() -> FBRewardedVideoAd {
@@ -103,8 +92,8 @@ internal class FacebookRewardedAd:
             let result = ad.show(fromRootViewController: rootView)
             if result {
                 // OK.
-                self._isLoaded = false
             } else {
+                self._isLoaded = false
                 self.destroyInternalAd()
                 self._bridge.callCpp(self._messageHelper.onFailedToShow)
             }
@@ -125,6 +114,7 @@ internal class FacebookRewardedAd:
             self.destroyInternalAd()
             if self._displaying {
                 self._displaying = false
+                self._isLoaded = false
                 self._bridge.callCpp(self._messageHelper.onFailedToShow, error.localizedDescription)
             } else {
                 self._bridge.callCpp(self._messageHelper.onFailedToLoad, error.localizedDescription)
@@ -174,6 +164,7 @@ internal class FacebookRewardedAd:
         Thread.runOnMainThread {
             self._logger.debug("\(kTag): \(#function): id = \(self._adId)")
             self._displaying = false
+            self._isLoaded = false
             self.destroyInternalAd()
             self._bridge.callCpp(self._messageHelper.onClosed, Utils.toString(self._rewarded))
         }

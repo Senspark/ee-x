@@ -7,10 +7,12 @@ namespace ee {
 namespace core {
 class PluginManagerImplCpp : public IPluginManagerImpl {
 public:
+    explicit PluginManagerImplCpp(ILogger& logger);
     virtual void initialize() override;
     virtual IMessageBridge& getBridge() override;
 
 private:
+    ILogger& logger_;
     std::shared_ptr<IMessageBridge> bridge_;
 };
 } // namespace core

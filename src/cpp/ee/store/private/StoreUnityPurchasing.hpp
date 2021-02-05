@@ -29,7 +29,7 @@ private:
     initialize(const std::shared_ptr<IStoreListener>& listener,
                const ConfigurationBuilder& builder,
                const std::shared_ptr<ITransactionLog>& transactionLog,
-               const Logger& logger);
+               ILogger& logger);
 };
 } // namespace store
 } // namespace ee

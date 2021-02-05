@@ -4,27 +4,31 @@ import {
     IFullScreenAd,
 } from "../../ads";
 import {
+    DefaultBannerAd,
     GuardedBannerAd,
     GuardedFullScreenAd,
     IAsyncHelper,
     MediationManager,
 } from "../../ads/internal";
 import {
+    ILogger,
     IMessageBridge,
     Utils,
 } from "../../core";
 import { IIronSource } from "../IIronSource";
 import { IronSourceBannerAdSize } from "../IronSourceBannerAdSize";
-import { IronSourceBannerAd } from "./IronSourceBannerAd";
 import { IronSourceInterstitialAd } from "./IronSourceInterstitialAd";
 import { IronSourceRewardedAd } from "./IronSourceRewardedAd";
 
+type Destroyer = () => void;
+
 export class IronSource implements IIronSource {
+    private readonly kTag = `IronSource`;
     private readonly kPrefix = `IronSourceBridge`;
     private readonly kInitialize = `${this.kPrefix}Initialize`;
     private readonly kGetBannerAdSize = `${this.kPrefix}GetBannerAdSize`;
     private readonly kCreateBannerAd = `${this.kPrefix}CreateBannerAd`;
-    private readonly kDestroyBannerAd = `${this.kPrefix}DestroyBannerAd`;
+    private readonly kDestroyAd = `${this.kPrefix}DestroyAd`;
     private readonly kHasInterstitialAd = `${this.kPrefix}HasInterstitialAd`;
     private readonly kLoadInterstitialAd = `${this.kPrefix}LoadInterstitialAd`;
     private readonly kShowInterstitialAd = `${this.kPrefix}ShowInterstitialAd`;
@@ -41,6 +45,8 @@ export class IronSource implements IIronSource {
     private readonly kOnRewardedAdClosed = `${this.kPrefix}OnRewardedAdClosed`;
 
     private readonly _bridge: IMessageBridge;
+    private readonly _logger: ILogger;
+    private readonly _destroyer: Destroyer;
     private _bannerAd?: IBannerAd;
     private _interstitialAd?: IronSourceInterstitialAd;
     private _sharedInterstitialAd?: IFullScreenAd;
@@ -48,22 +54,26 @@ export class IronSource implements IIronSource {
     private _sharedRewardedAd?: IFullScreenAd;
     private readonly _displayer: IAsyncHelper<FullScreenAdResult>;
 
-    public constructor(bridge: IMessageBridge) {
+    public constructor(bridge: IMessageBridge, logger: ILogger, destroyer: Destroyer) {
         this._bridge = bridge;
+        this._logger = logger;
+        this._destroyer = destroyer;
+        this._logger.debug(`${this.kTag}: constructor`);
         this._displayer = MediationManager.getInstance().adDisplayer;
 
         this._bridge.registerHandler(_ => this.onInterstitialAdLoaded(), this.kOnInterstitialAdLoaded);
-        this._bridge.registerHandler(this.onInterstitialAdFailedToLoad, this.kOnInterstitialAdFailedToLoad);
-        this._bridge.registerHandler(this.onInterstitialAdFailedToShow, this.kOnInterstitialAdFailedToShow);
+        this._bridge.registerHandler(message => this.onInterstitialAdFailedToLoad(message), this.kOnInterstitialAdFailedToLoad);
+        this._bridge.registerHandler(message => this.onInterstitialAdFailedToShow(message), this.kOnInterstitialAdFailedToShow);
         this._bridge.registerHandler(_ => this.onInterstitialAdClicked(), this.kOnInterstitialAdClicked);
         this._bridge.registerHandler(_ => this.onInterstitialAdClosed(), this.kOnInterstitialAdClosed);
         this._bridge.registerHandler(_ => this.onRewardedAdLoaded(), this.kOnRewardedAdLoaded);
-        this._bridge.registerHandler(this.onRewardedAdFailedToShow, this.kOnRewardedAdFailedToShow);
+        this._bridge.registerHandler(message => this.onRewardedAdFailedToShow(message), this.kOnRewardedAdFailedToShow);
         this._bridge.registerHandler(_ => this.onRewardedAdClicked(), this.kOnRewardedAdClicked);
         this._bridge.registerHandler(message => this.onRewardedAdClosed(Utils.toBool(message)), this.kOnRewardedAdClosed);
     }
 
     public destroy(): void {
+        this._logger.debug(`${this.kTag}: destroy`);
         this._bridge.deregisterHandler(this.kOnInterstitialAdLoaded);
         this._bridge.deregisterHandler(this.kOnInterstitialAdFailedToLoad);
         this._bridge.deregisterHandler(this.kOnInterstitialAdFailedToShow);
@@ -73,6 +83,7 @@ export class IronSource implements IIronSource {
         this._bridge.deregisterHandler(this.kOnRewardedAdFailedToShow);
         this._bridge.deregisterHandler(this.kOnRewardedAdClicked);
         this._bridge.deregisterHandler(this.kOnRewardedAdClosed);
+        this._destroyer();
     }
 
     public async initialize(appKey: string): Promise<boolean> {
@@ -90,6 +101,7 @@ export class IronSource implements IIronSource {
     }
 
     public createBannerAd(adId: string, adSize: IronSourceBannerAdSize): IBannerAd {
+        this._logger.debug(`${this.kTag}: createBannerAd: id = ${adId} size = ${adSize}`);
         if (this._bannerAd !== undefined) {
             return this._bannerAd;
         }
@@ -102,15 +114,19 @@ export class IronSource implements IIronSource {
             throw new Error(`Failed to create banner ad: ${adId}`);
         }
         const size = this.getBannerAdSize(adSize);
-        this._bannerAd = new GuardedBannerAd(new IronSourceBannerAd(this._bridge, this, adId, size));
+        this._bannerAd = new GuardedBannerAd(
+            new DefaultBannerAd("IronSourceBannerAd", this._bridge, this._logger,
+                () => this.destroyBannerAd(adId),
+                adId, size));
         return this._bannerAd;
     }
 
     public destroyBannerAd(adId: string): boolean {
+        this._logger.debug(`${this.kTag}: destroyBannerAd: id = ${adId}`);
         if (this._bannerAd === undefined) {
             return false;
         }
-        const response = this._bridge.call(this.kDestroyBannerAd, adId);
+        const response = this._bridge.call(this.kDestroyAd, adId);
         if (!Utils.toBool(response)) {
             // Assert.
             return false;
@@ -120,6 +136,7 @@ export class IronSource implements IIronSource {
     }
 
     public createInterstitialAd(adId: string): IFullScreenAd {
+        this._logger.debug(`${this.kTag}: createInterstitialAd: id = ${adId}`);
         if (this._sharedInterstitialAd !== undefined) {
             return this._sharedInterstitialAd;
         }
@@ -129,6 +146,7 @@ export class IronSource implements IIronSource {
     }
 
     public destroyInterstitialAd(adId: string): boolean {
+        this._logger.debug(`${this.kTag}: destroyInterstitialAd: id = ${adId}`);
         if (this._sharedInterstitialAd == undefined) {
             return false;
         }
@@ -138,6 +156,7 @@ export class IronSource implements IIronSource {
     }
 
     public createRewardedAd(adId: string): IFullScreenAd {
+        this._logger.debug(`${this.kTag}: createRewardedAd: id = ${adId}`);
         if (this._sharedRewardedAd !== undefined) {
             return this._sharedRewardedAd;
         }
@@ -147,6 +166,7 @@ export class IronSource implements IIronSource {
     }
 
     public destroyRewardedAd(adId: string): boolean {
+        this._logger.debug(`${this.kTag}: destroyRewardedAd: id = ${adId}`);
         if (this._sharedRewardedAd == undefined) {
             return false;
         }

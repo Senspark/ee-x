@@ -46,7 +46,6 @@ internal class AppLovinInterstitialAdListener(
     override fun adDisplayed(ad: AppLovinAd) {
         Thread.runOnMainThread {
             _logger.info("$kTag: ${this::adDisplayed.name}")
-            _isLoaded.set(false)
         }
     }
 
@@ -60,6 +59,7 @@ internal class AppLovinInterstitialAdListener(
     override fun adHidden(ad: AppLovinAd) {
         Thread.runOnMainThread {
             _logger.info(this::adHidden.name)
+            _isLoaded.set(false)
             _bridge.callCpp(kOnInterstitialAdClosed)
         }
     }

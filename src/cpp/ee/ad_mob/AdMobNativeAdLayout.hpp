@@ -17,7 +17,7 @@
 #include "ee/ad_mob/AdMobFwd.hpp"
 
 namespace ee {
-namespace admob {
+namespace ad_mob {
 class NativeAdLayout {
 private:
     using Self = NativeAdLayout;
@@ -41,7 +41,7 @@ protected:
 
     std::unordered_map<std::string, std::string> params_;
 };
-} // namespace admob
+} // namespace ad_mob
 } // namespace ee
 
 #endif // __cplusplus

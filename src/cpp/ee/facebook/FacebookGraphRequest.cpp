@@ -13,10 +13,6 @@ namespace ee {
 namespace facebook {
 using Self = GraphRequest;
 
-Self::GraphRequest() {
-    //
-}
-
 Self& Self::setPath(const std::string& path) {
     path_ = path;
     return *this;

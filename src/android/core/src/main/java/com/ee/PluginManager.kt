@@ -21,9 +21,8 @@ class PluginManager private constructor() {
         private val _sharedInstance = PluginManager()
 
         @JvmStatic
-        fun getInstance(): PluginManager {
-            return _sharedInstance
-        }
+        val instance: PluginManager
+            @AnyThread get() = _sharedInstance
     }
 
     private interface PluginExecutor {
@@ -114,34 +113,30 @@ class PluginManager private constructor() {
         }
     }
 
-    @AnyThread
-    fun getApplication(): Application? {
-        return _application
-    }
+    val application: Application?
+        @AnyThread get() = _application
 
-    @AnyThread
-    fun getActivity(): Activity? {
-        return _activity
-    }
+    var activity: Activity?
+        @AnyThread get() = _activity
+        @AnyThread set(value) {
+            val activity = value ?: throw IllegalArgumentException("Null activity")
+            val application = activity.application
+            _application = application
+            _activity = activity
+            _activityClass = activity::class.java
+            application.registerActivityLifecycleCallbacks(_lifecycleCallbacks)
+        }
 
-    @AnyThread
-    fun getBridge(): IMessageBridge? {
-        return _bridge
-    }
+    val bridge: IMessageBridge?
+        @AnyThread get() = _bridge
 
-    @AnyThread
-    fun setActivity(activity: Activity) {
-        val application = activity.application
-        _application = application
-        _activity = activity
-        _activityClass = activity::class.java
-        application.registerActivityLifecycleCallbacks(_lifecycleCallbacks)
-    }
+    val logger: ILogger
+        @AnyThread get() = _logger
 
     @AnyThread
     @InternalSerializationApi
     fun initializePlugins(version: String, messageHandler: MessageBridgeHandler) {
-        val expectedVersion = "2.3.0"
+        val expectedVersion = "2.4.1"
         if (version != expectedVersion) {
             throw IllegalStateException("Version mismatched: found $version expected $expectedVersion")
         }
@@ -227,7 +222,7 @@ private external fun ee_callCppInternal(tag: String, message: String)
 @NativeThread
 @Suppress("FunctionName", "unused")
 private fun ee_staticInitializePlugins(version: String) {
-    PluginManager.getInstance().initializePlugins(version) { tag, message ->
+    PluginManager.instance.initializePlugins(version) { tag, message ->
         ee_callCppInternal(tag, message)
     }
 }
@@ -235,36 +230,36 @@ private fun ee_staticInitializePlugins(version: String) {
 @NativeThread
 @Suppress("FunctionName", "unused")
 private fun ee_staticSetLogLevel(level: Int) {
-    PluginManager.getInstance().setLogLevel(level)
+    PluginManager.instance.setLogLevel(level)
 }
 
 @NativeThread
 @Suppress("FunctionName", "unused")
 private fun ee_staticAddPlugin(name: String) {
-    PluginManager.getInstance().addPlugin(name)
+    PluginManager.instance.addPlugin(name)
 }
 
 @NativeThread
 @Suppress("FunctionName", "unused")
 private fun ee_staticRemovePlugin(name: String) {
-    PluginManager.getInstance().removePlugin(name)
+    PluginManager.instance.removePlugin(name)
 }
 
 @NativeThread
 @Suppress("FunctionName", "unused")
 private fun ee_staticGetActivity(): Any? {
-    return PluginManager.getInstance().getActivity()
+    return PluginManager.instance.activity
 }
 
 @NativeThread
 @Suppress("FunctionName", "unused")
 private fun ee_staticSetActivity(activity: Any) {
     val item = activity as? Activity ?: throw IllegalArgumentException("Invalid activity")
-    PluginManager.getInstance().setActivity(item)
+    PluginManager.instance.activity = item
 }
 
 /// Legacy method used by Soomla.
 @Suppress("FunctionName")
 fun ee_getStorePlugin(): IPlugin? {
-    return PluginManager.getInstance().getPlugin("Store")
+    return PluginManager.instance.getPlugin("Store")
 }

@@ -95,8 +95,8 @@ internal class FirebasePerformanceTrace(
     }
 
     @AnyThread
-    private fun incrementMetric(traceName: String, value: Long) {
-        _trace.incrementMetric(traceName, value)
+    private fun incrementMetric(name: String, value: Long) {
+        _trace.incrementMetric(name, value)
     }
 
     @AnyThread

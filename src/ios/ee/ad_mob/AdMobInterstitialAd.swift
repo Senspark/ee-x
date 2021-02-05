@@ -10,12 +10,12 @@ import GoogleMobileAds
 
 private let kTag = "\(AdMobInterstitialAd.self)"
 
-internal class AdMobInterstitialAd: NSObject, IInterstitialAd, GADInterstitialDelegate {
+internal class AdMobInterstitialAd: NSObject, IFullScreenAd, GADInterstitialDelegate {
     private let _bridge: IMessageBridge
     private let _logger: ILogger
     private let _adId: String
     private let _messageHelper: MessageHelper
-    private var _helper: InterstitialAdHelper?
+    private var _helper: FullScreenAdHelper?
     private var _isLoaded = false
     private var _ad: GADInterstitial?
     
@@ -27,7 +27,7 @@ internal class AdMobInterstitialAd: NSObject, IInterstitialAd, GADInterstitialDe
         _adId = adId
         _messageHelper = MessageHelper("AdMobInterstitialAd", _adId)
         super.init()
-        _helper = InterstitialAdHelper(_bridge, self, _messageHelper)
+        _helper = FullScreenAdHelper(_bridge, self, _messageHelper)
         registerHandlers()
     }
     
@@ -108,13 +108,13 @@ internal class AdMobInterstitialAd: NSObject, IInterstitialAd, GADInterstitialDe
     func interstitialWillPresentScreen(_ ad: GADInterstitial) {
         Thread.runOnMainThread {
             self._logger.debug("\(kTag): \(#function): id = \(self._adId)")
-            self._isLoaded = false
         }
     }
     
     func interstitialDidFail(toPresentScreen ad: GADInterstitial) {
         Thread.runOnMainThread {
             self._logger.debug("\(kTag): \(#function): id = \(self._adId)")
+            self._isLoaded = false
             self.destroyInternalAd()
             self._bridge.callCpp(self._messageHelper.onFailedToShow)
         }
@@ -136,6 +136,7 @@ internal class AdMobInterstitialAd: NSObject, IInterstitialAd, GADInterstitialDe
     func interstitialDidDismissScreen(_ ad: GADInterstitial) {
         Thread.runOnMainThread {
             self._logger.debug("\(kTag): \(#function): id = \(self._adId)")
+            self._isLoaded = false
             self.destroyInternalAd()
             self._bridge.callCpp(self._messageHelper.onClosed)
         }

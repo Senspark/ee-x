@@ -6,7 +6,10 @@ using UnityEngine;
 using UnityEngine.Assertions;
 
 namespace EE.Internal {
+    using Destroyer = Action;
+
     internal class FacebookAds : IFacebookAds {
+        private const string kTag = nameof(FacebookAds);
         private const string kPrefix = "FacebookAdsBridge";
         private const string kInitialize = kPrefix + "Initialize";
         private const string kGetTestDeviceHash = kPrefix + "GetTestDeviceHash";
@@ -14,29 +17,32 @@ namespace EE.Internal {
         private const string kClearTestDevices = kPrefix + "ClearTestDevices";
         private const string kGetBannerAdSize = kPrefix + "GetBannerAdSize";
         private const string kCreateBannerAd = kPrefix + "CreateBannerAd";
-        private const string kDestroyBannerAd = kPrefix + "DestroyBannerAd";
         private const string kCreateNativeAd = kPrefix + "CreateNativeAd";
-        private const string kDestroyNativeAd = kPrefix + "DestroyNativeAd";
         private const string kCreateInterstitialAd = kPrefix + "CreateInterstitialAd";
-        private const string kDestroyInterstitialAd = kPrefix + "DestroyInterstitialAd";
         private const string kCreateRewardedAd = kPrefix + "CreateRewardedAd";
-        private const string kDestroyRewardedAd = kPrefix + "DestroyRewardedAd";
+        private const string kDestroyAd = kPrefix + "DestroyAd";
 
         private readonly IMessageBridge _bridge;
+        private readonly ILogger _logger;
+        private readonly Destroyer _destroyer;
         private readonly Dictionary<string, IAd> _ads;
         private readonly IAsyncHelper<FullScreenAdResult> _displayer;
 
-        public FacebookAds(IMessageBridge bridge) {
+        public FacebookAds(IMessageBridge bridge, ILogger logger, Destroyer destroyer) {
             _bridge = bridge;
+            _logger = logger;
+            _destroyer = destroyer;
             _ads = new Dictionary<string, IAd>();
             _displayer = MediationManager.Instance.AdDisplayer;
         }
 
         public void Destroy() {
+            _logger.Debug($"{kTag}: constructor");
             foreach (var ad in _ads.Values) {
                 ad.Destroy();
             }
             _ads.Clear();
+            _destroyer();
         }
 
         public async Task<bool> Initialize() {
@@ -75,6 +81,7 @@ namespace EE.Internal {
         }
 
         public IBannerAd CreateBannerAd(string adId, FacebookBannerAdSize adSize) {
+            _logger.Debug($"${kTag}: {nameof(CreateBannerAd)}: id = {adId} size = {adSize}");
             if (_ads.TryGetValue(adId, out var result)) {
                 return result as IBannerAd;
             }
@@ -88,22 +95,32 @@ namespace EE.Internal {
                 return null;
             }
             var size = GetBannerAdSize(adSize);
-            var ad = new GuardedBannerAd(new FacebookBannerAd(_bridge, this, adId, size));
+            var ad = new GuardedBannerAd(new DefaultBannerAd("FacebookBannerAd", _bridge, _logger,
+                () => DestroyAd(adId), adId, size));
             _ads.Add(adId, ad);
             return ad;
         }
 
         public IFullScreenAd CreateInterstitialAd(string adId) {
             return CreateFullScreenAd(kCreateInterstitialAd, adId,
-                () => new FacebookInterstitialAd(_bridge, _displayer, this, adId));
+                () => new DefaultFullScreenAd("FacebookInterstitialAd", _bridge, _logger, _displayer,
+                    () => DestroyAd(adId),
+                    _ => FullScreenAdResult.Completed,
+                    adId));
         }
 
         public IFullScreenAd CreateRewardedAd(string adId) {
             return CreateFullScreenAd(kCreateRewardedAd, adId,
-                () => new FacebookRewardedAd(_bridge, _displayer, this, adId));
+                () => new DefaultFullScreenAd("FacebookRewardedAd", _bridge, _logger, _displayer,
+                    () => DestroyAd(adId),
+                    message => Utils.ToBool(message)
+                        ? FullScreenAdResult.Completed
+                        : FullScreenAdResult.Canceled,
+                    adId));
         }
 
         private IFullScreenAd CreateFullScreenAd(string handlerId, string adId, Func<IFullScreenAd> creator) {
+            _logger.Debug($"${kTag}: {nameof(CreateFullScreenAd)}: id = {adId}");
             if (_ads.TryGetValue(adId, out var result)) {
                 return result as IFullScreenAd;
             }
@@ -117,23 +134,12 @@ namespace EE.Internal {
             return ad;
         }
 
-        internal bool DestroyBannerAd(string adId) {
-            return DestroyAd(kDestroyBannerAd, adId);
-        }
-
-        internal bool DestroyInterstitialAd(string adId) {
-            return DestroyAd(kDestroyInterstitialAd, adId);
-        }
-
-        internal bool DestroyRewardedAd(string adId) {
-            return DestroyAd(kDestroyRewardedAd, adId);
-        }
-
-        private bool DestroyAd(string handlerId, string adId) {
+        private bool DestroyAd(string adId) {
+            _logger.Debug($"${kTag}: {nameof(DestroyAd)}: id = {adId}");
             if (!_ads.ContainsKey(adId)) {
                 return false;
             }
-            var response = _bridge.Call(handlerId, adId);
+            var response = _bridge.Call(kDestroyAd, adId);
             if (!Utils.ToBool(response)) {
                 Assert.IsTrue(false);
                 return false;

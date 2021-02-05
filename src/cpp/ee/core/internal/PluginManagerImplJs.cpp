@@ -2,8 +2,8 @@
 
 #ifdef EE_X_COCOS_JS
 #include "ee/core/JsbUtils.hpp"
-#include "ee/core/PluginManager.hpp"
 #include "ee/core/internal/MessageBridgeJs.hpp"
+#include "ee/core/internal/PluginManagerUtils.hpp"
 
 namespace ee {
 namespace core {
@@ -17,8 +17,7 @@ bool ee_staticLogLevel_binder(se::State& state) {
         return false;
     }
     se::Value jsThis(state.thisObject());
-    // FIXME.
-    // PluginManager::setLogLevel(args[0].toInt32());
+    PluginManagerUtils::setLogLevel(args[0].toInt32());
     return true;
 }
 
@@ -31,7 +30,7 @@ bool ee_staticAddPlugin_binder(se::State& state) {
         return false;
     }
     se::Value jsThis(state.thisObject());
-    PluginManager::addPlugin(static_cast<Plugin>(args[0].toInt32()));
+    PluginManagerUtils::addPlugin(args[0].toString());
     return true;
 }
 
@@ -44,7 +43,7 @@ bool ee_staticRemovePlugin_binder(se::State& state) {
         return false;
     }
     se::Value jsThis(state.thisObject());
-    PluginManager::removePlugin(static_cast<Plugin>(args[0].toInt32()));
+    PluginManagerUtils::removePlugin(args[0].toString());
     return true;
 }
 

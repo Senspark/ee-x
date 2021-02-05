@@ -9,6 +9,7 @@ import {
     MediationManager,
 } from "../../ads/internal";
 import {
+    ILogger,
     IMessageBridge,
     Utils,
 } from "../../core";
@@ -16,7 +17,10 @@ import { IUnityAds } from "../IUnityAds";
 import { UnityInterstitialAd } from "./UnityInterstitialAd";
 import { UnityRewardedAd } from "./UnityRewardedAd";
 
+type Destroyer = () => void;
+
 export class UnityAds implements IUnityAds {
+    private readonly kTag = `UnityAds;`
     private readonly kPrefix = "UnityAdsBridge";
     private readonly kInitialize = this.kPrefix + "Initialize";
     private readonly kSetDebugModeEnabled = this.kPrefix + "SetDebugModeEnabled";
@@ -28,18 +32,23 @@ export class UnityAds implements IUnityAds {
     private readonly kOnClosed = this.kPrefix + "OnClosed";
 
     private readonly _bridge: IMessageBridge;
+    private readonly _logger: ILogger;
+    private readonly _destroyer: Destroyer;
     private _displaying: boolean;
     private _adId?: string;
     private readonly _ads: { [index: string]: [IAd, IAd] };
     private readonly _displayer: IAsyncHelper<FullScreenAdResult>;
 
-    public constructor(bridge: IMessageBridge) {
+    public constructor(bridge: IMessageBridge, logger: ILogger, destroyer: Destroyer) {
         this._bridge = bridge;
+        this._logger = logger;
+        this._destroyer = destroyer;
         this._displaying = false;
         this._ads = {};
         this._displayer = MediationManager.getInstance().adDisplayer;
 
-        this._bridge.registerHandler(this.onLoaded, this.kOnLoaded);
+        this._logger.debug(`${this.kTag}: constructor`);
+        this._bridge.registerHandler(message => this.onLoaded(message), this.kOnLoaded);
         this._bridge.registerHandler(message => {
             const response: {
                 ad_id: string,
@@ -57,9 +66,11 @@ export class UnityAds implements IUnityAds {
     }
 
     public destroy(): void {
+        this._logger.debug(`${this.kTag}: destroy`);
         this._bridge.deregisterHandler(this.kOnLoaded);
         this._bridge.deregisterHandler(this.kOnFailedToShow);
         this._bridge.deregisterHandler(this.kOnClosed);
+        this._destroyer();
     }
 
     public async initialize(gameId: string, testModeEnabled: boolean): Promise<boolean> {

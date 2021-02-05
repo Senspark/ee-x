@@ -3,7 +3,7 @@ package com.ee.internal
 import android.app.Activity
 import android.app.Application
 import androidx.annotation.AnyThread
-import com.ee.IInterstitialAd
+import com.ee.IFullScreenAd
 import com.ee.ILogger
 import com.ee.IMessageBridge
 import com.ee.Thread
@@ -13,7 +13,7 @@ import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.FullScreenContentCallback
 import com.google.android.gms.ads.LoadAdError
 import com.google.android.gms.ads.appopen.AppOpenAd
-import com.google.common.truth.Truth.assertThat
+import com.google.android.gms.ads.appopen.AppOpenAd.AppOpenAdLoadCallback
 import java.util.concurrent.atomic.AtomicBoolean
 
 internal class AdMobAppOpenAd(
@@ -22,13 +22,13 @@ internal class AdMobAppOpenAd(
     private val _application: Application,
     private var _activity: Activity?,
     private val _adId: String)
-    : IInterstitialAd {
+    : IFullScreenAd {
     companion object {
         private val kTag = AdMobAppOpenAd::class.java.name
     }
 
     private val _messageHelper = MessageHelper("AdMobAppOpenAd", _adId)
-    private val _helper = InterstitialAdHelper(_bridge, this, _messageHelper)
+    private val _helper = FullScreenAdHelper(_bridge, this, _messageHelper)
     private val _isLoaded = AtomicBoolean(false)
     private var _ad: AppOpenAd? = null
 
@@ -37,17 +37,21 @@ internal class AdMobAppOpenAd(
         registerHandlers()
     }
 
-    fun onCreate(activity: Activity) {
+    override fun onCreate(activity: Activity) {
         _activity = activity
     }
 
-    fun onDestroy(activity: Activity) {
-        assertThat(_activity).isEqualTo(activity)
+    override fun onResume() {
+    }
+
+    override fun onPause() {
+    }
+
+    override fun onDestroy() {
         _activity = null
     }
 
-    @AnyThread
-    fun destroy() {
+    override fun destroy() {
         _logger.info("$kTag: destroy: adId = $_adId")
         deregisterHandlers()
     }
@@ -69,7 +73,7 @@ internal class AdMobAppOpenAd(
     override fun load() {
         Thread.runOnMainThread {
             _logger.debug("$kTag: ${this::load.name}: id = $_adId")
-            val callback = object : AppOpenAd.AppOpenAdLoadCallback() {
+            val callback = object : AppOpenAdLoadCallback() {
                 override fun onAppOpenAdLoaded(ad: AppOpenAd) {
                     Thread.runOnMainThread {
                         _logger.debug("$kTag: ${this::onAppOpenAdLoaded.name}: id = $_adId")
@@ -97,17 +101,22 @@ internal class AdMobAppOpenAd(
     override fun show() {
         Thread.runOnMainThread {
             _logger.debug("$kTag: ${this::show.name}: id = $_adId")
-            val ad = _ad ?: throw IllegalArgumentException("Ad is not initialized")
+            val ad = _ad
+            if (ad == null) {
+                _bridge.callCpp(_messageHelper.onFailedToShow, "Null ad")
+                return@runOnMainThread
+            }
             val callback = object : FullScreenContentCallback() {
                 override fun onAdShowedFullScreenContent() {
                     Thread.runOnMainThread {
-                        _ad = null
+                        _logger.debug("$kTag: ${this::onAdShowedFullScreenContent.name}: id = $_adId")
                     }
                 }
 
                 override fun onAdFailedToShowFullScreenContent(error: AdError?) {
                     Thread.runOnMainThread {
                         _logger.debug("$kTag: ${this::onAdFailedToShowFullScreenContent.name}: id = $_adId message = ${error?.message ?: ""}")
+                        _isLoaded.set(false)
                         _ad = null
                         _bridge.callCpp(_messageHelper.onFailedToShow, error?.message ?: "")
                     }
@@ -116,6 +125,7 @@ internal class AdMobAppOpenAd(
                 override fun onAdDismissedFullScreenContent() {
                     Thread.runOnMainThread {
                         _logger.debug("$kTag: ${this::onAdDismissedFullScreenContent.name}: id = $_adId")
+                        _isLoaded.set(false)
                         _ad = null
                         _bridge.callCpp(_messageHelper.onClosed)
                     }

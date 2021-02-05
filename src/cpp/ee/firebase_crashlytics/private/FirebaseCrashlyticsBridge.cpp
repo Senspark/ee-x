@@ -1,34 +1,36 @@
 #include "ee/firebase_crashlytics/private/FirebaseCrashlyticsBridge.hpp"
 
+#include <ee/core/ILogger.hpp>
 #include <ee/core/IMessageBridge.hpp>
-#include <ee/core/PluginManager.hpp>
+#include <ee/core/Task.hpp>
+#include <ee/core/Utils.hpp>
 
 namespace ee {
-namespace core {
-template <>
-std::shared_ptr<IFirebaseCrashlytics>
-PluginManager::createPluginImpl(IMessageBridge& bridge) {
-    addPlugin(Plugin::FirebaseCrashlytics);
-    return std::make_shared<firebase::crashlytics::Bridge>(bridge);
-}
-} // namespace core
-
 namespace firebase {
 namespace crashlytics {
 namespace {
 const std::string kPrefix = "FirebaseCrashlyticsBridge";
+const auto kInitialize = kPrefix + "Initialize";
 const auto kLog = kPrefix + "Log";
 } // namespace
 
 using Self = Bridge;
 
-Self::Bridge(IMessageBridge& bridge)
-    : bridge_(bridge) {}
+Self::Bridge(IMessageBridge& bridge, ILogger& logger,
+             const Destroyer& destroyer)
+    : bridge_(bridge)
+    , logger_(logger)
+    , destroyer_(destroyer) {}
 
 Self::~Bridge() = default;
 
 void Self::destroy() {
-    PluginManager::removePlugin(Plugin::FirebaseCrashlytics);
+    destroyer_();
+}
+
+Task<bool> Self::initialize() {
+    auto response = co_await bridge_.callAsync(kInitialize);
+    return core::toBool(response);
 }
 
 void Self::log(const std::string& message) {

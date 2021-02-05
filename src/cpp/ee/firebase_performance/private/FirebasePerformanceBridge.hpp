@@ -8,8 +8,6 @@
 #ifndef EE_X_FIREBASE_PERFORMANCE_BRIDGE_HPP
 #define EE_X_FIREBASE_PERFORMANCE_BRIDGE_HPP
 
-#ifdef __cplusplus
-
 #include "ee/firebase_performance/IFirebasePerformanceBridge.hpp"
 
 namespace ee {
@@ -17,22 +15,26 @@ namespace firebase {
 namespace performance {
 class Bridge final : public IBridge {
 public:
-    explicit Bridge(IMessageBridge& bridge);
+    using Destroyer = std::function<void()>;
+
+    explicit Bridge(IMessageBridge& bridge, ILogger& logger,
+                    const Destroyer& destroyer);
     virtual ~Bridge() override;
 
     virtual void destroy() override;
 
-    virtual void setDataCollectionEnabled(bool enabled) override;
+    virtual Task<bool> initialize() override;
     virtual bool isDataCollectionEnabled() override;
+    virtual void setDataCollectionEnabled(bool enabled) override;
     virtual std::shared_ptr<ITrace> newTrace(const std::string& name) override;
 
 private:
     IMessageBridge& bridge_;
+    ILogger& logger_;
+    Destroyer destroyer_;
 };
 } // namespace performance
 } // namespace firebase
 } // namespace ee
-
-#endif // __cplusplus
 
 #endif /* EE_X_FIREBASE_PERFORMANCE_BRIDGE_HPP */

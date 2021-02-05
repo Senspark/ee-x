@@ -9,7 +9,10 @@ namespace ee {
 namespace iron_source {
 class Bridge final : public IBridge {
 public:
-    explicit Bridge(IMessageBridge& bridge);
+    using Destroyer = std::function<void()>;
+
+    explicit Bridge(IMessageBridge& bridge, ILogger& logger,
+                    const Destroyer& destroyer);
     virtual ~Bridge() override;
 
     virtual void destroy() override;
@@ -23,7 +26,6 @@ public:
     createRewardedAd(const std::string& adId) override;
 
 private:
-    friend BannerAd;
     friend InterstitialAd;
     friend RewardedAd;
 
@@ -54,7 +56,8 @@ private:
     void onMediationAdClosed(FullScreenAdResult result);
 
     IMessageBridge& bridge_;
-    const Logger& logger_;
+    ILogger& logger_;
+    Destroyer destroyer_;
 
     /// Share the same ad instance.
     std::shared_ptr<IBannerAd> bannerAd_;

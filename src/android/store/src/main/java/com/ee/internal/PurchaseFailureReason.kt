@@ -1,5 +1,6 @@
 package com.ee.internal
 
+import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Serializer
@@ -20,6 +21,7 @@ enum class PurchaseFailureReason {
     DuplicateTransaction,
     Unknown;
 
+    @ExperimentalSerializationApi
     @Serializer(forClass = PurchaseFailureReason::class)
     companion object : KSerializer<PurchaseFailureReason> {
         override val descriptor: SerialDescriptor

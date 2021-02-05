@@ -18,8 +18,10 @@ abstract_target 'common' do
         pod_ee_x('apps-flyer')
         pod_ee_x('facebook')
         pod_ee_x('facebook-ads')
+        pod_ee_x('firebase-analytics')
         pod_ee_x('firebase-crashlytics')
         pod_ee_x('firebase-performance')
+        pod_ee_x('firebase-remote-config')
         pod_ee_x('iron-source')
         pod_ee_x('notification')
         pod_ee_x('play')
@@ -29,10 +31,9 @@ abstract_target 'common' do
         pod_ee_x('vungle')
         
         # Legacy.
-        pod_ee_x('firebase-dynamic-link')
-        pod_ee_x('firebase-messaging')
-        pod_ee_x('firebase-remote-config')
-        pod_ee_x('firebase-storage')
+        # pod_ee_x('firebase-dynamic-link')
+        # pod_ee_x('firebase-messaging')
+        # pod_ee_x('firebase-storage')
         
         pod 'Adjust', :modular_headers => true
     end

@@ -55,7 +55,7 @@ public:
 
 protected:
     std::shared_ptr<IStoreCallback> unity_;
-    const Logger& logger_;
+    ILogger& logger_;
 
 private:
     void onPurchaseFailed(const PurchaseFailureDescription& failure,

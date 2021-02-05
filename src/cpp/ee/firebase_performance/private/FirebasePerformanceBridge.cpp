@@ -7,51 +7,51 @@
 
 #include "ee/firebase_performance/private/FirebasePerformanceBridge.hpp"
 
+#include <ee/core/ILogger.hpp>
 #include <ee/core/IMessageBridge.hpp>
-#include <ee/core/PluginManager.hpp>
 #include <ee/core/Utils.hpp>
 
 #include "ee/firebase_performance/private/FirebasePerformanceTrace.hpp"
 
 namespace ee {
-namespace core {
-template <>
-std::shared_ptr<IFirebasePerformance>
-PluginManager::createPluginImpl(IMessageBridge& bridge) {
-    addPlugin(Plugin::FirebasePerformance);
-    return std::make_shared<firebase::performance::Bridge>(bridge);
-}
-} // namespace core
-
 namespace firebase {
 namespace performance {
 namespace {
 // clang-format off
 const std::string kPrefix = "FirebasePerformanceBridge";
-const auto kSetDataCollectionEnabled = kPrefix + "SetDataCollectionEnabled";
+const auto kInitialize               = kPrefix + "Initialize";
 const auto kIsDataCollectionEnabled  = kPrefix + "IsDataCollectionEnabled";
+const auto kSetDataCollectionEnabled = kPrefix + "SetDataCollectionEnabled";
 const auto kNewTrace                 = kPrefix + "NewTrace";
 // clang-format on
 } // namespace
 
 using Self = Bridge;
 
-Self::Bridge(IMessageBridge& bridge)
-    : bridge_(bridge) {}
+Self::Bridge(IMessageBridge& bridge, ILogger& logger,
+             const Destroyer& destroyer)
+    : bridge_(bridge)
+    , logger_(logger)
+    , destroyer_(destroyer) {}
 
 Self::~Bridge() = default;
 
 void Self::destroy() {
-    PluginManager::removePlugin(Plugin::FirebasePerformance);
+    destroyer_();
 }
 
-void Self::setDataCollectionEnabled(bool enabled) {
-    bridge_.call(kSetDataCollectionEnabled, core::toString(enabled));
+Task<bool> Self::initialize() {
+    auto response = co_await bridge_.callAsync(kInitialize);
+    return core::toBool(response);
 }
 
 bool Self::isDataCollectionEnabled() {
     auto response = bridge_.call(kIsDataCollectionEnabled);
     return core::toBool(response);
+}
+
+void Self::setDataCollectionEnabled(bool enabled) {
+    bridge_.call(kSetDataCollectionEnabled, core::toString(enabled));
 }
 
 std::shared_ptr<ITrace> Self::newTrace(const std::string& name) {

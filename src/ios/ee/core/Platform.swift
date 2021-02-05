@@ -9,7 +9,6 @@ import Foundation
 import Reachability
 import RxSwift
 
-@objc(EEPlatform)
 public class Platform: NSObject {
     private static let kPrefix = "Platform_"
 

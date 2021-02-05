@@ -28,7 +28,8 @@ class IPlugin;
 class PluginManager;
 class IPluginManagerImpl;
 
-struct LogLevel;
+enum class LogLevel;
+class ILogger;
 class Logger;
 
 class IMessageBridge;
@@ -94,6 +95,7 @@ using core::Library;
 using core::Plugin;
 using core::PluginManager;
 
+using core::ILogger;
 using core::Logger;
 using core::LogLevel;
 

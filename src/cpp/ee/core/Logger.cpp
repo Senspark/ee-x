@@ -46,7 +46,7 @@ void Self::setEnabled(bool enabled) {
     enabled_ = enabled;
 }
 
-void Self::log(const LogLevel& level, std::string formatString, ...) const {
+void Self::log(const LogLevel& level, std::string formatString, ...) {
     std::va_list args;
     va_start(args, formatString);
     log(level, formatString, args);
@@ -54,49 +54,49 @@ void Self::log(const LogLevel& level, std::string formatString, ...) const {
 }
 
 void Self::log(const LogLevel& level, std::string formatString,
-               std::va_list args) const {
+               std::va_list args) {
     if (enabled_ && callback_) {
         auto message = format(formatString, args);
         callback_(level, tag_, message);
     }
 }
 
-void Self::verbose(std::string formatString, ...) const {
+void Self::verbose(std::string formatString, ...) {
     std::va_list args;
     va_start(args, formatString);
     log(LogLevel::Verbose, formatString, args);
     va_end(args);
 }
 
-void Self::debug(std::string formatString, ...) const {
+void Self::debug(std::string formatString, ...) {
     std::va_list args;
     va_start(args, formatString);
     log(LogLevel::Debug, formatString, args);
     va_end(args);
 }
 
-void Self::info(std::string formatString, ...) const {
+void Self::info(std::string formatString, ...) {
     std::va_list args;
     va_start(args, formatString);
     log(LogLevel::Info, formatString, args);
     va_end(args);
 }
 
-void Self::warn(std::string formatString, ...) const {
+void Self::warn(std::string formatString, ...) {
     std::va_list args;
     va_start(args, formatString);
     log(LogLevel::Warn, formatString, args);
     va_end(args);
 }
 
-void Self::error(std::string formatString, ...) const {
+void Self::error(std::string formatString, ...) {
     std::va_list args;
     va_start(args, formatString);
     log(LogLevel::Error, formatString, args);
     va_end(args);
 }
 
-void Self::wtf(std::string formatString, ...) const {
+void Self::wtf(std::string formatString, ...) {
     std::va_list args;
     va_start(args, formatString);
     log(LogLevel::Assert, formatString, args);

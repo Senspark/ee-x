@@ -20,46 +20,46 @@
 
 namespace ee {
 namespace facebook {
+enum class ShareType {
+    Link,
+    Photo,
+    Video,
+};
+
+struct LoginResult {
+    bool successful;
+    bool canceled;
+    std::string errorMessage;
+};
+
+struct GraphResult {
+    bool successful;
+    std::string response;
+    std::string errorMessage;
+};
+
+struct ShareResult {
+    bool successful;
+    bool canceled;
+    std::string errorMessage;
+};
+
 class IBridge : public IPlugin {
 public:
-    virtual ~IBridge() = default;
-
     virtual bool isLoggedIn() const = 0;
 
-    virtual void logIn(const std::vector<std::string>& permissions,
-                       const std::shared_ptr<ILoginDelegate>& delegate) = 0;
+    [[nodiscard]] virtual Task<LoginResult>
+    logIn(const std::vector<std::string>& permissions) = 0;
 
-    virtual std::shared_ptr<ILoginDelegate> createLoginDelegate() = 0;
-
-    virtual void logOut() = 0;
+    [[nodiscard]] virtual Task<> logOut() = 0;
 
     virtual std::shared_ptr<IAccessToken> getAccessToken() const = 0;
 
-    virtual void
-    graphRequest(const GraphRequest& request,
-                 const std::shared_ptr<IGraphDelegate>& delegate) = 0;
+    [[nodiscard]] virtual Task<GraphResult>
+    graphRequest(const GraphRequest& request) = 0;
 
-    virtual std::shared_ptr<IGraphDelegate> createGraphDelegate() = 0;
-
-    virtual void
-    sendRequest(const RequestContent& content,
-                const std::shared_ptr<IRequestDelegate>& delegate) = 0;
-
-    virtual std::shared_ptr<IRequestDelegate> createRequestDelegate() = 0;
-
-    virtual void
-    shareLinkContent(const std::string& url,
-                     const std::shared_ptr<IShareDelegate>& delegate) = 0;
-
-    virtual void
-    sharePhotoContent(const std::string& url,
-                      const std::shared_ptr<IShareDelegate>& delegate) = 0;
-
-    virtual void
-    shareVideoContent(const std::string& url,
-                      const std::shared_ptr<IShareDelegate>& delegate) = 0;
-
-    virtual std::shared_ptr<IShareDelegate> createShareDelegate() = 0;
+    [[nodiscard]] virtual Task<ShareResult>
+    shareContent(ShareType type, const std::string& url) = 0;
 };
 } // namespace facebook
 } // namespace ee

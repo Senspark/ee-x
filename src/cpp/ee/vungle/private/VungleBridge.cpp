@@ -3,26 +3,15 @@
 #include <ee/ads/internal/GuardedFullScreenAd.hpp>
 #include <ee/ads/internal/IAsyncHelper.hpp>
 #include <ee/ads/internal/MediationManager.hpp>
+#include <ee/core/ILogger.hpp>
 #include <ee/core/IMessageBridge.hpp>
-#include <ee/core/Logger.hpp>
-#include <ee/core/PluginManager.hpp>
 #include <ee/core/Task.hpp>
-#include <ee/core/Thread.hpp>
 #include <ee/core/Utils.hpp>
 #include <ee/nlohmann/json.hpp>
 
 #include "ee/vungle/private/VungleRewardedAd.hpp"
 
 namespace ee {
-namespace core {
-template <>
-std::shared_ptr<IVungle>
-PluginManager::createPluginImpl(IMessageBridge& bridge) {
-    addPlugin(Plugin::Vungle);
-    return std::make_shared<vungle::Bridge>(bridge);
-}
-} // namespace core
-
 namespace vungle {
 namespace {
 // clang-format off
@@ -44,9 +33,11 @@ const auto kOnClosed       = kPrefix + "OnClosed";
 
 using Self = Bridge;
 
-Self::Bridge(IMessageBridge& bridge)
+Self::Bridge(IMessageBridge& bridge, ILogger& logger,
+             const Destroyer& destroyer)
     : bridge_(bridge)
-    , logger_(Logger::getSystemLogger()) {
+    , logger_(logger)
+    , destroyer_(destroyer) {
     logger_.debug(__PRETTY_FUNCTION__);
     auto&& mediation = ads::MediationManager::getInstance();
     displayer_ = mediation.getAdDisplayer();
@@ -91,7 +82,7 @@ void Self::destroy() {
     bridge_.deregisterHandler(kOnFailedToShow);
     bridge_.deregisterHandler(kOnClicked);
     bridge_.deregisterHandler(kOnClosed);
-    PluginManager::removePlugin(Plugin::Vungle);
+    destroyer_();
 }
 
 Task<bool> Self::initialize(const std::string& appId) {

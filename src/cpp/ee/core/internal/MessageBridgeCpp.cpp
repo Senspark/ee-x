@@ -10,16 +10,16 @@
 
 #include <ee/nlohmann/json.hpp>
 
+#include "ee/core/ILogger.hpp"
 #include "ee/core/LambdaAwaiter.hpp"
-#include "ee/core/Logger.hpp"
 #include "ee/core/internal/MessageBridgeUtils.hpp"
 
 namespace ee {
 namespace core {
 using Self = MessageBridgeCpp;
 
-Self::MessageBridgeCpp()
-    : logger_(Logger::getSystemLogger())
+Self::MessageBridgeCpp(ILogger& logger)
+    : logger_(logger)
     , callbackCounter_(0) {}
 
 Self::~MessageBridgeCpp() = default;

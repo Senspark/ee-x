@@ -3,7 +3,7 @@ package com.ee.internal
 import android.app.Activity
 import androidx.annotation.AnyThread
 import androidx.annotation.UiThread
-import com.ee.IInterstitialAd
+import com.ee.IFullScreenAd
 import com.ee.ILogger
 import com.ee.IMessageBridge
 import com.ee.Thread
@@ -11,7 +11,6 @@ import com.facebook.ads.Ad
 import com.facebook.ads.AdError
 import com.facebook.ads.InterstitialAd
 import com.facebook.ads.InterstitialAdListener
-import com.google.common.truth.Truth.assertThat
 import java.util.concurrent.atomic.AtomicBoolean
 
 /**
@@ -22,13 +21,13 @@ internal class FacebookInterstitialAd(
     private val _logger: ILogger,
     private var _activity: Activity?,
     private val _adId: String)
-    : IInterstitialAd, InterstitialAdListener {
+    : IFullScreenAd, InterstitialAdListener {
     companion object {
         private val kTag = FacebookInterstitialAd::class.java.name
     }
 
     private val _messageHelper = MessageHelper("FacebookInterstitialAd", _adId)
-    private val _helper = InterstitialAdHelper(_bridge, this, _messageHelper)
+    private val _helper = FullScreenAdHelper(_bridge, this, _messageHelper)
     private val _isLoaded = AtomicBoolean(false)
     private var _displaying = false
     private var _ad: InterstitialAd? = null
@@ -38,19 +37,21 @@ internal class FacebookInterstitialAd(
         registerHandlers()
     }
 
-    @UiThread
-    fun onCreate(activity: Activity) {
+    override fun onCreate(activity: Activity) {
         _activity = activity
     }
 
-    @UiThread
-    fun onDestroy(activity: Activity) {
-        assertThat(_activity).isEqualTo(activity)
+    override fun onResume() {
+    }
+
+    override fun onPause() {
+    }
+
+    override fun onDestroy() {
         _activity = null
     }
 
-    @AnyThread
-    fun destroy() {
+    override fun destroy() {
         _logger.info("$kTag: ${this::destroy.name}: adId = $_adId")
         deregisterHandlers()
         destroyInternalAd()
@@ -109,6 +110,7 @@ internal class FacebookInterstitialAd(
             if (result) {
                 // OK.
             } else {
+                _isLoaded.set(false)
                 destroyInternalAd()
                 _bridge.callCpp(_messageHelper.onFailedToShow)
             }
@@ -129,6 +131,7 @@ internal class FacebookInterstitialAd(
             destroyInternalAd()
             if (_displaying) {
                 _displaying = false
+                _isLoaded.set(false)
                 _bridge.callCpp(_messageHelper.onFailedToShow, adError.errorMessage)
             } else {
                 _bridge.callCpp(_messageHelper.onFailedToLoad, adError.errorMessage)
@@ -139,7 +142,6 @@ internal class FacebookInterstitialAd(
     override fun onInterstitialDisplayed(ad: Ad) {
         Thread.runOnMainThread {
             _logger.debug("$kTag: ${this::onInterstitialDisplayed.name}: id = $_adId")
-            _isLoaded.set(false)
         }
     }
 
@@ -160,6 +162,7 @@ internal class FacebookInterstitialAd(
         Thread.runOnMainThread {
             _logger.debug("$kTag: ${this::onInterstitialDismissed.name}: id = $_adId")
             _displaying = false
+            _isLoaded.set(false)
             destroyInternalAd()
             _bridge.callCpp(_messageHelper.onClosed)
         }

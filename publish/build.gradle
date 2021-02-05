@@ -5,7 +5,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:4.1.1'
+        classpath 'com.android.tools.build:gradle:4.1.2'
         classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.5'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
         classpath "org.jetbrains.kotlin:kotlin-serialization:$kotlinVersion"
@@ -27,12 +27,12 @@ allprojects {
 
 ext {
     compileSdkVersion = 30
-    buildToolsVersion = '30.0.2'
+    buildToolsVersion = '30.0.3'
     targetSdkVersion = 30
-    firebaseVersion = '25.13.0'
+    firebaseVersion = '26.4.0'
     buildPrefab = true
     buildMaven = true
-    pluginVersion = '2.3.0'
+    pluginVersion = '2.4.1'
     pluginDependencies = [
         'core'                  : [],
         'ads'                   : ['core'],
@@ -51,11 +51,11 @@ ext {
         'firebase-core'         : ['core'],
         'firebase-analytics'    : ['firebase-core'],
         'firebase-crashlytics'  : ['firebase-core'],
-        'firebase-dynamic-link' : ['firebase-core'],
-        'firebase-messaging'    : ['firebase-core'],
-        'firebase-remote-config': ['firebase-core'],
-        'firebase-storage'      : ['firebase-core'],
+        // 'firebase-dynamic-link' : ['firebase-core'],
+        // 'firebase-messaging'    : ['firebase-core'],
         'firebase-performance'  : ['firebase-core'],
+        'firebase-remote-config': ['firebase-core'],
+        // 'firebase-storage'      : ['firebase-core'],
         'notification'          : ['core'],
         'play'                  : ['core'],
         'recorder'              : ['core'],

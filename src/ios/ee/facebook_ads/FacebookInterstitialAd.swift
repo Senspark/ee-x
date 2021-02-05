@@ -11,12 +11,12 @@ import Foundation
 private let kTag = "\(FacebookInterstitialAd.self)"
 
 internal class FacebookInterstitialAd:
-    NSObject, IInterstitialAd, FBInterstitialAdDelegate {
+    NSObject, IFullScreenAd, FBInterstitialAdDelegate {
     private let _bridge: IMessageBridge
     private let _logger: ILogger
     private let _adId: String
     private let _messageHelper: MessageHelper
-    private var _helper: InterstitialAdHelper?
+    private var _helper: FullScreenAdHelper?
     private var _isLoaded = false
     private var _displaying = false
     private var _ad: FBInterstitialAd?
@@ -29,7 +29,7 @@ internal class FacebookInterstitialAd:
         _adId = adId
         _messageHelper = MessageHelper("FacebookInterstitialAd", _adId)
         super.init()
-        _helper = InterstitialAdHelper(_bridge, self, _messageHelper)
+        _helper = FullScreenAdHelper(_bridge, self, _messageHelper)
         registerHandlers()
     }
     
@@ -91,8 +91,8 @@ internal class FacebookInterstitialAd:
             let result = ad.show(fromRootViewController: rootView)
             if result {
                 // OK.
-                self._isLoaded = false
             } else {
+                self._isLoaded = false
                 self.destroyInternalAd()
                 self._bridge.callCpp(self._messageHelper.onFailedToShow)
             }
@@ -113,6 +113,7 @@ internal class FacebookInterstitialAd:
             self.destroyInternalAd()
             if self._displaying {
                 self._displaying = false
+                self._isLoaded = false
                 self._bridge.callCpp(self._messageHelper.onFailedToShow, error.localizedDescription)
             } else {
                 self._bridge.callCpp(self._messageHelper.onFailedToLoad, error.localizedDescription)
@@ -143,6 +144,7 @@ internal class FacebookInterstitialAd:
         Thread.runOnMainThread {
             self._logger.debug("\(kTag): \(#function): id = \(self._adId)")
             self._displaying = false
+            self._isLoaded = false
             self.destroyInternalAd()
             self._bridge.callCpp(self._messageHelper.onClosed)
         }

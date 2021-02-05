@@ -3,7 +3,10 @@ import {
     MessageHandler,
 } from '../IMessageBridge';
 import { IMessageBridgeImpl } from './IMessageBridgeImpl';
+import { MessageBridgeImplEditor } from './MessageBridgeImplEditor';
 import { MessageBridgeImplNative } from './MessageBridgeImplNative';
+
+declare const CC_JSB: boolean;
 
 export class MessageBridge implements IMessageBridge {
     private _callbackCounter = 0;
@@ -11,7 +14,11 @@ export class MessageBridge implements IMessageBridge {
     private readonly _impl: IMessageBridgeImpl;
 
     public constructor() {
-        this._impl = new MessageBridgeImplNative(this.callCpp);
+        if (CC_JSB) {
+            this._impl = new MessageBridgeImplNative();
+        } else {
+            this._impl = new MessageBridgeImplEditor();
+        }
     }
 
     public registerHandler(handler: MessageHandler, tag: string): void {

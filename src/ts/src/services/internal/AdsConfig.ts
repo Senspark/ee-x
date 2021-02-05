@@ -49,7 +49,7 @@ type UnityAdsConfigDef = {
     time_out?: number,
 }
 
-type AdConfigDef = (BannerConfigDef | RectangleConfigDef | AppOpenConfigDef | InterstitialConfigDef | RewardedConfigDef) & {
+type AdConfigDef = (BannerConfigDef | RectangleConfigDef | AppOpenConfigDef | InterstitialConfigDef | RewardedInterstitialConfigDef | RewardedConfigDef) & {
     format: string,
 }
 
@@ -67,6 +67,11 @@ type AppOpenConfigDef = {
 }
 
 type InterstitialConfigDef = {
+    interval?: number,
+    instance: AdInstanceConfigDef,
+}
+
+type RewardedInterstitialConfigDef = {
     interval?: number,
     instance: AdInstanceConfigDef,
 }
@@ -96,6 +101,7 @@ export enum AdFormat {
     Rectangle,
     AppOpen,
     Interstitial,
+    RewardedInterstitial,
     Rewarded,
 }
 
@@ -177,6 +183,8 @@ class AdMobConfig implements INetworkConfig {
                 return this._plugin.createAppOpenAd(id);
             case AdFormat.Interstitial:
                 return this._plugin.createInterstitialAd(id);
+            case AdFormat.RewardedInterstitial:
+                return this._plugin.createRewardedInterstitialAd(id);
             case AdFormat.Rewarded:
                 return this._plugin.createRewardedAd(id);
             default:
@@ -331,6 +339,7 @@ class AdConfig {
             case "rect": return new RectangleConfig(node);
             case "app_open": return new AppOpenConfig(node);
             case "interstitial": return new InterstitialConfig(node);
+            case "rewarded_interstitial": return new RewardedInterstitialConfig(node);
             case "rewarded": return new RewardedConfig(node);
             default:
                 throw new Error(`Ad format not supported`);
@@ -406,6 +415,25 @@ class InterstitialConfig implements IAdConfig {
 
     public get format(): AdFormat {
         return AdFormat.Interstitial;
+    }
+
+    public createAd(manager: INetworkConfigManager): IAd {
+        const ad = this._instance.createAd(manager);
+        return new GenericAd(ad, this._interval);
+    }
+}
+class RewardedInterstitialConfig implements IAdConfig {
+    private readonly _interval: number;
+    private readonly _instance: IAdInstanceConfig<IFullScreenAd>;
+
+    public constructor(node: RewardedInterstitialConfigDef) {
+        this._interval = node.interval !== undefined ? node.interval : 0;
+        this._instance = new AdInstanceConfig<IFullScreenAd, MultiFullScreenAd>()
+            .parse(MultiFullScreenAd, AdFormat.RewardedInterstitial, node.instance);
+    }
+
+    public get format(): AdFormat {
+        return AdFormat.RewardedInterstitial;
     }
 
     public createAd(manager: INetworkConfigManager): IAd {

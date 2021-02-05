@@ -1,22 +1,12 @@
 #include "ee/ad_colony/private/AdColonyBridge.hpp"
 
+#include <ee/core/ILogger.hpp>
 #include <ee/core/IMessageBridge.hpp>
-#include <ee/core/Logger.hpp>
-#include <ee/core/PluginManager.hpp>
 #include <ee/core/Task.hpp>
 #include <ee/core/Utils.hpp>
 #include <ee/nlohmann/json.hpp>
 
 namespace ee {
-namespace core {
-template <>
-std::shared_ptr<IAdColony>
-PluginManager::createPluginImpl(IMessageBridge& bridge) {
-    addPlugin(Plugin::AdColony);
-    return std::make_shared<ad_colony::Bridge>(bridge);
-}
-} // namespace core
-
 namespace ad_colony {
 namespace {
 const std::string kPrefix = "AdColonyBridge";
@@ -25,9 +15,11 @@ const std::string kInitialize = kPrefix + "Initialize";
 
 using Self = Bridge;
 
-Self::Bridge(IMessageBridge& bridge)
+Self::Bridge(IMessageBridge& bridge, ILogger& logger,
+             const Destroyer& destroyer)
     : bridge_(bridge)
-    , logger_(Logger::getSystemLogger()) {
+    , logger_(logger)
+    , destroyer_(destroyer) {
     logger_.debug("%s", __PRETTY_FUNCTION__);
 }
 
@@ -35,7 +27,7 @@ Self::~Bridge() = default;
 
 void Self::destroy() {
     logger_.debug("%s", __PRETTY_FUNCTION__);
-    PluginManager::removePlugin(Plugin::AdColony);
+    destroyer_();
 }
 
 Task<bool> Self::initialize(const std::string& appId,

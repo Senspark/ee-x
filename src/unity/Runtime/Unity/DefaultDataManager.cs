@@ -10,7 +10,7 @@ namespace EE {
         }
 
         public T Get<T>(string key, T defaultValue) {
-            var str = PlayerPrefs.GetString(key, null);
+            var str = PlayerPrefs.GetString(key, "");
             return str == "" ? defaultValue : JsonUtility.FromJson<T>(str);
         }
 

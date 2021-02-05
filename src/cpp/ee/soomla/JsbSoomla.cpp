@@ -7,6 +7,7 @@
 
 #include "ee/soomla/JsbSoomla.hpp"
 
+#include "ee/soomla/internal/JsbVirtualCurrency.hpp"
 #include "ee/soomla/internal/jsb_cc_error.hpp"
 #include "ee/soomla/internal/jsb_cc_lifetime_vg.hpp"
 #include "ee/soomla/internal/jsb_cc_lifetime_vg_builder.hpp"
@@ -37,6 +38,7 @@ bool registerJsb(se::Object* global) {
     register_cc_purchase_with_market_manual(global);
     register_cc_purchase_with_market_builder_manual(global);
     register_cc_virtual_item_manual(global);
+    registerVirtualCurrency(global);
     register_cc_store_info_manual(global);
     register_cc_purchasable_virtual_item_manual(global);
     register_cc_single_use_pack_vg_manual(global);

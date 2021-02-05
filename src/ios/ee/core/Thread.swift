@@ -7,15 +7,12 @@
 
 import Foundation
 
-@objc(EEThread)
 public class Thread: NSObject {
-    @objc
     public class func isMainThread() -> Bool {
         return Foundation.Thread.isMainThread
     }
 
     @discardableResult
-    @objc
     public class func runOnMainThread(_ callback: @escaping () -> Void) -> Bool {
         if isMainThread() {
             callback()
@@ -27,7 +24,6 @@ public class Thread: NSObject {
         return false
     }
 
-    @objc
     public class func runOnMainThreadDelayed(_ seconds: Float,
                                              _ callback: @escaping () -> Void) {
         DispatchQueue.main.asyncAfter(

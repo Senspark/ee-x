@@ -8,59 +8,45 @@
 
 #include "ee/ad_mob/private/AdMobBridge.hpp"
 
+#include <ee/ads/internal/DefaultBannerAd.hpp>
+#include <ee/ads/internal/DefaultFullScreenAd.hpp>
 #include <ee/ads/internal/GuardedBannerAd.hpp>
 #include <ee/ads/internal/GuardedFullScreenAd.hpp>
 #include <ee/ads/internal/MediationManager.hpp>
+#include <ee/core/ILogger.hpp>
 #include <ee/core/IMessageBridge.hpp>
-#include <ee/core/Logger.hpp>
-#include <ee/core/PluginManager.hpp>
 #include <ee/core/Task.hpp>
 #include <ee/core/Utils.hpp>
 #include <ee/nlohmann/json.hpp>
 
 #include "ee/ad_mob/AdMobNativeAdLayout.hpp"
-#include "ee/ad_mob/private/AdMobAppOpenAd.hpp"
-#include "ee/ad_mob/private/AdMobBannerAd.hpp"
-#include "ee/ad_mob/private/AdMobInterstitialAd.hpp"
-#include "ee/ad_mob/private/AdMobNativeAd.hpp"
-#include "ee/ad_mob/private/AdMobRewardedAd.hpp"
 
 namespace ee {
-namespace core {
-template <>
-std::shared_ptr<IAdMob>
-PluginManager::createPluginImpl(IMessageBridge& bridge) {
-    addPlugin(Plugin::AdMob);
-    return std::make_shared<admob::Bridge>(bridge);
-}
-} // namespace core
-
-namespace admob {
+namespace ad_mob {
 namespace {
 // clang-format off
-const std::string kPrefix             = "AdMobBridge";
-const auto kInitialize                = kPrefix + "Initialize";
-const auto kGetEmulatorTestDeviceHash = kPrefix + "GetEmulatorTestDeviceHash";
-const auto kAddTestDevice             = kPrefix + "AddTestDevice";
-const auto kGetBannerAdSize           = kPrefix + "GetBannerAdSize";
-const auto kCreateBannerAd            = kPrefix + "CreateBannerAd";
-const auto kDestroyBannerAd           = kPrefix + "DestroyBannerAd";
-const auto kCreateNativeAd            = kPrefix + "CreateNativeAd";
-const auto kDestroyNativeAd           = kPrefix + "DestroyNativeAd";
-const auto kCreateAppOpenAd           = kPrefix + "CreateAppOpenAd";
-const auto kDestroyAppOpenAd          = kPrefix + "DestroyAppOpenAd";
-const auto kCreateInterstitialAd      = kPrefix + "CreateInterstitialAd";
-const auto kDestroyInterstitialAd     = kPrefix + "DestroyInterstitialAd";
-const auto kCreateRewardedAd          = kPrefix + "CreateRewardedAd";
-const auto kDestroyRewardedAd         = kPrefix + "DestroyRewardedAd";
+const std::string kPrefix                = "AdMobBridge";
+const auto kInitialize                   = kPrefix + "Initialize";
+const auto kGetEmulatorTestDeviceHash    = kPrefix + "GetEmulatorTestDeviceHash";
+const auto kAddTestDevice                = kPrefix + "AddTestDevice";
+const auto kGetBannerAdSize              = kPrefix + "GetBannerAdSize";
+const auto kCreateBannerAd               = kPrefix + "CreateBannerAd";
+const auto kCreateNativeAd               = kPrefix + "CreateNativeAd";
+const auto kCreateAppOpenAd              = kPrefix + "CreateAppOpenAd";
+const auto kCreateInterstitialAd         = kPrefix + "CreateInterstitialAd";
+const auto kCreateRewardedInterstitialAd = kPrefix + "CreateRewardedInterstitialAd";
+const auto kCreateRewardedAd             = kPrefix + "CreateRewardedAd";
+const auto kDestroyAd                    = kPrefix + "DestroyAd";
 // clang-format on
 } // namespace
 
 using Self = Bridge;
 
-Self::Bridge(IMessageBridge& bridge)
+Self::Bridge(IMessageBridge& bridge, ILogger& logger,
+             const Destroyer& destroyer)
     : bridge_(bridge)
-    , logger_(Logger::getSystemLogger()) {
+    , logger_(logger)
+    , destroyer_(destroyer) {
     logger_.debug("%s", __PRETTY_FUNCTION__);
     auto&& mediation = ads::MediationManager::getInstance();
     displayer_ = mediation.getAdDisplayer();
@@ -73,7 +59,7 @@ void Self::destroy() {
     for (auto&& [key, value] : ads_) {
         value->destroy();
     }
-    PluginManager::removePlugin(Plugin::AdMob);
+    destroyer_();
 }
 
 Task<bool> Self::initialize() {
@@ -118,7 +104,12 @@ std::shared_ptr<IBannerAd> Self::createBannerAd(const std::string& adId,
     }
     auto size = getBannerAdSize(adSize);
     auto ad = std::make_shared<ads::GuardedBannerAd>(
-        std::make_shared<BannerAd>(bridge_, logger_, this, adId, size));
+        std::make_shared<ads::DefaultBannerAd>(
+            "AdMobBannerAd", bridge_, logger_,
+            [this, adId] { //
+                destroyAd(adId);
+            },
+            adId, size));
     ads_.emplace(adId, ad);
     return ad;
 }
@@ -143,28 +134,80 @@ Self::createNativeAd(const std::string& adId, const std::string& layoutName,
         return nullptr;
     }
     auto ad = std::make_shared<ads::GuardedBannerAd>(
-        std::make_shared<NativeAd>(bridge_, logger_, this, adId));
+        std::make_shared<ads::DefaultBannerAd>(
+            "AdMobNativeAd", bridge_, logger_,
+            [this, adId] { //
+                destroyAd(adId);
+            },
+            adId, std::pair(0, 0)));
     ads_.emplace(adId, ad);
     return ad;
 }
 
 std::shared_ptr<IFullScreenAd> Self::createAppOpenAd(const std::string& adId) {
-    return createFullScreenAd<AppOpenAd>(kCreateAppOpenAd, adId);
+    return createFullScreenAd(kCreateAppOpenAd, adId, [this, adId] {
+        return std::make_shared<ads::DefaultFullScreenAd>(
+            "AdMobAppOpenAd", bridge_, logger_, displayer_,
+            [this, adId] { //
+                return destroyAd(adId);
+            },
+            [](const std::string& message) { //
+                return FullScreenAdResult::Completed;
+            },
+            adId);
+    });
 }
 
 std::shared_ptr<IFullScreenAd>
 Self::createInterstitialAd(const std::string& adId) {
-    return createFullScreenAd<InterstitialAd>(kCreateInterstitialAd, adId);
+    return createFullScreenAd(kCreateInterstitialAd, adId, [this, adId] {
+        return std::make_shared<ads::DefaultFullScreenAd>(
+            "AdMobInterstitialAd", bridge_, logger_, displayer_,
+            [this, adId] { //
+                return destroyAd(adId);
+            },
+            [](const std::string& message) { //
+                return FullScreenAdResult::Completed;
+            },
+            adId);
+    });
+}
+
+std::shared_ptr<IFullScreenAd>
+Self::createRewardedInterstitialAd(const std::string& adId) {
+    return createFullScreenAd(
+        kCreateRewardedInterstitialAd, adId, [this, adId] {
+            return std::make_shared<ads::DefaultFullScreenAd>(
+                "AdMobRewardedInterstitialAd", bridge_, logger_, displayer_,
+                [this, adId] { //
+                    return destroyAd(adId);
+                },
+                [](const std::string& message) { //
+                    return core::toBool(message) ? FullScreenAdResult::Completed
+                                                 : FullScreenAdResult::Canceled;
+                },
+                adId);
+        });
 }
 
 std::shared_ptr<IFullScreenAd> Self::createRewardedAd(const std::string& adId) {
-    return createFullScreenAd<RewardedAd>(kCreateRewardedAd, adId);
+    return createFullScreenAd(kCreateRewardedAd, adId, [this, adId] {
+        return std::make_shared<ads::DefaultFullScreenAd>(
+            "AdMobRewardedAd", bridge_, logger_, displayer_,
+            [this, adId] { //
+                return destroyAd(adId);
+            },
+            [](const std::string& message) { //
+                return core::toBool(message) ? FullScreenAdResult::Completed
+                                             : FullScreenAdResult::Canceled;
+            },
+            adId);
+    });
 }
 
-template <class Ad>
-std::shared_ptr<IFullScreenAd>
-Self::createFullScreenAd(const std::string& handlerId,
-                         const std::string& adId) {
+std::shared_ptr<IFullScreenAd> Self::createFullScreenAd(
+    const std::string& handlerId, const std::string& adId,
+    const std::function<std::shared_ptr<IFullScreenAd>()>& creator) {
     logger_.debug("%s: id = %s", __PRETTY_FUNCTION__, adId.c_str());
     auto iter = ads_.find(adId);
     if (iter != ads_.cend()) {
@@ -177,39 +220,18 @@ Self::createFullScreenAd(const std::string& handlerId,
         assert(false);
         return nullptr;
     }
-    auto ad = std::make_shared<ads::GuardedFullScreenAd>(
-        std::make_shared<Ad>(bridge_, logger_, displayer_, this, adId));
+    auto ad = std::make_shared<ads::GuardedFullScreenAd>(creator());
     ads_.emplace(adId, ad);
     return ad;
 }
 
-bool Self::destroyBannerAd(const std::string& adId) {
-    return destroyAd(kDestroyBannerAd, adId);
-}
-
-bool Self::destroyNativeAd(const std::string& adId) {
-    return destroyAd(kDestroyNativeAd, adId);
-}
-
-bool Self::destroyAppOpenAd(const std::string& adId) {
-    return destroyAd(kDestroyAppOpenAd, adId);
-}
-
-bool Self::destroyInterstitialAd(const std::string& adId) {
-    return destroyAd(kDestroyInterstitialAd, adId);
-}
-
-bool Self::destroyRewardedAd(const std::string& adId) {
-    return destroyAd(kDestroyRewardedAd, adId);
-}
-
-bool Self::destroyAd(const std::string& handlerId, const std::string& adId) {
+bool Self::destroyAd(const std::string& adId) {
     logger_.debug("%s: id = %s", __PRETTY_FUNCTION__, adId.c_str());
     auto iter = ads_.find(adId);
     if (iter == ads_.cend()) {
         return false;
     }
-    auto&& response = bridge_.call(handlerId, adId);
+    auto&& response = bridge_.call(kDestroyAd, adId);
     if (not core::toBool(response)) {
         logger_.error("%s: There was an error when attempt to destroy an ad.",
                       __PRETTY_FUNCTION__);
@@ -219,5 +241,5 @@ bool Self::destroyAd(const std::string& handlerId, const std::string& adId) {
     ads_.erase(iter);
     return true;
 }
-} // namespace admob
+} // namespace ad_mob
 } // namespace ee

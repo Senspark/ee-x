@@ -14,7 +14,7 @@
 #include "ee/ad_mob/AdMobFwd.hpp"
 
 namespace ee {
-namespace admob {
+namespace ad_mob {
 enum class BannerAdSize {
     /// kGADAdSizeBanner
     /// Typically 320x50.
@@ -32,7 +32,7 @@ enum class BannerAdSize {
     /// Typically 300x250.
     MediumRectangle,
 };
-} // namespace admob
+} // namespace ad_mob
 } // namespace ee
 
 #endif // __cplusplus

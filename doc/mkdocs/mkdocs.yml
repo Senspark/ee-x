@@ -28,36 +28,42 @@ nav:
     - index.md
     - contributions.md
   - Cocos2d-x:
-    - cocos2dx/getting-started.md
-    - cocos2dx/design-patterns.md
-    - cocos2dx/utils.md
-    - cocos2dx/multi-ad.md
-    - cocos2dx/firebase-analytics.md
-    - cocos2dx/firebase-crashlytics.md
-    - cocos2dx/firebase-dynamic-link.md
-    - cocos2dx/firebase-messaging.md
-    - cocos2dx/firebase-performance.md
-    - cocos2dx/firebase-remote-config.md
-    - cocos2dx/firebase-storage.md
-    - cocos2dx/ad-mob.md 
-    - cocos2dx/app-lovin.md
-    - cocos2dx/facebook-ads.md
-    - cocos2dx/iron-source.md
-    - cocos2dx/unity-ads.md
-    - cocos2dx/vungle.md
-    - cocos2dx/adjust.md
-    - cocos2dx/apps-flyer.md
-    - cocos2dx/facebook.md
-    - cocos2dx/notification.md
-    - cocos2dx/play.md
-    - cocos2dx/soomla-store.md
-    - cocos2dx/store.md
+    - cocos2d-x/getting-started.md
+    - cocos2d-x/design-patterns.md
+    - cocos2d-x/utils.md
+    - cocos2d-x/multi-ad.md
+    - cocos2d-x/firebase-analytics.md
+    - cocos2d-x/firebase-crashlytics.md
+    # - cocos2d-x/firebase-dynamic-link.md
+    # - cocos2d-x/firebase-messaging.md
+    - cocos2d-x/firebase-performance.md
+    - cocos2d-x/firebase-remote-config.md
+    # - cocos2d-x/firebase-storage.md
+    # - cocos2d-x/ad-mob.md 
+    # - cocos2d-x/app-lovin.md
+    # - cocos2d-x/facebook-ads.md
+    # - cocos2d-x/iron-source.md
+    # - cocos2d-x/unity-ads.md
+    # - cocos2d-x/vungle.md
+    - cocos2d-x/adjust.md
+    - cocos2d-x/apps-flyer.md
+    - cocos2d-x/facebook.md
+    - cocos2d-x/notification.md
+    - cocos2d-x/play.md
+    - cocos2d-x/soomla-store.md
+    - cocos2d-x/store.md
+  - Cocos Creator:
+    - cocos-creator/getting-started.md
+    - cocos-creator/utils.md
+    - cocos-creator/multi-ad.md
+    - cocos-creator/adjust.md
+    - cocos-creator/facebook.md
   - Unity:
     - unity/getting-started.md
     - unity/design-patterns.md
     - unity/utils.md
     - unity/multi-ad.md
-    - unity/ad-mob.md
+    # - unity/ad-mob.md
     - unity/adjust.md
   - Contributions:
     - contributions/update-documents.md

@@ -1,4 +1,9 @@
 # Getting Started
+## Requirements
+- Unity 2020.1+: <https://unity3d.com/get-unity/download>
+- Android SDK: 17+
+- iOS SDK: 12.0+
+
 ## Configuration
 ### Prerequisite
 - External Dependency Manager: <https://github.com/googlesamples/unity-jar-resolver>

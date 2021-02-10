@@ -12,7 +12,7 @@ abstract_target 'common' do
         
         pod_ee_x('cpp')
         pod_ee_x('ad-colony')
-        pod_ee_x('ad-mob')
+        pod_ee_x('ad-mob-mediation')
         pod_ee_x('adjust')
         pod_ee_x('app-lovin')
         pod_ee_x('apps-flyer')
@@ -22,7 +22,7 @@ abstract_target 'common' do
         pod_ee_x('firebase-crashlytics')
         pod_ee_x('firebase-performance')
         pod_ee_x('firebase-remote-config')
-        pod_ee_x('iron-source')
+        pod_ee_x('iron-source-mediation')
         pod_ee_x('notification')
         pod_ee_x('play')
         pod_ee_x('recorder')

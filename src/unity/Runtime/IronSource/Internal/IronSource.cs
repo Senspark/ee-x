@@ -95,7 +95,7 @@ namespace EE.Internal {
         }
 
         public IBannerAd CreateBannerAd(string adId, IronSourceBannerAdSize adSize) {
-            _logger.Debug($"${kTag}: {nameof(CreateBannerAd)}: id = {adId} size = {adSize}");
+            _logger.Debug($"{kTag}: {nameof(CreateBannerAd)}: id = {adId} size = {adSize}");
             if (_bannerAd != null) {
                 return _bannerAd;
             }
@@ -115,7 +115,7 @@ namespace EE.Internal {
         }
 
         private bool DestroyBannerAd(string adId) {
-            _logger.Debug($"${kTag}: {nameof(DestroyBannerAd)}: id = {adId}");
+            _logger.Debug($"{kTag}: {nameof(DestroyBannerAd)}: id = {adId}");
             if (_bannerAd == null) {
                 return false;
             }
@@ -129,7 +129,7 @@ namespace EE.Internal {
         }
 
         public IFullScreenAd CreateInterstitialAd(string adId) {
-            _logger.Debug($"${kTag}: {nameof(CreateInterstitialAd)}: id = {adId}");
+            _logger.Debug($"{kTag}: {nameof(CreateInterstitialAd)}: id = {adId}");
             if (_sharedInterstitialAd != null) {
                 return _sharedInterstitialAd;
             }
@@ -139,7 +139,7 @@ namespace EE.Internal {
         }
 
         internal bool DestroyInterstitialAd(string adId) {
-            _logger.Debug($"${kTag}: {nameof(DestroyInterstitialAd)}: id = {adId}");
+            _logger.Debug($"{kTag}: {nameof(DestroyInterstitialAd)}: id = {adId}");
             if (_sharedInterstitialAd == null) {
                 return false;
             }
@@ -158,7 +158,7 @@ namespace EE.Internal {
         }
 
         internal bool DestroyRewardedAd(string adId) {
-            _logger.Debug($"${kTag}: {nameof(DestroyRewardedAd)}: id = {adId}");
+            _logger.Debug($"{kTag}: {nameof(DestroyRewardedAd)}: id = {adId}");
             if (_sharedRewardedAd == null) {
                 return false;
             }

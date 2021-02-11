@@ -28,6 +28,8 @@ public:
     virtual Task<bool> initialize(const std::string& gameId,
                                   bool testModeEnabled) override;
     virtual void setDebugModeEnabled(bool enabled) override;
+    virtual std::shared_ptr<IBannerAd>
+    createBannerAd(const std::string& adId, BannerAdSize adSize) override;
     virtual std::shared_ptr<IFullScreenAd>
     createInterstitialAd(const std::string& adId) override;
     virtual std::shared_ptr<IFullScreenAd>
@@ -37,10 +39,13 @@ private:
     friend InterstitialAd;
     friend RewardedAd;
 
+    std::pair<int, int> getBannerAdSize(BannerAdSize adSize);
+    bool destroyAd(const std::string& adId);
+
     template <class Ad>
     std::shared_ptr<IFullScreenAd> createFullScreenAd(const std::string& adId);
 
-    bool destroyAd(const std::string& adId);
+    bool destroyFullScreenAd(const std::string& adId);
 
     bool hasRewardedAd(const std::string& adId) const;
     Task<bool> loadRewardedAd(const std::string& adId);
@@ -64,9 +69,10 @@ private:
     /// Currently displaying ad ID.
     std::string adId_;
 
+    std::map<std::string, std::shared_ptr<IAd>> ads_;
     std::map<std::string, std::pair<std::shared_ptr<IAd>,  // Decorated ad.
                                     std::shared_ptr<IAd>>> // Raw ad.
-        ads_;
+        fullScreenAds_;
     std::shared_ptr<ads::IAsyncHelper<FullScreenAdResult>> displayer_;
 };
 } // namespace unity_ads

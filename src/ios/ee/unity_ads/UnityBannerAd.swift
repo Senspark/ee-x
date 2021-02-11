@@ -1,37 +1,38 @@
 //
-//  IronSourceBannerAd.swift
-//  ee-x-d542b565
+//  UnityBannerAd.swift
+//  Pods
 //
-//  Created by eps on 1/25/21.
+//  Created by eps on 2/11/21.
 //
 
-private let kTag = "\(IronSourceBannerAd.self)"
+import UnityAds
 
-internal class IronSourceBannerAd: NSObject, IBannerAd, ISBannerDelegate {
+private let kTag = "\(UnityBannerAd.self)"
+
+internal class UnityBannerAd: NSObject, IBannerAd, UADSBannerViewDelegate {
     private let _bridge: IMessageBridge
     private let _logger: ILogger
     private let _adId: String
-    private let _adSize: ISBannerSize
+    private let _adSize: CGSize
     private let _messageHelper: MessageHelper
     private var _helper: BannerAdHelper?
     private let _viewHelper: ViewHelper
     private var _isLoaded = false
-    private var _ad: ISBannerView?
+    private var _ad: UADSBannerView?
 
     init(_ bridge: IMessageBridge,
          _ logger: ILogger,
          _ adId: String,
-         _ adSize: ISBannerSize,
-         _ bannerHelper: IronSourceBannerHelper) {
+         _ adSize: CGSize,
+         _ bannerHelper: UnityBannerHelper) {
         _bridge = bridge
         _logger = logger
         _adId = adId
         _adSize = adSize
-        _messageHelper = MessageHelper("IronSourceBannerAd", _adId)
+        _messageHelper = MessageHelper("UnityBannerAd", _adId)
         _viewHelper = ViewHelper(CGPoint.zero, bannerHelper.getSize(adSize: adSize), false)
         super.init()
         _helper = BannerAdHelper(_bridge, self, _messageHelper)
-        IronSource.setBannerDelegate(self)
         registerHandlers()
         createInternalAd()
     }
@@ -39,7 +40,6 @@ internal class IronSourceBannerAd: NSObject, IBannerAd, ISBannerDelegate {
     func destroy() {
         deregisterHandler()
         destroyInternalAd()
-        // Cannot clear delegates.
     }
 
     func registerHandlers() {
@@ -56,6 +56,12 @@ internal class IronSourceBannerAd: NSObject, IBannerAd, ISBannerDelegate {
                 return
             }
             self._isLoaded = false
+            let ad = UADSBannerView(placementId: self._adId, size: self._adSize)
+            ad.delegate = self
+            self._ad = ad
+            self._viewHelper.view = ad
+            let rootView = Utils.getCurrentRootViewController()
+            rootView?.view.addSubview(ad)
         }
     }
 
@@ -65,8 +71,8 @@ internal class IronSourceBannerAd: NSObject, IBannerAd, ISBannerDelegate {
                 return
             }
             self._isLoaded = false
+            ad.delegate = nil
             ad.removeFromSuperview()
-            IronSource.destroyBanner(ad)
             self._ad = nil
             self._viewHelper.view = nil
         }
@@ -79,11 +85,11 @@ internal class IronSourceBannerAd: NSObject, IBannerAd, ISBannerDelegate {
     func load() {
         Thread.runOnMainThread {
             self._logger.debug("\(kTag): \(#function): id = \(self._adId)")
-            guard let rootView = Utils.getCurrentRootViewController() else {
-                assert(false, "Root view is null")
+            guard let ad = self._ad else {
+                assert(false, "Ad is not initialized")
                 return
             }
-            IronSource.loadBanner(with: rootView, size: self._adSize, placement: self._adId)
+            ad.load()
         }
     }
 
@@ -102,45 +108,29 @@ internal class IronSourceBannerAd: NSObject, IBannerAd, ISBannerDelegate {
         set(value) { _viewHelper.size = value }
     }
 
-    func bannerDidLoad(_ bannerView: ISBannerView) {
+    func bannerViewDidLoad(_ bannerView: UADSBannerView) {
         Thread.runOnMainThread {
             self._logger.debug("\(kTag): \(#function): id = \(self._adId)")
-            self._ad = bannerView
-            self._viewHelper.view = bannerView
-            let rootView = Utils.getCurrentRootViewController()
-            rootView?.view.addSubview(bannerView)
             self._isLoaded = true
             self._bridge.callCpp(self._messageHelper.onLoaded)
         }
     }
 
-    func bannerDidFailToLoadWithError(_ error: Error) {
+    func bannerViewDidError(_ bannerView: UADSBannerView, error: UADSBannerError) {
         Thread.runOnMainThread {
             self._logger.debug("\(kTag): \(#function): id = \(self._adId) message = \(error.localizedDescription)")
             self._bridge.callCpp(self._messageHelper.onFailedToLoad, error.localizedDescription)
         }
     }
 
-    func didClickBanner() {
+    func bannerViewDidClick(_ bannerView: UADSBannerView) {
         Thread.runOnMainThread {
             self._logger.debug("\(kTag): \(#function): id = \(self._adId)")
             self._bridge.callCpp(self._messageHelper.onClicked)
         }
     }
 
-    func bannerWillPresentScreen() {
-        Thread.runOnMainThread {
-            self._logger.debug("\(kTag): \(#function): id = \(self._adId)")
-        }
-    }
-
-    func bannerDidDismissScreen() {
-        Thread.runOnMainThread {
-            self._logger.debug("\(kTag): \(#function): id = \(self._adId)")
-        }
-    }
-
-    func bannerWillLeaveApplication() {
+    func bannerViewDidLeaveApplication(_ bannerView: UADSBannerView) {
         Thread.runOnMainThread {
             self._logger.debug("\(kTag): \(#function): id = \(self._adId)")
         }

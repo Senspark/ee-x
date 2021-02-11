@@ -12,6 +12,9 @@ private let kTag = "\(UnityAdsBridge.self)"
 private let kPrefix = "UnityAdsBridge"
 private let kInitialize = "\(kPrefix)Initialize"
 private let kSetDebugModeEnabled = "\(kPrefix)SetDebugModeEnabled"
+private let kGetBannerAdSize = "\(kPrefix)GetBannerAdSize"
+private let kCreateBannerAd = "\(kPrefix)CreateBannerAd"
+private let kDestroyAd = "\(kPrefix)DestroyAd"
 private let kHasRewardedAd = "\(kPrefix)HasRewardedAd"
 private let kLoadRewardedAd = "\(kPrefix)LoadRewardedAd"
 private let kShowRewardedAd = "\(kPrefix)ShowRewardedAd"
@@ -63,6 +66,8 @@ class UnityAdsBridge: NSObject, IPlugin, UnityAdsDelegate {
     private let _logger: ILogger
     private var _initializing = false
     private var _initialized = false
+    private let _bannerHelper = UnityBannerHelper()
+    private var _ads: [String: IAd] = [:]
     private var _displayed = false
     private var _loadedAdIds: Set<String> = []
 
@@ -75,6 +80,8 @@ class UnityAdsBridge: NSObject, IPlugin, UnityAdsDelegate {
 
     public func destroy() {
         deregisterHandlers()
+        _ads.values.forEach { $0.destroy() }
+        _ads.removeAll()
         Thread.runOnMainThread {
             UnityAds.remove(self)
         }
@@ -102,6 +109,29 @@ class UnityAdsBridge: NSObject, IPlugin, UnityAdsDelegate {
             self.setDebugModeEnabled(Utils.toBool(message))
             return ""
         }
+        _bridge.registerHandler(kGetBannerAdSize) { message in
+            let index = Int(message) ?? -1
+            let size = self._bannerHelper.getSize(index: index)
+            return EEJsonUtils.convertDictionary(toString: [
+                "width": size.width,
+                "height": size.height
+            ])
+        }
+        _bridge.registerHandler(kCreateBannerAd) { message in
+            let dict = EEJsonUtils.convertString(toDictionary: message)
+            guard
+                let adId = dict["adId"] as? String,
+                let index = dict["adSize"] as? Int
+            else {
+                assert(false, "Invalid argument")
+                return ""
+            }
+            let adSize = self._bannerHelper.getAdSize(index)
+            return Utils.toString(self.createBannerAd(adId, adSize))
+        }
+        _bridge.registerHandler(kDestroyAd) { message in
+            Utils.toString(self.destroyAd(message))
+        }
         _bridge.registerHandler(kHasRewardedAd) { message in
             Utils.toString(self.hasRewardedAd(message))
         }
@@ -123,6 +153,9 @@ class UnityAdsBridge: NSObject, IPlugin, UnityAdsDelegate {
     func deregisterHandlers() {
         _bridge.deregisterHandler(kInitialize)
         _bridge.deregisterHandler(kSetDebugModeEnabled)
+        _bridge.deregisterHandler(kGetBannerAdSize)
+        _bridge.deregisterHandler(kCreateBannerAd)
+        _bridge.deregisterHandler(kDestroyAd)
         _bridge.deregisterHandler(kHasRewardedAd)
         _bridge.deregisterHandler(kLoadRewardedAd)
         _bridge.deregisterHandler(kShowRewardedAd)
@@ -180,6 +213,30 @@ class UnityAdsBridge: NSObject, IPlugin, UnityAdsDelegate {
             }
             UnityAds.setDebugMode(enabled)
         }
+    }
+
+    func createBannerAd(_ adId: String, _ adSize: CGSize) -> Bool {
+        return createAd(adId) {
+            UnityBannerAd(self._bridge, self._logger, adId, adSize, self._bannerHelper)
+        }
+    }
+
+    func createAd(_ adId: String, _ creator: () -> IAd) -> Bool {
+        if _ads.contains(where: { key, _ in key == adId }) {
+            return false
+        }
+        let ad = creator()
+        _ads[adId] = ad
+        return true
+    }
+
+    func destroyAd(_ adId: String) -> Bool {
+        guard let ad = _ads[adId] else {
+            return false
+        }
+        ad.destroy()
+        _ads.removeValue(forKey: adId)
+        return true
     }
 
     func hasRewardedAd(_ adId: String) -> Bool {

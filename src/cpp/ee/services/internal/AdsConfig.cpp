@@ -18,6 +18,7 @@
 #include <ee/iron_source/IronSourceBannerAdSize.hpp>
 #include <ee/nlohmann/json.hpp>
 #include <ee/unity_ads/IUnityAdsBridge.hpp>
+#include <ee/unity_ads/UnityBannerAdSize.hpp>
 #include <ee/vungle/IVungleBridge.hpp>
 
 #include "ee/services/internal/GenericAd.hpp"
@@ -212,6 +213,8 @@ Network UnityAdsConfig::network() const {
 std::shared_ptr<IAd> UnityAdsConfig::createAd(AdFormat format,
                                               const std::string& id) {
     switch (format) {
+    case AdFormat::Banner:
+        return plugin_->createBannerAd(id, UnityBannerAdSize::Banner);
     case AdFormat::Interstitial:
         return plugin_->createInterstitialAd(id);
     case AdFormat::Rewarded:

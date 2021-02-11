@@ -8,6 +8,8 @@
 
 #include "ee/unity_ads/private/UnityAdsBridge.hpp"
 
+#include <ee/ads/internal/DefaultBannerAd.hpp>
+#include <ee/ads/internal/GuardedBannerAd.hpp>
 #include <ee/ads/internal/GuardedFullScreenAd.hpp>
 #include <ee/ads/internal/IAsyncHelper.hpp>
 #include <ee/ads/internal/MediationManager.hpp>
@@ -23,17 +25,18 @@
 namespace ee {
 namespace unity_ads {
 namespace {
-// clang-format off
-const std::string kPrefix       = "UnityAdsBridge";
-const auto kInitialize          = kPrefix + "Initialize";
+const std::string kPrefix = "UnityAdsBridge";
+const auto kInitialize = kPrefix + "Initialize";
 const auto kSetDebugModeEnabled = kPrefix + "SetDebugModeEnabled";
-const auto kHasRewardedAd       = kPrefix + "HasRewardedAd";
-const auto kLoadRewardedAd      = kPrefix + "LoadRewardedAd";
-const auto kShowRewardedAd      = kPrefix + "ShowRewardedAd";
-const auto kOnLoaded            = kPrefix + "OnLoaded";
-const auto kOnFailedToShow      = kPrefix + "OnFailedToShow";
-const auto kOnClosed            = kPrefix + "OnClosed";
-// clang-format on
+const auto kGetBannerAdSize = kPrefix + "GetBannerAdSize";
+const auto kCreateBannerAd = kPrefix + "CreateBannerAd";
+const auto kDestroyAd = kPrefix + "DestroyAd";
+const auto kHasRewardedAd = kPrefix + "HasRewardedAd";
+const auto kLoadRewardedAd = kPrefix + "LoadRewardedAd";
+const auto kShowRewardedAd = kPrefix + "ShowRewardedAd";
+const auto kOnLoaded = kPrefix + "OnLoaded";
+const auto kOnFailedToShow = kPrefix + "OnFailedToShow";
+const auto kOnClosed = kPrefix + "OnClosed";
 } // namespace
 
 using Self = Bridge;
@@ -75,6 +78,9 @@ void Self::destroy() {
     bridge_.deregisterHandler(kOnLoaded);
     bridge_.deregisterHandler(kOnFailedToShow);
     bridge_.deregisterHandler(kOnClosed);
+    for (auto&& [key, value] : ads_) {
+        value->destroy();
+    }
     destroyer_();
 }
 
@@ -92,6 +98,45 @@ void Self::setDebugModeEnabled(bool enabled) {
     bridge_.call(kSetDebugModeEnabled, core::toString(enabled));
 }
 
+std::pair<int, int> Self::getBannerAdSize(BannerAdSize adSize) {
+    auto response = bridge_.call(kGetBannerAdSize,
+                                 std::to_string(static_cast<int>(adSize)));
+    auto json = nlohmann::json::parse(response);
+    int width = json["width"];
+    int height = json["height"];
+    return std::pair(width, height);
+}
+
+std::shared_ptr<IBannerAd> Self::createBannerAd(const std::string& adId,
+                                                BannerAdSize adSize) {
+    logger_.debug("%s: id = %s size = %d", __PRETTY_FUNCTION__, adId.c_str(),
+                  static_cast<int>(adSize));
+    auto iter = ads_.find(adId);
+    if (iter != ads_.cend()) {
+        return std::dynamic_pointer_cast<IBannerAd>(iter->second);
+    }
+    nlohmann::json json;
+    json["adId"] = adId;
+    json["adSize"] = static_cast<int>(adSize);
+    auto response = bridge_.call(kCreateBannerAd, json.dump());
+    if (not core::toBool(response)) {
+        logger_.error("%s: There was an error when attempt to create an ad.",
+                      __PRETTY_FUNCTION__);
+        assert(false);
+        return nullptr;
+    }
+    auto size = getBannerAdSize(adSize);
+    auto ad = std::make_shared<ads::GuardedBannerAd>(
+        std::make_shared<ads::DefaultBannerAd>(
+            "UnityBannerAd", bridge_, logger_,
+            [this, adId] { //
+                destroyAd(adId);
+            },
+            adId, size));
+    ads_.emplace(adId, ad);
+    return ad;
+}
+
 std::shared_ptr<IFullScreenAd>
 Self::createInterstitialAd(const std::string& adId) {
     return createFullScreenAd<InterstitialAd>(adId);
@@ -105,20 +150,37 @@ template <class Ad>
 std::shared_ptr<IFullScreenAd>
 Self::createFullScreenAd(const std::string& adId) {
     logger_.debug("%s: adId = %s", __PRETTY_FUNCTION__, adId.c_str());
-    auto iter = ads_.find(adId);
-    if (iter != ads_.cend()) {
+    auto iter = fullScreenAds_.find(adId);
+    if (iter != fullScreenAds_.cend()) {
         return std::dynamic_pointer_cast<IFullScreenAd>(iter->second.first);
     }
     auto raw = std::make_shared<Ad>(logger_, displayer_, this, adId);
     auto ad = std::make_shared<ads::GuardedFullScreenAd>(raw);
-    ads_.try_emplace(adId, ad, raw);
+    fullScreenAds_.try_emplace(adId, ad, raw);
     return ad;
 }
 
-bool Self::destroyAd(const std::string& adId) {
+bool Self::destroyFullScreenAd(const std::string& adId) {
     logger_.debug("%s: adId = %s", __PRETTY_FUNCTION__, adId.c_str());
+    auto iter = fullScreenAds_.find(adId);
+    if (iter == fullScreenAds_.cend()) {
+        return false;
+    }
+    fullScreenAds_.erase(iter);
+    return true;
+}
+
+bool Self::destroyAd(const std::string& adId) {
+    logger_.debug("%s: id = %s", __PRETTY_FUNCTION__, adId.c_str());
     auto iter = ads_.find(adId);
     if (iter == ads_.cend()) {
+        return false;
+    }
+    auto&& response = bridge_.call(kDestroyAd, adId);
+    if (not core::toBool(response)) {
+        logger_.error("%s: There was an error when attempt to destroy an ad.",
+                      __PRETTY_FUNCTION__);
+        assert(false);
         return false;
     }
     ads_.erase(iter);
@@ -145,7 +207,7 @@ void Self::showRewardedAd(const std::string& adId) {
 
 void Self::onLoaded(const std::string& adId) {
     logger_.debug("%s: adId = %s", __PRETTY_FUNCTION__, adId.c_str());
-    if (auto iter = ads_.find(adId); iter != ads_.cend()) {
+    if (auto iter = fullScreenAds_.find(adId); iter != fullScreenAds_.cend()) {
         auto&& ad = iter->second.second;
         if (auto item = std::dynamic_pointer_cast<InterstitialAd>(ad);
             item != nullptr) {
@@ -169,7 +231,8 @@ void Self::onFailedToShow(const std::string& adId, const std::string& message) {
     if (displaying_) {
         assert(adId_ == adId);
         displaying_ = false;
-        if (auto iter = ads_.find(adId); iter != ads_.cend()) {
+        if (auto iter = fullScreenAds_.find(adId);
+            iter != fullScreenAds_.cend()) {
             auto&& ad = iter->second.second;
             if (auto item = std::dynamic_pointer_cast<InterstitialAd>(ad);
                 item != nullptr) {
@@ -194,7 +257,8 @@ void Self::onClosed(const std::string& adId, bool rewarded) {
     if (displaying_) {
         assert(adId_ == adId);
         displaying_ = false;
-        if (auto iter = ads_.find(adId); iter != ads_.cend()) {
+        if (auto iter = fullScreenAds_.find(adId);
+            iter != fullScreenAds_.cend()) {
             auto&& ad = iter->second.second;
             if (auto item = std::dynamic_pointer_cast<InterstitialAd>(ad);
                 item != nullptr) {

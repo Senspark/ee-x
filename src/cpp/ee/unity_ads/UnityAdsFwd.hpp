@@ -15,12 +15,14 @@
 
 namespace ee {
 namespace unity_ads {
+enum class BannerAdSize;
 class IBridge;
 class Bridge;
 class InterstitialAd;
 class RewardedAd;
 } // namespace unity_ads
 
+using UnityBannerAdSize = unity_ads::BannerAdSize;
 using IUnityAds = unity_ads::IBridge;
 } // namespace ee
 

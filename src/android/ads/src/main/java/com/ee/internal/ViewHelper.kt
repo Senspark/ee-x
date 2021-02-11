@@ -49,9 +49,9 @@ class ViewHelper(
     }
 
     private val _view = AtomicReference<View?>(null)
+    private val _visible = AtomicBoolean(false)
     private val _position = AtomicReference<Point>(Point(0, 0))
     private val _size = AtomicReference<Point>(Point(0, 0))
-    private val _visible = AtomicBoolean(false)
 
     var view: View?
         @AnyThread get() = _view.get()
@@ -61,6 +61,16 @@ class ViewHelper(
                 applyPosition(view, position)
                 applySize(view, size)
                 applyVisible(view, isVisible)
+            }
+        }
+
+
+    var isVisible: Boolean
+        @AnyThread get() = _visible.get()
+        @AnyThread set(value) {
+            _visible.set(value)
+            view?.let { view ->
+                applyVisible(view, value)
             }
         }
 
@@ -82,18 +92,9 @@ class ViewHelper(
             }
         }
 
-    var isVisible: Boolean
-        @AnyThread get() = _visible.get()
-        @AnyThread set(value) {
-            _visible.set(value)
-            view?.let { view ->
-                applyVisible(view, value)
-            }
-        }
-
     init {
+        isVisible = initialVisible
         position = initialPosition
         size = initialSize
-        isVisible = initialVisible
     }
 }

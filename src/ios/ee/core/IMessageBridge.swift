@@ -30,6 +30,13 @@ public protocol IMessageBridge {
     /// @param tag The unique tag of the handler.
     func deregisterHandler(_ tag: String)
 
+    /// Calls a handler from Objective-C with a message.
+    /// @warning This method should not be called manually.
+    /// @param tag The tag of the handler.
+    /// @param message The message.
+    /// @return Reply message from Objective-C.
+    func call(_ tag: String, _ message: String) -> String
+
     /// Calls a handler from C++ without a message.
     /// @param tag The unique tag of the handler.
     func callCpp(_ tag: String)

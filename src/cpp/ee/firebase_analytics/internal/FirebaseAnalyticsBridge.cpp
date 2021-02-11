@@ -42,7 +42,7 @@ void Self::destroy() {
 
 Task<bool> Self::initialize() {
     auto response = co_await bridge_.callAsync(kInitialize);
-    return core::toBool(response);
+    co_return core::toBool(response);
 }
 
 void Self::setUserProperty(const std::string& key, const std::string& value) {

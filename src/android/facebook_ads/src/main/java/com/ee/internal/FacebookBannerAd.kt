@@ -139,6 +139,12 @@ internal class FacebookBannerAd(
         }
     }
 
+    override var isVisible: Boolean
+        @AnyThread get() = _viewHelper.isVisible
+        @AnyThread set(value) {
+            _viewHelper.isVisible = value
+        }
+
     override var position: Point
         @AnyThread get() = _viewHelper.position
         @AnyThread set(value) {
@@ -149,12 +155,6 @@ internal class FacebookBannerAd(
         @AnyThread get() = _viewHelper.size
         @AnyThread set(value) {
             _viewHelper.size = value
-        }
-
-    override var isVisible: Boolean
-        @AnyThread get() = _viewHelper.isVisible
-        @AnyThread set(value) {
-            _viewHelper.isVisible = value
         }
 
     override fun onAdLoaded(ad: Ad) {

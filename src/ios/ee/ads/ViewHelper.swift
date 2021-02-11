@@ -55,6 +55,16 @@ class ViewHelper {
         }
     }
 
+    var isVisible: Bool {
+        get { return _visible }
+        set(value) {
+            _visible = value
+            if let view = view {
+                ViewHelper.applyVisible(view, value)
+            }
+        }
+    }
+
     var position: CGPoint {
         get { return _position }
         set(value) {
@@ -75,16 +85,6 @@ class ViewHelper {
             _size = size
             if let view = view {
                 ViewHelper.applySize(view, size)
-            }
-        }
-    }
-
-    var isVisible: Bool {
-        get { return _visible }
-        set(value) {
-            _visible = value
-            if let view = view {
-                ViewHelper.applyVisible(view, value)
             }
         }
     }

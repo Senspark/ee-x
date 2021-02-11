@@ -7,18 +7,18 @@ import { MessageHelper } from "./MessageHelper";
 export class BannerAdHelper {
     private readonly _bridge: IMessageBridge;
     private readonly _helper: MessageHelper;
+    private _visible: boolean;
     private _anchor: [number, number];
     private _position: [number, number];
     private _size: [number, number];
-    private _visible: boolean;
 
     public constructor(bridge: IMessageBridge, helper: MessageHelper, size: [number, number]) {
         this._bridge = bridge;
         this._helper = helper;
+        this._visible = false;
         this._size = size;
         this._anchor = [0, 0];
         this._position = [0, 0];
-        this._visible = false;
     }
 
     public get isLoaded(): boolean {
@@ -28,6 +28,15 @@ export class BannerAdHelper {
 
     public load(): void {
         this._bridge.call(this._helper.load);
+    }
+
+    public get isVisible(): boolean {
+        return this._visible;
+    }
+
+    public set isVisible(value: boolean) {
+        this._bridge.call(this._helper.setVisible, Utils.toString(value));
+        this._visible = value;
     }
 
     private setPositionTopLeft(position: [number, number]) {
@@ -76,14 +85,5 @@ export class BannerAdHelper {
         };
         this._bridge.call(this._helper.setSize, JSON.stringify(request));
         this._size = value;
-    }
-
-    public get isVisible(): boolean {
-        return this._visible;
-    }
-
-    public set isVisible(value: boolean) {
-        this._bridge.call(this._helper.setVisible, Utils.toString(value));
-        this._visible = value;
     }
 }

@@ -5,9 +5,9 @@ using System.Threading.Tasks;
 
 namespace EE {
     public class MultiBannerAd : ObserverManager<AdObserver>, IBannerAd, IMultiAd<IBannerAd> {
+        private bool _visible;
         private (float, float) _anchor;
         private (float, float) _position;
-        private bool _visible;
         private readonly List<IBannerAd> _items;
         private readonly ObserverHandle _handle;
         private IBannerAd _activeItem;
@@ -25,6 +25,7 @@ namespace EE {
             _handle.Bind(item).AddObserver(new AdObserver {
                 OnLoaded = () => {
                     _loadedItems.Add(item);
+                    Invalidate();
                     DispatchEvent(observer => observer.OnLoaded?.Invoke());
                 },
                 OnClicked = () => DispatchEvent(observer => observer.OnClicked?.Invoke())
@@ -59,6 +60,19 @@ namespace EE {
                 }
             }
             return result;
+        }
+
+        public bool IsVisible {
+            get => _visible;
+            set {
+                _visible = value;
+                Invalidate();
+                foreach (var item in _items) {
+                    if (!_loadedItems.Contains(item)) {
+                        _ = item.Load();
+                    }
+                }
+            }
         }
 
         public (float, float) Anchor {
@@ -100,40 +114,19 @@ namespace EE {
             }
         }
 
-        public bool IsVisible {
-            get => _visible;
-            set {
-                _visible = value;
-                foreach (var item in _items) {
-                    item.IsVisible = false;
+        private void Invalidate() {
+            var lastActiveItem = _activeItem;
+            foreach (var item in _items) {
+                if (_loadedItems.Contains(item)) {
+                    _activeItem = item;
+                    break;
                 }
-                if (_visible) {
-                    if (_loadedItems.Count == 0) {
-                        foreach (var item in _items) {
-                            if (item != _activeItem && item.IsLoaded) {
-                                _activeItem = item;
-                                break;
-                            }
-                        }
-                    } else {
-                        // Prefer to displaying loaded ad.
-                        foreach (var item in _items) {
-                            if (_loadedItems.Contains(item)) {
-                                _loadedItems.Remove(item);
-                                _activeItem = item;
-                                break;
-                            }
-                        }
-                    }
-                    if (_activeItem != null) {
-                        _activeItem.IsVisible = true;
-                    }
-                } else {
-                    if (_activeItem != null) {
-                        // Reload the currently active ad.
-                        _ = _activeItem.Load();
-                    }
-                }
+            }
+            if (_activeItem != null) {
+                _activeItem.IsVisible = _visible;
+            }
+            if (lastActiveItem != null && lastActiveItem != _activeItem) {
+                lastActiveItem.IsVisible = false;
             }
         }
     }

@@ -7,9 +7,9 @@ import { IBannerAd } from "./IBannerAd";
 import { IMultiAd } from "./IMultiAd";
 
 export class MultiBannerAd extends ObserverManager<AdObserver> implements IBannerAd, IMultiAd<IBannerAd> {
+    private _visible: boolean;
     private _anchor: [number, number];
     private _position: [number, number];
-    private _visible: boolean;
     private readonly _items: IBannerAd[];
     private readonly _handle: ObserverHandle;
     private _activeItem?: IBannerAd;
@@ -30,7 +30,10 @@ export class MultiBannerAd extends ObserverManager<AdObserver> implements IBanne
         item.isVisible = this._visible;
         this._handle.bind(item).addObserver({
             onLoaded: () => {
-                this._loadedItems.push(item);
+                if (this._loadedItems.indexOf(item) === -1) {
+                    this._loadedItems.push(item);
+                }
+                this.invalidate();
                 this.dispatchEvent(observer => observer.onLoaded && observer.onLoaded());
             },
             onClicked: () => this.dispatchEvent(observer => observer.onClicked && observer.onClicked()),
@@ -64,6 +67,21 @@ export class MultiBannerAd extends ObserverManager<AdObserver> implements IBanne
             }
         }
         return true;
+    }
+
+    public get isVisible(): boolean {
+        return this._visible;
+    }
+
+    public set isVisible(value: boolean) {
+        this._visible = value;
+        this.invalidate();
+        for (const item of this._items) {
+            if (this._loadedItems.indexOf(item) === -1) {
+                // Load in background.ss
+                const _ = item.load();
+            }
+        }
     }
 
     public get anchor(): [number, number] {
@@ -105,41 +123,19 @@ export class MultiBannerAd extends ObserverManager<AdObserver> implements IBanne
         }
     }
 
-    public get isVisible(): boolean {
-        return this._visible;
-    }
-
-    public set isVisible(value: boolean) {
-        this._visible = value;
+    private invalidate(): void {
+        const lastActiveItem = this._activeItem;
         for (const item of this._items) {
-            item.isVisible = false;
+            if (this._loadedItems.indexOf(item) !== -1) {
+                this._activeItem = item;
+                break;
+            }
         }
-        if (value) {
-            if (this._loadedItems.length === 0) {
-                for (const item of this._items) {
-                    if (item !== this._activeItem && item.isLoaded) {
-                        this._activeItem = item;
-                        break;
-                    }
-                }
-            } else {
-                for (const item of this._items) {
-                    const index = this._loadedItems.indexOf(item);
-                    if (index !== -1) {
-                        this._loadedItems.splice(index, 1);
-                        this._activeItem = item;
-                        break;
-                    }
-                }
-            }
-            if (this._activeItem !== undefined) {
-                this._activeItem.isVisible = true;
-            }
-        } else {
-            if (this._activeItem !== undefined) {
-                // Reload the currently active ad.
-                const _ = this._activeItem.load();
-            }
+        if (this._activeItem !== undefined) {
+            this._activeItem.isVisible = this._visible;
+        }
+        if (lastActiveItem !== undefined && lastActiveItem !== this._activeItem) {
+            lastActiveItem.isVisible = false;
         }
     }
 }

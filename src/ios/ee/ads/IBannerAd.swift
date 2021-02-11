@@ -8,7 +8,7 @@
 import Foundation
 
 protocol IBannerAd: IAd {
+    var isVisible: Bool { get set }
     var position: CGPoint { get set }
     var size: CGSize { get set }
-    var isVisible: Bool { get set }
 }

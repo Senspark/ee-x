@@ -96,6 +96,11 @@ internal class FacebookBannerAd:
         }
     }
     
+    var isVisible: Bool {
+        get { return _viewHelper.isVisible }
+        set(value) { _viewHelper.isVisible = value }
+    }
+    
     var position: CGPoint {
         get { return _viewHelper.position }
         set(value) { _viewHelper.position = value }
@@ -104,11 +109,6 @@ internal class FacebookBannerAd:
     var size: CGSize {
         get { return _viewHelper.size }
         set(value) { _viewHelper.size = value }
-    }
-    
-    var isVisible: Bool {
-        get { return _viewHelper.isVisible }
-        set(value) { _viewHelper.isVisible = value }
     }
     
     func adViewDidLoad(_ adView: FBAdView) {

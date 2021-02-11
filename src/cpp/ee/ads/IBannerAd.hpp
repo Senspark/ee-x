@@ -19,7 +19,12 @@ namespace ee {
 namespace ads {
 class IBannerAd : public IAd {
 public:
-    virtual ~IBannerAd() = default;
+    /// Checks whether this ad is visible.
+    virtual bool isVisible() const = 0;
+
+    /// Sets this ad view's visibility.
+    /// @param[in] visible Whether this ad view is visible.
+    virtual void setVisible(bool visible) = 0;
 
     /// Gets the anchor of this ad view.
     virtual std::pair<float, float> getAnchor() const = 0;
@@ -43,13 +48,6 @@ public:
 
     /// Sets the size in pixels.
     virtual void setSize(float width, float height) = 0;
-
-    /// Checks whether this ad is visible.
-    virtual bool isVisible() const = 0;
-
-    /// Sets this ad view's visibility.
-    /// @param[in] visible Whether this ad view is visible.
-    virtual void setVisible(bool visible) = 0;
 };
 } // namespace ads
 } // namespace ee

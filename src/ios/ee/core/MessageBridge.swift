@@ -8,8 +8,6 @@
 import Foundation
 
 public class MessageBridge: NSObject, IMessageBridge {
-    private static let _sharedInstance = MessageBridge()
-    
     private var _handlers: [String: MessageHandler]
     private let _handleLock = "handle_lock"
     
@@ -61,20 +59,7 @@ public class MessageBridge: NSObject, IMessageBridge {
         return _handlers[tag]
     }
     
-    public func callCpp(_ tag: String) {
-        callCpp(tag, "")
-    }
-    
-    public func callCpp(_ tag: String, _ message: String) {
-        ee_callCppInternal(tag, message)
-    }
-    
-    /// Calls a handler from Objective-C with a message.
-    /// @warning This method should not be called manually.
-    /// @param tag The tag of the handler.
-    /// @param message The message.
-    /// @return Reply message from Objective-C.
-    private func call(_ tag: String, _ message: String) -> String {
+    public func call(_ tag: String, _ message: String) -> String {
         guard let handler = findHandler(tag) else {
             assert(false, "A handler with tag \(tag) doesn't exist")
             return ""
@@ -82,13 +67,12 @@ public class MessageBridge: NSObject, IMessageBridge {
         return handler(message)
     }
     
-    fileprivate class func staticCall(_ tag: UnsafePointer<CChar>,
-                                      _ message: UnsafePointer<CChar>) -> UnsafeMutablePointer<CChar>? {
-        let tag_str = String(cString: tag)
-        let message_str = String(cString: message)
-        let response = _sharedInstance.call(tag_str, message_str)
-        let response_unmanaged = strdup(response)
-        return response_unmanaged
+    public func callCpp(_ tag: String) {
+        callCpp(tag, "")
+    }
+    
+    public func callCpp(_ tag: String, _ message: String) {
+        ee_callCppInternal(tag, message)
     }
 }
 
@@ -96,5 +80,9 @@ public class MessageBridge: NSObject, IMessageBridge {
 @_cdecl("ee_staticCall")
 public func ee_staticCall(_ tag: UnsafePointer<CChar>,
                           _ message: UnsafePointer<CChar>) -> UnsafeMutablePointer<CChar>? {
-    return MessageBridge.staticCall(tag, message)
+    let tag_str = String(cString: tag)
+    let message_str = String(cString: message)
+    let response = PluginManager.instance.bridge.call(tag_str, message_str)
+    let response_unmanaged = strdup(response)
+    return response_unmanaged
 }

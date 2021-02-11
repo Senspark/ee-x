@@ -25,6 +25,9 @@ public:
     virtual bool isLoaded() const override;
     virtual Task<bool> load() override;
 
+    virtual bool isVisible() const override;
+    virtual void setVisible(bool visible) override;
+
     virtual std::pair<float, float> getAnchor() const override;
     virtual void setAnchor(float x, float y) override;
 
@@ -34,18 +37,15 @@ public:
     virtual std::pair<float, float> getSize() const override;
     virtual void setSize(float width, float height) override;
 
-    virtual bool isVisible() const override;
-    virtual void setVisible(bool visible) override;
-
 private:
     bool loaded_;
+    bool visible_;
     int positionX_;
     int positionY_;
     float anchorX_;
     float anchorY_;
     int width_;
     int height_;
-    bool visible_;
 };
 } // namespace ads
 } // namespace ee

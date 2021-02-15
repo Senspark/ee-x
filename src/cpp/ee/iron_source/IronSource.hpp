@@ -6,6 +6,7 @@
 #include <ee/ads/Ads.hpp>
 
 #include "ee/iron_source/IIronSourceBridge.hpp"
+#include "ee/iron_source/IronSourceBannerAdSize.hpp"
 
 #endif // __cplusplus
 

@@ -23,7 +23,6 @@ class async_mutex_scoped_lock_operation;
 namespace ee {
 namespace core {
 enum class Library;
-enum class Plugin;
 class IPlugin;
 class PluginManager;
 class IPluginManagerImpl;
@@ -92,7 +91,6 @@ class JsbUtils;
 
 using core::IPlugin;
 using core::Library;
-using core::Plugin;
 using core::PluginManager;
 
 using core::ILogger;

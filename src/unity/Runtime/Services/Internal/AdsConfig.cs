@@ -7,11 +7,36 @@ using SimpleJSON;
 using UnityEngine.Assertions;
 
 namespace EE.Internal {
+    internal static class AdsConfigUtils {
+        public static Network ParseNetwork(string id) {
+            switch (id) {
+                case "ad_mob": return Network.AdMob;
+                case "facebook_ads": return Network.FacebookAds;
+                case "iron_source": return Network.IronSource;
+                case "unity_ads": return Network.UnityAds;
+                default: return Network.Null;
+            }
+        }
+
+        public static AdFormat ParseAdFormat(string id) {
+            switch (id) {
+                case "banner": return AdFormat.Banner;
+                case "rect": return AdFormat.Rectangle;
+                case "app_open": return AdFormat.AppOpen;
+                case "interstitial": return AdFormat.Interstitial;
+                case "rewarded_interstitial": return AdFormat.RewardedInterstitial;
+                case "rewarded": return AdFormat.Rewarded;
+                default: return AdFormat.Null;
+            }
+        }
+    }
+
     internal enum Network {
         AdMob,
         FacebookAds,
         IronSource,
-        UnityAds
+        UnityAds,
+        Null
     }
 
     internal enum AdFormat {
@@ -20,7 +45,8 @@ namespace EE.Internal {
         AppOpen,
         Interstitial,
         RewardedInterstitial,
-        Rewarded
+        Rewarded,
+        Null
     }
 
     internal interface INetworkConfigManager {
@@ -50,7 +76,7 @@ namespace EE.Internal {
                     return item.CreateAd(format, id);
                 }
             }
-            return null;
+            return new NullAd();
         }
     }
 
@@ -62,15 +88,15 @@ namespace EE.Internal {
 
     internal static class NetworkConfig {
         public static INetworkConfig Parse(JSONNode node) {
-            var network = node["network"].Value;
+            var network = AdsConfigUtils.ParseNetwork(node["network"].Value);
             switch (network) {
-                case "ad_mob": return new AdMobConfig(node);
-                case "facebook_ads": return new FacebookAdsConfig(node);
-                case "iron_source": return new IronSourceConfig(node);
-                case "unity_ads": return new UnityAdsConfig(node);
-                default:
-                    throw new ArgumentOutOfRangeException();
+                case Network.AdMob: return new AdMobConfig(node);
+                case Network.FacebookAds: return new FacebookAdsConfig(node);
+                case Network.IronSource: return new IronSourceConfig(node);
+                case Network.UnityAds: return new UnityAdsConfig(node);
+                case Network.Null: return new NullNetworkConfig();
             }
+            throw new ArgumentException();
         }
     }
 
@@ -97,12 +123,14 @@ namespace EE.Internal {
                     return _plugin.CreateAppOpenAd(id);
                 case AdFormat.Interstitial:
                     return _plugin.CreateInterstitialAd(id);
+                case AdFormat.RewardedInterstitial:
+                    return _plugin.CreateRewardedInterstitialAd(id);
                 case AdFormat.Rewarded:
                     return _plugin.CreateRewardedAd(id);
-                default:
-                    Assert.IsTrue(false);
-                    return null;
+                case AdFormat.Null:
+                    return new NullAd();
             }
+            throw new ArgumentException();
         }
     }
 
@@ -125,14 +153,17 @@ namespace EE.Internal {
                     return _plugin.CreateBannerAd(id, FacebookBannerAdSize.BannerHeight50);
                 case AdFormat.Rectangle:
                     return _plugin.CreateBannerAd(id, FacebookBannerAdSize.RectangleHeight250);
+                case AdFormat.AppOpen:
+                case AdFormat.RewardedInterstitial:
+                    return new NullFullScreenAd();
                 case AdFormat.Interstitial:
                     return _plugin.CreateInterstitialAd(id);
                 case AdFormat.Rewarded:
                     return _plugin.CreateRewardedAd(id);
-                default:
-                    Assert.IsTrue(false);
-                    return null;
+                case AdFormat.Null:
+                    return new NullAd();
             }
+            throw new ArgumentException();
         }
     }
 
@@ -157,14 +188,17 @@ namespace EE.Internal {
                     return _plugin.CreateBannerAd(id, IronSourceBannerAdSize.Banner);
                 case AdFormat.Rectangle:
                     return _plugin.CreateBannerAd(id, IronSourceBannerAdSize.Rectangle);
+                case AdFormat.AppOpen:
+                case AdFormat.RewardedInterstitial:
+                    return new NullFullScreenAd();
                 case AdFormat.Interstitial:
                     return _plugin.CreateInterstitialAd(id);
                 case AdFormat.Rewarded:
                     return _plugin.CreateRewardedAd(id);
-                default:
-                    Assert.IsTrue(false);
-                    return null;
+                case AdFormat.Null:
+                    return new NullAd();
             }
+            throw new ArgumentException();
         }
     }
 
@@ -187,14 +221,45 @@ namespace EE.Internal {
 
         public IAd CreateAd(AdFormat format, string id) {
             switch (format) {
+                case AdFormat.Banner:
+                    return _plugin.CreateBannerAd(id, UnityBannerAdSize.Normal);
+                case AdFormat.Rectangle:
+                    return new NullBannerAd();
+                case AdFormat.AppOpen:
+                case AdFormat.RewardedInterstitial:
+                    return new NullFullScreenAd();
                 case AdFormat.Interstitial:
                     return _plugin.CreateInterstitialAd(id);
                 case AdFormat.Rewarded:
                     return _plugin.CreateRewardedAd(id);
-                default:
-                    Assert.IsTrue(false);
-                    return null;
+                case AdFormat.Null:
+                    return new NullAd();
             }
+            throw new ArgumentException();
+        }
+    }
+
+    internal class NullNetworkConfig : INetworkConfig {
+        public Task Initialize() {
+            return Task.FromResult<object>(null);
+        }
+
+        public Network Network => Network.Null;
+
+        public IAd CreateAd(AdFormat format, string id) {
+            switch (format) {
+                case AdFormat.Banner:
+                case AdFormat.Rectangle:
+                    return new NullBannerAd();
+                case AdFormat.AppOpen:
+                case AdFormat.RewardedInterstitial:
+                case AdFormat.Interstitial:
+                case AdFormat.Rewarded:
+                    return new NullFullScreenAd();
+                case AdFormat.Null:
+                    return new NullAd();
+            }
+            throw new ArgumentException();
         }
     }
 
@@ -220,7 +285,7 @@ namespace EE.Internal {
                     return ad.CreateAd(_manager);
                 }
             }
-            return null;
+            return new NullAd();
         }
     }
 
@@ -231,17 +296,17 @@ namespace EE.Internal {
 
     internal static class AdConfig {
         public static IAdConfig Parse(JSONNode node) {
-            var format = node["format"].Value;
+            var format = AdsConfigUtils.ParseAdFormat(node["format"].Value);
             switch (format) {
-                case "banner": return new BannerConfig(node);
-                case "rect": return new RectangleConfig(node);
-                case "app_open": return new AppOpenConfig(node);
-                case "interstitial": return new InterstitialConfig(node);
-                case "rewarded_interstitial": return new RewardedInterstitialConfig(node);
-                case "rewarded": return new RewardedConfig(node);
-                default:
-                    throw new ArgumentOutOfRangeException();
+                case AdFormat.Banner: return new BannerConfig(node);
+                case AdFormat.Rectangle: return new RectangleConfig(node);
+                case AdFormat.AppOpen: return new AppOpenConfig(node);
+                case AdFormat.Interstitial: return new InterstitialConfig(node);
+                case AdFormat.RewardedInterstitial: return new RewardedInterstitialConfig(node);
+                case AdFormat.Rewarded: return new RewardedConfig(node);
+                case AdFormat.Null: return new NullAdConfig();
             }
+            throw new ArgumentException();
         }
     }
 
@@ -343,6 +408,14 @@ namespace EE.Internal {
         }
     }
 
+    internal class NullAdConfig : IAdConfig {
+        public AdFormat Format => AdFormat.Null;
+
+        public IAd CreateAd(INetworkConfigManager manager) {
+            return new NullAd();
+        }
+    }
+
     internal interface IAdInstanceConfig<out Ad> where Ad : IAd {
         Ad CreateAd(INetworkConfigManager manager);
     }
@@ -364,14 +437,8 @@ namespace EE.Internal {
 
         public SingleInstanceConfig(AdFormat format, JSONNode node) {
             _format = format;
-            var networks = new Dictionary<string, Network> {
-                ["ad_mob"] = Network.AdMob,
-                ["facebook_ads"] = Network.FacebookAds,
-                ["iron_source"] = Network.IronSource,
-                ["unity_ads"] = Network.UnityAds
-            };
             var network = node["network"].Value;
-            _network = networks[network];
+            _network = AdsConfigUtils.ParseNetwork(network);
             _id = node.HasKey("id") ? node["id"].Value : "";
         }
 

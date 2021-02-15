@@ -30,6 +30,9 @@ public:
     /// Sets debug mode enabled.
     virtual void setDebugModeEnabled(bool enabled) = 0;
 
+    virtual std::shared_ptr<IBannerAd> createBannerAd(const std::string& adId,
+                                                      BannerAdSize adSize) = 0;
+
     /// Creates an interstitial ad with the specified placement ID.
     virtual std::shared_ptr<IFullScreenAd>
     createInterstitialAd(const std::string& adId) = 0;

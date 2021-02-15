@@ -4,14 +4,14 @@
 Modify `build.gradle`
 ```java
 dependencies {
-    implementation 'com.senspark.ee:firebase-remote-config:2.4.2'
+    implementation 'com.senspark.ee:firebase-remote-config:2.4.3'
 }
 ```
 
 ### iOS
 Modify `Podfile`
 ```ruby
-pod 'ee-x/firebase-remote-config', '2.4.2'
+pod 'ee-x/firebase-remote-config', '2.4.3'
 ```
 
 ## Basic usage
@@ -42,14 +42,14 @@ co_await plugin->setDefaults({
 Get config values
 ```cpp
 // Get bool value.
-auto value1 = co_await plugin->getBool("key1");
+auto value1 = plugin->getBool("key1");
 
 // Get long value.
-auto value2 = co_await plugin->getLong("key2");
+auto value2 = plugin->getLong("key2");
 
 // Get double value.
-auto value3 = co_await plugin->getDouble("key3");
+auto value3 = plugin->getDouble("key3");
 
 // Get string value.
-auto value4 = co_await plugin->getString("key4");
+auto value4 = plugin->getString("key4");
 ```

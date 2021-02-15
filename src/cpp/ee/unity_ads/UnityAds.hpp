@@ -14,6 +14,7 @@
 #include <ee/ads/Ads.hpp>
 
 #include "ee/unity_ads/IUnityAdsBridge.hpp"
+#include "ee/unity_ads/UnityBannerAdSize.hpp"
 
 #endif // __cplusplus
 

@@ -15,7 +15,6 @@ namespace ads {
 using Self = NullBannerAd;
 
 Self::NullBannerAd() {
-    loaded_ = false;
     visible_ = false;
     positionX_ = 0;
     positionY_ = 0;
@@ -23,16 +22,6 @@ Self::NullBannerAd() {
     anchorY_ = 0.0f;
     width_ = 0;
     height_ = 0;
-}
-
-void Self::destroy() {}
-
-bool Self::isLoaded() const {
-    return loaded_;
-}
-
-Task<bool> Self::load() {
-    co_return false;
 }
 
 bool Self::isVisible() const {

@@ -1,22 +1,10 @@
-import { ObserverManager } from "../core";
-import { AdObserver } from "./IAd";
 import {
     FullScreenAdResult,
     IFullScreenAd,
 } from "./IFullScreenAd";
+import { NullAd } from "./NullAd";
 
-export class NullFullScreenAd extends ObserverManager<AdObserver> implements IFullScreenAd {
-    public destroy(): void {
-    }
-
-    public get isLoaded(): boolean {
-        return false;
-    }
-
-    public async load(): Promise<boolean> {
-        return false;
-    }
-
+export class NullFullScreenAd extends NullAd implements IFullScreenAd {
     public async show(): Promise<FullScreenAdResult> {
         return FullScreenAdResult.Failed;
     }

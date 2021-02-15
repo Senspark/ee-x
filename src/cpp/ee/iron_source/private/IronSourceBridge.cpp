@@ -17,33 +17,27 @@
 namespace ee {
 namespace iron_source {
 namespace {
-// clang-format off
-const std::string kPrefix                = "IronSourceBridge";
-
-const auto kInitialize                   = kPrefix + "Initialize";
-
-const auto kGetBannerAdSize              = kPrefix + "GetBannerAdSize";
-const auto kCreateBannerAd               = kPrefix + "CreateBannerAd";
-const auto kDestroyAd                    = kPrefix + "DestroyAd";
-
-const auto kHasInterstitialAd            = kPrefix + "HasInterstitialAd";
-const auto kLoadInterstitialAd           = kPrefix + "LoadInterstitialAd";
-const auto kShowInterstitialAd           = kPrefix + "ShowInterstitialAd";
-
-const auto kHasRewardedAd                = kPrefix + "HasRewardedAd";
-const auto kShowRewardedAd               = kPrefix + "ShowRewardedAd";
-
-const auto kOnInterstitialAdLoaded       = kPrefix + "OnInterstitialAdLoaded";
-const auto kOnInterstitialAdFailedToLoad = kPrefix + "OnInterstitialAdFailedToLoad";
-const auto kOnInterstitialAdFailedToShow = kPrefix + "OnInterstitialAdFailedToShow";
-const auto kOnInterstitialAdClicked      = kPrefix + "OnInterstitialAdClicked";
-const auto kOnInterstitialAdClosed       = kPrefix + "OnInterstitialAdClosed";
-
-const auto kOnRewardedAdLoaded       = kPrefix + "OnRewardedAdLoaded";
+const std::string kPrefix = "IronSourceBridge";
+const auto kInitialize = kPrefix + "Initialize";
+const auto kGetBannerAdSize = kPrefix + "GetBannerAdSize";
+const auto kCreateBannerAd = kPrefix + "CreateBannerAd";
+const auto kDestroyAd = kPrefix + "DestroyAd";
+const auto kHasInterstitialAd = kPrefix + "HasInterstitialAd";
+const auto kLoadInterstitialAd = kPrefix + "LoadInterstitialAd";
+const auto kShowInterstitialAd = kPrefix + "ShowInterstitialAd";
+const auto kHasRewardedAd = kPrefix + "HasRewardedAd";
+const auto kShowRewardedAd = kPrefix + "ShowRewardedAd";
+const auto kOnInterstitialAdLoaded = kPrefix + "OnInterstitialAdLoaded";
+const auto kOnInterstitialAdFailedToLoad =
+    kPrefix + "OnInterstitialAdFailedToLoad";
+const auto kOnInterstitialAdFailedToShow =
+    kPrefix + "OnInterstitialAdFailedToShow";
+const auto kOnInterstitialAdClicked = kPrefix + "OnInterstitialAdClicked";
+const auto kOnInterstitialAdClosed = kPrefix + "OnInterstitialAdClosed";
+const auto kOnRewardedAdLoaded = kPrefix + "OnRewardedAdLoaded";
 const auto kOnRewardedAdFailedToShow = kPrefix + "OnRewardedAdFailedToShow";
-const auto kOnRewardedAdClicked      = kPrefix + "OnRewardedAdClicked";
-const auto kOnRewardedAdClosed       = kPrefix + "OnRewardedAdClosed";
-// clang-format on
+const auto kOnRewardedAdClicked = kPrefix + "OnRewardedAdClicked";
+const auto kOnRewardedAdClosed = kPrefix + "OnRewardedAdClosed";
 } // namespace
 
 using Self = Bridge;

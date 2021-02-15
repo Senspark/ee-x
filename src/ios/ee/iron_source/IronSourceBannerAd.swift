@@ -102,7 +102,7 @@ internal class IronSourceBannerAd: NSObject, IBannerAd, ISBannerDelegate {
         set(value) { _viewHelper.size = value }
     }
 
-    func bannerDidLoad(_ bannerView: ISBannerView!) {
+    func bannerDidLoad(_ bannerView: ISBannerView) {
         Thread.runOnMainThread {
             self._logger.debug("\(kTag): \(#function): id = \(self._adId)")
             self._ad = bannerView
@@ -114,7 +114,7 @@ internal class IronSourceBannerAd: NSObject, IBannerAd, ISBannerDelegate {
         }
     }
 
-    func bannerDidFailToLoadWithError(_ error: Error!) {
+    func bannerDidFailToLoadWithError(_ error: Error) {
         Thread.runOnMainThread {
             self._logger.debug("\(kTag): \(#function): id = \(self._adId) message = \(error.localizedDescription)")
             self._bridge.callCpp(self._messageHelper.onFailedToLoad, error.localizedDescription)

@@ -3,6 +3,8 @@ package com.ee
 import android.app.Activity
 import android.app.Application
 import androidx.annotation.AnyThread
+import com.ee.internal.UnityBannerAd
+import com.ee.internal.UnityBannerHelper
 import com.ee.internal.deserialize
 import com.ee.internal.serialize
 import com.google.common.truth.Truth.assertThat
@@ -12,6 +14,7 @@ import com.unity3d.ads.IUnityAdsLoadListener
 import com.unity3d.ads.UnityAds
 import com.unity3d.ads.UnityAds.FinishState
 import com.unity3d.ads.UnityAds.UnityAdsError
+import com.unity3d.services.banners.UnityBannerSize
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.serialization.InternalSerializationApi
 import kotlinx.serialization.Serializable
@@ -31,6 +34,9 @@ class UnityAdsBridge(
         private const val kPrefix = "UnityAdsBridge"
         private const val kInitialize = "${kPrefix}Initialize"
         private const val kSetDebugModeEnabled = "${kPrefix}SetDebugModeEnabled"
+        private const val kGetBannerAdSize = "${kPrefix}GetBannerAdSize"
+        private const val kCreateBannerAd = "${kPrefix}CreateBannerAd"
+        private const val kDestroyAd = "${kPrefix}DestroyAd"
         private const val kHasRewardedAd = "${kPrefix}HasRewardedAd"
         private const val kLoadRewardedAd = "${kPrefix}LoadRewardedAd"
         private const val kShowRewardedAd = "${kPrefix}ShowRewardedAd"
@@ -41,6 +47,8 @@ class UnityAdsBridge(
 
     private var _initializing = false
     private var _initialized = false
+    private val _bannerHelper = UnityBannerHelper()
+    private val _ads: MutableMap<String, IAd> = ConcurrentHashMap()
     private val _loadedAdIds: MutableSet<String> = Collections.newSetFromMap(ConcurrentHashMap())
 
     init {
@@ -51,19 +59,38 @@ class UnityAdsBridge(
 
     override fun onCreate(activity: Activity) {
         _activity = activity
+        for (ad in _ads.values) {
+            ad.onCreate(activity)
+        }
     }
 
     override fun onStart() {}
     override fun onStop() {}
-    override fun onResume() {}
-    override fun onPause() {}
+    override fun onResume() {
+        for (ad in _ads.values) {
+            ad.onResume()
+        }
+    }
+
+    override fun onPause() {
+        for (ad in _ads.values) {
+            ad.onPause()
+        }
+    }
 
     override fun onDestroy() {
+        for (ad in _ads.values) {
+            ad.onDestroy()
+        }
         _activity = null
     }
 
     override fun destroy() {
         deregisterHandlers()
+        for (ad in _ads.values) {
+            ad.destroy()
+        }
+        _ads.clear()
         Thread.runOnMainThread {
             UnityAds.removeListener(this)
         }
@@ -85,6 +112,33 @@ class UnityAdsBridge(
             setDebugModeEnabled(Utils.toBoolean(message))
             ""
         }
+        _bridge.registerHandler(kGetBannerAdSize) { message ->
+            @Serializable
+            @Suppress("unused")
+            class Response(
+                val width: Int,
+                val height: Int
+            )
+
+            val index = message.toInt()
+            val size = _bannerHelper.getSize(index)
+            val response = Response(size.x, size.y)
+            response.serialize()
+        }
+        _bridge.registerHandler(kCreateBannerAd) { message ->
+            @Serializable
+            class Request(
+                val adId: String,
+                val adSize: Int
+            )
+
+            val request = deserialize<Request>(message)
+            val adSize = _bannerHelper.getAdSize(request.adSize)
+            Utils.toString(createBannerAd(request.adId, adSize))
+        }
+        _bridge.registerHandler(kDestroyAd) { message ->
+            Utils.toString(destroyAd(message))
+        }
         _bridge.registerHandler(kHasRewardedAd) { message ->
             Utils.toString(hasRewardedAd(message))
         }
@@ -101,6 +155,9 @@ class UnityAdsBridge(
     private fun deregisterHandlers() {
         _bridge.deregisterHandler(kInitialize)
         _bridge.deregisterHandler(kSetDebugModeEnabled)
+        _bridge.deregisterHandler(kGetBannerAdSize)
+        _bridge.deregisterHandler(kCreateBannerAd)
+        _bridge.deregisterHandler(kDestroyAd)
         _bridge.deregisterHandler(kHasRewardedAd)
         _bridge.deregisterHandler(kLoadRewardedAd)
         _bridge.deregisterHandler(kShowRewardedAd)
@@ -173,6 +230,31 @@ class UnityAdsBridge(
             }
             UnityAds.setDebugMode(enabled)
         }
+    }
+
+    @AnyThread
+    fun createBannerAd(adId: String, adSize: UnityBannerSize): Boolean {
+        return createAd(adId) {
+            UnityBannerAd(_bridge, _logger, _activity, adId, adSize, _bannerHelper)
+        }
+    }
+
+    @AnyThread
+    fun createAd(adId: String, creator: () -> IAd): Boolean {
+        if (_ads.containsKey(adId)) {
+            return false
+        }
+        val ad = creator()
+        _ads[adId] = ad
+        return true
+    }
+
+    @AnyThread
+    fun destroyAd(adId: String): Boolean {
+        val ad = _ads[adId] ?: return false
+        ad.destroy()
+        _ads.remove(adId)
+        return true
     }
 
     @AnyThread

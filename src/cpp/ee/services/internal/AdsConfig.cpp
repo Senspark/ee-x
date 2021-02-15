@@ -6,6 +6,9 @@
 #include <ee/ad_mob/IAdMobBridge.hpp>
 #include <ee/ads/MultiBannerAd.hpp>
 #include <ee/ads/MultiFullScreenAd.hpp>
+#include <ee/ads/NullAd.hpp>
+#include <ee/ads/NullBannerAd.hpp>
+#include <ee/ads/NullFullScreenAd.hpp>
 #include <ee/app_lovin/IAppLovinBridge.hpp>
 #include <ee/cocos/CocosBannerAd.hpp>
 #include <ee/core/Delay.hpp>
@@ -18,12 +21,59 @@
 #include <ee/iron_source/IronSourceBannerAdSize.hpp>
 #include <ee/nlohmann/json.hpp>
 #include <ee/unity_ads/IUnityAdsBridge.hpp>
+#include <ee/unity_ads/UnityBannerAdSize.hpp>
 #include <ee/vungle/IVungleBridge.hpp>
 
 #include "ee/services/internal/GenericAd.hpp"
 
 namespace ee {
 namespace services {
+namespace {
+Network parseNetwork(const std::string& id) {
+    if (id == "ad_mob") {
+        return Network::AdMob;
+    }
+    if (id == "app_lovin") {
+        return Network::AppLovin;
+    }
+    if (id == "facebook_ads") {
+        return Network::FacebookAds;
+    }
+    if (id == "iron_source") {
+        return Network::IronSource;
+    }
+    if (id == "unity_ads") {
+        return Network::UnityAds;
+    }
+    if (id == "vungle") {
+        return Network::Vungle;
+    }
+    return Network::Null;
+}
+
+AdFormat parseAdFormat(const std::string& id) {
+    if (id == "banner") {
+        return AdFormat::Banner;
+    }
+    if (id == "rect") {
+        return AdFormat::Rectangle;
+    }
+    if (id == "app_open") {
+        return AdFormat::AppOpen;
+    }
+    if (id == "interstitial") {
+        return AdFormat::Interstitial;
+    }
+    if (id == "rewarded_interstitial") {
+        return AdFormat::RewardedInterstitial;
+    }
+    if (id == "rewarded") {
+        return AdFormat::Rewarded;
+    }
+    return AdFormat::Null;
+}
+} // namespace
+
 NetworkConfigManager::NetworkConfigManager(const nlohmann::json& node) {
     for (auto&& [key, value] : node["networks"].items()) {
         auto network = INetworkConfig::parse(value);
@@ -45,32 +95,28 @@ std::shared_ptr<IAd> NetworkConfigManager::createAd(Network network,
             return item->createAd(format, id);
         }
     }
-    return nullptr;
+    return std::make_shared<NullAd>();
 }
 
 std::shared_ptr<INetworkConfig>
 INetworkConfig::parse(const nlohmann::json& node) {
-    auto&& network = node["network"];
-    if (network == "ad_mob") {
+    auto&& network = parseNetwork(node["network"]);
+    switch (network) {
+    case Network::AdMob:
         return std::make_shared<AdMobConfig>(node);
-    }
-    if (network == "app_lovin") {
+    case Network::AppLovin:
         return std::make_shared<AppLovinConfig>(node);
-    }
-    if (network == "facebook_ads") {
+    case Network::FacebookAds:
         return std::make_shared<FacebookAdsConfig>(node);
-    }
-    if (network == "iron_source") {
+    case Network::IronSource:
         return std::make_shared<IronSourceConfig>(node);
-    }
-    if (network == "unity_ads") {
+    case Network::UnityAds:
         return std::make_shared<UnityAdsConfig>(node);
-    }
-    if (network == "vungle") {
+    case Network::Vungle:
         return std::make_shared<VungleConfig>(node);
+    case Network::Null:
+        return std::make_shared<NullNetworkConfig>();
     }
-    assert(false);
-    return nullptr;
 }
 
 AdMobConfig::AdMobConfig(const nlohmann::json& node) {}
@@ -99,9 +145,8 @@ std::shared_ptr<IAd> AdMobConfig::createAd(AdFormat format,
         return plugin_->createRewardedInterstitialAd(id);
     case AdFormat::Rewarded:
         return plugin_->createRewardedAd(id);
-    default:
-        assert(false);
-        return nullptr;
+    case AdFormat::Null:
+        return std::make_shared<NullAd>();
     }
 }
 
@@ -121,11 +166,17 @@ Network AppLovinConfig::network() const {
 std::shared_ptr<IAd> AppLovinConfig::createAd(AdFormat format,
                                               const std::string& id) {
     switch (format) {
+    case AdFormat::Banner:
+    case AdFormat::Rectangle:
+        return std::make_shared<NullBannerAd>();
+    case AdFormat::AppOpen:
+    case AdFormat::Interstitial:
+    case AdFormat::RewardedInterstitial:
+        return std::make_shared<NullFullScreenAd>();
     case AdFormat::Rewarded:
         return plugin_->createRewardedAd();
-    default:
-        assert(false);
-        return nullptr;
+    case AdFormat::Null:
+        return std::make_shared<NullAd>();
     }
 }
 
@@ -149,13 +200,15 @@ std::shared_ptr<IAd> FacebookAdsConfig::createAd(AdFormat format,
     case AdFormat::Rectangle:
         return plugin_->createBannerAd(
             id, FacebookBannerAdSize::RectangleHeight250);
+    case AdFormat::AppOpen:
+    case AdFormat::RewardedInterstitial:
+        return std::make_shared<NullFullScreenAd>();
     case AdFormat::Interstitial:
         return plugin_->createInterstitialAd(id);
     case AdFormat::Rewarded:
         return plugin_->createRewardedAd(id);
-    default:
-        assert(false);
-        return nullptr;
+    case AdFormat::Null:
+        return std::make_shared<NullAd>();
     }
 }
 
@@ -179,13 +232,15 @@ std::shared_ptr<IAd> IronSourceConfig::createAd(AdFormat format,
         return plugin_->createBannerAd(id, IronSourceBannerAdSize::Banner);
     case AdFormat::Rectangle:
         return plugin_->createBannerAd(id, IronSourceBannerAdSize::Rectangle);
+    case AdFormat::AppOpen:
+    case AdFormat::RewardedInterstitial:
+        return std::make_shared<NullFullScreenAd>();
     case AdFormat::Interstitial:
         return plugin_->createInterstitialAd(id);
     case AdFormat::Rewarded:
         return plugin_->createRewardedAd(id);
-    default:
-        assert(false);
-        return nullptr;
+    case AdFormat::Null:
+        return std::make_shared<NullAd>();
     }
 }
 
@@ -212,13 +267,19 @@ Network UnityAdsConfig::network() const {
 std::shared_ptr<IAd> UnityAdsConfig::createAd(AdFormat format,
                                               const std::string& id) {
     switch (format) {
+    case AdFormat::Banner:
+        return plugin_->createBannerAd(id, UnityBannerAdSize::Banner);
+    case AdFormat::Rectangle:
+        return std::make_shared<NullBannerAd>();
+    case AdFormat::AppOpen:
+    case AdFormat::RewardedInterstitial:
+        return std::make_shared<NullFullScreenAd>();
     case AdFormat::Interstitial:
         return plugin_->createInterstitialAd(id);
     case AdFormat::Rewarded:
         return plugin_->createRewardedAd(id);
-    default:
-        assert(false);
-        return nullptr;
+    case AdFormat::Null:
+        return std::make_shared<NullAd>();
     }
 }
 
@@ -245,11 +306,41 @@ Network VungleConfig::network() const {
 std::shared_ptr<IAd> VungleConfig::createAd(AdFormat format,
                                             const std::string& id) {
     switch (format) {
+    case AdFormat::Banner:
+    case AdFormat::Rectangle:
+        return std::make_shared<NullBannerAd>();
+    case AdFormat::AppOpen:
+    case AdFormat::Interstitial:
+    case AdFormat::RewardedInterstitial:
+        return std::make_shared<NullFullScreenAd>();
     case AdFormat::Rewarded:
         return plugin_->createRewardedAd(id);
-    default:
-        assert(false);
-        return nullptr;
+    case AdFormat::Null:
+        return std::make_shared<NullAd>();
+    }
+}
+
+Task<> NullNetworkConfig::initialize() {
+    co_return;
+}
+
+Network NullNetworkConfig::network() const {
+    return Network::Null;
+}
+
+std::shared_ptr<IAd> NullNetworkConfig::createAd(AdFormat format,
+                                                 const std::string& id) {
+    switch (format) {
+    case AdFormat::Banner:
+    case AdFormat::Rectangle:
+        return std::make_shared<NullBannerAd>();
+    case AdFormat::AppOpen:
+    case AdFormat::Interstitial:
+    case AdFormat::RewardedInterstitial:
+    case AdFormat::Rewarded:
+        return std::make_shared<NullFullScreenAd>();
+    case AdFormat::Null:
+        return std::make_shared<NullAd>();
     }
 }
 
@@ -269,31 +360,27 @@ std::shared_ptr<IAd> AdConfigManager::createAd(AdFormat format) {
             return ad->createAd(manager_);
         }
     }
-    return nullptr;
+    return std::make_shared<NullAd>();
 }
 
 std::shared_ptr<IAdConfig> IAdConfig::parse(const nlohmann::json& node) {
-    auto&& format = node["format"];
-    if (format == "banner") {
+    auto&& format = parseAdFormat(node["format"]);
+    switch (format) {
+    case AdFormat::Banner:
         return std::make_shared<BannerConfig>(node);
-    }
-    if (format == "rect") {
+    case AdFormat::Rectangle:
         return std::make_shared<RectangleConfig>(node);
-    }
-    if (format == "app_open") {
+    case AdFormat::AppOpen:
         return std::make_shared<AppOpenConfig>(node);
-    }
-    if (format == "interstitial") {
+    case AdFormat::Interstitial:
         return std::make_shared<InterstitialConfig>(node);
-    }
-    if (format == "rewarded_interstitial") {
+    case AdFormat::RewardedInterstitial:
         return std::make_shared<RewardedInterstitialConfig>(node);
-    }
-    if (format == "rewarded") {
+    case AdFormat::Rewarded:
         return std::make_shared<RewardedConfig>(node);
+    case AdFormat::Null:
+        return std::make_shared<NullAdConfig>();
     }
-    assert(false);
-    return nullptr;
 }
 
 BannerConfig::BannerConfig(const nlohmann::json& node) {
@@ -390,6 +477,15 @@ std::shared_ptr<IAd> RewardedConfig::createAd(
     return std::make_shared<GenericAd>(ad, 0);
 }
 
+AdFormat NullAdConfig::format() const {
+    return AdFormat::Null;
+}
+
+std::shared_ptr<IAd> NullAdConfig::createAd(
+    const std::shared_ptr<INetworkConfigManager>& manager) const {
+    return std::make_shared<NullAd>();
+}
+
 template <class Ad>
 template <class MultiAd>
 std::shared_ptr<IAdInstanceConfig<Ad>>
@@ -405,16 +501,7 @@ template <class Ad>
 SingleInstanceConfig<Ad>::SingleInstanceConfig(AdFormat format,
                                                const nlohmann::json& node) {
     format_ = format;
-    std::map<std::string, Network> networks = {
-        {"ad_mob", Network::AdMob},
-        {"app_lovin", Network::AppLovin},
-        {"facebook_ads", Network::FacebookAds},
-        {"iron_source", Network::IronSource},
-        {"unity_ads", Network::UnityAds},
-        {"vungle", Network::Vungle},
-    };
-    auto&& network = node["network"];
-    network_ = networks[network];
+    network_ = parseNetwork(node["network"]);
     id_ = node.value("id", "");
 }
 

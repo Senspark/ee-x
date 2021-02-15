@@ -5,6 +5,9 @@ import {
     IMultiAd,
     MultiBannerAd,
     MultiFullScreenAd,
+    NullAd,
+    NullBannerAd,
+    NullFullScreenAd,
 } from "../../ads";
 import {
     AdMobBannerAdSize,
@@ -89,11 +92,34 @@ type SingleInstanceConfigDef = {
 
 type WaterfallInstanceConfigDef = SingleInstanceConfigDef[];
 
+function parseNetwork(id: string): Network {
+    switch (id) {
+        case "ad_mob": return Network.AdMob;
+        case "facebook_ads": return Network.FacebookAds;
+        case "iron_source": return Network.IronSource;
+        case "unity_ads": return Network.UnityAds;
+        default: return Network.Null;
+    }
+}
+
+function parseAdFormat(id: string): AdFormat {
+    switch (id) {
+        case "banner": return AdFormat.Banner;
+        case "rect": return AdFormat.Rectangle;
+        case "app_open": return AdFormat.AppOpen;
+        case "interstitial": return AdFormat.Interstitial;
+        case "rewarded_interstitial": return AdFormat.RewardedInterstitial;
+        case "rewarded": return AdFormat.Rewarded;
+        default: return AdFormat.Null;
+    }
+}
+
 export enum Network {
     AdMob,
     FacebookAds,
     IronSource,
     UnityAds,
+    Null,
 }
 
 export enum AdFormat {
@@ -103,11 +129,12 @@ export enum AdFormat {
     Interstitial,
     RewardedInterstitial,
     Rewarded,
+    Null,
 }
 
 interface INetworkConfigManager {
     initialize(): Promise<void>;
-    createAd(network: Network, format: AdFormat, id: string): IAd | undefined;
+    createAd(network: Network, format: AdFormat, id: string): IAd;
 }
 
 class NetworkConfigManager implements INetworkConfigManager {
@@ -126,13 +153,13 @@ class NetworkConfigManager implements INetworkConfigManager {
         }
     }
 
-    public createAd(network: Network, format: AdFormat, id: string): IAd | undefined {
+    public createAd(network: Network, format: AdFormat, id: string): IAd {
         for (const item of this._networks) {
             if (item.network === network) {
                 return item.createAd(format, id);
             }
         }
-        return undefined;
+        return new NullAd();
     }
 }
 
@@ -144,13 +171,13 @@ interface INetworkConfig {
 
 class NetworkConfig {
     public static parse(node: NetworkConfigDef): INetworkConfig {
-        const network = node.network;
+        const network = parseNetwork(node.network);
         switch (network) {
-            case "ad_mob": return new AdMobConfig(node);
-            case "facebook_ads": return new FacebookAdsConfig(node);
-            case "iron_source": return new IronSourceConfig(node as IronSourceConfigDef);
-            case "unity_ads": return new UnityAdsConfig(node as UnityAdsConfigDef);
-            default: throw new Error(`Invalid network`);
+            case Network.AdMob: return new AdMobConfig(node);
+            case Network.FacebookAds: return new FacebookAdsConfig(node);
+            case Network.IronSource: return new IronSourceConfig(node as IronSourceConfigDef);
+            case Network.UnityAds: return new UnityAdsConfig(node as UnityAdsConfigDef);
+            case Network.Null: return new NullNetworkConfig();
         }
     }
 }
@@ -187,8 +214,8 @@ class AdMobConfig implements INetworkConfig {
                 return this._plugin.createRewardedInterstitialAd(id);
             case AdFormat.Rewarded:
                 return this._plugin.createRewardedAd(id);
-            default:
-                throw Error(`Ad format not supported`);
+            case AdFormat.Null:
+                return new NullAd();
         }
     }
 }
@@ -217,12 +244,15 @@ class FacebookAdsConfig implements INetworkConfig {
                 return this._plugin.createBannerAd(id, FacebookBannerAdSize.BannerHeight50);
             case AdFormat.Rectangle:
                 return this._plugin.createBannerAd(id, FacebookBannerAdSize.RectangleHeight250);
+            case AdFormat.AppOpen:
+            case AdFormat.RewardedInterstitial:
+                return new NullFullScreenAd();
             case AdFormat.Interstitial:
                 return this._plugin.createInterstitialAd(id);
             case AdFormat.Rewarded:
                 return this._plugin.createRewardedAd(id);
-            default:
-                throw Error(`Ad format not supported`);
+            case AdFormat.Null:
+                return new NullAd();
         }
     }
 }
@@ -253,12 +283,15 @@ class IronSourceConfig implements INetworkConfig {
                 return this._plugin.createBannerAd(id, IronSourceBannerAdSize.Banner);
             case AdFormat.Rectangle:
                 return this._plugin.createBannerAd(id, IronSourceBannerAdSize.Rectangle);
+            case AdFormat.AppOpen:
+            case AdFormat.RewardedInterstitial:
+                return new NullFullScreenAd();
             case AdFormat.Interstitial:
                 return this._plugin.createInterstitialAd(id);
             case AdFormat.Rewarded:
                 return this._plugin.createRewardedAd(id);
-            default:
-                throw Error(`Ad format not supported`);
+            case AdFormat.Null:
+                return new NullAd();
         }
     }
 }
@@ -290,18 +323,48 @@ class UnityAdsConfig implements INetworkConfig {
             throw Error(`Plugin not initialized`);
         }
         switch (format) {
+            case AdFormat.Banner:
+            case AdFormat.Rectangle:
+                return new NullBannerAd();
+            case AdFormat.AppOpen:
+            case AdFormat.RewardedInterstitial:
+                return new NullFullScreenAd();
             case AdFormat.Interstitial:
                 return this._plugin.createInterstitialAd(id);
             case AdFormat.Rewarded:
                 return this._plugin.createRewardedAd(id);
-            default:
-                throw Error(`Ad format not supported`);
+            case AdFormat.Null:
+                return new NullAd();
+        }
+    }
+}
+
+class NullNetworkConfig implements INetworkConfig {
+    public async initialize(): Promise<void> {
+    }
+
+    public get network(): Network {
+        return Network.Null;
+    }
+
+    public createAd(format: AdFormat, id: string): IAd {
+        switch (format) {
+            case AdFormat.Banner:
+            case AdFormat.Rectangle:
+                return new NullBannerAd();
+            case AdFormat.AppOpen:
+            case AdFormat.RewardedInterstitial:
+            case AdFormat.Interstitial:
+            case AdFormat.Rewarded:
+                return new NullFullScreenAd();
+            case AdFormat.Null:
+                return new NullAd();
         }
     }
 }
 
 interface IAdConfigManager {
-    createAd(format: AdFormat): IAd | undefined
+    createAd(format: AdFormat): IAd;
 }
 
 class AdConfigManager implements IAdConfigManager {
@@ -316,13 +379,13 @@ class AdConfigManager implements IAdConfigManager {
         }
     }
 
-    public createAd(format: AdFormat): IAd | undefined {
+    public createAd(format: AdFormat): IAd {
         for (const ad of this._ads) {
             if (ad.format == format) {
                 return ad.createAd(this._manager);
             }
         }
-        return undefined;
+        return new NullAd();
     }
 }
 
@@ -333,16 +396,15 @@ interface IAdConfig {
 
 class AdConfig {
     public static parse(node: AdConfigDef): IAdConfig {
-        const format = node.format;
+        const format = parseAdFormat(node.format);
         switch (format) {
-            case "banner": return new BannerConfig(node);
-            case "rect": return new RectangleConfig(node);
-            case "app_open": return new AppOpenConfig(node);
-            case "interstitial": return new InterstitialConfig(node);
-            case "rewarded_interstitial": return new RewardedInterstitialConfig(node);
-            case "rewarded": return new RewardedConfig(node);
-            default:
-                throw new Error(`Ad format not supported`);
+            case AdFormat.Banner: return new BannerConfig(node);
+            case AdFormat.Rectangle: return new RectangleConfig(node);
+            case AdFormat.AppOpen: return new AppOpenConfig(node);
+            case AdFormat.Interstitial: return new InterstitialConfig(node);
+            case AdFormat.RewardedInterstitial: return new RewardedInterstitialConfig(node);
+            case AdFormat.Rewarded: return new RewardedConfig(node);
+            case AdFormat.Null: return new NullAdConfig();
         }
     }
 }
@@ -422,6 +484,7 @@ class InterstitialConfig implements IAdConfig {
         return new GenericAd(ad, this._interval);
     }
 }
+
 class RewardedInterstitialConfig implements IAdConfig {
     private readonly _interval: number;
     private readonly _instance: IAdInstanceConfig<IFullScreenAd>;
@@ -460,6 +523,16 @@ class RewardedConfig implements IAdConfig {
     }
 }
 
+class NullAdConfig implements IAdConfig {
+    public get format(): AdFormat {
+        return AdFormat.Null;
+    }
+
+    public createAd(manager: INetworkConfigManager): IAd {
+        return new NullAd();
+    }
+}
+
 interface IAdInstanceConfig<Ad extends IAd> {
     createAd(manager: INetworkConfigManager): Ad;
 }
@@ -480,16 +553,7 @@ class SingleInstanceConfig<Ad extends IAd> implements IAdInstanceConfig<Ad> {
 
     public constructor(format: AdFormat, node: SingleInstanceConfigDef) {
         this._format = format;
-        const networks: {
-            [index: string]: Network,
-        } = {
-            ["ad_mob"]: Network.AdMob,
-            ["facebook_ads"]: Network.FacebookAds,
-            ["iron_source"]: Network.IronSource,
-            ["unity_ads"]: Network.UnityAds
-        };
-        const network = node.network;
-        this._network = networks[network];
+        this._network = parseNetwork(node.network);
         this._id = node[`id`] !== undefined ? node["id"] : "";
     }
 
@@ -544,7 +608,7 @@ export class AdsConfig {
         await this._networkManager.initialize();
     }
 
-    public createAd(format: AdFormat): IAd | undefined {
+    public createAd(format: AdFormat): IAd {
         return this._adManager.createAd(format);
     }
 }

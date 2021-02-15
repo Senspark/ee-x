@@ -83,41 +83,17 @@ class FirebaseRemoteConfigBridge: NSObject, IPlugin {
                         _ in resolver("")
                     })
         }
-        _bridge.registerAsyncHandler(kGetBool) { message, resolver in
-            self.getBool(message)
-                .subscribe(
-                    onSuccess: {
-                        result in resolver(Utils.toString(result))
-                    }, onError: {
-                        _ in resolver(Utils.toString(false))
-                    })
+        _bridge.registerHandler(kGetBool) { message in
+            Utils.toString(self.getBool(message))
         }
-        _bridge.registerAsyncHandler(kGetLong) { message, resolver in
-            self.getLong(message)
-                .subscribe(
-                    onSuccess: {
-                        result in resolver("\(result)")
-                    }, onError: {
-                        _ in resolver("\(0)")
-                    })
+        _bridge.registerHandler(kGetLong) { message in
+            "\(self.getLong(message))"
         }
-        _bridge.registerAsyncHandler(kGetDouble) { message, resolver in
-            self.getDouble(message)
-                .subscribe(
-                    onSuccess: {
-                        result in resolver("\(result)")
-                    }, onError: {
-                        _ in resolver("\(0.0)")
-                    })
+        _bridge.registerHandler(kGetDouble) { message in
+            "\(self.getDouble(message))"
         }
-        _bridge.registerAsyncHandler(kGetString) { message, resolver in
+        _bridge.registerHandler(kGetString) { message in
             self.getString(message)
-                .subscribe(
-                    onSuccess: {
-                        result in resolver(result)
-                    }, onError: {
-                        _ in resolver("")
-                    })
         }
     }
     
@@ -229,63 +205,39 @@ class FirebaseRemoteConfigBridge: NSObject, IPlugin {
         .subscribeOn(MainScheduler())
     }
     
-    func getBool(_ key: String) -> Single<Bool> {
-        return Single<Bool>.create { single in
-            Thread.runOnMainThread {
-                guard let plugin = self._plugin else {
-                    assert(false, "Please call initialize() first")
-                    return
-                }
-                let value = plugin.configValue(forKey: key)
-                single(.success(value.boolValue))
-            }
-            return Disposables.create()
+    func getBool(_ key: String) -> Bool {
+        guard let plugin = _plugin else {
+            assert(false, "Please call initialize() first")
+            return false
         }
-        .subscribeOn(MainScheduler())
+        let value = plugin.configValue(forKey: key)
+        return value.boolValue
     }
     
-    func getLong(_ key: String) -> Single<Int64> {
-        return Single<Int64>.create { single in
-            Thread.runOnMainThread {
-                guard let plugin = self._plugin else {
-                    assert(false, "Please call initialize() first")
-                    return
-                }
-                let value = plugin.configValue(forKey: key)
-                single(.success(value.numberValue.int64Value))
-            }
-            return Disposables.create()
+    func getLong(_ key: String) -> Int64 {
+        guard let plugin = _plugin else {
+            assert(false, "Please call initialize() first")
+            return 0
         }
-        .subscribeOn(MainScheduler())
+        let value = plugin.configValue(forKey: key)
+        return value.numberValue.int64Value
     }
     
-    func getDouble(_ key: String) -> Single<Double> {
-        return Single<Double>.create { single in
-            Thread.runOnMainThread {
-                guard let plugin = self._plugin else {
-                    assert(false, "Please call initialize() first")
-                    return
-                }
-                let value = plugin.configValue(forKey: key)
-                single(.success(value.numberValue.doubleValue))
-            }
-            return Disposables.create()
+    func getDouble(_ key: String) -> Double {
+        guard let plugin = _plugin else {
+            assert(false, "Please call initialize() first")
+            return 0
         }
-        .subscribeOn(MainScheduler())
+        let value = plugin.configValue(forKey: key)
+        return value.numberValue.doubleValue
     }
     
-    func getString(_ key: String) -> Single<String> {
-        return Single<String>.create { single in
-            Thread.runOnMainThread {
-                guard let plugin = self._plugin else {
-                    assert(false, "Please call initialize() first")
-                    return
-                }
-                let value = plugin.configValue(forKey: key)
-                single(.success(value.stringValue ?? ""))
-            }
-            return Disposables.create()
+    func getString(_ key: String) -> String {
+        guard let plugin = _plugin else {
+            assert(false, "Please call initialize() first")
+            return ""
         }
-        .subscribeOn(MainScheduler())
+        let value = plugin.configValue(forKey: key)
+        return value.stringValue ?? ""
     }
 }

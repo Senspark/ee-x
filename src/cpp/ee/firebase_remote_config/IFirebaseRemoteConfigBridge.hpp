@@ -32,10 +32,10 @@ public:
         const std::unordered_map<
             std::string, std::variant<bool, std::int64_t, double, std::string>>&
             defaults) = 0;
-    virtual Task<bool> getBool(const std::string& key) = 0;
-    virtual Task<std::int64_t> getLong(const std::string& key) = 0;
-    virtual Task<double> getDouble(const std::string& key) = 0;
-    virtual Task<std::string> getString(const std::string& key) = 0;
+    virtual bool getBool(const std::string& key) = 0;
+    virtual std::int64_t getLong(const std::string& key) = 0;
+    virtual double getDouble(const std::string& key) = 0;
+    virtual std::string getString(const std::string& key) = 0;
 };
 } // namespace remote_config
 } // namespace firebase

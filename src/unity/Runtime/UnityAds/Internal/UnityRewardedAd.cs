@@ -16,7 +16,7 @@ namespace EE.Internal {
         }
 
         public void Destroy() {
-            _plugin.DestroyAd(_adId);
+            _plugin.DestroyFullScreenAd(_adId);
         }
 
         public bool IsLoaded => _plugin.HasRewardedAd(_adId);

@@ -137,8 +137,7 @@ class IronSourceBannerAd(
             IronSource.loadBanner(ad, _adId)
         }
     }
-
-
+    
     override var isVisible: Boolean
         @AnyThread get() = _viewHelper.isVisible
         @AnyThread set(value) {

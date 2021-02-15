@@ -39,7 +39,7 @@ namespace EE.Internal {
             _loadingCapped = false;
             _loader = new AsyncHelper<bool>();
 
-            _logger.Debug($"{kTag}: constructor: prefix = ${_prefix} id = ${_adId}");
+            _logger.Debug($"{kTag}: constructor: prefix = {_prefix} id = {_adId}");
             _bridge.RegisterHandler(_ => OnLoaded(), _messageHelper.OnLoaded);
             _bridge.RegisterHandler(OnFailedToLoad, _messageHelper.OnFailedToLoad);
             _bridge.RegisterHandler(OnFailedToShow, _messageHelper.OnFailedToShow);

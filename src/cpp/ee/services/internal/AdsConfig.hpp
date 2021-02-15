@@ -20,6 +20,7 @@ enum class Network {
     IronSource,
     UnityAds,
     Vungle,
+    Null,
 };
 
 enum class AdFormat {
@@ -29,6 +30,7 @@ enum class AdFormat {
     Interstitial,
     RewardedInterstitial,
     Rewarded,
+    Null,
 };
 
 class INetworkConfig;
@@ -149,6 +151,14 @@ private:
     int timeOut_;
 };
 
+class NullNetworkConfig : public INetworkConfig {
+public:
+    virtual Task<> initialize() override;
+    virtual Network network() const override;
+    virtual std::shared_ptr<IAd> createAd(AdFormat format,
+                                          const std::string& id) override;
+};
+
 class IAdConfig;
 
 class IAdConfigManager {
@@ -263,6 +273,14 @@ public:
 
 private:
     std::shared_ptr<IAdInstanceConfig<IFullScreenAd>> instance_;
+};
+
+class NullAdConfig : public IAdConfig {
+public:
+    virtual AdFormat format() const override;
+
+    virtual std::shared_ptr<IAd> createAd(
+        const std::shared_ptr<INetworkConfigManager>& manager) const override;
 };
 
 template <class Ad>

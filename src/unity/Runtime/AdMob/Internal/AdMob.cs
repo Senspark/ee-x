@@ -79,7 +79,7 @@ namespace EE.Internal {
         }
 
         public IBannerAd CreateBannerAd(string adId, AdMobBannerAdSize adSize) {
-            _logger.Debug($"${kTag}: {nameof(CreateBannerAd)}: id = {adId} size = {adSize}");
+            _logger.Debug($"{kTag}: {nameof(CreateBannerAd)}: id = {adId} size = {adSize}");
             if (_ads.TryGetValue(adId, out var result)) {
                 return result as IBannerAd;
             }
@@ -136,7 +136,7 @@ namespace EE.Internal {
         }
 
         private IFullScreenAd CreateFullScreenAd(string handlerId, string adId, Func<IFullScreenAd> creator) {
-            _logger.Debug($"${kTag}: {nameof(CreateFullScreenAd)}: id = {adId}");
+            _logger.Debug($"{kTag}: {nameof(CreateFullScreenAd)}: id = {adId}");
             if (_ads.TryGetValue(adId, out var result)) {
                 return result as IFullScreenAd;
             }
@@ -151,7 +151,7 @@ namespace EE.Internal {
         }
 
         private bool DestroyAd(string adId) {
-            _logger.Debug($"${kTag}: {nameof(DestroyAd)}: id = {adId}");
+            _logger.Debug($"{kTag}: {nameof(DestroyAd)}: id = {adId}");
             if (!_ads.ContainsKey(adId)) {
                 return false;
             }

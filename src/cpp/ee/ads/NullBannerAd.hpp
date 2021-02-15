@@ -11,19 +11,14 @@
 
 #ifdef __cplusplus
 
-#include <ee/core/ObserverManager.hpp>
-
+#include "ee/ads/NullAd.hpp"
 #include "ee/ads/IBannerAd.hpp"
 
 namespace ee {
 namespace ads {
-class NullBannerAd : public IBannerAd, public ObserverManager<AdObserver> {
+class NullBannerAd : public IBannerAd, public NullAd {
 public:
     NullBannerAd();
-    virtual void destroy() override;
-
-    virtual bool isLoaded() const override;
-    virtual Task<bool> load() override;
 
     virtual bool isVisible() const override;
     virtual void setVisible(bool visible) override;
@@ -38,7 +33,6 @@ public:
     virtual void setSize(float width, float height) override;
 
 private:
-    bool loaded_;
     bool visible_;
     int positionX_;
     int positionY_;

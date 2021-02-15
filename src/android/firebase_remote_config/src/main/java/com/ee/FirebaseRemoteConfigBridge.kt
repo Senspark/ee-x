@@ -98,16 +98,16 @@ class FirebaseRemoteConfigBridge(
             setDefaults(request.defaults)
             ""
         }
-        _bridge.registerAsyncHandler(kGetBool) { message ->
+        _bridge.registerHandler(kGetBool) { message ->
             Utils.toString(getBool(message))
         }
-        _bridge.registerAsyncHandler(kGetLong) { message ->
+        _bridge.registerHandler(kGetLong) { message ->
             getLong(message).toString()
         }
-        _bridge.registerAsyncHandler(kGetDouble) { message ->
+        _bridge.registerHandler(kGetDouble) { message ->
             getDouble(message).toString()
         }
-        _bridge.registerAsyncHandler(kGetString) { message ->
+        _bridge.registerHandler(kGetString) { message ->
             getString(message)
         }
     }
@@ -202,47 +202,24 @@ class FirebaseRemoteConfigBridge(
         }
     }
 
-    @AnyThread
-    private suspend fun getBool(key: String): Boolean {
-        return suspendCoroutine { cont ->
-            Thread.runOnMainThread {
-                val plugin = _plugin
-                    ?: throw IllegalStateException("Please call initialize() first")
-                cont.resume(plugin.getBoolean(key))
-            }
-        }
+    private fun getBool(key: String): Boolean {
+        val plugin = _plugin ?: throw IllegalStateException("Please call initialize() first")
+        return plugin.getBoolean(key)
     }
 
-    @AnyThread
-    private suspend fun getLong(key: String): Long {
-        return suspendCoroutine { cont ->
-            Thread.runOnMainThread {
-                val plugin = _plugin
-                    ?: throw IllegalStateException("Please call initialize() first")
-                cont.resume(plugin.getLong(key))
-            }
-        }
+    private fun getLong(key: String): Long {
+        val plugin = _plugin ?: throw IllegalStateException("Please call initialize() first")
+        return plugin.getLong(key)
     }
 
-    @AnyThread
-    private suspend fun getDouble(key: String): Double {
-        return suspendCoroutine { cont ->
-            Thread.runOnMainThread {
-                val plugin = _plugin
-                    ?: throw IllegalStateException("Please call initialize() first")
-                cont.resume(plugin.getDouble(key))
-            }
-        }
+
+    private fun getDouble(key: String): Double {
+        val plugin = _plugin ?: throw IllegalStateException("Please call initialize() first")
+        return plugin.getDouble(key)
     }
 
-    @AnyThread
-    private suspend fun getString(key: String): String {
-        return suspendCoroutine { cont ->
-            Thread.runOnMainThread {
-                val plugin = _plugin
-                    ?: throw IllegalStateException("Please call initialize() first")
-                cont.resume(plugin.getString(key))
-            }
-        }
+    private fun getString(key: String): String {
+        val plugin = _plugin ?: throw IllegalStateException("Please call initialize() first")
+        return plugin.getString(key)
     }
 }

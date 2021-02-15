@@ -17,7 +17,7 @@
 
 namespace ee {
 namespace ads {
-class IBannerAd : public IAd {
+class IBannerAd : public virtual IAd {
 public:
     /// Checks whether this ad is visible.
     virtual bool isVisible() const = 0;

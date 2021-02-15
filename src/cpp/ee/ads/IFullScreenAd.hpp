@@ -18,7 +18,7 @@ enum class FullScreenAdResult {
     Completed,
 };
 
-class IFullScreenAd : public IAd {
+class IFullScreenAd : public virtual IAd {
 public:
     /// Attempts to show this ad.
     [[nodiscard]] virtual Task<FullScreenAdResult> show() = 0;

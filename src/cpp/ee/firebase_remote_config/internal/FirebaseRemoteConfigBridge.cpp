@@ -80,24 +80,24 @@ Task<> Self::setDefaults(
     co_await bridge_.callAsync(kSetDefaults, request.dump());
 }
 
-Task<bool> Self::getBool(const std::string& key) {
-    auto response = co_await bridge_.callAsync(kGetBool, key);
-    co_return core::toBool(response);
+bool Self::getBool(const std::string& key) {
+    auto response = bridge_.call(kGetBool, key);
+    return core::toBool(response);
 }
 
-Task<std::int64_t> Self::getLong(const std::string& key) {
-    auto response = co_await bridge_.callAsync(kGetLong, key);
-    co_return std::stoll(response);
+std::int64_t Self::getLong(const std::string& key) {
+    auto response = bridge_.call(kGetLong, key);
+    return std::stoll(response);
 }
 
-Task<double> Self::getDouble(const std::string& key) {
-    auto response = co_await bridge_.callAsync(kGetDouble, key);
-    co_return std::stod(response);
+double Self::getDouble(const std::string& key) {
+    auto response =  bridge_.call(kGetDouble, key);
+    return std::stod(response);
 }
 
-Task<std::string> Self::getString(const std::string& key) {
-    auto response = co_await bridge_.callAsync(kGetString, key);
-    co_return response;
+std::string Self::getString(const std::string& key) {
+    auto response = bridge_.call(kGetString, key);
+    return response;
 }
 } // namespace remote_config
 } // namespace firebase

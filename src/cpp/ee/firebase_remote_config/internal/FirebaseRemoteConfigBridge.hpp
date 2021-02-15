@@ -33,10 +33,10 @@ public:
         const std::unordered_map<
             std::string, std::variant<bool, std::int64_t, double, std::string>>&
             defaults) override;
-    virtual Task<bool> getBool(const std::string& key) override;
-    virtual Task<std::int64_t> getLong(const std::string& key) override;
-    virtual Task<double> getDouble(const std::string& key) override;
-    virtual Task<std::string> getString(const std::string& key) override;
+    virtual bool getBool(const std::string& key) override;
+    virtual std::int64_t getLong(const std::string& key) override;
+    virtual double getDouble(const std::string& key) override;
+    virtual std::string getString(const std::string& key) override;
 
 private:
     IMessageBridge& bridge_;

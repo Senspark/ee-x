@@ -1,4 +1,4 @@
-import { IBannerAd } from "../ads";
+import { CocosBannerAd } from "../cocos";
 import {
     ObserverHandle,
     ObserverManager,
@@ -54,8 +54,10 @@ export class DefaultAdsManager extends ObserverManager<AdsObserver> implements I
     }
 
     private initializeBannerAd(format: AdFormat): void {
-        const ad = this._config.createAd(format) as IBannerAd | undefined;
-        if (ad === undefined) {
+        const ad = this._config.createAd(format);
+        if (ad instanceof CocosBannerAd) {
+            // OK.
+        } else {
             return;
         }
         this._bannerAds[format].ad = ad;
@@ -66,8 +68,10 @@ export class DefaultAdsManager extends ObserverManager<AdsObserver> implements I
     }
 
     private initializeFullScreenAd(format: AdFormat) {
-        const ad = this._config.createAd(format) as GenericAd | undefined;
-        if (ad === undefined) {
+        const ad = this._config.createAd(format);
+        if (ad instanceof GenericAd) {
+            // OK.
+        } else {
             return;
         }
         this._fullScreenAds[format] = ad;

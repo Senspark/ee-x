@@ -26,6 +26,7 @@ class IFullScreenAd;
 class MultiBannerAd;
 class MultiFullScreenAd;
 
+class NullAd;
 class NullBannerAd;
 class NullFullScreenAd;
 
@@ -65,6 +66,7 @@ using MultiAdView [[deprecated]] = MultiBannerAd;
 using MultiInterstitialAd [[deprecated]] = MultiFullScreenAd;
 using MultiRewardedAd [[deprecated]] = MultiFullScreenAd;
 
+using ads::NullAd;
 using ads::NullBannerAd;
 using ads::NullFullScreenAd;
 using NullAdView [[deprecated]] = NullBannerAd;

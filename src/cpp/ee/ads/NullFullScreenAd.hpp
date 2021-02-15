@@ -3,18 +3,12 @@
 
 #ifdef __cplusplus
 
-#include <ee/core/ObserverManager.hpp>
-
 #include "ee/ads/IFullScreenAd.hpp"
+#include "ee/ads/NullAd.hpp"
 
 namespace ee {
 namespace ads {
-class NullFullScreenAd : public IFullScreenAd,
-                         public ObserverManager<AdObserver> {
-    virtual void destroy() override;
-
-    virtual bool isLoaded() const override;
-    virtual Task<bool> load() override;
+class NullFullScreenAd : public IFullScreenAd, public NullAd {
     virtual Task<FullScreenAdResult> show() override;
 };
 } // namespace ads

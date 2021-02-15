@@ -1,21 +1,10 @@
-using System.Threading.Tasks;
-
 namespace EE {
-    public class NullBannerAd : ObserverManager<AdObserver>, IBannerAd {
+    public class NullBannerAd : NullAd, IBannerAd {
         private (float, float) _anchor;
         private (float, float) _position;
         private (float, float) _size;
 
-        public void Destroy() {
-        }
-
-        public bool IsLoaded { get; private set; }
-
-        public async Task<bool> Load() {
-            await Task.Delay(1000);
-            IsLoaded = true;
-            return true;
-        }
+        public bool IsVisible { get; set; }
 
         public (float, float) Anchor {
             get => _anchor;
@@ -43,7 +32,5 @@ namespace EE {
                 _size = value;
             }
         }
-
-        public bool IsVisible { get; set; }
     }
 }

@@ -4,4 +4,6 @@ export * from './IFullScreenAd';
 export * from './IMultiAd';
 export * from './MultiBannerAd';
 export * from './MultiFullScreenAd';
+export * from './NullAd';
+export * from './NullBannerAd';
 export * from './NullFullScreenAd';

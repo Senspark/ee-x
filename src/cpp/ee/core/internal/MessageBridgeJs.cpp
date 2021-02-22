@@ -1,6 +1,8 @@
 #include "ee/core/internal/MessageBridgeJs.hpp"
 
 #ifdef EE_X_COCOS_JS
+#include <regex>
+
 #include "ee/core/JsbUtils.hpp"
 #include "ee/core/Logger.hpp"
 #include "ee/core/Task.hpp"
@@ -57,10 +59,11 @@ std::string Self::call(const std::string& tag, const std::string& message) {
 }
 
 void Self::callCpp(const std::string& tag, const std::string& message) {
+    auto escapedMessage = std::regex_replace(message, std::regex("\""), "\\\"");
     auto engine = se::ScriptEngine::getInstance();
-    engine->evalString(
-        ("ee_x.ee_callCppInternal(\"" + tag + "\", \"" + message + "\");")
-            .c_str());
+    engine->evalString(("ee_x.ee_callCppInternal(\"" + tag + "\", \"" +
+                        escapedMessage + "\");")
+                           .c_str());
 }
 
 Task<std::string> Self::callAsync(const std::string& tag,

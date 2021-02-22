@@ -37,7 +37,7 @@ namespace EE.Internal {
         private IFullScreenAd _sharedInterstitialAd;
         private IronSourceRewardedAd _rewardedAd;
         private IFullScreenAd _sharedRewardedAd;
-        private readonly IAsyncHelper<FullScreenAdResult> _displayer;
+        private readonly IAsyncHelper<AdResult> _displayer;
 
         public IronSource(IMessageBridge bridge, ILogger logger, Destroyer destroyer) {
             _bridge = bridge;
@@ -225,7 +225,7 @@ namespace EE.Internal {
             if (_interstitialAd != null) {
                 _interstitialAd.OnClosed();
             } else {
-                OnMediationAdClosed(FullScreenAdResult.Completed);
+                OnMediationAdClosed(AdResult.Completed);
             }
         }
 
@@ -258,12 +258,12 @@ namespace EE.Internal {
                 _rewardedAd.OnClosed(rewarded);
             } else {
                 OnMediationAdClosed(rewarded
-                    ? FullScreenAdResult.Completed
-                    : FullScreenAdResult.Canceled);
+                    ? AdResult.Completed
+                    : AdResult.Canceled);
             }
         }
 
-        private void OnMediationAdClosed(FullScreenAdResult result) {
+        private void OnMediationAdClosed(AdResult result) {
             if (_displayer.IsProcessing) {
                 _displayer.Resolve(result);
                 return;

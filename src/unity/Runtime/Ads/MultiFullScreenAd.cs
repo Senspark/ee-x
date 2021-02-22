@@ -43,10 +43,10 @@ namespace EE {
             return result;
         }
 
-        public async Task<FullScreenAdResult> Show() {
-            var result = FullScreenAdResult.Failed;
+        public async Task<AdResult> Show() {
+            var result = AdResult.Failed;
             foreach (var item in _items) {
-                if (result == FullScreenAdResult.Failed) {
+                if (result == AdResult.Failed) {
                     // Only process if there isn't any successfully displayed ad.
                     result = await item.Show();
                 }

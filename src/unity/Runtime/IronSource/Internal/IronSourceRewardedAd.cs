@@ -4,12 +4,12 @@ using UnityEngine.Assertions;
 
 namespace EE.Internal {
     internal class IronSourceRewardedAd : ObserverManager<AdObserver>, IFullScreenAd {
-        private readonly IAsyncHelper<FullScreenAdResult> _displayer;
+        private readonly IAsyncHelper<AdResult> _displayer;
         private readonly IronSource _plugin;
         private readonly string _adId;
 
         public IronSourceRewardedAd(
-            IAsyncHelper<FullScreenAdResult> displayer, IronSource plugin, string adId) {
+            IAsyncHelper<AdResult> displayer, IronSource plugin, string adId) {
             _displayer = displayer;
             _plugin = plugin;
             _adId = adId;
@@ -25,7 +25,7 @@ namespace EE.Internal {
             return Task.FromResult(IsLoaded);
         }
 
-        public Task<FullScreenAdResult> Show() {
+        public Task<AdResult> Show() {
             return _displayer.Process(
                 () => _plugin.ShowRewardedAd(_adId),
                 result => {
@@ -39,7 +39,7 @@ namespace EE.Internal {
 
         internal void OnFailedToShow(string message) {
             if (_displayer.IsProcessing) {
-                _displayer.Resolve(FullScreenAdResult.Failed);
+                _displayer.Resolve(AdResult.Failed);
             } else {
                 Assert.IsTrue(false);
             }
@@ -52,8 +52,8 @@ namespace EE.Internal {
         internal void OnClosed(bool rewarded) {
             if (_displayer.IsProcessing) {
                 _displayer.Resolve(rewarded
-                    ? FullScreenAdResult.Completed
-                    : FullScreenAdResult.Canceled);
+                    ? AdResult.Completed
+                    : AdResult.Canceled);
             } else {
                 Assert.IsTrue(false);
             }

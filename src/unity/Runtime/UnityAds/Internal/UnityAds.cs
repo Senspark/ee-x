@@ -30,7 +30,7 @@ namespace EE.Internal {
         private string _adId;
         private readonly Dictionary<string, IAd> _ads;
         private readonly Dictionary<string, (IAd, IAd)> _fullScreenAds;
-        private readonly IAsyncHelper<FullScreenAdResult> _displayer;
+        private readonly IAsyncHelper<AdResult> _displayer;
 
         [Serializable]
         private struct OnFailedToShowResponse {
@@ -243,20 +243,20 @@ namespace EE.Internal {
                 }
             } else {
                 OnMediationAdClosed(adId, rewarded
-                    ? FullScreenAdResult.Completed
-                    : FullScreenAdResult.Canceled);
+                    ? AdResult.Completed
+                    : AdResult.Canceled);
             }
         }
 
         private void OnMediationAdFailedToShow(string adId, string message) {
             if (_displayer.IsProcessing) {
-                _displayer.Resolve(FullScreenAdResult.Failed);
+                _displayer.Resolve(AdResult.Failed);
                 return;
             }
             Assert.IsTrue(false);
         }
 
-        private void OnMediationAdClosed(string adId, FullScreenAdResult result) {
+        private void OnMediationAdClosed(string adId, AdResult result) {
             if (_displayer.IsProcessing) {
                 _displayer.Resolve(result);
                 return;

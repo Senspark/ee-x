@@ -27,7 +27,7 @@ namespace EE.Internal {
         private readonly ILogger _logger;
         private readonly Destroyer _destroyer;
         private readonly Dictionary<string, IAd> _ads;
-        private readonly IAsyncHelper<FullScreenAdResult> _displayer;
+        private readonly IAsyncHelper<AdResult> _displayer;
 
         public AdMob(IMessageBridge bridge, ILogger logger, Destroyer destroyer) {
             _bridge = bridge;
@@ -103,7 +103,7 @@ namespace EE.Internal {
             return CreateFullScreenAd(kCreateAppOpenAd, adId,
                 () => new DefaultFullScreenAd("AdMobAppOpenAd", _bridge, _logger, _displayer,
                     () => DestroyAd(adId),
-                    _ => FullScreenAdResult.Completed,
+                    _ => AdResult.Completed,
                     adId));
         }
 
@@ -111,7 +111,7 @@ namespace EE.Internal {
             return CreateFullScreenAd(kCreateInterstitialAd, adId,
                 () => new DefaultFullScreenAd("AdMobInterstitialAd", _bridge, _logger, _displayer,
                     () => DestroyAd(adId),
-                    _ => FullScreenAdResult.Completed,
+                    _ => AdResult.Completed,
                     adId));
         }
 
@@ -120,8 +120,8 @@ namespace EE.Internal {
                 () => new DefaultFullScreenAd("AdMobRewardedInterstitialAd", _bridge, _logger, _displayer,
                     () => DestroyAd(adId),
                     message => Utils.ToBool(message)
-                        ? FullScreenAdResult.Completed
-                        : FullScreenAdResult.Canceled,
+                        ? AdResult.Completed
+                        : AdResult.Canceled,
                     adId));
         }
 
@@ -130,8 +130,8 @@ namespace EE.Internal {
                 () => new DefaultFullScreenAd("AdMobRewardedAd", _bridge, _logger, _displayer,
                     () => DestroyAd(adId),
                     message => Utils.ToBool(message)
-                        ? FullScreenAdResult.Completed
-                        : FullScreenAdResult.Canceled,
+                        ? AdResult.Completed
+                        : AdResult.Canceled,
                     adId));
         }
 

@@ -26,7 +26,7 @@ namespace EE.Internal {
         private readonly ILogger _logger;
         private readonly Destroyer _destroyer;
         private readonly Dictionary<string, IAd> _ads;
-        private readonly IAsyncHelper<FullScreenAdResult> _displayer;
+        private readonly IAsyncHelper<AdResult> _displayer;
 
         public FacebookAds(IMessageBridge bridge, ILogger logger, Destroyer destroyer) {
             _bridge = bridge;
@@ -105,7 +105,7 @@ namespace EE.Internal {
             return CreateFullScreenAd(kCreateInterstitialAd, adId,
                 () => new DefaultFullScreenAd("FacebookInterstitialAd", _bridge, _logger, _displayer,
                     () => DestroyAd(adId),
-                    _ => FullScreenAdResult.Completed,
+                    _ => AdResult.Completed,
                     adId));
         }
 
@@ -114,8 +114,8 @@ namespace EE.Internal {
                 () => new DefaultFullScreenAd("FacebookRewardedAd", _bridge, _logger, _displayer,
                     () => DestroyAd(adId),
                     message => Utils.ToBool(message)
-                        ? FullScreenAdResult.Completed
-                        : FullScreenAdResult.Canceled,
+                        ? AdResult.Completed
+                        : AdResult.Canceled,
                     adId));
         }
 

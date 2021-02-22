@@ -5,26 +5,26 @@ using UnityEngine.Assertions;
 
 namespace EE.Internal {
     using Destroyer = Action;
-    using ResultParser = Func<string, FullScreenAdResult>;
+    using ResultParser = Func<string, AdResult>;
 
     internal class DefaultFullScreenAd : ObserverManager<AdObserver>, IFullScreenAd {
         private const string kTag = nameof(DefaultFullScreenAd);
         private readonly string _prefix;
         private readonly IMessageBridge _bridge;
         private readonly ILogger _logger;
-        private readonly IAsyncHelper<FullScreenAdResult> _displayer;
+        private readonly IAsyncHelper<AdResult> _displayer;
         private readonly Destroyer _destroyer;
         private readonly ResultParser _resultParser;
         private readonly string _adId;
         private readonly MessageHelper _messageHelper;
-        private bool _loadingCapped;
+        private readonly ICapper _loadCapper;
         private readonly IAsyncHelper<bool> _loader;
 
         public DefaultFullScreenAd(
             string prefix,
             IMessageBridge bridge,
             ILogger logger,
-            IAsyncHelper<FullScreenAdResult> displayer,
+            IAsyncHelper<AdResult> displayer,
             Destroyer destroyer,
             ResultParser resultParser,
             string adId) {
@@ -36,7 +36,7 @@ namespace EE.Internal {
             _resultParser = resultParser;
             _adId = adId;
             _messageHelper = new MessageHelper(_prefix, adId);
-            _loadingCapped = false;
+            _loadCapper = new Capper(30);
             _loader = new AsyncHelper<bool>();
 
             _logger.Debug($"{kTag}: constructor: prefix = {_prefix} id = {_adId}");
@@ -69,14 +69,10 @@ namespace EE.Internal {
 
         public async Task<bool> Load() {
             _logger.Debug($"{kTag}: {nameof(Load)}: prefix = {_prefix} id = {_adId} loading = {_loader.IsProcessing}");
-            if (_loadingCapped) {
+            if (_loadCapper.IsCapped) {
                 return false;
             }
-            _loadingCapped = true;
-            Utils.NoAwait(async () => {
-                await Task.Delay(30000);
-                _loadingCapped = false;
-            });
+            _loadCapper.Cap();
             return await _loader.Process(
                 () => _bridge.Call(_messageHelper.Load),
                 result => {
@@ -84,7 +80,7 @@ namespace EE.Internal {
                 });
         }
 
-        public Task<FullScreenAdResult> Show() {
+        public Task<AdResult> Show() {
             _logger.Debug(
                 $"{kTag}: {nameof(Show)}: prefix = {_prefix} id = {_adId} displaying = {_displayer.IsProcessing}");
             return _displayer.Process(
@@ -119,7 +115,7 @@ namespace EE.Internal {
             _logger.Debug(
                 $"{kTag}: {nameof(OnFailedToLoad)}: prefix = {_prefix} id = {_adId} displaying = {_displayer.IsProcessing} message = {message}");
             if (_displayer.IsProcessing) {
-                _displayer.Resolve(FullScreenAdResult.Failed);
+                _displayer.Resolve(AdResult.Failed);
             } else {
                 Assert.IsTrue(false);
             }
@@ -130,7 +126,7 @@ namespace EE.Internal {
             DispatchEvent(observer => observer.OnClicked?.Invoke());
         }
 
-        private void OnClosed(FullScreenAdResult result) {
+        private void OnClosed(AdResult result) {
             _logger.Debug(
                 $"{kTag}: {nameof(OnClosed)}: prefix = {_prefix} id = {_adId} displaying = {_displayer.IsProcessing}");
             if (_displayer.IsProcessing) {

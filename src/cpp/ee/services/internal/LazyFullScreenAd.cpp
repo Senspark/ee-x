@@ -27,6 +27,9 @@ Self::~LazyFullScreenAd() = default;
 
 void Self::setAd(const std::shared_ptr<IFullScreenAd>& ad) {
     handle_->clear();
+    if (ad == nullptr) {
+        return;
+    }
     (*handle_) //
         .bind(*ad)
         .addObserver({

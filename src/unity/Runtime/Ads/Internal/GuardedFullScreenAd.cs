@@ -53,15 +53,15 @@ namespace EE.Internal {
             return IsLoaded;
         }
 
-        public async Task<FullScreenAdResult> Show() {
+        public async Task<AdResult> Show() {
             if (!IsLoaded) {
-                return FullScreenAdResult.Failed;
+                return AdResult.Failed;
             }
             if (_loading) {
-                return FullScreenAdResult.Failed;
+                return AdResult.Failed;
             }
             if (_displaying) {
-                return FullScreenAdResult.Failed;
+                return AdResult.Failed;
             }
             _displaying = true;
             IsLoaded = false;

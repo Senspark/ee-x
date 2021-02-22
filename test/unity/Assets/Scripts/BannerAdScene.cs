@@ -11,15 +11,15 @@ namespace EETest {
         public EE.IAdsManager AdsManager { get; set; }
 
         public void Execute() {
-            AdsManager.IsBannerAdVisible = true;
+            AdsManager.BannerAd.IsVisible = true;
             var (width, height) = EE.Platform.GetViewSize();
             _tweens.Add(DOTween.Sequence()
                 .SetDelay(2.0f)
                 .AppendInterval(8.0f)
                 .AppendCallback(() => {
                     Debug.Log($"Move to top-left");
-                    AdsManager.BannerAdAnchor = (0, 1);
-                    AdsManager.BannerAdPosition = (0, height);
+                    AdsManager.BannerAd.Anchor = (0, 1);
+                    AdsManager.BannerAd.Position = (0, height);
                 })
                 .SetLoops(-1));
             _tweens.Add(DOTween.Sequence()
@@ -27,8 +27,8 @@ namespace EETest {
                 .AppendInterval(8.0f)
                 .AppendCallback(() => {
                     Debug.Log($"Move to top-right");
-                    AdsManager.BannerAdAnchor = (1, 1);
-                    AdsManager.BannerAdPosition = (width, height);
+                    AdsManager.BannerAd.Anchor = (1, 1);
+                    AdsManager.BannerAd.Position = (width, height);
                 })
                 .SetLoops(-1));
             _tweens.Add(DOTween.Sequence()
@@ -36,8 +36,8 @@ namespace EETest {
                 .AppendInterval(8.0f)
                 .AppendCallback(() => {
                     Debug.Log($"Move to bottom-right");
-                    AdsManager.BannerAdAnchor = (1, 0);
-                    AdsManager.BannerAdPosition = (width, 0);
+                    AdsManager.BannerAd.Anchor = (1, 0);
+                    AdsManager.BannerAd.Position = (width, 0);
                 })
                 .SetLoops(-1));
             _tweens.Add(DOTween.Sequence()
@@ -45,8 +45,8 @@ namespace EETest {
                 .AppendInterval(8.0f)
                 .AppendCallback(() => {
                     Debug.Log($"Move to bottom-left");
-                    AdsManager.BannerAdAnchor = (0, 0);
-                    AdsManager.BannerAdPosition = (0, 0);
+                    AdsManager.BannerAd.Anchor = (0, 0);
+                    AdsManager.BannerAd.Position = (0, 0);
                 })
                 .SetLoops(-1));
         }

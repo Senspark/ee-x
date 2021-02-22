@@ -40,7 +40,7 @@ namespace EETest {
         public void OnShowInterstitialAdButtonPressed() {
             EE.Utils.NoAwait(async () => {
                 _resultText.text = "---";
-                var result = await AdsManager.ShowInterstitialAd();
+                var result = await AdsManager.InterstitialAd.Show();
                 UpdateResult(result);
             });
         }
@@ -48,7 +48,7 @@ namespace EETest {
         public void OnShowRewardedAdButtonPressed() {
             EE.Utils.NoAwait(async () => {
                 _resultText.text = "---";
-                var result = await AdsManager.ShowRewardedAd();
+                var result = await AdsManager.RewardedAd.Show();
                 UpdateResult(result);
             });
         }

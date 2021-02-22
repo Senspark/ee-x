@@ -4,8 +4,8 @@ using System.Xml.Xsl;
 
 namespace EE {
     public class NullFullScreenAd : NullAd, IFullScreenAd {
-        public Task<FullScreenAdResult> Show() {
-            return Task.FromResult(FullScreenAdResult.Failed);
+        public Task<AdResult> Show() {
+            return Task.FromResult(AdResult.Failed);
         }
     }
 }

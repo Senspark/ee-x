@@ -32,30 +32,30 @@ bool Self::init() {
     auto&& winSize = _director->getWinSize();
     setContentSize(winSize);
 
-    adsManager_->setBannerAdVisible(true);
-    schedule(std::bind([this, winSize] {
+    auto&& ad = adsManager_->getBannerAd();
+    ad->setVisible(true);
+    schedule(std::bind([this, winSize, ad] {
                  CCLOG("Move to top-left");
-                 adsManager_->setBannerAdAnchor(0, 1);
-                 adsManager_->setBannerAdPosition(0, winSize.height);
+                 ad->setAnchor(0, 1);
+                 ad->setPosition(0, winSize.height);
              }),
              8.0f, CC_REPEAT_FOREVER, 2.0f, "_1");
-    schedule(std::bind([this, winSize] {
+    schedule(std::bind([this, winSize, ad] {
                  CCLOG("Move to top-right");
-                 adsManager_->setBannerAdAnchor(1, 1);
-                 adsManager_->setBannerAdPosition(winSize.width,
-                                                  winSize.height);
+                 ad->setAnchor(1, 1);
+                 ad->setPosition(winSize.width, winSize.height);
              }),
              8.0f, CC_REPEAT_FOREVER, 4.0f, "_2");
-    schedule(std::bind([this, winSize] {
+    schedule(std::bind([this, winSize, ad] {
                  CCLOG("Move to bottom-right");
-                 adsManager_->setBannerAdAnchor(1, 0);
-                 adsManager_->setBannerAdPosition(winSize.width, 0);
+                 ad->setAnchor(1, 0);
+                 ad->setPosition(winSize.width, 0);
              }),
              8.0f, CC_REPEAT_FOREVER, 6.0f, "_3");
-    schedule(std::bind([this, winSize] {
+    schedule(std::bind([this, winSize, ad] {
                  CCLOG("Move to bottom-left");
-                 adsManager_->setBannerAdAnchor(0, 0);
-                 adsManager_->setBannerAdPosition(0, 0);
+                 ad->setAnchor(0, 0);
+                 ad->setPosition(0, 0);
              }),
              8.0f, CC_REPEAT_FOREVER, 8.0f, "_4");
     return true;

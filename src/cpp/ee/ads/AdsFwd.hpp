@@ -15,9 +15,12 @@
 
 namespace ee {
 namespace ads {
-enum class FullScreenAdResult;
+enum class AdResult;
 
 struct AdObserver;
+
+class ICapper;
+class Capper;
 
 class IAd;
 class IBannerAd;
@@ -45,7 +48,8 @@ class Retrier;
 class MediationManager;
 } // namespace ads
 
-using ads::FullScreenAdResult;
+using ads::AdResult;
+using FullScreenAdResult [[deprecated]] = AdResult;
 using IRewardedAdResult [[deprecated]] = FullScreenAdResult;
 
 using ads::AdObserver;

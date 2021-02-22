@@ -51,7 +51,7 @@ private:
     ResultParser resultParser_;
     std::string adId_;
     MessageHelper messageHelper_;
-    bool loadingCapped_;
+    std::shared_ptr<ICapper> loadCapper_;
     std::unique_ptr<IAsyncHelper<bool>> loader_;
 };
 } // namespace ads

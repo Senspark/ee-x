@@ -84,7 +84,7 @@ bool Self::init() {
         std::bind([this, resultText, updateResult] {
             ee::noAwait([this, resultText, updateResult]() -> ee::Task<> {
                 resultText->setString("---");
-                auto result = co_await adsManager_->showAppOpenAd();
+                auto result = co_await adsManager_->getAppOpenAd()->show();
                 updateResult(result);
             });
         }));
@@ -94,7 +94,7 @@ bool Self::init() {
         std::bind([this, resultText, updateResult] {
             ee::noAwait([this, resultText, updateResult]() -> ee::Task<> {
                 resultText->setString("---");
-                auto result = co_await adsManager_->showInterstitialAd();
+                auto result = co_await adsManager_->getInterstitialAd()->show();
                 updateResult(result);
             });
         }));
@@ -106,7 +106,7 @@ bool Self::init() {
             ee::noAwait([this, resultText, updateResult]() -> ee::Task<> {
                 resultText->setString("---");
                 auto result =
-                    co_await adsManager_->showRewardedInterstitialAd();
+                    co_await adsManager_->getRewardedInterstitialAd()->show();
                 updateResult(result);
             });
         }));
@@ -116,7 +116,7 @@ bool Self::init() {
         std::bind([this, resultText, updateResult] {
             ee::noAwait([this, resultText, updateResult]() -> ee::Task<> {
                 resultText->setString("---");
-                auto result = co_await adsManager_->showRewardedAd();
+                auto result = co_await adsManager_->getRewardedAd()->show();
                 updateResult(result);
             });
         }));

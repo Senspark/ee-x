@@ -1,5 +1,5 @@
 import {
-    FullScreenAdResult,
+    AdResult,
     IAd,
     IBannerAd,
     IFullScreenAd,
@@ -41,7 +41,7 @@ export class AdMob implements IAdMob {
     private readonly _logger: ILogger;
     private readonly _destroyer: Destroyer;
     private readonly _ads: { [index: string]: IAd };
-    private readonly _displayer: IAsyncHelper<FullScreenAdResult>;
+    private readonly _displayer: IAsyncHelper<AdResult>;
 
     public constructor(bridge: IMessageBridge, logger: ILogger, destroyer: Destroyer) {
         this._bridge = bridge;
@@ -110,7 +110,7 @@ export class AdMob implements IAdMob {
         return this.createFullScreenAd(this.kCreateAppOpenAd, adId, () =>
             new DefaultFullScreenAd("AdMobAppOpenAd", this._bridge, this._logger, this._displayer,
                 () => this.destroyAd(adId),
-                _ => FullScreenAdResult.Completed,
+                _ => AdResult.Completed,
                 adId))
     }
 
@@ -118,7 +118,7 @@ export class AdMob implements IAdMob {
         return this.createFullScreenAd(this.kCreateInterstitialAd, adId, () =>
             new DefaultFullScreenAd("AdMobInterstitialAd", this._bridge, this._logger, this._displayer,
                 () => this.destroyAd(adId),
-                _ => FullScreenAdResult.Completed,
+                _ => AdResult.Completed,
                 adId))
     }
 
@@ -127,8 +127,8 @@ export class AdMob implements IAdMob {
             new DefaultFullScreenAd("AdMobRewardedInterstitialAd", this._bridge, this._logger, this._displayer,
                 () => this.destroyAd(adId),
                 message => Utils.toBool(message)
-                    ? FullScreenAdResult.Completed
-                    : FullScreenAdResult.Canceled,
+                    ? AdResult.Completed
+                    : AdResult.Canceled,
                 adId))
     }
 
@@ -137,8 +137,8 @@ export class AdMob implements IAdMob {
             new DefaultFullScreenAd("AdMobRewardedAd", this._bridge, this._logger, this._displayer,
                 () => this.destroyAd(adId),
                 message => Utils.toBool(message)
-                    ? FullScreenAdResult.Completed
-                    : FullScreenAdResult.Canceled,
+                    ? AdResult.Completed
+                    : AdResult.Canceled,
                 adId))
     }
 

@@ -1,5 +1,5 @@
 import {
-    FullScreenAdResult,
+    AdResult,
     IBannerAd,
     IFullScreenAd,
 } from "../../ads";
@@ -52,7 +52,7 @@ export class IronSource implements IIronSource {
     private _sharedInterstitialAd?: IFullScreenAd;
     private _rewardedAd?: IronSourceRewardedAd;
     private _sharedRewardedAd?: IFullScreenAd;
-    private readonly _displayer: IAsyncHelper<FullScreenAdResult>;
+    private readonly _displayer: IAsyncHelper<AdResult>;
 
     public constructor(bridge: IMessageBridge, logger: ILogger, destroyer: Destroyer) {
         this._bridge = bridge;
@@ -233,7 +233,7 @@ export class IronSource implements IIronSource {
         if (this._interstitialAd !== undefined) {
             this._interstitialAd.onClosed();
         } else {
-            this.onMediationAdClosed(FullScreenAdResult.Completed);
+            this.onMediationAdClosed(AdResult.Completed);
         }
     }
 
@@ -266,12 +266,12 @@ export class IronSource implements IIronSource {
             this._rewardedAd.onClosed(rewarded);
         } else {
             this.onMediationAdClosed(rewarded
-                ? FullScreenAdResult.Completed
-                : FullScreenAdResult.Canceled);
+                ? AdResult.Completed
+                : AdResult.Canceled);
         }
     }
 
-    private onMediationAdClosed(result: FullScreenAdResult): void {
+    private onMediationAdClosed(result: AdResult): void {
         if (this._displayer.isProcessing) {
             this._displayer.resolve(result);
             return;

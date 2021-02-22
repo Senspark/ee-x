@@ -1,11 +1,11 @@
 import {
-    FullScreenAdResult,
+    AdResult,
     IFullScreenAd,
 } from "./IFullScreenAd";
 import { NullAd } from "./NullAd";
 
 export class NullFullScreenAd extends NullAd implements IFullScreenAd {
-    public async show(): Promise<FullScreenAdResult> {
-        return FullScreenAdResult.Failed;
+    public async show(): Promise<AdResult> {
+        return AdResult.Failed;
     }
 }

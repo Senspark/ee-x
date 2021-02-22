@@ -1,32 +1,29 @@
 import {
     AdObserver,
-    FullScreenAdResult,
+    AdResult,
     IAd,
     IFullScreenAd,
 } from "../../ads";
+import {
+    Capper,
+    ICapper,
+} from "../../ads/internal";
 import {
     ObserverHandle,
     ObserverManager,
     Platform,
     Utils,
 } from "../../core";
-import { AdResult } from "../AdResult";
 
-export class GenericAd extends ObserverManager<AdObserver> implements IAd {
+export class GenericAd extends ObserverManager<AdObserver> implements IFullScreenAd {
     private readonly _ad: IFullScreenAd;
-    private _capped: boolean;
-    private readonly _interval: number;
+    private readonly _capper: ICapper;
     private readonly _handle: ObserverHandle;
 
     public constructor(ad: IFullScreenAd, interval: number) {
         super();
         this._ad = ad;
-        this._interval = interval;
-        this._capped = false;
-        Utils.noAwait(async () => {
-            await this._ad.load();
-        });
-        this.updateCapping();
+        this._capper = new Capper(interval);
         this._handle = new ObserverHandle();
         this._handle.bind(this._ad)
             .addObserver({
@@ -49,7 +46,7 @@ export class GenericAd extends ObserverManager<AdObserver> implements IAd {
     }
 
     public async show(): Promise<AdResult> {
-        if (this._interval > 0 && this._capped) {
+        if (this._capper.isCapped) {
             return AdResult.Capped;
         }
         if (this._ad.isLoaded) {
@@ -85,27 +82,10 @@ export class GenericAd extends ObserverManager<AdObserver> implements IAd {
         Utils.noAwait(async () => {
             await this._ad.load();
         });
-        switch (result) {
-            case FullScreenAdResult.Completed:
-                this.updateCapping();
-                return AdResult.Completed;
-            case FullScreenAdResult.Canceled:
-                return AdResult.Canceled;
-            case FullScreenAdResult.Failed:
-                return AdResult.Failed;
+        if (result == AdResult.Completed) {
+            this._capper.cap();
         }
-        // Assert.
-        return AdResult.Failed;
-    }
-
-    private updateCapping(): void {
-        if (this._interval > 0) {
-            this._capped = true;
-            Utils.noAwait(async () => {
-                await Utils.delay(this._interval);
-                this._capped = false;
-            });
-        }
+        return result;
     }
 
     private async testConnection(timeOut: number): Promise<boolean> {

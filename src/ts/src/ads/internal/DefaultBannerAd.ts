@@ -7,7 +7,9 @@ import { AdObserver } from "../IAd";
 import { IBannerAd } from "../IBannerAd";
 import { AsyncHelper } from "./AsyncHelper";
 import { BannerAdHelper } from "./BannerAdHelper";
+import { Capper } from "./Capper";
 import { IAsyncHelper } from "./IAsyncHelper";
+import { ICapper } from "./ICapper";
 import { MessageHelper } from "./MessageHelper";
 
 type Destroyer = () => void;
@@ -21,6 +23,7 @@ export class DefaultBannerAd extends ObserverManager<AdObserver> implements IBan
     private readonly _adId: string;
     private readonly _messageHelper: MessageHelper;
     private readonly _helper: BannerAdHelper;
+    private readonly _loadCapper: ICapper;
     private readonly _loader: IAsyncHelper<boolean>;
 
     public constructor(
@@ -38,6 +41,7 @@ export class DefaultBannerAd extends ObserverManager<AdObserver> implements IBan
         this._adId = adId;
         this._messageHelper = new MessageHelper(prefix, adId);
         this._helper = new BannerAdHelper(this._bridge, this._messageHelper, size);
+        this._loadCapper = new Capper(5);
         this._loader = new AsyncHelper<boolean>();
 
         this._logger.debug(`${this.kTag}: constructor: prefix = ${this._prefix} id = ${this._adId}`);
@@ -58,9 +62,13 @@ export class DefaultBannerAd extends ObserverManager<AdObserver> implements IBan
         return this._helper.isLoaded;
     }
 
-    public load(): Promise<boolean> {
+    public async load(): Promise<boolean> {
         this._logger.debug(`${this.kTag}: load: prefix = ${this._prefix} id = ${this._adId} loading = ${this._loader.isProcessing}`);
-        return this._loader.process(
+        if (this._loadCapper.isCapped) {
+            return false;
+        }
+        this._loadCapper.cap();
+        return await this._loader.process(
             () => this._helper.load(),
             result => {
                 // OK.

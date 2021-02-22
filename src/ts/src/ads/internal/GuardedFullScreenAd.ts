@@ -4,7 +4,7 @@ import {
 } from "../../core";
 import { AdObserver } from "../IAd";
 import {
-    FullScreenAdResult,
+    AdResult,
     IFullScreenAd,
 } from "../IFullScreenAd";
 
@@ -53,15 +53,15 @@ export class GuardedFullScreenAd extends ObserverManager<AdObserver> implements 
         return this._loaded;
     }
 
-    public async show(): Promise<FullScreenAdResult> {
+    public async show(): Promise<AdResult> {
         if (!this._loaded) {
-            return FullScreenAdResult.Failed;
+            return AdResult.Failed;
         }
         if (this._loading) {
-            return FullScreenAdResult.Failed;
+            return AdResult.Failed;
         }
         if (this._displaying) {
-            return FullScreenAdResult.Failed;
+            return AdResult.Failed;
         }
         this._displaying = true;
         this._loaded = false;

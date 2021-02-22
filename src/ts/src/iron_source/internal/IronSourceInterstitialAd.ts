@@ -1,6 +1,6 @@
 import {
     AdObserver,
-    FullScreenAdResult,
+    AdResult,
     IFullScreenAd,
 } from "../../ads";
 import {
@@ -11,13 +11,13 @@ import { ObserverManager } from "../../core";
 import { IronSource } from "./IronSource";
 
 export class IronSourceInterstitialAd extends ObserverManager<AdObserver> implements IFullScreenAd {
-    private readonly _displayer: IAsyncHelper<FullScreenAdResult>;
+    private readonly _displayer: IAsyncHelper<AdResult>;
     private readonly _plugin: IronSource;
     private readonly _adId: string;
     private readonly _loader: IAsyncHelper<boolean>;
 
     public constructor(
-        displayer: IAsyncHelper<FullScreenAdResult>, plugin: IronSource, adId: string) {
+        displayer: IAsyncHelper<AdResult>, plugin: IronSource, adId: string) {
         super();
         this._displayer = displayer;
         this._plugin = plugin;
@@ -41,7 +41,7 @@ export class IronSourceInterstitialAd extends ObserverManager<AdObserver> implem
             });
     }
 
-    public show(): Promise<FullScreenAdResult> {
+    public show(): Promise<AdResult> {
         return this._displayer.process(
             () => this._plugin.showInterstitialAd(this._adId),
             result => {
@@ -68,7 +68,7 @@ export class IronSourceInterstitialAd extends ObserverManager<AdObserver> implem
 
     public onFailedToShow(message: string): void {
         if (this._displayer.isProcessing) {
-            this._displayer.resolve(FullScreenAdResult.Failed);
+            this._displayer.resolve(AdResult.Failed);
         } else {
             // Assert.
         }
@@ -80,7 +80,7 @@ export class IronSourceInterstitialAd extends ObserverManager<AdObserver> implem
 
     public onClosed(): void {
         if (this._displayer.isProcessing) {
-            this._displayer.resolve(FullScreenAdResult.Completed);
+            this._displayer.resolve(AdResult.Completed);
         } else {
             // Assert.
         }

@@ -2,7 +2,7 @@ using System;
 using System.Threading.Tasks;
 
 namespace EE.Internal {
-    internal class GenericAd : ObserverManager<AdObserver>, IAd {
+    internal class GenericAd : ObserverManager<AdObserver>, IFullScreenAd {
         private readonly IFullScreenAd _ad;
         private readonly ICapper _capper;
         private readonly ObserverHandle _handle;

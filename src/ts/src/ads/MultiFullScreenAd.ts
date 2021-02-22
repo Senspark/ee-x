@@ -4,7 +4,7 @@ import {
 } from "../core";
 import { AdObserver } from "./IAd";
 import {
-    FullScreenAdResult,
+    AdResult,
     IFullScreenAd,
 } from "./IFullScreenAd";
 import { IMultiAd } from "./IMultiAd";
@@ -52,10 +52,10 @@ export class MultiFullScreenAd extends ObserverManager<AdObserver> implements IF
         return result;
     }
 
-    public async show(): Promise<FullScreenAdResult> {
-        let result = FullScreenAdResult.Failed;
+    public async show(): Promise<AdResult> {
+        let result = AdResult.Failed;
         for (const item of this._items) {
-            if (result === FullScreenAdResult.Failed) {
+            if (result === AdResult.Failed) {
                 result = await item.show();
             }
             if (!item.isLoaded) {

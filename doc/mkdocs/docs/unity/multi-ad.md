@@ -24,8 +24,8 @@ manager.IsBannerAdVisible = true;
 
 // Set ad position and anchor.
 var (viewWidth, viewHeight) = EE.Platform.GetViewSize();
-adsManager.BannerAdAnchor = (0.5f, 0.5f);
-adsManager.BannerAdPosition = (viewWidth * 0.5f, viewHeight * 0.5f);
+adsManager.BannerAd.Anchor = (0.5f, 0.5f);
+adsManager.BannerAd.Position = (viewWidth * 0.5f, viewHeight * 0.5f);
 ```
 
 Rectangle banner ad
@@ -35,13 +35,13 @@ manager.IsRectangleAdVisible = true;
 
 // Set ad position and anchor.
 var (viewWidth, viewHeight) = EE.Platform.GetViewSize();
-adsManager.RectangleAdAnchor = (0.5f, 0.5f);
-adsManager.RectangleAdPosition = (viewWidth * 0.5f, viewHeight * 0.5f);
+adsManager.RectangleAd.Anchor = (0.5f, 0.5f);
+adsManager.RectangleAd.Position = (viewWidth * 0.5f, viewHeight * 0.5f);
 ```
 
 App open ad
 ```csharp
-var result = await manager.ShowAppOpenAd();
+var result = await manager.AppOpenAd.Show();
 if (result == EE.AdResult.Completed) {
     // Completed.
 } else {
@@ -51,7 +51,7 @@ if (result == EE.AdResult.Completed) {
 
 Interstitial ad
 ```csharp
-var result = await manager.ShowInterstitialAd();
+var result = await manager.InterstitialAd.Show();
 if (result == EE.AdResult.Completed) {
     // Completed.
 } else {
@@ -61,7 +61,7 @@ if (result == EE.AdResult.Completed) {
 
 Rewarded interstitial ad
 ```csharp
-var result = await manager.ShowRewardedInterstitialAd();
+var result = await manager.RewardedInterstitialAd.Show();
 if (result == EE.AdResult.Completed) {
     // Completed.
 } else {
@@ -71,7 +71,7 @@ if (result == EE.AdResult.Completed) {
 
 Rewarded ad
 ```csharp
-var result = await manager.ShowRewardedAd();
+var result = await manager.RewardedAd.Show();
 if (result == EE.AdResult.Completed) {
     // Completed.
 } else {

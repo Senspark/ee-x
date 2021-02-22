@@ -37,24 +37,24 @@ manager->setBannerAdVisible(true);
 
 // Set ad position and anchor.
 auto winSize = cocos2d::Director::getInstance()->getWinSize();
-manager->setBannerAdPosition(winSize.width / 2, winSize.height / 2);
-manager->setBannerAdAnchor(0.5f, 0.5f);
+manager->getBannerAd()->setPosition(winSize.width / 2, winSize.height / 2);
+manager->getBannerAd()->setAnchor(0.5f, 0.5f);
 ```
 
 Rectangle banner ad
 ```cpp
 // Show ad.
-manager->setRectangleAdVisible(true);
+manager->getRectangleAd()->setVisible(true);
 
 // Set ad position and anchor.
 auto winSize = cocos2d::Director::getInstance()->getWinSize();
-manager->setRectangleAdPosition(winSize.width / 2, winSize.height / 2);
-manager->setRectangleAdAnchor(0.5f, 0.5f);
+manager->getRectangleAd()->setPosition(winSize.width / 2, winSize.height / 2);
+manager->getRectangleAd()->setAnchor(0.5f, 0.5f);
 ```
 
 App open ad
 ```cpp
-auto result = co_await manager->showAppOpenAd();
+auto result = co_await manager->getAppOpenAd()->show();
 if (result == ee::AdResult::Completed) {
     // Completed.
 } else {
@@ -64,7 +64,7 @@ if (result == ee::AdResult::Completed) {
 
 Interstitial ad
 ```cpp
-auto result = co_await manager->showInterstitialAd();
+auto result = co_await manager->getInterstitialAd()->show();
 if (result == ee::AdResult::Completed) {
     // Completed.
 } else {
@@ -74,7 +74,7 @@ if (result == ee::AdResult::Completed) {
 
 Rewarded interstitial ad
 ```cpp
-auto result = co_await manager->showRewardedInterstitialAd();
+auto result = co_await manager->getRewardedInterstitialAd()->show();
 if (result == ee::AdResult::Completed) {
     // Completed.
 } else {
@@ -84,7 +84,7 @@ if (result == ee::AdResult::Completed) {
 
 Rewarded ad
 ```cpp
-auto result = co_await manager->showRewardedAd();
+auto result = co_await manager->getRewardedAd()->show();
 if (result == ee::AdResult::Completed) {
     // Completed.
 } else {

@@ -8,34 +8,34 @@
 
 <span class=c1>// Set ad position and anchor.</span>
 <span class=kt>var</span> <span class=p>(</span><span class=n>viewWidth</span><span class=p>,</span> <span class=n>viewHeight</span><span class=p>)</span> <span class=p>=</span> <span class=n>EE</span><span class=p>.</span><span class=n>Platform</span><span class=p>.</span><span class=n>GetViewSize</span><span class=p>();</span>
-<span class=n>adsManager</span><span class=p>.</span><span class=n>BannerAdAnchor</span> <span class=p>=</span> <span class=p>(</span><span class=m>0.5f</span><span class=p>,</span> <span class=m>0.5f</span><span class=p>);</span>
-<span class=n>adsManager</span><span class=p>.</span><span class=n>BannerAdPosition</span> <span class=p>=</span> <span class=p>(</span><span class=n>viewWidth</span> <span class=p>*</span> <span class=m>0.5f</span><span class=p>,</span> <span class=n>viewHeight</span> <span class=p>*</span> <span class=m>0.5f</span><span class=p>);</span>
+<span class=n>adsManager</span><span class=p>.</span><span class=n>BannerAd</span><span class=p>.</span><span class=n>Anchor</span> <span class=p>=</span> <span class=p>(</span><span class=m>0.5f</span><span class=p>,</span> <span class=m>0.5f</span><span class=p>);</span>
+<span class=n>adsManager</span><span class=p>.</span><span class=n>BannerAd</span><span class=p>.</span><span class=n>Position</span> <span class=p>=</span> <span class=p>(</span><span class=n>viewWidth</span> <span class=p>*</span> <span class=m>0.5f</span><span class=p>,</span> <span class=n>viewHeight</span> <span class=p>*</span> <span class=m>0.5f</span><span class=p>);</span>
 </code></pre></div> <p>Rectangle banner ad</p> <div class=codehilite><pre><span></span><code><span class=c1>// Show ad.</span>
 <span class=n>manager</span><span class=p>.</span><span class=n>IsRectangleAdVisible</span> <span class=p>=</span> <span class=k>true</span><span class=p>;</span>
 
 <span class=c1>// Set ad position and anchor.</span>
 <span class=kt>var</span> <span class=p>(</span><span class=n>viewWidth</span><span class=p>,</span> <span class=n>viewHeight</span><span class=p>)</span> <span class=p>=</span> <span class=n>EE</span><span class=p>.</span><span class=n>Platform</span><span class=p>.</span><span class=n>GetViewSize</span><span class=p>();</span>
-<span class=n>adsManager</span><span class=p>.</span><span class=n>RectangleAdAnchor</span> <span class=p>=</span> <span class=p>(</span><span class=m>0.5f</span><span class=p>,</span> <span class=m>0.5f</span><span class=p>);</span>
-<span class=n>adsManager</span><span class=p>.</span><span class=n>RectangleAdPosition</span> <span class=p>=</span> <span class=p>(</span><span class=n>viewWidth</span> <span class=p>*</span> <span class=m>0.5f</span><span class=p>,</span> <span class=n>viewHeight</span> <span class=p>*</span> <span class=m>0.5f</span><span class=p>);</span>
-</code></pre></div> <p>App open ad</p> <div class=codehilite><pre><span></span><code><span class=kt>var</span> <span class=n>result</span> <span class=p>=</span> <span class=k>await</span> <span class=n>manager</span><span class=p>.</span><span class=n>ShowAppOpenAd</span><span class=p>();</span>
+<span class=n>adsManager</span><span class=p>.</span><span class=n>RectangleAd</span><span class=p>.</span><span class=n>Anchor</span> <span class=p>=</span> <span class=p>(</span><span class=m>0.5f</span><span class=p>,</span> <span class=m>0.5f</span><span class=p>);</span>
+<span class=n>adsManager</span><span class=p>.</span><span class=n>RectangleAd</span><span class=p>.</span><span class=n>Position</span> <span class=p>=</span> <span class=p>(</span><span class=n>viewWidth</span> <span class=p>*</span> <span class=m>0.5f</span><span class=p>,</span> <span class=n>viewHeight</span> <span class=p>*</span> <span class=m>0.5f</span><span class=p>);</span>
+</code></pre></div> <p>App open ad</p> <div class=codehilite><pre><span></span><code><span class=kt>var</span> <span class=n>result</span> <span class=p>=</span> <span class=k>await</span> <span class=n>manager</span><span class=p>.</span><span class=n>AppOpenAd</span><span class=p>.</span><span class=n>Show</span><span class=p>();</span>
 <span class=k>if</span> <span class=p>(</span><span class=n>result</span> <span class=p>==</span> <span class=n>EE</span><span class=p>.</span><span class=n>AdResult</span><span class=p>.</span><span class=n>Completed</span><span class=p>)</span> <span class=p>{</span>
     <span class=c1>// Completed.</span>
 <span class=p>}</span> <span class=k>else</span> <span class=p>{</span>
     <span class=c1>// Failed.</span>
 <span class=p>}</span>
-</code></pre></div> <p>Interstitial ad</p> <div class=codehilite><pre><span></span><code><span class=kt>var</span> <span class=n>result</span> <span class=p>=</span> <span class=k>await</span> <span class=n>manager</span><span class=p>.</span><span class=n>ShowInterstitialAd</span><span class=p>();</span>
+</code></pre></div> <p>Interstitial ad</p> <div class=codehilite><pre><span></span><code><span class=kt>var</span> <span class=n>result</span> <span class=p>=</span> <span class=k>await</span> <span class=n>manager</span><span class=p>.</span><span class=n>InterstitialAd</span><span class=p>.</span><span class=n>Show</span><span class=p>();</span>
 <span class=k>if</span> <span class=p>(</span><span class=n>result</span> <span class=p>==</span> <span class=n>EE</span><span class=p>.</span><span class=n>AdResult</span><span class=p>.</span><span class=n>Completed</span><span class=p>)</span> <span class=p>{</span>
     <span class=c1>// Completed.</span>
 <span class=p>}</span> <span class=k>else</span> <span class=p>{</span>
     <span class=c1>// Failed.</span>
 <span class=p>}</span>
-</code></pre></div> <p>Rewarded interstitial ad</p> <div class=codehilite><pre><span></span><code><span class=kt>var</span> <span class=n>result</span> <span class=p>=</span> <span class=k>await</span> <span class=n>manager</span><span class=p>.</span><span class=n>ShowRewardedInterstitialAd</span><span class=p>();</span>
+</code></pre></div> <p>Rewarded interstitial ad</p> <div class=codehilite><pre><span></span><code><span class=kt>var</span> <span class=n>result</span> <span class=p>=</span> <span class=k>await</span> <span class=n>manager</span><span class=p>.</span><span class=n>RewardedInterstitialAd</span><span class=p>.</span><span class=n>Show</span><span class=p>();</span>
 <span class=k>if</span> <span class=p>(</span><span class=n>result</span> <span class=p>==</span> <span class=n>EE</span><span class=p>.</span><span class=n>AdResult</span><span class=p>.</span><span class=n>Completed</span><span class=p>)</span> <span class=p>{</span>
     <span class=c1>// Completed.</span>
 <span class=p>}</span> <span class=k>else</span> <span class=p>{</span>
     <span class=c1>// Failed.</span>
 <span class=p>}</span>
-</code></pre></div> <p>Rewarded ad</p> <div class=codehilite><pre><span></span><code><span class=kt>var</span> <span class=n>result</span> <span class=p>=</span> <span class=k>await</span> <span class=n>manager</span><span class=p>.</span><span class=n>ShowRewardedAd</span><span class=p>();</span>
+</code></pre></div> <p>Rewarded ad</p> <div class=codehilite><pre><span></span><code><span class=kt>var</span> <span class=n>result</span> <span class=p>=</span> <span class=k>await</span> <span class=n>manager</span><span class=p>.</span><span class=n>RewardedAd</span><span class=p>.</span><span class=n>Show</span><span class=p>();</span>
 <span class=k>if</span> <span class=p>(</span><span class=n>result</span> <span class=p>==</span> <span class=n>EE</span><span class=p>.</span><span class=n>AdResult</span><span class=p>.</span><span class=n>Completed</span><span class=p>)</span> <span class=p>{</span>
     <span class=c1>// Completed.</span>
 <span class=p>}</span> <span class=k>else</span> <span class=p>{</span>

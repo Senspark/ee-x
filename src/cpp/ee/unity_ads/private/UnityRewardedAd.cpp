@@ -24,7 +24,7 @@ using Self = RewardedAd;
 
 Self::RewardedAd(
     ILogger& logger,
-    const std::shared_ptr<ads::IAsyncHelper<FullScreenAdResult>>& displayer,
+    const std::shared_ptr<ads::IAsyncHelper<AdResult>>& displayer,
     Bridge* plugin, const std::string& adId)
     : logger_(logger)
     , displayer_(displayer)
@@ -52,7 +52,7 @@ Task<bool> Self::load() {
     co_return isLoaded();
 }
 
-Task<FullScreenAdResult> Self::show() {
+Task<AdResult> Self::show() {
     logger_.debug("%s: adId = %s displaying = %s", __PRETTY_FUNCTION__,
                   adId_.c_str(),
                   core::toString(displayer_->isProcessing()).c_str());
@@ -60,7 +60,7 @@ Task<FullScreenAdResult> Self::show() {
         [this] { //
             plugin_->showRewardedAd(adId_);
         },
-        [](FullScreenAdResult result) {
+        [](AdResult result) {
             // OK.
         });
     co_return result;
@@ -81,7 +81,7 @@ void Self::onFailedToShow(const std::string& message) {
                   core::toString(displayer_->isProcessing()).c_str(),
                   message.c_str());
     if (displayer_->isProcessing()) {
-        displayer_->resolve(FullScreenAdResult::Failed);
+        displayer_->resolve(AdResult::Failed);
     } else {
         logger_.error("%s: this ad is expected to be displaying",
                       __PRETTY_FUNCTION__);
@@ -95,8 +95,8 @@ void Self::onClosed(bool rewarded) {
                   core::toString(displayer_->isProcessing()).c_str(),
                   core::toString(rewarded).c_str());
     if (displayer_->isProcessing()) {
-        displayer_->resolve(rewarded ? FullScreenAdResult::Completed
-                                     : FullScreenAdResult::Canceled);
+        displayer_->resolve(rewarded ? AdResult::Completed
+                                     : AdResult::Canceled);
     } else {
         logger_.error("%s: this ad is expected to be displaying",
                       __PRETTY_FUNCTION__);

@@ -27,6 +27,9 @@ Self::~LazyBannerAd() = default;
 
 void Self::setAd(const std::shared_ptr<IBannerAd>& ad) {
     handle_->clear();
+    if (ad == nullptr) {
+        return;
+    }
     (*handle_) //
         .bind(*ad)
         .addObserver({

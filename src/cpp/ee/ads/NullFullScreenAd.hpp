@@ -9,7 +9,7 @@
 namespace ee {
 namespace ads {
 class NullFullScreenAd : public IFullScreenAd, public NullAd {
-    virtual Task<FullScreenAdResult> show() override;
+    virtual Task<AdResult> show() override;
 };
 } // namespace ads
 } // namespace ee

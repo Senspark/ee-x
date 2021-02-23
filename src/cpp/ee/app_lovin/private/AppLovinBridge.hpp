@@ -59,7 +59,7 @@ private:
     RewardedAd* rewardedAd_;
     std::shared_ptr<IFullScreenAd> sharedRewardedAd_;
 
-    std::shared_ptr<ads::IAsyncHelper<FullScreenAdResult>> displayer_;
+    std::shared_ptr<ads::IAsyncHelper<AdResult>> displayer_;
 };
 } // namespace app_lovin
 } // namespace ee

@@ -4,8 +4,6 @@ using System.Threading.Tasks;
 
 using SimpleJSON;
 
-using UnityEngine.Assertions;
-
 namespace EE.Internal {
     internal static class AdsConfigUtils {
         public static Network ParseNetwork(string id) {

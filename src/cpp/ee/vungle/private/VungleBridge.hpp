@@ -55,7 +55,7 @@ private:
 
     std::map<std::string, Entry<IFullScreenAd, RewardedAd>> rewardedAds_;
 
-    std::shared_ptr<ads::IAsyncHelper<FullScreenAdResult>> displayer_;
+    std::shared_ptr<ads::IAsyncHelper<AdResult>> displayer_;
 };
 } // namespace vungle
 } // namespace ee

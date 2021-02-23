@@ -6,8 +6,8 @@ namespace ee {
 namespace ads {
 using Self = NullFullScreenAd;
 
-Task<FullScreenAdResult> Self::show() {
-    co_return FullScreenAdResult::Failed;
+Task<AdResult> Self::show() {
+    co_return AdResult::Failed;
 }
 } // namespace ads
 } // namespace ee

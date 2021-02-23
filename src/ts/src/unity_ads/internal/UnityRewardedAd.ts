@@ -1,6 +1,6 @@
 import {
     AdObserver,
-    FullScreenAdResult,
+    AdResult,
     IFullScreenAd,
 } from "../../ads";
 import { IAsyncHelper } from "../../ads/internal";
@@ -11,12 +11,12 @@ import {
 import { UnityAds } from "./UnityAds";
 
 export class UnityRewardedAd extends ObserverManager<AdObserver> implements IFullScreenAd {
-    private readonly _displayer: IAsyncHelper<FullScreenAdResult>;
+    private readonly _displayer: IAsyncHelper<AdResult>;
     private readonly _plugin: UnityAds;
     private readonly _adId: string;
 
     public constructor(
-        displayer: IAsyncHelper<FullScreenAdResult>, plugin: UnityAds, adId: string) {
+        displayer: IAsyncHelper<AdResult>, plugin: UnityAds, adId: string) {
         super();
         this._displayer = displayer;
         this._plugin = plugin;
@@ -38,7 +38,7 @@ export class UnityRewardedAd extends ObserverManager<AdObserver> implements IFul
         return this.isLoaded;
     }
 
-    public show(): Promise<FullScreenAdResult> {
+    public show(): Promise<AdResult> {
         return this._displayer.process(
             () => this._plugin.showRewardedAd(this._adId),
             result => {
@@ -52,7 +52,7 @@ export class UnityRewardedAd extends ObserverManager<AdObserver> implements IFul
 
     public onFailedToShow(message: string): void {
         if (this._displayer.isProcessing) {
-            this._displayer.resolve(FullScreenAdResult.Failed);
+            this._displayer.resolve(AdResult.Failed);
         } else {
             // Assert.
         }
@@ -61,8 +61,8 @@ export class UnityRewardedAd extends ObserverManager<AdObserver> implements IFul
     public onClosed(rewarded: boolean): void {
         if (this._displayer.isProcessing) {
             this._displayer.resolve(rewarded
-                ? FullScreenAdResult.Completed
-                : FullScreenAdResult.Canceled);
+                ? AdResult.Completed
+                : AdResult.Canceled);
         } else {
             // Assert.
         }

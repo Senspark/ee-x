@@ -3,45 +3,21 @@
 
 #ifdef __cplusplus
 
-#include <functional>
-
-#include <ee/core/IObserverManager.hpp>
+#include <memory>
 
 #include "ee/services/ServicesFwd.hpp"
 
 namespace ee {
 namespace services {
-struct AdsObserver {
-    std::function<void()> onClicked;
-};
-
-class IAdsManager : public virtual IObserverManager<AdObserver> {
+class IAdsManager {
 public:
     virtual ~IAdsManager() = default;
-    virtual bool isBannerAdLoaded() const = 0;
-    virtual bool isBannerAdVisible() const = 0;
-    virtual void setBannerAdVisible(bool visible) = 0;
-    virtual std::pair<float, float> getBannerAdAnchor() const = 0;
-    virtual void setBannerAdAnchor(float x, float y) = 0;
-    virtual std::pair<float, float> getBannerAdPosition() const = 0;
-    virtual void setBannerAdPosition(float x, float y) = 0;
-    virtual std::pair<float, float> getBannerAdSize() const = 0;
-    virtual void setBannerAdSize(float x, float y) = 0;
-
-    virtual bool isRectangleAdLoaded() const = 0;
-    virtual bool isRectangleAdVisible() const = 0;
-    virtual void setRectangleAdVisible(bool visible) = 0;
-    virtual std::pair<float, float> getRectangleAdAnchor() const = 0;
-    virtual void setRectangleAdAnchor(float x, float y) = 0;
-    virtual std::pair<float, float> getRectangleAdPosition() const = 0;
-    virtual void setRectangleAdPosition(float x, float y) = 0;
-    virtual std::pair<float, float> getRectangleAdSize() const = 0;
-    virtual void setRectangleAdSize(float x, float y) = 0;
-
-    virtual Task<AdResult> showAppOpenAd() = 0;
-    virtual Task<AdResult> showInterstitialAd() = 0;
-    virtual Task<AdResult> showRewardedInterstitialAd() = 0;
-    virtual Task<AdResult> showRewardedAd() = 0;
+    virtual std::shared_ptr<IBannerAd> getBannerAd() = 0;
+    virtual std::shared_ptr<IBannerAd> getRectangleAd() = 0;
+    virtual std::shared_ptr<IFullScreenAd> getAppOpenAd() = 0;
+    virtual std::shared_ptr<IFullScreenAd> getInterstitialAd() = 0;
+    virtual std::shared_ptr<IFullScreenAd> getRewardedInterstitialAd() = 0;
+    virtual std::shared_ptr<IFullScreenAd> getRewardedAd() = 0;
 };
 } // namespace services
 } // namespace ee

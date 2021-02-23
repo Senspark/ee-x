@@ -38,7 +38,7 @@ public class PluginManager: NSObject {
     
     #if os(iOS)
     fileprivate func initializePlugins(_ version: String, _ delegate: UIApplicationDelegate) -> Bool {
-        let expectedVersion = "2.4.3"
+        let expectedVersion = "2.5.0"
         if version != expectedVersion {
             _logger.error("Version mismatched: found \(version) expected \(expectedVersion)")
             assert(false)

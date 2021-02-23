@@ -25,7 +25,7 @@ cocos2d::ui::Button* createButton() {
 }
 } // namespace
 
-Self* Self::createWithAdView(std::shared_ptr<ee::IAdView> adView) {
+Self* Self::createWithAdView(std::shared_ptr<ee::IBannerAd> adView) {
     auto result = new Self();
     result->initWithAdView(adView);
     result->autorelease();
@@ -36,7 +36,7 @@ Self::NativeAdTestScene()
     : firstTouch_(false)
     , lastPosition_(cocos2d::Point::ZERO) {}
 
-bool Self::initWithAdView(std::shared_ptr<ee::IAdView> adView) {
+bool Self::initWithAdView(std::shared_ptr<ee::IBannerAd> adView) {
     if (not Super::init()) {
         return false;
     }

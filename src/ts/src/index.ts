@@ -10,5 +10,6 @@ export * from './firebase_crashlytics';
 export * from './firebase_performance';
 export * from './firebase_remote_config';
 export * from './iron_source';
+export * from './notification';
 export * from './services';
 export * from './unity_ads';

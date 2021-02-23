@@ -1,5 +1,5 @@
 import {
-    FullScreenAdResult,
+    AdResult,
     IAd,
     IBannerAd,
     IFullScreenAd,
@@ -40,7 +40,7 @@ export class FacebookAds implements IFacebookAds {
     private readonly _logger: ILogger;
     private readonly _destroyer: Destroyer;
     private readonly _ads: { [index: string]: IAd };
-    private readonly _displayer: IAsyncHelper<FullScreenAdResult>;
+    private readonly _displayer: IAsyncHelper<AdResult>;
 
     public constructor(bridge: IMessageBridge, logger: ILogger, destroyer: Destroyer) {
         this._bridge = bridge;
@@ -114,7 +114,7 @@ export class FacebookAds implements IFacebookAds {
         return this.createFullScreenAd(this.kCreateInterstitialAd, adId, () =>
             new DefaultFullScreenAd("FacebookInterstitialAd", this._bridge, this._logger, this._displayer,
                 () => this.destroyAd(adId),
-                _ => FullScreenAdResult.Completed,
+                _ => AdResult.Completed,
                 adId))
     }
 
@@ -123,8 +123,8 @@ export class FacebookAds implements IFacebookAds {
             new DefaultFullScreenAd("FacebookRewardedAd", this._bridge, this._logger, this._displayer,
                 () => this.destroyAd(adId),
                 message => Utils.toBool(message)
-                    ? FullScreenAdResult.Completed
-                    : FullScreenAdResult.Canceled,
+                    ? AdResult.Completed
+                    : AdResult.Canceled,
                 adId))
     }
 

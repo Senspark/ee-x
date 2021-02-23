@@ -1,5 +1,5 @@
 import {
-    FullScreenAdResult,
+    AdResult,
     IAd,
     IFullScreenAd,
 } from "../../ads";
@@ -37,7 +37,7 @@ export class UnityAds implements IUnityAds {
     private _displaying: boolean;
     private _adId?: string;
     private readonly _ads: { [index: string]: [IAd, IAd] };
-    private readonly _displayer: IAsyncHelper<FullScreenAdResult>;
+    private readonly _displayer: IAsyncHelper<AdResult>;
 
     public constructor(bridge: IMessageBridge, logger: ILogger, destroyer: Destroyer) {
         this._bridge = bridge;
@@ -183,20 +183,20 @@ export class UnityAds implements IUnityAds {
             }
         } else {
             this.onMediationAdClosed(adId, rewarded
-                ? FullScreenAdResult.Completed
-                : FullScreenAdResult.Canceled);
+                ? AdResult.Completed
+                : AdResult.Canceled);
         }
     }
 
     private onMediationAdFailedToShow(adId: string, message: string): void {
         if (this._displayer.isProcessing) {
-            this._displayer.resolve(FullScreenAdResult.Failed);
+            this._displayer.resolve(AdResult.Failed);
             return;
         }
         // Assert.IsTrue(false);
     }
 
-    private onMediationAdClosed(adId: string, result: FullScreenAdResult): void {
+    private onMediationAdClosed(adId: string, result: AdResult): void {
         if (this._displayer.isProcessing) {
             this._displayer.resolve(result);
             return;

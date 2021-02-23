@@ -19,7 +19,7 @@ public:
 
     virtual bool isLoaded() const override;
     virtual Task<bool> load() override;
-    virtual Task<FullScreenAdResult> show() override;
+    virtual Task<AdResult> show() override;
 
 private:
     std::shared_ptr<IFullScreenAd> ad_;

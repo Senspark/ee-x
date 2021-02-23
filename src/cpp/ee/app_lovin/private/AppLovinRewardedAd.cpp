@@ -20,10 +20,9 @@ namespace ee {
 namespace app_lovin {
 using Self = RewardedAd;
 
-Self::RewardedAd(
-    ILogger& logger,
-    const std::shared_ptr<ads::IAsyncHelper<FullScreenAdResult>>& displayer,
-    Bridge* plugin)
+Self::RewardedAd(ILogger& logger,
+                 const std::shared_ptr<ads::IAsyncHelper<AdResult>>& displayer,
+                 Bridge* plugin)
     : logger_(logger)
     , displayer_(displayer)
     , plugin_(plugin) {
@@ -55,14 +54,14 @@ Task<bool> Self::load() {
     co_return result;
 }
 
-Task<FullScreenAdResult> Self::show() {
+Task<AdResult> Self::show() {
     logger_.debug("%s: displaying = %s", __PRETTY_FUNCTION__,
                   core::toString(displayer_->isProcessing()).c_str());
     auto result = co_await displayer_->process(
         [this] { //
             plugin_->showRewardedAd();
         },
-        [](FullScreenAdResult result) {
+        [](AdResult result) {
             // OK.
         });
     co_return result;
@@ -112,8 +111,8 @@ void Self::onClosed(bool rewarded) {
                   core::toString(displayer_->isProcessing()).c_str(),
                   core::toString(rewarded).c_str());
     if (displayer_->isProcessing()) {
-        displayer_->resolve(rewarded ? FullScreenAdResult::Completed
-                                     : FullScreenAdResult::Canceled);
+        displayer_->resolve(rewarded ? AdResult::Completed
+                                     : AdResult::Canceled);
     } else {
         logger_.error("%s: this ad is expected to be displaying",
                       __PRETTY_FUNCTION__);

@@ -287,7 +287,7 @@ void Self::onInterstitialAdClosed() {
     if (interstitialAd_) {
         interstitialAd_->onClosed();
     } else {
-        onMediationAdClosed(FullScreenAdResult::Completed);
+        onMediationAdClosed(AdResult::Completed);
     }
 }
 
@@ -322,14 +322,14 @@ void Self::onRewardedAdClosed(bool rewarded) {
     if (rewardedAd_) {
         rewardedAd_->onClosed(rewarded);
     } else {
-        onMediationAdClosed(rewarded ? FullScreenAdResult::Completed
-                                     : FullScreenAdResult::Canceled);
+        onMediationAdClosed(rewarded ? AdResult::Completed
+                                     : AdResult::Canceled);
     }
 }
 
 #pragma mark - Mediation Ad Callbacks.
 
-void Self::onMediationAdClosed(FullScreenAdResult result) {
+void Self::onMediationAdClosed(AdResult result) {
     logger_.debug("%s", __PRETTY_FUNCTION__);
     if (displayer_->isProcessing()) {
         displayer_->resolve(result);

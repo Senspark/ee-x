@@ -8,16 +8,15 @@
 namespace ee {
 namespace services {
 enum class AdFormat;
-enum class AdResult;
 
 class AdsConfig;
 class LazyBannerAd;
+class LazyFullScreenAd;
 class GenericAd;
 class IAdsManager;
 class DefaultAdsManager;
 } // namespace services
 
-using services::AdResult;
 using services::DefaultAdsManager;
 using services::IAdsManager;
 } // namespace ee

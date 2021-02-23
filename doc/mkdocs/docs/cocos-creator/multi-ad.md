@@ -3,20 +3,20 @@
 Modify `build.gradle`
 ```java
 dependencies {
-    implementation 'com.senspark.ee:ad-mob-mediation:2.4.3'
-    implementation 'com.senspark.ee:facebook-ads:2.4.3'
-    implementation 'com.senspark.ee:iron-source-mediation:2.4.3'
-    implementation 'com.senspark.ee:unity-ads:2.4.3'
+    implementation 'com.senspark.ee:ad-mob-mediation:2.5.0'
+    implementation 'com.senspark.ee:facebook-ads:2.5.0'
+    implementation 'com.senspark.ee:iron-source-mediation:2.5.0'
+    implementation 'com.senspark.ee:unity-ads:2.5.0'
 }
 ```
 
 ### iOS
 Modify `Podfile`
 ```ruby
-pod 'ee-x/ad-mob-mediation', '2.4.3'
-pod 'ee-x/facebook-ads', '2.4.3'
-pod 'ee-x/iron-source-mediation', '2.4.3'
-pod 'ee-x/unity-ads', '2.4.3'
+pod 'ee-x/ad-mob-mediation', '2.5.0'
+pod 'ee-x/facebook-ads', '2.5.0'
+pod 'ee-x/iron-source-mediation', '2.5.0'
+pod 'ee-x/unity-ads', '2.5.0'
 ```
 
 ## Basic usage
@@ -35,28 +35,28 @@ cc.resources.load<cc.JsonAsset>('config_path', (err, res) => {
 Normal banner ad
 ```ts
 // Show ad.
-manager.isBannerAdVisible = true;
+manager.bannerAd.isVisible = true;
 
 // Set ad position and anchor.
 const winSize = cc.winSize();
-manager.bannerAdPosition = [winSize.width / 2, winSize.height / 2];
-manager.bannerAdAnchor = [0.5f, 0.5f];
+manager.bannerAd.position = [winSize.width / 2, winSize.height / 2];
+manager.bannerAd.anchor = [0.5f, 0.5f];
 ```
 
 Rectangle banner ad
 ```ts
 // Show ad.
-manager.isRectangleAdVisible = true;
+manager.rectangleAd.isVisible = true;
 
 // Set ad position and anchor.
 const winSize = cc.winSize();
-manager.rectangleAdPosition = [winSize.width / 2, winSize.height / 2];
-manager.rectangleAdAnchor = [0.5f, 0.5f];
+manager.rectangleAd.position = [winSize.width / 2, winSize.height / 2];
+manager.rectangleAd.anchor = [0.5f, 0.5f];
 ```
 
 App open ad
 ```ts
-const result = await manager.showAppOpenAd();
+const result = await manager.appOpenAd.show();
 if (result == ee_x.AdResult.Completed) {
     // Completed.
 } else {
@@ -66,7 +66,7 @@ if (result == ee_x.AdResult.Completed) {
 
 Interstitial ad
 ```ts
-auto result = await manager.showInterstitialAd();
+auto result = await manager.interstitialAd.show();
 if (result == ee_x.AdResult.Completed) {
     // Completed.
 } else {
@@ -76,7 +76,7 @@ if (result == ee_x.AdResult.Completed) {
 
 Rewarded interstitial ad
 ```ts
-const result = await manager.showRewardedInterstitialAd();
+const result = await manager.rewardedInterstitialAd.show();
 if (result == ee_x.AdResult.Completed) {
     // Completed.
 } else {
@@ -86,7 +86,7 @@ if (result == ee_x.AdResult.Completed) {
 
 Rewarded ad
 ```ts
-const result = await manager.showRewardedAd();
+const result = await manager.rewardedAd.show();
 if (result == ee_x.AdResult.Completed) {
     // Completed.
 } else {

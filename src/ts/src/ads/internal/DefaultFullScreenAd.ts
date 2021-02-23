@@ -6,34 +6,36 @@ import {
 } from "../../core";
 import { AdObserver } from "../IAd";
 import {
-    FullScreenAdResult,
+    AdResult,
     IFullScreenAd,
 } from "../IFullScreenAd";
 import { AsyncHelper } from "./AsyncHelper";
+import { Capper } from "./Capper";
 import { IAsyncHelper } from "./IAsyncHelper";
+import { ICapper } from "./ICapper";
 import { MessageHelper } from "./MessageHelper";
 
 type Destroyer = () => void;
-type ResultParser = (message: string) => FullScreenAdResult;
+type ResultParser = (message: string) => AdResult;
 
 export class DefaultFullScreenAd extends ObserverManager<AdObserver> implements IFullScreenAd {
     private readonly kTag = `DefaultFullScreenAd`;
     private readonly _prefix: string;
     private readonly _bridge: IMessageBridge;
     private readonly _logger: ILogger;
-    private readonly _displayer: IAsyncHelper<FullScreenAdResult>;
+    private readonly _displayer: IAsyncHelper<AdResult>;
     private readonly _destroyer: Destroyer;
     private readonly _resultParser: ResultParser;
     private readonly _adId: string;
     private readonly _messageHelper: MessageHelper;
-    private _loadingCapped: boolean;
+    private readonly _loadCapper: ICapper;
     private readonly _loader: IAsyncHelper<boolean>;
 
     public constructor(
         prefix: string,
         bridge: IMessageBridge,
         logger: ILogger,
-        displayer: IAsyncHelper<FullScreenAdResult>,
+        displayer: IAsyncHelper<AdResult>,
         destroyer: Destroyer,
         resultParser: ResultParser,
         adId: string) {
@@ -46,7 +48,7 @@ export class DefaultFullScreenAd extends ObserverManager<AdObserver> implements 
         this._resultParser = resultParser;
         this._adId = adId;
         this._messageHelper = new MessageHelper(prefix, adId);
-        this._loadingCapped = false;
+        this._loadCapper = new Capper(30);
         this._loader = new AsyncHelper<boolean>();
 
         this._logger.debug(`${this.kTag}: constructor: prefix = ${this._prefix} id = ${this._adId}`);
@@ -77,14 +79,10 @@ export class DefaultFullScreenAd extends ObserverManager<AdObserver> implements 
 
     public async load(): Promise<boolean> {
         this._logger.debug(`${this.kTag}: load: prefix = ${this._prefix} id = ${this._adId} loading = ${this._loader.isProcessing}`);
-        if (this._loadingCapped) {
+        if (this._loadCapper.isCapped) {
             return false;
         }
-        this._loadingCapped = true;
-        Utils.noAwait(async () => {
-            await Utils.delay(30);
-            this._loadingCapped = false;
-        });
+        this._loadCapper.cap();
         return await this._loader.process(
             () => this._bridge.call(this._messageHelper.load),
             result => {
@@ -92,7 +90,7 @@ export class DefaultFullScreenAd extends ObserverManager<AdObserver> implements 
             });
     }
 
-    public show(): Promise<FullScreenAdResult> {
+    public show(): Promise<AdResult> {
         this._logger.debug(`${this.kTag}: show: prefix = ${this._prefix} id = ${this._adId} displaying = ${this._displayer.isProcessing}`);
         return this._displayer.process(
             () => this._bridge.call(this._messageHelper.show),
@@ -123,7 +121,7 @@ export class DefaultFullScreenAd extends ObserverManager<AdObserver> implements 
     private onFailedToShow(message: string): void {
         this._logger.debug(`${this.kTag}: onFailedToLoad: prefix = ${this._prefix} id = ${this._adId} displaying = ${this._displayer.isProcessing} message = ${message}`);
         if (this._displayer.isProcessing) {
-            this._displayer.resolve(FullScreenAdResult.Failed);
+            this._displayer.resolve(AdResult.Failed);
         } else {
             // Assert.
         }
@@ -134,7 +132,7 @@ export class DefaultFullScreenAd extends ObserverManager<AdObserver> implements 
         this.dispatchEvent(observer => observer.onClicked && observer.onClicked());
     }
 
-    private onClosed(result: FullScreenAdResult): void {
+    private onClosed(result: AdResult): void {
         this._logger.debug(`${this.kTag}: onClosed: prefix = ${this._prefix} id = ${this._adId} displaying = ${this._displayer.isProcessing}`);
         if (this._displayer.isProcessing) {
             this._displayer.resolve(result);

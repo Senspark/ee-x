@@ -15,18 +15,15 @@
 #include <ee/core/Task.hpp>
 #include <ee/core/WhenAll.hpp>
 
-#include "ee/services/AdResult.hpp"
+#include "ee/ads/internal/Capper.hpp"
 
 namespace ee {
 namespace services {
 using Self = GenericAd;
 
 Self::GenericAd(const std::shared_ptr<IFullScreenAd>& ad, int interval)
-    : ad_(ad)
-    , interval_(interval)
-    , capped_(false) {
-    noAwait(ad_->load());
-    updateCapping();
+    : ad_(ad) {
+    capper_ = std::make_shared<ads::Capper>(interval);
     handle_ = std::make_unique<ObserverHandle>();
     (*handle_).bind(*ad_).addObserver({
         .onLoaded =
@@ -67,7 +64,7 @@ Task<bool> Self::load() {
 }
 
 Task<AdResult> Self::show() {
-    if (interval_ > 0 && capped_) {
+    if (capper_->isCapped()) {
         co_return AdResult::Capped;
     }
     if (ad_->isLoaded()) {
@@ -100,27 +97,10 @@ Task<AdResult> Self::show() {
     }
     auto result = co_await ad_->show();
     noAwait(ad_->load());
-    switch (result) {
-    case FullScreenAdResult::Completed:
-        updateCapping();
-        co_return AdResult::Completed;
-    case FullScreenAdResult::Canceled:
-        co_return AdResult::Canceled;
-    case FullScreenAdResult::Failed:
-        co_return AdResult::Failed;
-    default:
-        assert(false);
+    if (result == AdResult::Completed) {
+        capper_->cap();
     }
-}
-
-void Self::updateCapping() {
-    if (interval_ > 0) {
-        capped_ = true;
-        noAwait([this]() -> Task<> {
-            co_await Delay(interval_);
-            capped_ = false;
-        });
-    }
+    co_return result;
 }
 
 Task<bool> Self::testConnection(float timeOut) {

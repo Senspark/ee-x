@@ -15,7 +15,7 @@
 
 namespace ee {
 namespace services {
-class GenericAd : public IAd, public ObserverManager<AdObserver> {
+class GenericAd : public IFullScreenAd, public ObserverManager<AdObserver> {
 public:
     explicit GenericAd(const std::shared_ptr<IFullScreenAd>& ad, int interval);
     virtual ~GenericAd() override;
@@ -23,18 +23,14 @@ public:
     virtual void destroy() override;
 
     virtual bool isLoaded() const override;
-    [[nodiscard]] virtual Task<bool> load() override;
-
-    [[nodiscard]] Task<AdResult> show();
+    virtual Task<bool> load() override;
+    virtual Task<AdResult> show() override;
 
 private:
     static Task<bool> testConnection(float timeOut);
 
-    void updateCapping();
-
     std::shared_ptr<IFullScreenAd> ad_;
-    bool capped_;
-    int interval_;
+    std::shared_ptr<ads::ICapper> capper_;
     std::unique_ptr<ObserverHandle> handle_;
 };
 } // namespace services

@@ -15,6 +15,7 @@
 #include <ee/core/Utils.hpp>
 
 #include "ee/ads/internal/AsyncHelper.hpp"
+#include "ee/ads/internal/Capper.hpp"
 
 namespace ee {
 namespace ads {
@@ -22,7 +23,7 @@ using Self = DefaultFullScreenAd;
 
 Self::DefaultFullScreenAd(
     const std::string& prefix, IMessageBridge& bridge, ILogger& logger,
-    const std::shared_ptr<IAsyncHelper<FullScreenAdResult>>& displayer,
+    const std::shared_ptr<IAsyncHelper<AdResult>>& displayer,
     const Destroyer& destroyer, const ResultParser& resultParser,
     const std::string& adId)
     : prefix_(prefix)
@@ -35,7 +36,7 @@ Self::DefaultFullScreenAd(
     , messageHelper_(prefix, adId) {
     logger_.debug("%s: prefix = %s id = %s", __PRETTY_FUNCTION__,
                   prefix_.c_str(), adId_.c_str());
-    loadingCapped_ = false;
+    loadCapper_ = std::make_shared<Capper>(30);
     loader_ = std::make_unique<AsyncHelper<bool>>();
 
     bridge_.registerHandler(
@@ -90,14 +91,10 @@ Task<bool> Self::load() {
     logger_.debug("%s: prefix = %s id = %s loading = %s", __PRETTY_FUNCTION__,
                   prefix_.c_str(), adId_.c_str(),
                   core::toString(loader_->isProcessing()).c_str());
-    if (loadingCapped_) {
+    if (loadCapper_->isCapped()) {
         co_return false;
     }
-    loadingCapped_ = true;
-    noAwait([this]() -> Task<> {
-        co_await Delay(30.0f);
-        loadingCapped_ = false;
-    });
+    loadCapper_->cap();
     auto result = co_await loader_->process(
         [this] { //
             bridge_.call(messageHelper_.load());
@@ -108,7 +105,7 @@ Task<bool> Self::load() {
     co_return result;
 }
 
-Task<FullScreenAdResult> Self::show() {
+Task<AdResult> Self::show() {
     logger_.debug("%s: prefix = %s id = %s displaying = %s",
                   __PRETTY_FUNCTION__, prefix_.c_str(), adId_.c_str(),
                   core::toString(displayer_->isProcessing()).c_str());
@@ -116,7 +113,7 @@ Task<FullScreenAdResult> Self::show() {
         [this] { //
             bridge_.call(messageHelper_.show());
         },
-        [](FullScreenAdResult result) {
+        [](AdResult result) {
             // OK.
         });
     co_return result;
@@ -160,7 +157,7 @@ void Self::onFailedToShow(const std::string& message) {
                   core::toString(displayer_->isProcessing()).c_str(),
                   message.c_str());
     if (displayer_->isProcessing()) {
-        displayer_->resolve(FullScreenAdResult::Failed);
+        displayer_->resolve(AdResult::Failed);
     } else {
         logger_.error("%s: this ad is expected to be displaying",
                       __PRETTY_FUNCTION__);
@@ -178,7 +175,7 @@ void Self::onClicked() {
     });
 }
 
-void Self::onClosed(FullScreenAdResult result) {
+void Self::onClosed(AdResult result) {
     logger_.debug("%s: prefix = %s id = %s displaying = %s",
                   __PRETTY_FUNCTION__, prefix_.c_str(), adId_.c_str(),
                   core::toString(displayer_->isProcessing()).c_str());

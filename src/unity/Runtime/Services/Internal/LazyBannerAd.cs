@@ -21,6 +21,9 @@ namespace EE.Internal {
             get => _ad;
             set {
                 _handle.Clear();
+                if (value == null) {
+                    return;
+                }
                 _handle.Bind(value)
                     .AddObserver(new AdObserver {
                         OnLoaded = () => {

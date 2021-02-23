@@ -49,7 +49,7 @@ export class FullScreenAdScene extends cc.Component {
     public onShowInterstitialAdButtonPressed(): void {
         ee.Utils.noAwait(async () => {
             this._resultText.string = `---`;
-            const result = await this.adsManager.showInterstitialAd();
+            const result = await this.adsManager.interstitialAd.show();
             this.updateResult(result);
         });
     }
@@ -57,7 +57,7 @@ export class FullScreenAdScene extends cc.Component {
     public onShowRewardedAdButtonPressed(): void {
         ee.Utils.noAwait(async () => {
             this._resultText.string = `---`;
-            const result = await this.adsManager.showRewardedAd();
+            const result = await this.adsManager.rewardedAd.show();
             this.updateResult(result);
         });
     }

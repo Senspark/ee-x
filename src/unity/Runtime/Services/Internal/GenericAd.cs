@@ -1,21 +1,15 @@
 using System;
 using System.Threading.Tasks;
 
-using UnityEngine.Assertions;
-
 namespace EE.Internal {
-    internal class GenericAd : ObserverManager<AdObserver>, IAd {
+    internal class GenericAd : ObserverManager<AdObserver>, IFullScreenAd {
         private readonly IFullScreenAd _ad;
-        private bool _capped;
-        private readonly int _interval;
+        private readonly ICapper _capper;
         private readonly ObserverHandle _handle;
 
         public GenericAd(IFullScreenAd ad, int interval) {
             _ad = ad;
-            _interval = interval;
-            _capped = false;
-            Utils.NoAwait(async () => await _ad.Load());
-            UpdateCapping();
+            _capper = new Capper(interval);
             _handle = new ObserverHandle();
             _handle.Bind(_ad)
                 .AddObserver(new AdObserver {
@@ -36,7 +30,7 @@ namespace EE.Internal {
         }
 
         public async Task<AdResult> Show() {
-            if (_interval > 0 && _capped) {
+            if (_capper.IsCapped) {
                 return AdResult.Capped;
             }
             if (_ad.IsLoaded) {
@@ -66,27 +60,10 @@ namespace EE.Internal {
             }
             var result = await _ad.Show();
             Utils.NoAwait(async () => await _ad.Load());
-            switch (result) {
-                case FullScreenAdResult.Completed:
-                    UpdateCapping();
-                    return AdResult.Completed;
-                case FullScreenAdResult.Canceled:
-                    return AdResult.Canceled;
-                case FullScreenAdResult.Failed:
-                    return AdResult.Failed;
+            if (result == AdResult.Completed) {
+                _capper.Cap();
             }
-            Assert.IsFalse(true);
-            return AdResult.Failed;
-        }
-
-        private void UpdateCapping() {
-            if (_interval > 0) {
-                _capped = true;
-                Utils.NoAwait(async () => {
-                    await Task.Delay(_interval * 1000);
-                    _capped = false;
-                });
-            }
+            return result;
         }
 
         private static async Task<bool> TestConnection(float timeOut) {

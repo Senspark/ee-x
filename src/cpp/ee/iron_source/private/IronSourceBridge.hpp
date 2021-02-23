@@ -53,7 +53,7 @@ private:
     void onRewardedAdClicked();
     void onRewardedAdClosed(bool rewarded);
 
-    void onMediationAdClosed(FullScreenAdResult result);
+    void onMediationAdClosed(AdResult result);
 
     IMessageBridge& bridge_;
     ILogger& logger_;
@@ -66,7 +66,7 @@ private:
     std::shared_ptr<RewardedAd> rewardedAd_;
     std::shared_ptr<IFullScreenAd> sharedRewardedAd_;
 
-    std::shared_ptr<ads::IAsyncHelper<FullScreenAdResult>> displayer_;
+    std::shared_ptr<ads::IAsyncHelper<AdResult>> displayer_;
 };
 } // namespace iron_source
 } // namespace ee

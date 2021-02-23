@@ -189,8 +189,8 @@ void Self::onMediationAdClosed(const std::string& adId, bool rewarded) {
     logger_.debug("%s: %s", __PRETTY_FUNCTION__,
                   core::toString(rewarded).c_str());
     if (displayer_->isProcessing()) {
-        displayer_->resolve(rewarded ? FullScreenAdResult::Completed
-                                     : FullScreenAdResult::Canceled);
+        displayer_->resolve(rewarded ? AdResult::Completed
+                                     : AdResult::Canceled);
         return;
     }
     assert(false);

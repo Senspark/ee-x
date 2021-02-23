@@ -7,21 +7,26 @@
 
 namespace ee {
 namespace ads {
-enum class FullScreenAdResult {
-    /// Failed to display the ad.
+enum class AdResult {
+    /// Used by DefaultFullScreenAd.
     Failed,
-
-    /// Succeeded to display the ad and the user has canceled the ad.
     Canceled,
-
-    /// Succeeded to display the ad and the user has completed the ad.
     Completed,
+
+    /// Used by LazyFullScreenAd.
+    NotInitialized,
+    NotConfigured,
+
+    /// Used by GenericAd.
+    Capped,
+    NoInternet,
+    NotLoaded,
 };
 
 class IFullScreenAd : public virtual IAd {
 public:
     /// Attempts to show this ad.
-    [[nodiscard]] virtual Task<FullScreenAdResult> show() = 0;
+    [[nodiscard]] virtual Task<AdResult> show() = 0;
 };
 } // namespace ads
 } // namespace ee

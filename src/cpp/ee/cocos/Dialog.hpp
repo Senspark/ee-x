@@ -11,7 +11,7 @@
 
 #ifdef __cplusplus
 
-#include "ee/cocos/EECocos2dxFwd.hpp"
+#include "ee/cocos/CocosFwd.hpp"
 
 #ifdef EE_X_COCOS_CPP
 #include <functional>

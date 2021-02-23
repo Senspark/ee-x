@@ -273,22 +273,21 @@ void Self::onClosed(const std::string& adId, bool rewarded) {
         }
     } else {
         // Mediation.
-        onMediationAdClosed(adId, rewarded ? FullScreenAdResult::Completed
-                                           : FullScreenAdResult::Canceled);
+        onMediationAdClosed(adId, rewarded ? AdResult::Completed
+                                           : AdResult::Canceled);
     }
 }
 
 void Self::onMediationAdFailedToShow(const std::string& adId,
                                      const std::string& message) {
     if (displayer_->isProcessing()) {
-        displayer_->resolve(FullScreenAdResult::Failed);
+        displayer_->resolve(AdResult::Failed);
         return;
     }
     assert(false);
 }
 
-void Self::onMediationAdClosed(const std::string& adId,
-                               FullScreenAdResult result) {
+void Self::onMediationAdClosed(const std::string& adId, AdResult result) {
     if (displayer_->isProcessing()) {
         displayer_->resolve(result);
         return;

@@ -17,7 +17,7 @@
 namespace eetest {
 class NativeAdTester : public ITester {
 public:
-    explicit NativeAdTester(const std::shared_ptr<ee::IAdView>& ad);
+    explicit NativeAdTester(const std::shared_ptr<ee::IBannerAd>& ad);
 
     virtual void initialize() override;
     virtual void destroy() override;
@@ -25,7 +25,7 @@ public:
     virtual void stop() override;
 
 private:
-    std::shared_ptr<ee::IAdView> ad_;
+    std::shared_ptr<ee::IBannerAd> ad_;
 };
 } // namespace eetest
 

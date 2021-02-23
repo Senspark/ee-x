@@ -50,7 +50,7 @@ class MediationManager;
 
 using ads::AdResult;
 using FullScreenAdResult [[deprecated]] = AdResult;
-using IRewardedAdResult [[deprecated]] = FullScreenAdResult;
+using IRewardedAdResult [[deprecated]] = AdResult;
 
 using ads::AdObserver;
 using IAdViewObserver [[deprecated]] = AdObserver;

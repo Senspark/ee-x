@@ -6,7 +6,7 @@
 
 ## 2.4.3 - 2020-02-15
 - [Native] Handle invalid network / ad format in IAdsManager.
-- [Native] getBool / getLong / getDouble / getString are nows synchronized methods in Firebase Remote Config.
+- [Native] getBool / getLong / getDouble / getString are now synchronized methods in Firebase Remote Config.
 - [Native] Add Unity banner ad.
 
 ## 2.4.2 - 2020-02-11

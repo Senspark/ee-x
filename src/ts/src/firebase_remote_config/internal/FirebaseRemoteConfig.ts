@@ -76,23 +76,23 @@ export class FirebaseRemoteConfig implements IFirebaseRemoteConfig {
         await this._bridge.callAsync(this.kSetDefaults, JSON.stringify(request));
     }
 
-    public async getBool(key: string): Promise<boolean> {
-        const response = await this._bridge.callAsync(this.kGetBool, key);
+    public getBool(key: string): boolean {
+        const response = this._bridge.call(this.kGetBool, key);
         return Utils.toBool(response);
     }
 
-    public async getLong(key: string): Promise<number> {
-        const response = await this._bridge.callAsync(this.kGetLong, key);
+    public getLong(key: string): number {
+        const response = this._bridge.call(this.kGetLong, key);
         return parseInt(response);
     }
 
-    public async getDouble(key: string): Promise<number> {
-        const response = await this._bridge.callAsync(this.kGetDouble, key);
+    public getDouble(key: string): number {
+        const response = this._bridge.call(this.kGetDouble, key);
         return parseFloat(response);
     }
 
-    public async getString(key: string): Promise<string> {
-        const response = await this._bridge.callAsync(this.kGetString, key);
+    public getString(key: string): string {
+        const response = this._bridge.call(this.kGetString, key);
         return response;
     }
 }

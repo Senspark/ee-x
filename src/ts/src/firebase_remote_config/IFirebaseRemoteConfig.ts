@@ -7,8 +7,8 @@ export interface IFirebaseRemoteConfig extends IPlugin {
     fetch(fetchTimeOut: number): Promise<FirebaseFetchStatus>;
     activate(): Promise<boolean>;
     setDefaults(defaults: { [key: string]: boolean | number | string }): Promise<void>;
-    getBool(key: string): Promise<boolean>;
-    getLong(key: string): Promise<number>;
-    getDouble(key: string): Promise<number>;
-    getString(key: string): Promise<string>;
+    getBool(key: string): boolean;
+    getLong(key: string): number;
+    getDouble(key: string): number;
+    getString(key: string): string;
 }

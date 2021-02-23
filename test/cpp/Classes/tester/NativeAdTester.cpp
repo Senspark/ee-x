@@ -17,7 +17,7 @@
 namespace eetest {
 using Self = NativeAdTester;
 
-Self::NativeAdTester(const std::shared_ptr<ee::IAdView>& ad)
+Self::NativeAdTester(const std::shared_ptr<ee::IBannerAd>& ad)
     : ad_(ad) {}
 
 void Self::initialize() {

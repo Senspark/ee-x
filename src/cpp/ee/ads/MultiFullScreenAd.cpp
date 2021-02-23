@@ -69,10 +69,10 @@ Task<bool> Self::load() {
     co_return result;
 }
 
-Task<FullScreenAdResult> Self::show() {
-    auto result = FullScreenAdResult::Failed;
+Task<AdResult> Self::show() {
+    auto result = AdResult::Failed;
     for (auto&& item : items_) {
-        if (result == FullScreenAdResult::Failed) {
+        if (result == AdResult::Failed) {
             // Only process if there isn't any successfully displayed ad.
             result = co_await item->show();
         }

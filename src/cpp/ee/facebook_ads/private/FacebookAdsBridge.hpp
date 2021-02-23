@@ -52,7 +52,7 @@ private:
     ILogger& logger_;
     Destroyer destroyer_;
     std::map<std::string, std::shared_ptr<IAd>> ads_;
-    std::shared_ptr<ads::IAsyncHelper<FullScreenAdResult>> displayer_;
+    std::shared_ptr<ads::IAsyncHelper<AdResult>> displayer_;
 };
 } // namespace facebook_ads
 } // namespace ee

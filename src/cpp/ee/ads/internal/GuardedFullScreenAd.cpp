@@ -81,15 +81,15 @@ Task<bool> Self::load() {
     co_return loaded_;
 }
 
-Task<FullScreenAdResult> Self::show() {
+Task<AdResult> Self::show() {
     if (not loaded_) {
-        co_return FullScreenAdResult::Failed;
+        co_return AdResult::Failed;
     }
     if (loading_) {
-        co_return FullScreenAdResult::Failed;
+        co_return AdResult::Failed;
     }
     if (displaying_) {
-        co_return FullScreenAdResult::Failed;
+        co_return AdResult::Failed;
     }
     displaying_ = true;
     loaded_ = false;

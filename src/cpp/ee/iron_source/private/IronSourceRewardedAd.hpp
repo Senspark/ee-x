@@ -20,17 +20,16 @@ namespace ee {
 namespace iron_source {
 class RewardedAd : public IFullScreenAd, public ObserverManager<AdObserver> {
 public:
-    explicit RewardedAd(
-        ILogger& logger,
-        std::shared_ptr<ads::IAsyncHelper<FullScreenAdResult>>& displayer,
-        Bridge* plugin, const std::string& adId);
+    explicit RewardedAd(ILogger& logger,
+                        std::shared_ptr<ads::IAsyncHelper<AdResult>>& displayer,
+                        Bridge* plugin, const std::string& adId);
     virtual ~RewardedAd() override;
 
     virtual void destroy() override;
 
     virtual bool isLoaded() const override;
     virtual Task<bool> load() override;
-    virtual Task<FullScreenAdResult> show() override;
+    virtual Task<AdResult> show() override;
 
 private:
     friend Bridge;
@@ -41,7 +40,7 @@ private:
     void onClosed(bool rewarded);
 
     ILogger& logger_;
-    std::shared_ptr<ads::IAsyncHelper<FullScreenAdResult>> displayer_;
+    std::shared_ptr<ads::IAsyncHelper<AdResult>> displayer_;
     Bridge* plugin_;
     std::string adId_;
 };

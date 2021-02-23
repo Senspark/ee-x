@@ -23,7 +23,7 @@ class InterstitialAd : public IFullScreenAd,
 public:
     explicit InterstitialAd(
         ILogger& logger,
-        const std::shared_ptr<ads::IAsyncHelper<FullScreenAdResult>>& displayer,
+        const std::shared_ptr<ads::IAsyncHelper<AdResult>>& displayer,
         Bridge* plugin, const std::string& adId);
     virtual ~InterstitialAd() override;
 
@@ -31,7 +31,7 @@ public:
 
     virtual bool isLoaded() const override;
     virtual Task<bool> load() override;
-    virtual Task<FullScreenAdResult> show() override;
+    virtual Task<AdResult> show() override;
 
 private:
     friend Bridge;
@@ -43,7 +43,7 @@ private:
     void onClosed();
 
     ILogger& logger_;
-    std::shared_ptr<ads::IAsyncHelper<FullScreenAdResult>> displayer_;
+    std::shared_ptr<ads::IAsyncHelper<AdResult>> displayer_;
     Bridge* plugin_;
     std::string adId_;
 

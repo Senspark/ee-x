@@ -164,7 +164,7 @@ Self::createInterstitialAd(const std::string& adId) {
                 return destroyAd(adId);
             },
             [](const std::string& message) { //
-                return FullScreenAdResult::Completed;
+                return AdResult::Completed;
             },
             adId);
     });
@@ -178,8 +178,8 @@ std::shared_ptr<IFullScreenAd> Self::createRewardedAd(const std::string& adId) {
                 return destroyAd(adId);
             },
             [](const std::string& message) { //
-                return core::toBool(message) ? FullScreenAdResult::Completed
-                                             : FullScreenAdResult::Canceled;
+                return core::toBool(message) ? AdResult::Completed
+                                             : AdResult::Canceled;
             },
             adId);
     });

@@ -57,8 +57,7 @@ private:
 
     void onMediationAdFailedToShow(const std::string& adId,
                                    const std::string& message);
-    void onMediationAdClosed(const std::string& adId,
-                             FullScreenAdResult result);
+    void onMediationAdClosed(const std::string& adId, AdResult result);
 
     IMessageBridge& bridge_;
     ILogger& logger_;
@@ -73,7 +72,7 @@ private:
     std::map<std::string, std::pair<std::shared_ptr<IAd>,  // Decorated ad.
                                     std::shared_ptr<IAd>>> // Raw ad.
         fullScreenAds_;
-    std::shared_ptr<ads::IAsyncHelper<FullScreenAdResult>> displayer_;
+    std::shared_ptr<ads::IAsyncHelper<AdResult>> displayer_;
 };
 } // namespace unity_ads
 } // namespace ee

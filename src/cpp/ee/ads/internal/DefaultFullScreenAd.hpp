@@ -19,12 +19,11 @@ class DefaultFullScreenAd : public IFullScreenAd,
                             public ObserverManager<AdObserver> {
 public:
     using Destroyer = std::function<void()>;
-    using ResultParser =
-        std::function<FullScreenAdResult(const std::string& message)>;
+    using ResultParser = std::function<AdResult(const std::string& message)>;
 
     explicit DefaultFullScreenAd(
         const std::string& prefix, IMessageBridge& bridge, ILogger& logger,
-        const std::shared_ptr<IAsyncHelper<FullScreenAdResult>>& displayer,
+        const std::shared_ptr<IAsyncHelper<AdResult>>& displayer,
         const Destroyer& destroyer, const ResultParser& resultParser,
         const std::string& adId);
 
@@ -34,19 +33,19 @@ public:
 
     virtual bool isLoaded() const override;
     virtual Task<bool> load() override;
-    virtual Task<FullScreenAdResult> show() override;
+    virtual Task<AdResult> show() override;
 
 private:
     void onLoaded();
     void onFailedToLoad(const std::string& message);
     void onFailedToShow(const std::string& message);
     void onClicked();
-    void onClosed(FullScreenAdResult result);
+    void onClosed(AdResult result);
 
     std::string prefix_;
     IMessageBridge& bridge_;
     ILogger& logger_;
-    std::shared_ptr<IAsyncHelper<FullScreenAdResult>> displayer_;
+    std::shared_ptr<IAsyncHelper<AdResult>> displayer_;
     Destroyer destroyer_;
     ResultParser resultParser_;
     std::string adId_;

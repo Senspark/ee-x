@@ -21,13 +21,12 @@ Self& Self::getInstance() {
 }
 
 Self::MediationManager() {
-    adDisplayer_ = std::make_shared<AsyncHelper<FullScreenAdResult>>();
+    adDisplayer_ = std::make_shared<AsyncHelper<AdResult>>();
 }
 
 Self::~MediationManager() {}
 
-const std::shared_ptr<IAsyncHelper<FullScreenAdResult>>&
-Self::getAdDisplayer() const {
+const std::shared_ptr<IAsyncHelper<AdResult>>& Self::getAdDisplayer() const {
     return adDisplayer_;
 }
 } // namespace ads

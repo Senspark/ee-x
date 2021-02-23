@@ -23,7 +23,7 @@ using Self = DefaultFullScreenAd;
 
 Self::DefaultFullScreenAd(
     const std::string& prefix, IMessageBridge& bridge, ILogger& logger,
-    const std::shared_ptr<IAsyncHelper<FullScreenAdResult>>& displayer,
+    const std::shared_ptr<IAsyncHelper<AdResult>>& displayer,
     const Destroyer& destroyer, const ResultParser& resultParser,
     const std::string& adId)
     : prefix_(prefix)
@@ -105,7 +105,7 @@ Task<bool> Self::load() {
     co_return result;
 }
 
-Task<FullScreenAdResult> Self::show() {
+Task<AdResult> Self::show() {
     logger_.debug("%s: prefix = %s id = %s displaying = %s",
                   __PRETTY_FUNCTION__, prefix_.c_str(), adId_.c_str(),
                   core::toString(displayer_->isProcessing()).c_str());
@@ -113,7 +113,7 @@ Task<FullScreenAdResult> Self::show() {
         [this] { //
             bridge_.call(messageHelper_.show());
         },
-        [](FullScreenAdResult result) {
+        [](AdResult result) {
             // OK.
         });
     co_return result;
@@ -157,7 +157,7 @@ void Self::onFailedToShow(const std::string& message) {
                   core::toString(displayer_->isProcessing()).c_str(),
                   message.c_str());
     if (displayer_->isProcessing()) {
-        displayer_->resolve(FullScreenAdResult::Failed);
+        displayer_->resolve(AdResult::Failed);
     } else {
         logger_.error("%s: this ad is expected to be displaying",
                       __PRETTY_FUNCTION__);
@@ -175,7 +175,7 @@ void Self::onClicked() {
     });
 }
 
-void Self::onClosed(FullScreenAdResult result) {
+void Self::onClosed(AdResult result) {
     logger_.debug("%s: prefix = %s id = %s displaying = %s",
                   __PRETTY_FUNCTION__, prefix_.c_str(), adId_.c_str(),
                   core::toString(displayer_->isProcessing()).c_str());

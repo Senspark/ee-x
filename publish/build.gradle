@@ -29,7 +29,7 @@ ext {
     compileSdkVersion = 30
     buildToolsVersion = '30.0.3'
     targetSdkVersion = 30
-    firebaseVersion = '26.4.0'
+    firebaseVersion = '26.5.0'
     buildPrefab = true
     buildMaven = true
     pluginVersion = '2.5.0'

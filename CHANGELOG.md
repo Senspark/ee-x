@@ -14,7 +14,7 @@
 - [Native] Fix to reload banner ad in MultiBannerAd.
 
 ## 2.4.1 - 2020-02-05
-- [C++] Remove Firebae C++ SDK.
+- [C++] Remove Firebase C++ SDK.
 
 ## 2.4.0 - 2020-02-04
 - [Android/iOS/Native] Add rewarded interstitial ads.

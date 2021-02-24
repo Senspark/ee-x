@@ -29,6 +29,7 @@ export class AdMob implements IAdMob {
     private readonly kGetEmulatorTestDeviceHash = this.kPrefix + "GetEmulatorTestDeviceHash";
     private readonly kAddTestDevice = this.kPrefix + "AddTestDevice";
     private readonly kGetBannerAdSize = this.kPrefix + "GetBannerAdSize";
+    private readonly kOpenTestSuite = this.kPrefix + "OpenTestSuite";
     private readonly kCreateBannerAd = this.kPrefix + "CreateBannerAd";
     private readonly kCreateNativeAd = this.kPrefix + "CreateNativeAd";
     private readonly kCreateAppOpenAd = this.kPrefix + "CreateAppOpenAd";
@@ -82,6 +83,10 @@ export class AdMob implements IAdMob {
             height: number,
         } = JSON.parse(response);
         return [json.width, json.height];
+    }
+
+    public openTestSuite(): void {
+        this._bridge.call(this.kOpenTestSuite);
     }
 
     public createBannerAd(adId: string, adSize: AdMobBannerAdSize): IBannerAd {

@@ -6,6 +6,7 @@
 //
 
 import GoogleMobileAds
+import GoogleMobileAdsMediationTestSuite
 import RxSwift
 
 private let kTag = "\(AdMobBridge.self)"
@@ -13,6 +14,7 @@ private let kPrefix = "AdMobBridge"
 private let kInitialize = "\(kPrefix)Initialize"
 private let kGetEmulatorTestDeviceHash = "\(kPrefix)GetEmulatorTestDeviceHash"
 private let kAddTestDevice = "\(kPrefix)AddTestDevice"
+private let kOpenTestSuite = "\(kPrefix)OpenTestSuite"
 private let kGetBannerAdSize = "\(kPrefix)GetBannerAdSize"
 private let kCreateBannerAd = "\(kPrefix)CreateBannerAd"
 private let kCreateNativeAd = "\(kPrefix)CreateNativeAd"
@@ -60,6 +62,10 @@ class AdMobBridge: NSObject, IPlugin {
         }
         _bridge.registerHandler(kAddTestDevice) { message in
             self.addTestDevice(message)
+            return ""
+        }
+        _bridge.registerHandler(kOpenTestSuite) { _ in
+            self.openTestSuite()
             return ""
         }
         _bridge.registerHandler(kGetBannerAdSize) { message in
@@ -169,6 +175,15 @@ class AdMobBridge: NSObject, IPlugin {
             self.checkInitialized()
             self._testDevices.append(hash)
             GADMobileAds.sharedInstance().requestConfiguration.testDeviceIdentifiers = self._testDevices
+        }
+    }
+
+    func openTestSuite() {
+        Thread.runOnMainThread {
+            guard let rootView = Utils.getCurrentRootViewController() else {
+                return
+            }
+            GoogleMobileAdsMediationTestSuite.present(on: rootView, delegate: nil)
         }
     }
 

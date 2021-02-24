@@ -132,6 +132,7 @@ Pod::Spec.new do |spec|
 
     # https://developers.google.com/admob/ios/rel-notes
     s.dependency 'Google-Mobile-Ads-SDK', '7.69.0'
+    s.dependency 'GoogleMobileAdsMediationTestSuite', '1.4.0'
   end
 
   spec.subspec 'ad-mob-mediation' do |s|

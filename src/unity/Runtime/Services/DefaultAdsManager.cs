@@ -58,6 +58,10 @@ namespace EE {
             _fullScreenAds[format].Ad = ad;
         }
 
+        public void OpenTestSuite() {
+            _config.OpenTestSuite(Network.AdMob);
+        }
+
         public IBannerAd BannerAd => _bannerAds[AdFormat.Banner];
         public IBannerAd RectangleAd => _bannerAds[AdFormat.Rectangle];
         public IFullScreenAd AppOpenAd => _fullScreenAds[AdFormat.AppOpen];

@@ -19,6 +19,7 @@ public:
 
     Task<bool> initialize();
 
+    virtual void openTestSuite() override;
     virtual std::shared_ptr<IBannerAd> getBannerAd() override;
     virtual std::shared_ptr<IBannerAd> getRectangleAd() override;
     virtual std::shared_ptr<IFullScreenAd> getAppOpenAd() override;

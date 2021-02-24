@@ -134,6 +134,7 @@ export enum AdFormat {
 
 interface INetworkConfigManager {
     initialize(): Promise<void>;
+    openTestSuite(network: Network): void;
     createAd(network: Network, format: AdFormat, id: string): IAd;
 }
 
@@ -153,6 +154,15 @@ class NetworkConfigManager implements INetworkConfigManager {
         }
     }
 
+    public openTestSuite(network: Network): void {
+        for (const item of this._networks) {
+            if (item.network === network) {
+                item.openTestSuite();
+                break;
+            }
+        }
+    }
+
     public createAd(network: Network, format: AdFormat, id: string): IAd {
         for (const item of this._networks) {
             if (item.network === network) {
@@ -166,6 +176,7 @@ class NetworkConfigManager implements INetworkConfigManager {
 interface INetworkConfig {
     initialize(): Promise<void>;
     network: Network;
+    openTestSuite(): void;
     createAd(format: AdFormat, id: string): IAd;
 }
 
@@ -195,6 +206,10 @@ class AdMobConfig implements INetworkConfig {
 
     public get network(): Network {
         return Network.AdMob;
+    }
+
+    public openTestSuite(): void {
+        this._plugin?.openTestSuite();
     }
 
     public createAd(format: AdFormat, id: string): IAd {
@@ -235,6 +250,9 @@ class FacebookAdsConfig implements INetworkConfig {
         return Network.FacebookAds;
     }
 
+    public openTestSuite(): void {
+    }
+
     public createAd(format: AdFormat, id: string): IAd {
         if (this._plugin === undefined) {
             throw Error(`Plugin not initialized`);
@@ -272,6 +290,9 @@ class IronSourceConfig implements INetworkConfig {
 
     public get network(): Network {
         return Network.IronSource;
+    }
+
+    public openTestSuite(): void {
     }
 
     public createAd(format: AdFormat, id: string): IAd {
@@ -318,6 +339,9 @@ class UnityAdsConfig implements INetworkConfig {
         return Network.UnityAds;
     }
 
+    public openTestSuite(): void {
+    }
+
     public createAd(format: AdFormat, id: string): IAd {
         if (this._plugin === undefined) {
             throw Error(`Plugin not initialized`);
@@ -345,6 +369,9 @@ class NullNetworkConfig implements INetworkConfig {
 
     public get network(): Network {
         return Network.Null;
+    }
+
+    public openTestSuite(): void {
     }
 
     public createAd(format: AdFormat, id: string): IAd {
@@ -606,6 +633,10 @@ export class AdsConfig {
 
     public async initialize(): Promise<void> {
         await this._networkManager.initialize();
+    }
+
+    public openTestSuite(network: Network): void {
+        this._networkManager.openTestSuite(network);
     }
 
     public createAd(format: AdFormat): IAd {

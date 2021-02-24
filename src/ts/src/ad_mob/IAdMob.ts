@@ -9,6 +9,7 @@ export interface IAdMob extends IPlugin {
     initialize(): Promise<boolean>;
     getEmulatorTestDeviceHash(): string;
     addTestDevice(hash: string): void;
+    openTestSuite(): void;
     createBannerAd(adId: string, adSize: AdMobBannerAdSize): IBannerAd;
     createAppOpenAd(adId: string): IFullScreenAd;
     createInterstitialAd(adId: string): IFullScreenAd;

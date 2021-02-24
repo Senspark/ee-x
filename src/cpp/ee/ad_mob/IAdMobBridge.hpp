@@ -32,6 +32,8 @@ public:
 
     virtual void addTestDevice(const std::string& hash) = 0;
 
+    virtual void openTestSuite() = 0;
+
     /// Creates a banner ad.
     /// @param[in] adId The banner ad unit ID.
     /// @param[in] adSize The banner ad size.

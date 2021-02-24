@@ -12,6 +12,7 @@ import com.ee.internal.AdMobRewardedAd
 import com.ee.internal.AdMobRewardedInterstitialAd
 import com.ee.internal.deserialize
 import com.ee.internal.serialize
+import com.google.android.ads.mediationtestsuite.MediationTestSuite
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.AdSize
 import com.google.android.gms.ads.MobileAds
@@ -37,6 +38,7 @@ class AdMobBridge(
         private const val kInitialize = "${kPrefix}Initialize"
         private const val kGetEmulatorTestDeviceHash = "${kPrefix}GetEmulatorTestDeviceHash"
         private const val kAddTestDevice = "${kPrefix}AddTestDevice"
+        private const val kOpenTestSuite = "${kPrefix}OpenTestSuite"
         private const val kGetBannerAdSize = "${kPrefix}GetBannerAdSize"
         private const val kCreateBannerAd = "${kPrefix}CreateBannerAd"
         private const val kCreateNativeAd = "${kPrefix}CreateNativeAd"
@@ -106,6 +108,10 @@ class AdMobBridge(
         }
         _bridge.registerHandler(kAddTestDevice) { message ->
             addTestDevice(message)
+            ""
+        }
+        _bridge.registerHandler(kOpenTestSuite) {
+            openTestSuite()
             ""
         }
         _bridge.registerHandler(kGetBannerAdSize) { message ->
@@ -228,6 +234,14 @@ class AdMobBridge(
                 .setTestDeviceIds(_testDevices)
                 .build()
             MobileAds.setRequestConfiguration(configuration)
+        }
+    }
+
+    @AnyThread
+    fun openTestSuite() {
+        Thread.runOnMainThread {
+            val activity = _activity ?: return@runOnMainThread
+            MediationTestSuite.launch(activity)
         }
     }
 

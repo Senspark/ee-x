@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 
 namespace EE {
     public interface IAdsManager {
+        void OpenTestSuite();
         IBannerAd BannerAd { get; }
         IBannerAd RectangleAd { get; }
         IFullScreenAd AppOpenAd { get; }

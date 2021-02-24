@@ -28,6 +28,7 @@ public:
     virtual Task<bool> initialize() override;
     virtual std::string getEmulatorTestDeviceHash() const override;
     virtual void addTestDevice(const std::string& hash) override;
+    virtual void openTestSuite() override;
     virtual std::shared_ptr<IBannerAd>
     createBannerAd(const std::string& adId, BannerAdSize adSize) override;
     virtual std::shared_ptr<IBannerAd>

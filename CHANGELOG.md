@@ -1,3 +1,6 @@
+## 2.5.1
+- [Native] Fix crash in fetch() in Firebase Remote Config.
+
 ## 2.5.0 - 2020-02-23
 - [Android] Update Firebase BoM version to 26.5.0
 - [Native] IAdsManager now has methods for each type of ad item.

@@ -11,17 +11,27 @@ import com.facebook.ads.Ad
 import com.facebook.ads.AdError
 import com.facebook.ads.InterstitialAd
 import com.facebook.ads.InterstitialAdListener
+import kotlinx.serialization.InternalSerializationApi
+import kotlinx.serialization.Serializable
 import java.util.concurrent.atomic.AtomicBoolean
 
 /**
  * Created by Zinge on 10/11/17.
  */
+@InternalSerializationApi
 internal class FacebookInterstitialAd(
     private val _bridge: IMessageBridge,
     private val _logger: ILogger,
     private var _activity: Activity?,
     private val _adId: String)
     : IFullScreenAd, InterstitialAdListener {
+    @Serializable
+    @Suppress("unused")
+    private class ErrorResponse(
+        val code: Int,
+        val message: String
+    )
+
     companion object {
         private val kTag = FacebookInterstitialAd::class.java.name
     }
@@ -112,7 +122,7 @@ internal class FacebookInterstitialAd(
             } else {
                 _isLoaded.set(false)
                 destroyInternalAd()
-                _bridge.callCpp(_messageHelper.onFailedToShow)
+                _bridge.callCpp(_messageHelper.onFailedToShow, ErrorResponse(-1, "Failed to show ad").serialize())
             }
         }
     }
@@ -125,16 +135,16 @@ internal class FacebookInterstitialAd(
         }
     }
 
-    override fun onError(ad: Ad, adError: AdError) {
+    override fun onError(ad: Ad, error: AdError) {
         Thread.runOnMainThread {
-            _logger.debug("$kTag: ${this::onError.name}: id = $_adId message = ${adError.errorMessage}")
+            _logger.debug("$kTag: ${this::onError.name}: id = $_adId message = ${error.errorMessage}")
             destroyInternalAd()
             if (_displaying) {
                 _displaying = false
                 _isLoaded.set(false)
-                _bridge.callCpp(_messageHelper.onFailedToShow, adError.errorMessage)
+                _bridge.callCpp(_messageHelper.onFailedToShow, ErrorResponse(error.errorCode, error.errorMessage).serialize())
             } else {
-                _bridge.callCpp(_messageHelper.onFailedToLoad, adError.errorMessage)
+                _bridge.callCpp(_messageHelper.onFailedToLoad, ErrorResponse(error.errorCode, error.errorMessage).serialize())
             }
         }
     }

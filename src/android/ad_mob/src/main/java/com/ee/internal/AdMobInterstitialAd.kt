@@ -12,16 +12,26 @@ import com.google.android.gms.ads.FullScreenContentCallback
 import com.google.android.gms.ads.LoadAdError
 import com.google.android.gms.ads.interstitial.InterstitialAd
 import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
+import kotlinx.serialization.InternalSerializationApi
+import kotlinx.serialization.Serializable
 import java.util.concurrent.atomic.AtomicBoolean
 
 /**
  * Created by Zinge on 10/13/17.
  */
+@InternalSerializationApi
 internal class AdMobInterstitialAd(
     private val _bridge: IMessageBridge,
     private val _logger: ILogger,
     private var _activity: Activity?,
     private val _adId: String) : IFullScreenAd {
+    @Serializable
+    @Suppress("unused")
+    private class ErrorResponse(
+        val code: Int,
+        val message: String
+    )
+
     companion object {
         private val kTag = AdMobInterstitialAd::class.java.name
     }
@@ -89,7 +99,7 @@ internal class AdMobInterstitialAd(
                         _logger.debug("${kTag}: ${this::onAdFailedToShowFullScreenContent.name}: id = $_adId message = ${error.message}")
                         _isLoaded.set(false)
                         _ad = null
-                        _bridge.callCpp(_messageHelper.onFailedToShow, error.message)
+                        _bridge.callCpp(_messageHelper.onFailedToShow, ErrorResponse(error.code, error.message).serialize())
                     }
                 }
 
@@ -116,7 +126,7 @@ internal class AdMobInterstitialAd(
                 override fun onAdFailedToLoad(error: LoadAdError) {
                     Thread.runOnMainThread {
                         _logger.debug("${kTag}: ${this::onAdFailedToLoad.name}: id = $_adId message = ${error.message} response = ${error.responseInfo ?: ""}")
-                        _bridge.callCpp(_messageHelper.onFailedToLoad, error.message)
+                        _bridge.callCpp(_messageHelper.onFailedToLoad, ErrorResponse(error.code, error.message).serialize())
                     }
                 }
             }
@@ -130,12 +140,12 @@ internal class AdMobInterstitialAd(
             _logger.debug("$kTag: ${this::show.name}: id = $_adId")
             val ad = _ad
             if (ad == null) {
-                _bridge.callCpp(_messageHelper.onFailedToShow, "Null ad")
+                _bridge.callCpp(_messageHelper.onFailedToShow, ErrorResponse(-1, "Null ad").serialize())
                 return@runOnMainThread
             }
             val activity = _activity
             if (activity == null) {
-                _bridge.callCpp(_messageHelper.onFailedToShow, "Null activity")
+                _bridge.callCpp(_messageHelper.onFailedToShow, ErrorResponse(-1, "Null activity").serialize())
                 return@runOnMainThread
             }
             ad.show(activity)

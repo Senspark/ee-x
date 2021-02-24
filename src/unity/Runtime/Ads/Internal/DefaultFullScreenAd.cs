@@ -1,6 +1,8 @@
 using System;
 using System.Threading.Tasks;
 
+using SimpleJSON;
+
 using UnityEngine.Assertions;
 
 namespace EE.Internal {
@@ -41,8 +43,14 @@ namespace EE.Internal {
 
             _logger.Debug($"{kTag}: constructor: prefix = {_prefix} id = {_adId}");
             _bridge.RegisterHandler(_ => OnLoaded(), _messageHelper.OnLoaded);
-            _bridge.RegisterHandler(OnFailedToLoad, _messageHelper.OnFailedToLoad);
-            _bridge.RegisterHandler(OnFailedToShow, _messageHelper.OnFailedToShow);
+            _bridge.RegisterHandler(message => {
+                var json = JSON.Parse(message);
+                OnFailedToLoad(json["code"], json["message"]);
+            }, _messageHelper.OnFailedToLoad);
+            _bridge.RegisterHandler(message => {
+                var json = JSON.Parse(message);
+                OnFailedToShow(json["code"], json["message"]);
+            }, _messageHelper.OnFailedToShow);
             _bridge.RegisterHandler(_ => OnClicked(), _messageHelper.OnClicked);
             _bridge.RegisterHandler(message => {
                 var result = _resultParser(message);
@@ -101,7 +109,7 @@ namespace EE.Internal {
             DispatchEvent(observer => observer.OnLoaded?.Invoke());
         }
 
-        private void OnFailedToLoad(string message) {
+        private void OnFailedToLoad(int code, string message) {
             _logger.Debug(
                 $"{kTag}: {nameof(OnFailedToLoad)}: prefix = {_prefix} id = {_adId} loading = {_loader.IsProcessing} message = {message}");
             if (_loader.IsProcessing) {
@@ -111,7 +119,7 @@ namespace EE.Internal {
             }
         }
 
-        private void OnFailedToShow(string message) {
+        private void OnFailedToShow(int code, string message) {
             _logger.Debug(
                 $"{kTag}: {nameof(OnFailedToLoad)}: prefix = {_prefix} id = {_adId} displaying = {_displayer.IsProcessing} message = {message}");
             if (_displayer.IsProcessing) {

@@ -16,6 +16,7 @@
 #include <ee/core/IMessageBridge.hpp>
 #include <ee/core/Task.hpp>
 #include <ee/core/Utils.hpp>
+#include <ee/nlohmann/json.hpp>
 
 #include "ee/app_lovin/private/AppLovinRewardedAd.hpp"
 
@@ -139,8 +140,9 @@ Self::Bridge(IMessageBridge& bridge, ILogger& logger,
         },
         kOnInterstitialAdLoaded);
     bridge_.registerHandler(
-        [this](const std::string& message) { //
-            onInterstitialAdFailedToLoad(message);
+        [this](const std::string& message) {
+            auto json = nlohmann::json::parse(message);
+            onInterstitialAdFailedToLoad(json["code"], json["message"]);
         },
         kOnInterstitialAdFailedToLoad);
     bridge_.registerHandler(
@@ -159,8 +161,9 @@ Self::Bridge(IMessageBridge& bridge, ILogger& logger,
         },
         kOnRewardedAdLoaded);
     bridge_.registerHandler(
-        [this](const std::string& message) { //
-            onRewardedAdFailedToLoad(message);
+        [this](const std::string& message) {
+            auto json = nlohmann::json::parse(message);
+            onRewardedAdFailedToLoad(json["code"], json["message"]);
         },
         kOnRewardedAdFailedToLoad);
     bridge_.registerHandler(
@@ -258,7 +261,7 @@ void Self::onInterstitialAdLoaded() {
     // TODO.
 }
 
-void Self::onInterstitialAdFailedToLoad(const std::string& message) {
+void Self::onInterstitialAdFailedToLoad(int code, const std::string& message) {
     logger_.debug("%s: message = %s", __PRETTY_FUNCTION__, message.c_str());
     // TODO.
 }
@@ -282,7 +285,7 @@ void Self::onRewardedAdLoaded() {
     }
 }
 
-void Self::onRewardedAdFailedToLoad(const std::string& message) {
+void Self::onRewardedAdFailedToLoad(int code, const std::string& message) {
     logger_.debug("%s: message = %s", __PRETTY_FUNCTION__, message.c_str());
     if (rewardedAd_) {
         rewardedAd_->onFailedToLoad(message);

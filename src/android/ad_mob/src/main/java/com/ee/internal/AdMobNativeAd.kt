@@ -27,6 +27,7 @@ import com.google.android.gms.ads.formats.MediaView
 import com.google.android.gms.ads.formats.UnifiedNativeAd
 import com.google.android.gms.ads.formats.UnifiedNativeAdView
 import kotlinx.serialization.InternalSerializationApi
+import kotlinx.serialization.Serializable
 import java.util.concurrent.atomic.AtomicBoolean
 
 private typealias ViewProcessor<T> = (view: T) -> Unit
@@ -44,6 +45,13 @@ internal class AdMobNativeAd(
     private val _layoutName: String,
     private val _identifiers: Map<String, String>)
     : IBannerAd, UnifiedNativeAd.OnUnifiedNativeAdLoadedListener, AdListener() {
+    @Serializable
+    @Suppress("unused")
+    private class ErrorResponse(
+        val code: Int,
+        val message: String
+    )
+    
     companion object {
         private val kTag = AdMobNativeAd::class.java.name
         private const val k__body = "body"
@@ -351,10 +359,10 @@ internal class AdMobNativeAd(
         }
     }
 
-    override fun onAdFailedToLoad(error: LoadAdError?) {
+    override fun onAdFailedToLoad(error: LoadAdError) {
         Thread.runOnMainThread {
-            _logger.debug("$kTag: onAdFailedToLoad: id = $_adId message = ${error?.message ?: ""}")
-            _bridge.callCpp(_messageHelper.onFailedToLoad, error?.message ?: "")
+            _logger.debug("$kTag: onAdFailedToLoad: id = $_adId message = ${error.message}")
+            _bridge.callCpp(_messageHelper.onFailedToLoad, ErrorResponse(error.code, error.message).serialize())
         }
     }
 

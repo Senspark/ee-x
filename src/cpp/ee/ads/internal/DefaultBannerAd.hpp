@@ -46,7 +46,7 @@ public:
 
 private:
     void onLoaded();
-    void onFailedToLoad(const std::string& message);
+    void onFailedToLoad(int code, const std::string& message);
     void onClicked();
 
     std::string prefix_;

@@ -43,13 +43,13 @@ private:
     void showRewardedAd(const std::string& adId);
 
     void onInterstitialAdLoaded();
-    void onInterstitialAdFailedToLoad(const std::string& message);
-    void onInterstitialAdFailedToShow(const std::string& message);
+    void onInterstitialAdFailedToLoad(int code, const std::string& message);
+    void onInterstitialAdFailedToShow(int code, const std::string& message);
     void onInterstitialAdClicked();
     void onInterstitialAdClosed();
 
     void onRewardedAdLoaded();
-    void onRewardedAdFailedToShow(const std::string& message);
+    void onRewardedAdFailedToShow(int code, const std::string& message);
     void onRewardedAdClicked();
     void onRewardedAdClosed(bool rewarded);
 

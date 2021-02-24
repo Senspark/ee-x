@@ -37,8 +37,8 @@ public:
 
 private:
     void onLoaded();
-    void onFailedToLoad(const std::string& message);
-    void onFailedToShow(const std::string& message);
+    void onFailedToLoad(int code, const std::string& message);
+    void onFailedToShow(int code, const std::string& message);
     void onClicked();
     void onClosed(AdResult result);
 

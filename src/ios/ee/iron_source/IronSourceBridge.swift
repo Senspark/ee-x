@@ -234,7 +234,10 @@ class IronSourceBridge: NSObject, IPlugin, ISRewardedVideoDelegate, ISInterstiti
     public func interstitialDidFailToLoadWithError(_ error: Error) {
         Thread.runOnMainThread {
             self._logger.debug("\(kTag): \(#function): \(error.localizedDescription)")
-            self._bridge.callCpp(kOnInterstitialAdFailedToLoad, error.localizedDescription)
+            self._bridge.callCpp(kOnInterstitialAdFailedToLoad, EEJsonUtils.convertDictionary(toString: [
+                "code": (error as NSError).code,
+                "message": error.localizedDescription
+            ]))
         }
     }
 
@@ -248,7 +251,10 @@ class IronSourceBridge: NSObject, IPlugin, ISRewardedVideoDelegate, ISInterstiti
         Thread.runOnMainThread {
             self._logger.debug("\(kTag): \(#function): \(error.localizedDescription)")
             self._isInterstitialAdLoaded = false
-            self._bridge.callCpp(kOnInterstitialAdFailedToShow, error.localizedDescription)
+            self._bridge.callCpp(kOnInterstitialAdFailedToShow, EEJsonUtils.convertDictionary(toString: [
+                "code": (error as NSError).code,
+                "message": error.localizedDescription
+            ]))
         }
     }
 
@@ -287,7 +293,10 @@ class IronSourceBridge: NSObject, IPlugin, ISRewardedVideoDelegate, ISInterstiti
         Thread.runOnMainThread {
             self._logger.debug("\(kTag): \(#function): \(error.localizedDescription)")
             self._isRewardedAdLoaded = false
-            self._bridge.callCpp(kOnRewardedAdFailedToShow, error.localizedDescription)
+            self._bridge.callCpp(kOnRewardedAdFailedToShow, EEJsonUtils.convertDictionary(toString: [
+                "code": (error as NSError).code,
+                "message": error.localizedDescription
+            ]))
         }
     }
 

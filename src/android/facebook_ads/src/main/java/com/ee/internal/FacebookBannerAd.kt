@@ -16,6 +16,7 @@ import com.facebook.ads.AdListener
 import com.facebook.ads.AdSize
 import com.facebook.ads.AdView
 import kotlinx.serialization.InternalSerializationApi
+import kotlinx.serialization.Serializable
 import java.util.concurrent.atomic.AtomicBoolean
 
 /**
@@ -30,6 +31,13 @@ internal class FacebookBannerAd(
     private val _adSize: AdSize,
     bannerHelper: FacebookBannerHelper)
     : IBannerAd, AdListener {
+    @Serializable
+    @Suppress("unused")
+    private class ErrorResponse(
+        val code: Int,
+        val message: String
+    )
+
     companion object {
         private val kTag = FacebookBannerAd::class.java.name
     }
@@ -165,10 +173,10 @@ internal class FacebookBannerAd(
         }
     }
 
-    override fun onError(ad: Ad, adError: AdError) {
+    override fun onError(ad: Ad, error: AdError) {
         Thread.runOnMainThread {
-            _logger.debug("$kTag: ${this::onError.name}: id = $_adId message = ${adError.errorMessage}")
-            _bridge.callCpp(_messageHelper.onFailedToLoad, adError.errorMessage)
+            _logger.debug("$kTag: ${this::onError.name}: id = $_adId message = ${error.errorMessage}")
+            _bridge.callCpp(_messageHelper.onFailedToLoad, ErrorResponse(error.errorCode, error.errorMessage).serialize())
         }
     }
 

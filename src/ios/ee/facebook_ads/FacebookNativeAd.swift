@@ -198,7 +198,10 @@ internal class FacebookNativeAd:
     func nativeAd(_ nativeAd: FBNativeAd, didFailWithError error: Error) {
         Thread.runOnMainThread {
             self._logger.debug("\(kTag): \(#function): \(error.localizedDescription)")
-            self._bridge.callCpp(self._messageHelper.onFailedToLoad, error.localizedDescription)
+            self._bridge.callCpp(self._messageHelper.onFailedToLoad, EEJsonUtils.convertDictionary(toString: [
+                "code": (error as NSError).code,
+                "message": error.localizedDescription
+            ]))
         }
     }
     

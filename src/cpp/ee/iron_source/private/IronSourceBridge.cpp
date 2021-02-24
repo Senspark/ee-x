@@ -59,13 +59,15 @@ Self::Bridge(IMessageBridge& bridge, ILogger& logger,
         },
         kOnInterstitialAdLoaded);
     bridge_.registerHandler(
-        [this](const std::string& message) { //
-            onInterstitialAdFailedToLoad(message);
+        [this](const std::string& message) {
+            auto json = nlohmann::json::parse(message);
+            onInterstitialAdFailedToLoad(json["code"], json["message"]);
         },
         kOnInterstitialAdFailedToLoad);
     bridge_.registerHandler(
-        [this](const std::string& message) { //
-            onInterstitialAdFailedToShow(message);
+        [this](const std::string& message) {
+            auto json = nlohmann::json::parse(message);
+            onInterstitialAdFailedToShow(json["code"], json["message"]);
         },
         kOnInterstitialAdFailedToShow);
     bridge_.registerHandler(
@@ -85,8 +87,9 @@ Self::Bridge(IMessageBridge& bridge, ILogger& logger,
         },
         kOnRewardedAdLoaded);
     bridge_.registerHandler(
-        [this](const std::string& message) { //
-            onRewardedAdFailedToShow(message);
+        [this](const std::string& message) {
+            auto json = nlohmann::json::parse(message);
+            onRewardedAdFailedToShow(json["code"], json["message"]);
         },
         kOnRewardedAdFailedToShow);
     bridge_.registerHandler(
@@ -257,7 +260,7 @@ void Self::onInterstitialAdLoaded() {
     }
 }
 
-void Self::onInterstitialAdFailedToLoad(const std::string& message) {
+void Self::onInterstitialAdFailedToLoad(int code, const std::string& message) {
     logger_.debug("%s", __PRETTY_FUNCTION__);
     if (interstitialAd_) {
         interstitialAd_->onFailedToLoad(message);
@@ -266,7 +269,7 @@ void Self::onInterstitialAdFailedToLoad(const std::string& message) {
     }
 }
 
-void Self::onInterstitialAdFailedToShow(const std::string& message) {
+void Self::onInterstitialAdFailedToShow(int code, const std::string& message) {
     if (interstitialAd_) {
         interstitialAd_->onFailedToShow(message);
     } else {
@@ -301,7 +304,7 @@ void Self::onRewardedAdLoaded() {
     }
 }
 
-void Self::onRewardedAdFailedToShow(const std::string& message) {
+void Self::onRewardedAdFailedToShow(int code, const std::string& message) {
     if (rewardedAd_) {
         rewardedAd_->onFailedToShow(message);
     } else {

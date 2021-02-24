@@ -10,12 +10,22 @@ import com.ee.ILogger
 import com.ee.IMessageBridge
 import com.ee.Thread
 import com.ee.Utils
+import kotlinx.serialization.InternalSerializationApi
+import kotlinx.serialization.Serializable
 import java.util.concurrent.atomic.AtomicBoolean
 
+@InternalSerializationApi
 internal class AppLovinRewardedAdListener(
     private val _bridge: IMessageBridge,
     private val _logger: ILogger)
     : AppLovinAdLoadListener, AppLovinAdDisplayListener, AppLovinAdClickListener, AppLovinAdRewardListener, AppLovinAdVideoPlaybackListener {
+    @Serializable
+    @Suppress("unused")
+    private class ErrorResponse(
+        val code: Int,
+        val message: String
+    )
+
     companion object {
         private val kTag = AppLovinRewardedAdListener::class.java.name
         private const val kPrefix = "AppLovinBridge"
@@ -42,7 +52,7 @@ internal class AppLovinRewardedAdListener(
     override fun failedToReceiveAd(errorCode: Int) {
         Thread.runOnMainThread {
             _logger.debug("$kTag: ${this::failedToReceiveAd.name}: code $errorCode")
-            _bridge.callCpp(kOnRewardedAdFailedToLoad, errorCode.toString())
+            _bridge.callCpp(kOnRewardedAdFailedToLoad, ErrorResponse(errorCode, "").serialize())
         }
     }
 

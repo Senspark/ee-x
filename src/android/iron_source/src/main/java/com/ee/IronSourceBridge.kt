@@ -30,6 +30,13 @@ class IronSourceBridge(
     private val _application: Application,
     private var _activity: Activity?)
     : IPlugin, RewardedVideoListener, InterstitialListener {
+    @Serializable
+    @Suppress("unused")
+    private class ErrorResponse(
+        val code: Int,
+        val message: String
+    )
+
     companion object {
         private val kTag = IronSourceBridge::class.java.name
         private const val kPrefix = "IronSourceBridge"
@@ -276,10 +283,10 @@ class IronSourceBridge(
         }
     }
 
-    override fun onInterstitialAdLoadFailed(ironSourceError: IronSourceError) {
+    override fun onInterstitialAdLoadFailed(error: IronSourceError) {
         Thread.runOnMainThread {
-            _logger.debug("$kTag: ${this::onInterstitialAdLoadFailed.name}: ${ironSourceError.errorMessage}")
-            _bridge.callCpp(kOnInterstitialAdFailedToLoad, ironSourceError.errorMessage)
+            _logger.debug("$kTag: ${this::onInterstitialAdLoadFailed.name}: ${error.errorMessage}")
+            _bridge.callCpp(kOnInterstitialAdFailedToLoad, ErrorResponse(error.errorCode, error.errorMessage).serialize())
         }
     }
 
@@ -289,11 +296,11 @@ class IronSourceBridge(
         }
     }
 
-    override fun onInterstitialAdShowFailed(ironSourceError: IronSourceError) {
+    override fun onInterstitialAdShowFailed(error: IronSourceError) {
         Thread.runOnMainThread {
-            _logger.debug("$kTag:${this::onInterstitialAdShowFailed.name}: ${ironSourceError.errorMessage}")
+            _logger.debug("$kTag:${this::onInterstitialAdShowFailed.name}: ${error.errorMessage}")
             _isInterstitialAdLoaded.set(false)
-            _bridge.callCpp(kOnInterstitialAdFailedToShow, ironSourceError.errorMessage)
+            _bridge.callCpp(kOnInterstitialAdFailedToShow, ErrorResponse(error.errorCode, error.errorMessage).serialize())
         }
     }
 
@@ -328,11 +335,11 @@ class IronSourceBridge(
         }
     }
 
-    override fun onRewardedVideoAdShowFailed(ironSourceError: IronSourceError) {
+    override fun onRewardedVideoAdShowFailed(error: IronSourceError) {
         Thread.runOnMainThread {
-            _logger.debug("$kTag: ${this::onRewardedVideoAdShowFailed.name}: ${ironSourceError.errorMessage}")
+            _logger.debug("$kTag: ${this::onRewardedVideoAdShowFailed.name}: ${error.errorMessage}")
             _isRewardedAdLoaded.set(false)
-            _bridge.callCpp(kOnRewardedAdFailedToShow, ironSourceError.errorMessage)
+            _bridge.callCpp(kOnRewardedAdFailedToShow, ErrorResponse(error.errorCode, error.errorMessage).serialize())
         }
     }
 

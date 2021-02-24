@@ -83,7 +83,10 @@ internal class FacebookRewardedAd: NSObject, IFullScreenAd, FBRewardedVideoAdDel
             self._logger.debug("\(kTag): \(#function): id = \(self._adId)")
             guard let rootView = Utils.getCurrentRootViewController() else {
                 assert(false, "Current rootView is null")
-                self._bridge.callCpp(self._messageHelper.onFailedToShow)
+                self._bridge.callCpp(self._messageHelper.onFailedToShow, EEJsonUtils.convertDictionary(toString: [
+                    "code": -1,
+                    "message": "Null root view"
+                ]))
                 return
             }
             self._displaying = true
@@ -95,7 +98,10 @@ internal class FacebookRewardedAd: NSObject, IFullScreenAd, FBRewardedVideoAdDel
             } else {
                 self._isLoaded = false
                 self.destroyInternalAd()
-                self._bridge.callCpp(self._messageHelper.onFailedToShow)
+                self._bridge.callCpp(self._messageHelper.onFailedToShow, EEJsonUtils.convertDictionary(toString: [
+                    "code": -1,
+                    "message": "Failed to show ad"
+                ]))
             }
         }
     }
@@ -115,9 +121,15 @@ internal class FacebookRewardedAd: NSObject, IFullScreenAd, FBRewardedVideoAdDel
             if self._displaying {
                 self._displaying = false
                 self._isLoaded = false
-                self._bridge.callCpp(self._messageHelper.onFailedToShow, error.localizedDescription)
+                self._bridge.callCpp(self._messageHelper.onFailedToShow, EEJsonUtils.convertDictionary(toString: [
+                    "code": (error as NSError).code,
+                    "message": error.localizedDescription
+                ]))
             } else {
-                self._bridge.callCpp(self._messageHelper.onFailedToLoad, error.localizedDescription)
+                self._bridge.callCpp(self._messageHelper.onFailedToLoad, EEJsonUtils.convertDictionary(toString: [
+                    "code": (error as NSError).code,
+                    "message": error.localizedDescription
+                ]))
             }
         }
     }

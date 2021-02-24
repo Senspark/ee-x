@@ -55,18 +55,21 @@ internal class AdMobAppOpenAd: NSObject, IFullScreenAd, GADFullScreenContentDele
             GADAppOpenAd.load(withAdUnitID: self._adId,
                               request: GADRequest(),
                               orientation: orientation) { ad, error in
-                if error == nil {
+                if let error = error {
+                    Thread.runOnMainThread {
+                        self._logger.debug("\(kTag): \(#function): failed id = \(self._adId) message = \(error.localizedDescription)")
+                        self._bridge.callCpp(self._messageHelper.onFailedToLoad, EEJsonUtils.convertDictionary(toString: [
+                            "code": (error as NSError).code,
+                            "message": error.localizedDescription
+                        ]))
+                    }
+                } else {
                     Thread.runOnMainThread {
                         self._logger.debug("\(kTag): \(#function): succeeded id = \(self._adId)")
                         self._isLoaded = true
                         self._ad = ad
                         self._ad?.fullScreenContentDelegate = self
                         self._bridge.callCpp(self._messageHelper.onLoaded)
-                    }
-                } else {
-                    Thread.runOnMainThread {
-                        self._logger.debug("\(kTag): \(#function): failed id = \(self._adId) message = \(error?.localizedDescription ?? "")")
-                        self._bridge.callCpp(self._messageHelper.onFailedToLoad, error?.localizedDescription ?? "")
                     }
                 }
             }
@@ -78,12 +81,18 @@ internal class AdMobAppOpenAd: NSObject, IFullScreenAd, GADFullScreenContentDele
             self._logger.debug("\(kTag): \(#function): id = \(self._adId)")
             guard let ad = self._ad else {
                 assert(false, "Ad is not initialized")
-                self._bridge.callCpp(self._messageHelper.onFailedToShow, "Null ad")
+                self._bridge.callCpp(self._messageHelper.onFailedToShow, EEJsonUtils.convertDictionary(toString: [
+                    "code": -1,
+                    "message": "Null ad"
+                ]))
                 return
             }
             guard let rootView = Utils.getCurrentRootViewController() else {
                 assert(false, "Current rootView is null")
-                self._bridge.callCpp(self._messageHelper.onFailedToShow)
+                self._bridge.callCpp(self._messageHelper.onFailedToShow, EEJsonUtils.convertDictionary(toString: [
+                    "code": -1,
+                    "message": "Null root view"
+                ]))
                 return
             }
             ad.present(fromRootViewController: rootView)
@@ -101,7 +110,10 @@ internal class AdMobAppOpenAd: NSObject, IFullScreenAd, GADFullScreenContentDele
             self._logger.debug("\(kTag): \(#function): id = \(self._adId) message = \(error.localizedDescription)")
             self._isLoaded = false
             self._ad = nil
-            self._bridge.callCpp(self._messageHelper.onFailedToShow, error.localizedDescription)
+            self._bridge.callCpp(self._messageHelper.onFailedToShow, EEJsonUtils.convertDictionary(toString: [
+                "code": (error as NSError).code,
+                "message": error.localizedDescription
+            ]))
         }
     }
 

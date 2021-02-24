@@ -16,6 +16,7 @@ import com.google.android.gms.ads.AdSize
 import com.google.android.gms.ads.AdView
 import com.google.android.gms.ads.LoadAdError
 import kotlinx.serialization.InternalSerializationApi
+import kotlinx.serialization.Serializable
 import java.util.concurrent.atomic.AtomicBoolean
 
 /**
@@ -30,6 +31,13 @@ internal class AdMobBannerAd(
     private val _adSize: AdSize,
     bannerHelper: AdMobBannerHelper)
     : IBannerAd, AdListener() {
+    @Serializable
+    @Suppress("unused")
+    private class ErrorResponse(
+        val code: Int,
+        val message: String
+    )
+
     companion object {
         private val kTag = AdMobBannerAd::class.java.name
     }
@@ -175,7 +183,7 @@ internal class AdMobBannerAd(
     override fun onAdFailedToLoad(error: LoadAdError) {
         Thread.runOnMainThread {
             _logger.debug("$kTag: onAdFailedToLoad: id = $_adId message = ${error.message} response = ${error.responseInfo ?: ""}")
-            _bridge.callCpp(_messageHelper.onFailedToLoad, error.message)
+            _bridge.callCpp(_messageHelper.onFailedToLoad, ErrorResponse(error.code, error.message).serialize())
         }
     }
 

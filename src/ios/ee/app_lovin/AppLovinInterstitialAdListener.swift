@@ -41,7 +41,10 @@ internal class AppLovinInterstitialAdListener:
     func adService(_ adService: ALAdService, didFailToLoadAdWithError code: Int32) {
         Thread.runOnMainThread {
             self._logger.debug("\(kTag): \(#function): code \(code)")
-            self._bridge.callCpp(kOnInterstitialAdFailedToLoad, "\(code)")
+            self._bridge.callCpp(kOnInterstitialAdFailedToLoad, EEJsonUtils.convertDictionary(toString: [
+                "code": code,
+                "message": ""
+            ]))
         }
     }
 

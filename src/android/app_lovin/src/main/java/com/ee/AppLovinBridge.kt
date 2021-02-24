@@ -12,8 +12,10 @@ import com.applovin.sdk.AppLovinSdkSettings
 import com.ee.internal.AppLovinInterstitialAdListener
 import com.ee.internal.AppLovinRewardedAdListener
 import kotlinx.coroutines.suspendCancellableCoroutine
+import kotlinx.serialization.InternalSerializationApi
 import kotlin.coroutines.resume
 
+@InternalSerializationApi
 class AppLovinBridge(
     private val _bridge: IMessageBridge,
     private val _logger: ILogger,
@@ -42,9 +44,9 @@ class AppLovinBridge(
     private var _rewardedAdListener: AppLovinRewardedAdListener? = null
 
     init {
-        _logger.info("constructor begin: application = $_application activity = $_activity")
+        _logger.info("$kTag: constructor begin: application = $_application activity = $_activity")
         registerHandlers()
-        _logger.info("constructor end")
+        _logger.info("$kTag: constructor end")
     }
 
     override fun onCreate(activity: Activity) {

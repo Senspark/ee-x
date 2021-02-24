@@ -46,7 +46,13 @@ export class DefaultBannerAd extends ObserverManager<AdObserver> implements IBan
 
         this._logger.debug(`${this.kTag}: constructor: prefix = ${this._prefix} id = ${this._adId}`);
         this._bridge.registerHandler(_ => this.onLoaded(), this._messageHelper.onLoaded);
-        this._bridge.registerHandler(message => this.onFailedToLoad(message), this._messageHelper.onFailedToLoad);
+        this._bridge.registerHandler(message => {
+            const json: {
+                code: number,
+                message: string,
+            } = JSON.parse(message);
+            this.onFailedToLoad(json.code, json.message);
+        }, this._messageHelper.onFailedToLoad);
         this._bridge.registerHandler(_ => this.onClicked(), this._messageHelper.onClicked);
     }
 
@@ -117,7 +123,7 @@ export class DefaultBannerAd extends ObserverManager<AdObserver> implements IBan
         this.dispatchEvent(observer => observer.onLoaded && observer.onLoaded());
     }
 
-    private onFailedToLoad(message: string): void {
+    private onFailedToLoad(code: number, message: string): void {
         this._logger.debug(`${this.kTag}: onFailedToLoad: prefix = ${this._prefix} id = ${this._adId} loading = ${this._loader.isProcessing} message = ${message}`);
         if (this._loader.isProcessing) {
             this._loader.resolve(false);

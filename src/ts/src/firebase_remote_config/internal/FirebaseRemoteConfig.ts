@@ -50,9 +50,9 @@ export class FirebaseRemoteConfig implements IFirebaseRemoteConfig {
         await this._bridge.callAsync(this.kSetSettings, JSON.stringify(request));
     }
 
-    public async fetch(fetchTimeOut: number): Promise<FirebaseFetchStatus> {
+    public async fetch(fetchInterval: number): Promise<FirebaseFetchStatus> {
         const request = {
-            fetchTimeOut,
+            fetchInterval,
         };
         const response = await this._bridge.callAsync(this.kFetch, JSON.stringify(request));
         switch (parseInt(response)) {

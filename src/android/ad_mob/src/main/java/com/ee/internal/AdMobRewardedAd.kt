@@ -143,7 +143,9 @@ internal class AdMobRewardedAd(
             }
             _rewarded = false
             ad.show(activity) {
-                _rewarded = true
+                Thread.runOnMainThread {
+                    _rewarded = true
+                }
             }
         }
     }

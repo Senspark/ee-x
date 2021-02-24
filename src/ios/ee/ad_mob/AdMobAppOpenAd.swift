@@ -48,6 +48,7 @@ internal class AdMobAppOpenAd: NSObject, IFullScreenAd, GADFullScreenContentDele
 
     func load() {
         Thread.runOnMainThread {
+            self._logger.debug("\(kTag): \(#function): id = \(self._adId)")
             let orientation = Utils.isLandscape()
                 ? UIInterfaceOrientation.landscapeLeft
                 : UIInterfaceOrientation.portrait
@@ -56,7 +57,7 @@ internal class AdMobAppOpenAd: NSObject, IFullScreenAd, GADFullScreenContentDele
                               orientation: orientation) { ad, error in
                 if error == nil {
                     Thread.runOnMainThread {
-                        self._logger.debug("\(kTag): \(#function): succeeded")
+                        self._logger.debug("\(kTag): \(#function): succeeded id = \(self._adId)")
                         self._isLoaded = true
                         self._ad = ad
                         self._ad?.fullScreenContentDelegate = self
@@ -64,7 +65,7 @@ internal class AdMobAppOpenAd: NSObject, IFullScreenAd, GADFullScreenContentDele
                     }
                 } else {
                     Thread.runOnMainThread {
-                        self._logger.debug("\(kTag): \(#function): failed error = \(error?.localizedDescription ?? "")")
+                        self._logger.debug("\(kTag): \(#function): failed id = \(self._adId) message = \(error?.localizedDescription ?? "")")
                         self._bridge.callCpp(self._messageHelper.onFailedToLoad, error?.localizedDescription ?? "")
                     }
                 }
@@ -74,12 +75,15 @@ internal class AdMobAppOpenAd: NSObject, IFullScreenAd, GADFullScreenContentDele
 
     func show() {
         Thread.runOnMainThread {
+            self._logger.debug("\(kTag): \(#function): id = \(self._adId)")
             guard let ad = self._ad else {
+                assert(false, "Ad is not initialized")
                 self._bridge.callCpp(self._messageHelper.onFailedToShow, "Null ad")
                 return
             }
             guard let rootView = Utils.getCurrentRootViewController() else {
-                assert(false, "Ad is not initialized")
+                assert(false, "Current rootView is null")
+                self._bridge.callCpp(self._messageHelper.onFailedToShow)
                 return
             }
             ad.present(fromRootViewController: rootView)
@@ -88,13 +92,13 @@ internal class AdMobAppOpenAd: NSObject, IFullScreenAd, GADFullScreenContentDele
 
     func adDidPresentFullScreenContent(_ ad: GADFullScreenPresentingAd) {
         Thread.runOnMainThread {
-            self._logger.debug("\(kTag): \(#function)")
+            self._logger.debug("\(kTag): \(#function): id = \(self._adId)")
         }
     }
 
     func ad(_ ad: GADFullScreenPresentingAd, didFailToPresentFullScreenContentWithError error: Error) {
         Thread.runOnMainThread {
-            self._logger.debug("\(kTag): \(#function): message = \(error.localizedDescription)")
+            self._logger.debug("\(kTag): \(#function): id = \(self._adId) message = \(error.localizedDescription)")
             self._isLoaded = false
             self._ad = nil
             self._bridge.callCpp(self._messageHelper.onFailedToShow, error.localizedDescription)
@@ -103,7 +107,7 @@ internal class AdMobAppOpenAd: NSObject, IFullScreenAd, GADFullScreenContentDele
 
     func adDidDismissFullScreenContent(_ ad: GADFullScreenPresentingAd) {
         Thread.runOnMainThread {
-            self._logger.debug("\(kTag): \(#function)")
+            self._logger.debug("\(kTag): \(#function): id = \(self._adId)")
             self._isLoaded = false
             self._ad = nil
             self._bridge.callCpp(self._messageHelper.onClosed)

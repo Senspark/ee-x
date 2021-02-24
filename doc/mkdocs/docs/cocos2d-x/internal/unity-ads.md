@@ -4,14 +4,14 @@
 Modify `build.gradle`
 ```java
 dependencies {
-    implementation 'com.senspark.ee:unity-ads:2.5.0'
+    implementation 'com.senspark.ee:unity-ads:2.5.1'
 }
 ```
 
 ### iOS
 Modify `Podfile`
 ```ruby
-pod 'ee-x/unity-ads', '2.5.0'
+pod 'ee-x/unity-ads', '2.5.1'
 ```
 
 ## Basic usage

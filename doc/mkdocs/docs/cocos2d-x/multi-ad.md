@@ -4,20 +4,20 @@
 Modify `build.gradle`
 ```java
 dependencies {
-    implementation 'com.senspark.ee:ad-mob-mediation:2.5.0'
-    implementation 'com.senspark.ee:facebook-ads:2.5.0'
-    implementation 'com.senspark.ee:iron-source-mediation:2.5.0'
-    implementation 'com.senspark.ee:unity-ads:2.5.0'
+    implementation 'com.senspark.ee:ad-mob-mediation:2.5.1'
+    implementation 'com.senspark.ee:facebook-ads:2.5.1'
+    implementation 'com.senspark.ee:iron-source-mediation:2.5.1'
+    implementation 'com.senspark.ee:unity-ads:2.5.1'
 }
 ```
 
 ### iOS
 Modify `Podfile`
 ```ruby
-pod 'ee-x/ad-mob-mediation', '2.5.0'
-pod 'ee-x/facebook-ads', '2.5.0'
-pod 'ee-x/iron-source-mediation', '2.5.0'
-pod 'ee-x/unity-ads', '2.5.0'
+pod 'ee-x/ad-mob-mediation', '2.5.1'
+pod 'ee-x/facebook-ads', '2.5.1'
+pod 'ee-x/iron-source-mediation', '2.5.1'
+pod 'ee-x/unity-ads', '2.5.1'
 ```
 
 ## Basic usage

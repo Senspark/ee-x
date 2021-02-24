@@ -61,7 +61,7 @@ Task<> Self::setSettings(std::int64_t fetchTimeOut,
 
 Task<FetchStatus> Self::fetch(std::int64_t fetchInterval) {
     nlohmann::json request;
-    request["fetchInterval"] = fetchTimeOut;
+    request["fetchInterval"] = fetchInterval;
     auto response = co_await bridge_.callAsync(kFetch, request.dump());
     co_return static_cast<FetchStatus>(std::stoi(response));
 }

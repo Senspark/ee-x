@@ -83,12 +83,12 @@ internal class AdMobRewardedInterstitialAd(
                     }
                 }
 
-                override fun onAdFailedToShowFullScreenContent(error: AdError?) {
+                override fun onAdFailedToShowFullScreenContent(error: AdError) {
                     Thread.runOnMainThread {
-                        _logger.debug("$kTag: ${this::onAdFailedToShowFullScreenContent.name}: id = $_adId message = ${error?.message ?: ""}")
+                        _logger.debug("$kTag: ${this::onAdFailedToShowFullScreenContent.name}: id = $_adId message = ${error.message}")
                         _isLoaded.set(false)
                         _ad = null
-                        _bridge.callCpp(_messageHelper.onFailedToShow, error?.message ?: "")
+                        _bridge.callCpp(_messageHelper.onFailedToShow, error.message)
                     }
                 }
 
@@ -102,20 +102,20 @@ internal class AdMobRewardedInterstitialAd(
                 }
             }
             val loadCallback = object : RewardedInterstitialAdLoadCallback() {
-                override fun onRewardedInterstitialAdLoaded(ad: RewardedInterstitialAd) {
+                override fun onAdLoaded(ad: RewardedInterstitialAd) {
                     Thread.runOnMainThread {
-                        _logger.debug("${kTag}: ${this::onRewardedInterstitialAdLoaded.name}: id = $_adId")
-                        ad.setFullScreenContentCallback(showCallback)
+                        _logger.debug("${kTag}: ${this::onAdLoaded.name}: id = $_adId")
+                        ad.fullScreenContentCallback = showCallback
                         _isLoaded.set(true)
                         _ad = ad
                         _bridge.callCpp(_messageHelper.onLoaded)
                     }
                 }
 
-                override fun onRewardedInterstitialAdFailedToLoad(error: LoadAdError?) {
+                override fun onAdFailedToLoad(error: LoadAdError) {
                     Thread.runOnMainThread {
-                        _logger.debug("${kTag}: onRewardedInterstitialAdFailedToLoad: id = $_adId message = ${error?.message ?: ""} response = ${error?.responseInfo ?: ""}")
-                        _bridge.callCpp(_messageHelper.onFailedToLoad, error?.message ?: "")
+                        _logger.debug("${kTag}: ${this::onAdFailedToLoad.name}: id = $_adId message = ${error.message} response = ${error.responseInfo ?: ""}")
+                        _bridge.callCpp(_messageHelper.onFailedToLoad, error.message)
                     }
                 }
             }

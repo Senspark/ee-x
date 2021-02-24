@@ -73,52 +73,19 @@ internal class AdMobAppOpenAd(
     override fun load() {
         Thread.runOnMainThread {
             _logger.debug("$kTag: ${this::load.name}: id = $_adId")
-            val callback = object : AppOpenAdLoadCallback() {
-                override fun onAppOpenAdLoaded(ad: AppOpenAd) {
-                    Thread.runOnMainThread {
-                        _logger.debug("$kTag: ${this::onAppOpenAdLoaded.name}: id = $_adId")
-                        _isLoaded.set(true)
-                        _ad = ad
-                        _bridge.callCpp(_messageHelper.onLoaded)
-                    }
-                }
-
-                override fun onAppOpenAdFailedToLoad(error: LoadAdError?) {
-                    Thread.runOnMainThread {
-                        _logger.debug("$kTag: onAppOpenAdFailedToLoad: id = $_adId message = ${error?.message ?: ""} response = ${error?.responseInfo ?: ""}")
-                        _bridge.callCpp(_messageHelper.onFailedToLoad, error?.message ?: "")
-                    }
-                }
-            }
-            val orientation = if (Utils.isLandscape(_application))
-                AppOpenAd.APP_OPEN_AD_ORIENTATION_LANDSCAPE else
-                AppOpenAd.APP_OPEN_AD_ORIENTATION_PORTRAIT
-            AppOpenAd.load(_application, _adId, AdRequest.Builder().build(), orientation, callback)
-        }
-    }
-
-    @AnyThread
-    override fun show() {
-        Thread.runOnMainThread {
-            _logger.debug("$kTag: ${this::show.name}: id = $_adId")
-            val ad = _ad
-            if (ad == null) {
-                _bridge.callCpp(_messageHelper.onFailedToShow, "Null ad")
-                return@runOnMainThread
-            }
-            val callback = object : FullScreenContentCallback() {
+            val showCallback = object : FullScreenContentCallback() {
                 override fun onAdShowedFullScreenContent() {
                     Thread.runOnMainThread {
                         _logger.debug("$kTag: ${this::onAdShowedFullScreenContent.name}: id = $_adId")
                     }
                 }
 
-                override fun onAdFailedToShowFullScreenContent(error: AdError?) {
+                override fun onAdFailedToShowFullScreenContent(error: AdError) {
                     Thread.runOnMainThread {
-                        _logger.debug("$kTag: ${this::onAdFailedToShowFullScreenContent.name}: id = $_adId message = ${error?.message ?: ""}")
+                        _logger.debug("$kTag: ${this::onAdFailedToShowFullScreenContent.name}: id = $_adId message = ${error.message}")
                         _isLoaded.set(false)
                         _ad = null
-                        _bridge.callCpp(_messageHelper.onFailedToShow, error?.message ?: "")
+                        _bridge.callCpp(_messageHelper.onFailedToShow, error.message)
                     }
                 }
 
@@ -131,7 +98,46 @@ internal class AdMobAppOpenAd(
                     }
                 }
             }
-            ad.show(_activity, callback)
+            val loadCallback = object : AppOpenAdLoadCallback() {
+                override fun onAdLoaded(ad: AppOpenAd) {
+                    Thread.runOnMainThread {
+                        _logger.debug("$kTag: ${this::onAdLoaded.name}: id = $_adId")
+                        ad.fullScreenContentCallback = showCallback
+                        _isLoaded.set(true)
+                        _ad = ad
+                        _bridge.callCpp(_messageHelper.onLoaded)
+                    }
+                }
+
+                override fun onAdFailedToLoad(error: LoadAdError) {
+                    Thread.runOnMainThread {
+                        _logger.debug("$kTag: ${this::onAdFailedToLoad.name}: id = $_adId message = ${error.message} response = ${error.responseInfo ?: ""}")
+                        _bridge.callCpp(_messageHelper.onFailedToLoad, error.message)
+                    }
+                }
+            }
+            val orientation = if (Utils.isLandscape(_application))
+                AppOpenAd.APP_OPEN_AD_ORIENTATION_LANDSCAPE else
+                AppOpenAd.APP_OPEN_AD_ORIENTATION_PORTRAIT
+            AppOpenAd.load(_application, _adId, AdRequest.Builder().build(), orientation, loadCallback)
+        }
+    }
+
+    @AnyThread
+    override fun show() {
+        Thread.runOnMainThread {
+            _logger.debug("$kTag: ${this::show.name}: id = $_adId")
+            val ad = _ad
+            if (ad == null) {
+                _bridge.callCpp(_messageHelper.onFailedToShow, "Null ad")
+                return@runOnMainThread
+            }
+            val activity = _activity
+            if (activity == null) {
+                _bridge.callCpp(_messageHelper.onFailedToShow, "Null activity")
+                return@runOnMainThread
+            }
+            ad.show(activity)
         }
     }
 }

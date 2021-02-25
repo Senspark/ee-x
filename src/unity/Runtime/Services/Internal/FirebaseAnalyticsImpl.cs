@@ -6,7 +6,7 @@ namespace EE.Internal {
         private readonly MethodInfo _methodSetCurrentScreen;
 
         public FirebaseAnalyticsImpl() {
-            var type = Type.GetType("Firebase.Analytics.FirebaseAnalytics, Firebase.Crashlytics");
+            var type = Type.GetType("Firebase.Analytics.FirebaseAnalytics, Firebase.Analytics");
             if (type == null) {
                 throw new ArgumentException("Cannot find FirebaseAnalytics");
             }

@@ -1,7 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
-
-namespace EE {
+﻿namespace EE {
     public interface IAdsManager {
         void OpenTestSuite();
         IBannerAd BannerAd { get; }

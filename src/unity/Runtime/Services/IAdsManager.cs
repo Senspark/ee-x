@@ -1,5 +1,6 @@
 ﻿namespace EE {
-    public interface IAdsManager {
+    [Service("EE" + nameof(IAdsManager))]
+    public interface IAdsManager : IService {
         void OpenTestSuite();
         IBannerAd BannerAd { get; }
         IBannerAd RectangleAd { get; }

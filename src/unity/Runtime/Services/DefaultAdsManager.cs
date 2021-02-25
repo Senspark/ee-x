@@ -22,6 +22,9 @@ namespace EE {
 
         public Task<bool> Initialize() => _initializer ?? (_initializer = InitializeImpl());
 
+        public void Destroy() {
+        }
+
         private async Task<bool> InitializeImpl() {
             _bannerAds[AdFormat.Banner] = new LazyBannerAd();
             _bannerAds[AdFormat.Rectangle] = new LazyBannerAd();

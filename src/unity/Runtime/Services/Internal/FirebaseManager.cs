@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.Assertions;
 
 namespace EE.Internal {
-    public static class FirebaseManager {
+    internal static class FirebaseManager {
         private static Task<bool> _initializer;
 
         public static Task<bool> Initialize() =>

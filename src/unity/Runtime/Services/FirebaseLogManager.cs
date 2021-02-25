@@ -1,11 +1,9 @@
-using System;
 using System.IO;
-using System.Reflection;
 using System.Threading.Tasks;
 
-using UnityEngine;
+using EE.Internal;
 
-namespace EE.Internal {
+namespace EE {
     public class FirebaseLogManager : ILogManager {
         private readonly IFirebaseCrashlyticsImpl _impl;
         private Task<bool> _initializer;

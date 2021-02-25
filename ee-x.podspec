@@ -291,7 +291,7 @@ Pod::Spec.new do |spec|
     s.dependency 'IronSourceAdColonyAdapter', '4.3.6'
 
     # https://developers.ironsrc.com/ironsource-mobile/ios/admob-change-log/
-    s.dependency 'IronSourceAdMobAdapter', '4.3.18.1'
+    s.dependency 'IronSourceAdMobAdapter', '4.3.19.0'
 
     # https://developers.ironsrc.com/ironsource-mobile/ios/applovin-change-log/
     s.dependency 'IronSourceAppLovinAdapter', '4.3.21.1'
@@ -306,7 +306,7 @@ Pod::Spec.new do |spec|
     s.dependency 'IronSourceTapjoyAdapter', '4.1.15.2'
 
     # https://developers.ironsrc.com/ironsource-mobile/ios/unityads-change-log/
-    s.dependency 'IronSourceUnityAdsAdapter', '4.3.8'
+    s.dependency 'IronSourceUnityAdsAdapter', '4.3.8.0'
 
     # https://developers.ironsrc.com/ironsource-mobile/ios/vungle-change-log/
     s.dependency 'IronSourceVungleAdapter', '4.3.8.2'

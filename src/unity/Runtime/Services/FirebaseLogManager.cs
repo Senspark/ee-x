@@ -7,17 +7,12 @@ using UnityEngine;
 
 namespace EE.Internal {
     public class FirebaseLogManager : ILogManager {
-        private readonly Type _type;
-        private readonly MethodInfo _method;
+        private readonly IFirebaseCrashlyticsImpl _impl;
         private Task<bool> _initializer;
         private bool _initialized;
 
         public FirebaseLogManager() {
-            _type = Type.GetType("Firebase.Crashlytics.Crashlytics, Firebase.Crashlytics");
-            if (_type == null) {
-                throw new MissingReferenceException("Cannot find FirebaseCrashlytics");
-            }
-            _method = _type.GetMethod("Log");
+            _impl = new FirebaseCrashlyticsImpl();
         }
 
         public Task<bool> Initialize() => _initializer = _initializer ?? (_initializer = InitializeImpl(1f));
@@ -53,7 +48,7 @@ namespace EE.Internal {
             var fileName = Path.GetFileName(sourceFilePath);
             var messageWithColon = message.Length == 0 ? "" : $": {message}";
             var fullMessage = $"{fileName}:{sourceLineNumber}: {memberName + messageWithColon}";
-            _method.Invoke(null, new object[] {fullMessage});
+            _impl.Log(fullMessage);
         }
     }
 }

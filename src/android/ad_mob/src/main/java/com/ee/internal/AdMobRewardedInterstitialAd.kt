@@ -34,7 +34,7 @@ internal class AdMobRewardedInterstitialAd(
         private val kTag = AdMobRewardedInterstitialAd::class.java.name
     }
 
-    private val _messageHelper = MessageHelper("AdMobAppOpenAd", _adId)
+    private val _messageHelper = MessageHelper("AdMobRewardedInterstitialAd", _adId)
     private val _helper = FullScreenAdHelper(_bridge, this, _messageHelper)
     private val _isLoaded = AtomicBoolean(false)
     private var _ad: RewardedInterstitialAd? = null

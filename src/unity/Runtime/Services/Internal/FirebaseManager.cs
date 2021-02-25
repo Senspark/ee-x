@@ -8,8 +8,7 @@ namespace EE.Internal {
     internal static class FirebaseManager {
         private static Task<bool> _initializer;
 
-        public static Task<bool> Initialize() =>
-            _initializer = _initializer ?? (_initializer = InitializeImpl());
+        public static Task<bool> Initialize() => _initializer ??= InitializeImpl();
 
         private static async Task<bool> InitializeImpl() {
             // https://firebase.google.com/docs/unity/setup

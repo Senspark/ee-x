@@ -1,3 +1,5 @@
+using System;
+
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -6,7 +8,13 @@ namespace EETest {
         [SerializeField]
         private Text _resultText;
 
+        private EE.IAnalyticsManager _analyticsManager;
+
         public EE.IAdsManager AdsManager { get; set; }
+
+        private void Awake() {
+            _analyticsManager = EE.ServiceLocator.Resolve<EE.IAnalyticsManager>();
+        }
 
         private void UpdateResult(EE.AdResult result) {
             switch (result) {
@@ -38,6 +46,9 @@ namespace EETest {
         }
 
         public void OnShowAppOpenAdButtonPressed() {
+            _analyticsManager.LogEvent(new ClickEvent {
+                button = "show_app_open_ad"
+            });
             EE.Utils.NoAwait(async () => {
                 _resultText.text = "---";
                 var result = await AdsManager.AppOpenAd.Show();
@@ -46,6 +57,9 @@ namespace EETest {
         }
 
         public void OnShowInterstitialAdButtonPressed() {
+            _analyticsManager.LogEvent(new ClickEvent {
+                button = "show_interstitial_ad"
+            });
             EE.Utils.NoAwait(async () => {
                 _resultText.text = "---";
                 var result = await AdsManager.InterstitialAd.Show();
@@ -54,6 +68,9 @@ namespace EETest {
         }
 
         public void OnShowRewardedInterstitialAdButtonPressed() {
+            _analyticsManager.LogEvent(new ClickEvent {
+                button = "show_rewarded_interstitial_ad"
+            });
             EE.Utils.NoAwait(async () => {
                 _resultText.text = "---";
                 var result = await AdsManager.RewardedInterstitialAd.Show();
@@ -62,6 +79,9 @@ namespace EETest {
         }
 
         public void OnShowRewardedAdButtonPressed() {
+            _analyticsManager.LogEvent(new ClickEvent {
+                button = "show_rewarded_ad"
+            });
             EE.Utils.NoAwait(async () => {
                 _resultText.text = "---";
                 var result = await AdsManager.RewardedAd.Show();

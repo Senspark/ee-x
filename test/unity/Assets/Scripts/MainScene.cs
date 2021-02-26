@@ -1,11 +1,9 @@
 using UnityEngine;
 
 namespace EETest {
-    public struct AnalyticsTestEvent : EE.IAnalyticsEvent {
-        public string EventName => "test_event";
-        public string string_value;
-        public int int_value;
-        public double double_value;
+    public struct ClickEvent : EE.IAnalyticsEvent {
+        public string EventName => "click";
+        public string button;
     }
 
     public class MainScene : MonoBehaviour {
@@ -19,11 +17,6 @@ namespace EETest {
                 await ServiceUtils.Initialize();
                 _analyticsManager = EE.ServiceLocator.Resolve<EE.IAnalyticsManager>();
                 _sceneLoader = EE.ServiceLocator.Resolve<EE.ISceneLoader>();
-                _analyticsManager.LogEvent(new AnalyticsTestEvent {
-                    string_value = "a",
-                    int_value = 2,
-                    double_value = 3.0
-                });
                 var fileName = Application.platform == RuntimePlatform.Android
                     ? "Config/ads_config_android"
                     : "Config/ads_config_ios";
@@ -39,6 +32,9 @@ namespace EETest {
             if (!_initialized) {
                 return;
             }
+            _analyticsManager.LogEvent(new ClickEvent {
+                button = "open_test_suite"
+            });
             _adsManager.OpenTestSuite();
         }
 
@@ -46,6 +42,9 @@ namespace EETest {
             if (!_initialized) {
                 return;
             }
+            _analyticsManager.LogEvent(new ClickEvent {
+                button = "test_banner_ad"
+            });
             EE.Utils.NoAwait(async () => {
                 var scene = await _sceneLoader.LoadScene<BannerAdScene>(nameof(BannerAdScene));
                 scene.AdsManager = _adsManager;
@@ -57,6 +56,9 @@ namespace EETest {
             if (!_initialized) {
                 return;
             }
+            _analyticsManager.LogEvent(new ClickEvent {
+                button = "test_full_screen_ad"
+            });
             EE.Utils.NoAwait(async () => {
                 var scene = await _sceneLoader.LoadScene<FullScreenAdScene>(nameof(FullScreenAdScene));
                 scene.AdsManager = _adsManager;

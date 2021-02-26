@@ -32,6 +32,8 @@ namespace EE.Internal {
 
             var fieldDependencyStatusAvailable = Enum.Parse(typeDependencyStatus, "Available");
             if (fieldDependencyStatusAvailable.Equals(status)) {
+                var methodDefaultInstance = typeFirebaseApp.GetProperty("DefaultInstance");
+                var app = methodDefaultInstance?.GetValue(null);
                 return true;
             }
             Debug.LogError($"Could not resolve all Firebase dependencies");

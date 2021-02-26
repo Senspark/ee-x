@@ -1,5 +1,8 @@
+using UnityEngine.Scripting;
+
 namespace EE {
-    [Service("EEx_IDataManager")]
+    [Preserve]
+    [Service("EE" + nameof(IDataManager))]
     public interface IDataManager : IService {
         /// <summary>
         /// Gets a value by key.

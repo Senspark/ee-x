@@ -1,4 +1,7 @@
-﻿namespace EE {
+﻿using UnityEngine.Scripting;
+
+namespace EE {
+    [Preserve]
     [Service("EE" + nameof(IAdsManager))]
     public interface IAdsManager : IService {
         void OpenTestSuite();

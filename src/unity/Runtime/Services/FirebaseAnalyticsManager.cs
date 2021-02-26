@@ -15,7 +15,7 @@ namespace EE {
             _impl = new FirebaseAnalyticsImpl();
         }
 
-        public Task<bool> Initialize() => _initializer ??= InitializeImpl(1f);
+        public Task<bool> Initialize() => _initializer = _initializer ?? (_initializer = InitializeImpl(1f));
 
         public void Destroy() {
         }

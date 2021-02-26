@@ -20,7 +20,7 @@ namespace EE {
             _fullScreenAds = new Dictionary<AdFormat, LazyFullScreenAd>();
         }
 
-        public Task<bool> Initialize() => _initializer ??= InitializeImpl();
+        public Task<bool> Initialize() => _initializer = _initializer ?? (_initializer = InitializeImpl());
 
         public void Destroy() {
         }

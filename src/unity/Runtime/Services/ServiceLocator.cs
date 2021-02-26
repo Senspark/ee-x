@@ -27,7 +27,7 @@ namespace EE {
         }
     }
 
-    public class ServiceLocator {
+    public static class ServiceLocator {
         private static readonly ServiceLocatorImpl _impl = new ServiceLocatorImpl();
 
         /// <summary>

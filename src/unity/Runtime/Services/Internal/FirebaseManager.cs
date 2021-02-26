@@ -19,13 +19,13 @@ namespace EE.Internal {
                 throw new ArgumentException("Cannot find Firebase.FirebaseApp");
             }
             var methodCheckAndFixDependenciesAsync =
-                typeFirebaseApp.GetMethod("CheckAndFixDependenciesAsync", new Type[] { });
+                typeFirebaseApp.GetMethod("CheckAndFixDependenciesAsync");
             Assert.IsNotNull(methodCheckAndFixDependenciesAsync);
 
             var typeDependencyStatus = Type.GetType("Firebase.DependencyStatus, Firebase.App");
             Assert.IsNotNull(typeDependencyStatus);
 
-            var task = (Task) methodCheckAndFixDependenciesAsync.Invoke(null, new object[] { });
+            var task = (Task) methodCheckAndFixDependenciesAsync.Invoke(null, null);
             await task.ConfigureAwait(false);
             var status = task.GetType().GetProperty("Result")?.GetValue(task);
             Debug.Log($"FirebaseManager: CheckAndFixDependenciesAsync result = {status}");

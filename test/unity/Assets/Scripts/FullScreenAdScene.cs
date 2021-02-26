@@ -37,10 +37,26 @@ namespace EETest {
             }
         }
 
+        public void OnShowAppOpenAdButtonPressed() {
+            EE.Utils.NoAwait(async () => {
+                _resultText.text = "---";
+                var result = await AdsManager.AppOpenAd.Show();
+                UpdateResult(result);
+            });
+        }
+
         public void OnShowInterstitialAdButtonPressed() {
             EE.Utils.NoAwait(async () => {
                 _resultText.text = "---";
                 var result = await AdsManager.InterstitialAd.Show();
+                UpdateResult(result);
+            });
+        }
+
+        public void OnShowRewardedInterstitialAdButtonPressed() {
+            EE.Utils.NoAwait(async () => {
+                _resultText.text = "---";
+                var result = await AdsManager.RewardedInterstitialAd.Show();
                 UpdateResult(result);
             });
         }

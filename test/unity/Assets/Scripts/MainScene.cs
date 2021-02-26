@@ -9,6 +9,7 @@ namespace EETest {
     }
 
     public class MainScene : MonoBehaviour {
+        private bool _initialized;
         private EE.IAnalyticsManager _analyticsManager;
         private EE.ISceneLoader _sceneLoader;
         private EE.IAdsManager _adsManager;
@@ -30,10 +31,21 @@ namespace EETest {
                 var adsManager = new EE.DefaultAdsManager(adsConfig);
                 EE.Utils.NoAwait(adsManager.Initialize);
                 _adsManager = adsManager;
+                _initialized = true;
             });
         }
 
+        public void OnOpenTestSuiteButtonPressed() {
+            if (!_initialized) {
+                return;
+            }
+            _adsManager.OpenTestSuite();
+        }
+
         public void OnTestBannerAdButtonPressed() {
+            if (!_initialized) {
+                return;
+            }
             EE.Utils.NoAwait(async () => {
                 var scene = await _sceneLoader.LoadScene<BannerAdScene>(nameof(BannerAdScene));
                 scene.AdsManager = _adsManager;
@@ -42,6 +54,9 @@ namespace EETest {
         }
 
         public void OnTestFullScreenAdButtonPressed() {
+            if (!_initialized) {
+                return;
+            }
             EE.Utils.NoAwait(async () => {
                 var scene = await _sceneLoader.LoadScene<FullScreenAdScene>(nameof(FullScreenAdScene));
                 scene.AdsManager = _adsManager;

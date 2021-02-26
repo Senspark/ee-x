@@ -78,25 +78,7 @@ namespace EE {
             var parameters = fields.Select(item => {
                 var name = item.Name;
                 var value = item.GetValue(analyticsEvent);
-                if (item.FieldType == typeof(bool)) {
-                    return new FirebaseParameter(name, (bool) value ? 1 : 0);
-                }
-                if (item.FieldType == typeof(int)) {
-                    return new FirebaseParameter(name, (int) value);
-                }
-                if (item.FieldType == typeof(long)) {
-                    return new FirebaseParameter(name, (long) value);
-                }
-                if (item.FieldType == typeof(float)) {
-                    return new FirebaseParameter(name, (float) value);
-                }
-                if (item.FieldType == typeof(double)) {
-                    return new FirebaseParameter(name, (double) value);
-                }
-                if (item.FieldType == typeof(string)) {
-                    return new FirebaseParameter(name, (string) value);
-                }
-                return null;
+                return (name, value);
             });
             _impl.LogEvent(analyticsEvent.EventName, parameters.ToArray());
         }

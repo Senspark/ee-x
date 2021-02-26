@@ -1,23 +1,33 @@
 using System;
 using System.Reflection;
 
+using UnityEngine.Assertions;
+
 namespace EE.Internal {
     internal class FirebaseAnalyticsImpl : IFirebaseAnalyticsImpl {
         private readonly MethodInfo _methodSetCurrentScreen;
-        private readonly MethodInfo _methodLogEventString;
-        private readonly MethodInfo _methodLogEventStringParameters;
+        private readonly MethodInfo _methodLogEvent;
+        private readonly MethodInfo _methodLogEventParameters;
+        private readonly Type _typeParameter;
+        private readonly ConstructorInfo _constructorLong;
+        private readonly ConstructorInfo _constructorDouble;
+        private readonly ConstructorInfo _constructorString;
 
         public FirebaseAnalyticsImpl() {
             var type = Type.GetType("Firebase.Analytics.FirebaseAnalytics, Firebase.Analytics");
-            if (type == null) {
-                throw new ArgumentException("Cannot find FirebaseAnalytics");
-            }
-            _methodSetCurrentScreen = type.GetMethod("SetCurrentScreen",
-                new[] {typeof(string), typeof(string)});
-            _methodLogEventString = type.GetMethod("LogEvent",
-                new[] {typeof(string)});
-            _methodLogEventStringParameters = type.GetMethod("LogEvent",
-                new[] {typeof(string), FirebaseParameter.InternalType.MakeArrayType()});
+            Assert.IsNotNull(type);
+
+            _typeParameter = Type.GetType("Firebase.Analytics.Parameter, Firebase.Analytics");
+            Assert.IsNotNull(_typeParameter);
+
+            _methodSetCurrentScreen = type.GetMethod("SetCurrentScreen", new[] {typeof(string), typeof(string)});
+            _methodLogEvent = type.GetMethod("LogEvent", new[] {typeof(string)});
+            _methodLogEventParameters =
+                type.GetMethod("LogEvent", new[] {typeof(string), _typeParameter.MakeArrayType()});
+
+            _constructorLong = _typeParameter.GetConstructor(new[] {typeof(string), typeof(long)});
+            _constructorDouble = _typeParameter.GetConstructor(new[] {typeof(string), typeof(double)});
+            _constructorString = _typeParameter.GetConstructor(new[] {typeof(string), typeof(string)});
         }
 
         public void SetCurrentScreen(string screenName, string screenClass) {
@@ -25,15 +35,29 @@ namespace EE.Internal {
         }
 
         public void LogEvent(string name) {
-            _methodLogEventString.Invoke(null, new object[] {name});
+            _methodLogEvent.Invoke(null, new object[] {name});
         }
 
-        public void LogEvent(string name, params FirebaseParameter[] parameters) {
-            var firebaseParameters = Array.CreateInstance(FirebaseParameter.InternalType, parameters.Length);
+        public void LogEvent(string name, (string, object)[] parameters) {
+            var firebaseParameters = Array.CreateInstance(_typeParameter, parameters.Length);
             for (var i = 0; i < parameters.Length; ++i) {
-                firebaseParameters.SetValue(parameters[i].Internal, i);
+                object param = null;
+                var (paramName, paramValue) = parameters[i];
+                var paramType = paramValue.GetType();
+                if (paramType == typeof(bool)) {
+                    param = _constructorLong.Invoke(new object[] {paramName, (bool) paramValue ? 1 : 0});
+                } else if (paramType == typeof(int) || paramType == typeof(long)) {
+                    param = _constructorLong.Invoke(new[] {paramName, paramValue});
+                } else if (paramType == typeof(float) || paramType == typeof(double)) {
+                    param = _constructorDouble.Invoke(new[] {paramName, paramValue});
+                } else if (paramType == typeof(string)) {
+                    param = _constructorString.Invoke(new[] {paramName, paramValue});
+                } else {
+                    Assert.IsFalse(true);
+                }
+                firebaseParameters.SetValue(param, i);
             }
-            _methodLogEventStringParameters.Invoke(null, new object[] {name, firebaseParameters});
+            _methodLogEventParameters.Invoke(null, new object[] {name, firebaseParameters});
         }
     }
 }

@@ -1,20 +1,20 @@
 using System;
 using System.Reflection;
 
+using UnityEngine.Assertions;
+
 namespace EE.Internal {
     internal class FirebaseCrashlyticsImpl : IFirebaseCrashlyticsImpl {
-        private readonly MethodInfo _method;
+        private readonly MethodInfo _methodLog;
 
         public FirebaseCrashlyticsImpl() {
             var type = Type.GetType("Firebase.Crashlytics.Crashlytics, Firebase.Crashlytics");
-            if (type == null) {
-                throw new ArgumentException("Cannot find FirebaseCrashlytics");
-            }
-            _method = type.GetMethod("Log", new[] {typeof(string)});
+            Assert.IsNotNull(type);
+            _methodLog = type.GetMethod("Log", new[] {typeof(string)});
         }
 
         public void Log(string message) {
-            _method.Invoke(null, new object[] {message});
+            _methodLog.Invoke(null, new object[] {message});
         }
     }
 }

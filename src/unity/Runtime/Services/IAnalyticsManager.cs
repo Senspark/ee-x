@@ -11,6 +11,7 @@ namespace EE {
         void PushScreen(string screenName);
         void PopScreen();
         void PopAllScreens();
+        void LogEvent(string name);
         void LogEvent<T>(T analyticsEvent) where T : IAnalyticsEvent;
     }
 }

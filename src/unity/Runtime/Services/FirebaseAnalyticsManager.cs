@@ -69,6 +69,13 @@ namespace EE {
             _impl.SetCurrentScreen(null, null);
         }
 
+        public void LogEvent(string name) {
+            if (!_initialized) {
+                return;
+            }
+            _impl.LogEvent(name);
+        }
+
         public void LogEvent<T>(T analyticsEvent) where T : IAnalyticsEvent {
             if (!_initialized) {
                 return;

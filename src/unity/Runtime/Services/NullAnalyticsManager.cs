@@ -63,6 +63,13 @@ namespace EE {
             _logManager.Log($"current_screen = null");
         }
 
+        public void LogEvent(string name) {
+            if (!_initialized) {
+                return;
+            }
+            _logManager.Log($"[{name}]");
+        }
+
         public void LogEvent<T>(T analyticsEvent) where T : IAnalyticsEvent {
             if (!_initialized) {
                 return;

@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 
 namespace EE {
-    public class DefaultLogManager : ILogManager {
+    public class NullLogManager : ILogManager {
         private static readonly UnityEngine.ILogger Logger = Debug.unityLogger;
 
         public Task<bool> Initialize() => Task.FromResult(true);

@@ -1,5 +1,5 @@
 namespace EE.Internal {
-    public interface IFirebaseCrashlyticsImpl {
+    internal interface IFirebaseCrashlyticsImpl {
         void Log(string message);
     }
 }

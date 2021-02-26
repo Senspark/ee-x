@@ -1,5 +1,6 @@
 namespace EE {
     public interface IAnalyticsEvent {
+        string EventName { get; }
     }
 
     [Service("EE" + nameof(IAnalyticsManager))]

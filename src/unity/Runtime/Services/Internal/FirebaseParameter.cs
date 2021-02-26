@@ -1,9 +1,7 @@
 using System;
 
-using EE.Internal;
-
-namespace EE {
-    public class FirebaseParameter {
+namespace EE.Internal {
+    internal class FirebaseParameter {
         private const string TypeName = "Firebase.Analytics.Parameter, Firebase.Analytics";
         private static readonly Type _type = Type.GetType(TypeName);
 
@@ -28,18 +26,19 @@ namespace EE {
                     typeof(double)
                 }));
 
-        private readonly object _internal;
+        public static Type InternalType { get; } = _type;
+        public object Internal { get; }
 
         public FirebaseParameter(string name, string value) {
-            _internal = _constructor0(name, value);
+            Internal = _constructor0(name, value);
         }
 
         public FirebaseParameter(string name, long value) {
-            _internal = _constructor1(name, value);
+            Internal = _constructor1(name, value);
         }
 
         public FirebaseParameter(string name, double value) {
-            _internal = _constructor2(name, value);
+            Internal = _constructor2(name, value);
         }
     }
 }

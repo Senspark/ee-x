@@ -2,17 +2,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-using EE.Internal;
-
 namespace EE {
-    public class FirebaseAnalyticsManager : IAnalyticsManager {
-        private readonly IFirebaseAnalyticsImpl _impl;
+    public class NullAnalyticsManager : IAnalyticsManager {
+        private readonly ILogManager _logManager;
         private readonly Stack<string> _screens = new Stack<string>();
         private Task<bool> _initializer;
         private bool _initialized;
 
-        public FirebaseAnalyticsManager() {
-            _impl = new FirebaseAnalyticsImpl();
+        public NullAnalyticsManager(ILogManager logManager) {
+            _logManager = logManager;
         }
 
         public Task<bool> Initialize() => _initializer = _initializer ?? (_initializer = InitializeImpl(1f));
@@ -28,11 +26,7 @@ namespace EE {
         }
 
         private async Task<bool> InitializeImpl() {
-            var result = await FirebaseManager.Initialize();
-            if (!result) {
-                _initialized = false;
-                return false;
-            }
+            await _logManager.Initialize();
             _initialized = true;
             return true;
         }
@@ -42,7 +36,7 @@ namespace EE {
                 return;
             }
             _screens.Push(screenName);
-            _impl.SetCurrentScreen(screenName, null);
+            _logManager.Log($"current_screen = {screenName}");
         }
 
         public void PopScreen() {
@@ -54,10 +48,10 @@ namespace EE {
             }
             _screens.Pop();
             if (_screens.Count == 0) {
-                _impl.SetCurrentScreen(null, null);
+                _logManager.Log($"current_screen = null");
             } else {
                 var screenName = _screens.Peek();
-                _impl.SetCurrentScreen(screenName, null);
+                _logManager.Log($"current_screen = {screenName}");
             }
         }
 
@@ -66,7 +60,7 @@ namespace EE {
                 return;
             }
             _screens.Clear();
-            _impl.SetCurrentScreen(null, null);
+            _logManager.Log($"current_screen = null");
         }
 
         public void LogEvent<T>(T analyticsEvent) where T : IAnalyticsEvent {
@@ -75,30 +69,15 @@ namespace EE {
             }
             var type = typeof(T);
             var fields = type.GetFields();
-            var parameters = fields.Select(item => {
+            var tokens = new[] {
+                $"[{analyticsEvent.EventName}]"
+            };
+            tokens = tokens.Concat(fields.Select(item => {
                 var name = item.Name;
                 var value = item.GetValue(analyticsEvent);
-                if (item.FieldType == typeof(bool)) {
-                    return new FirebaseParameter(name, (bool) value ? 1 : 0);
-                }
-                if (item.FieldType == typeof(int)) {
-                    return new FirebaseParameter(name, (int) value);
-                }
-                if (item.FieldType == typeof(long)) {
-                    return new FirebaseParameter(name, (long) value);
-                }
-                if (item.FieldType == typeof(float)) {
-                    return new FirebaseParameter(name, (float) value);
-                }
-                if (item.FieldType == typeof(double)) {
-                    return new FirebaseParameter(name, (double) value);
-                }
-                if (item.FieldType == typeof(string)) {
-                    return new FirebaseParameter(name, (string) value);
-                }
-                return null;
-            });
-            _impl.LogEvent(analyticsEvent.EventName, parameters.ToArray());
+                return $"[{name}={value}]";
+            })).ToArray();
+            _logManager.Log($"{string.Join(" ", tokens)}");
         }
     }
 }

@@ -11,20 +11,27 @@ namespace EE.Internal {
         public static Task<bool> Initialize() => _initializer = _initializer ?? (_initializer = InitializeImpl());
 
         private static async Task<bool> InitializeImpl() {
+            Debug.Log($"FirebaseManager: InitializeImpl");
+
             // https://firebase.google.com/docs/unity/setup
-            var typeFirebaseApp = Type.GetType("Firebase.FirebaseApp, Firebase.Core");
+            var typeFirebaseApp = Type.GetType("Firebase.FirebaseApp, Firebase.App");
             if (typeFirebaseApp == null) {
                 throw new ArgumentException("Cannot find Firebase.FirebaseApp");
             }
-            var methodCheckAndFixDependenciesAsync = typeFirebaseApp.GetMethod("CheckAndFixDependenciesAsync");
+            var methodCheckAndFixDependenciesAsync =
+                typeFirebaseApp.GetMethod("CheckAndFixDependenciesAsync", new Type[] { });
             Assert.IsNotNull(methodCheckAndFixDependenciesAsync);
 
-            var status = await (Task<object>) methodCheckAndFixDependenciesAsync.Invoke(null, new object[] { });
-
-            var typeDependencyStatus = Type.GetType("Firebase.DependencyStatus, Firebase.Core");
+            var typeDependencyStatus = Type.GetType("Firebase.DependencyStatus, Firebase.App");
             Assert.IsNotNull(typeDependencyStatus);
+
+            var task = (Task) methodCheckAndFixDependenciesAsync.Invoke(null, new object[] { });
+            await task.ConfigureAwait(false);
+            var status = task.GetType().GetProperty("Result")?.GetValue(task);
+            Debug.Log($"FirebaseManager: CheckAndFixDependenciesAsync result = {status}");
+
             var fieldDependencyStatusAvailable = Enum.Parse(typeDependencyStatus, "Available");
-            if (status == fieldDependencyStatusAvailable) {
+            if (fieldDependencyStatusAvailable.Equals(status)) {
                 return true;
             }
             Debug.LogError($"Could not resolve all Firebase dependencies");

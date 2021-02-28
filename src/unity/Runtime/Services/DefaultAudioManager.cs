@@ -18,11 +18,7 @@ namespace EE {
         public string Path { get; }
         public float Volume { get; }
 
-        public AudioInfo(string path) {
-            Path = path;
-        }
-
-        public AudioInfo(string path, float volume) {
+        public AudioInfo(string path, float volume = 1f) {
             Path = path;
             Volume = volume;
         }

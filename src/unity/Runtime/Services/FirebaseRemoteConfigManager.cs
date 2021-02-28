@@ -49,13 +49,13 @@ namespace EE {
             if (!await FirebaseManager.Initialize()) {
                 return false;
             }
+            LoadData();
             _impl.Initialize();
             await ActivateConfig();
             await _impl.SetDefaultsAsync(_defaults);
             _initialized = true;
             await _impl.FetchAsync(TimeSpan.Zero);
             _fetched = true;
-            LoadData();
             return true;
         }
 

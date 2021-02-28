@@ -27,10 +27,16 @@ namespace EE.Internal {
             Assert.IsNotNull(type0);
             _propertyDefaultInstance = type0.GetProperty("DefaultInstance");
             _propertyInfo = type0.GetProperty("Info");
-            _methodSetDefaultsAsync = type0.GetMethod("SetDefaulsAsync", new[] {typeof(Dictionary<string, object>)});
+            _methodSetDefaultsAsync = type0.GetMethod("SetDefaultsAsync", new[] {typeof(Dictionary<string, object>)});
             _methodFetchAsync = type0.GetMethod("FetchAsync", new[] {typeof(TimeSpan)});
             _methodActivateAsync = type0.GetMethod("ActivateAsync", new Type[] { });
             _methodGetValue = type0.GetMethod("GetValue", new[] {typeof(string)});
+            Assert.IsNotNull(_propertyDefaultInstance);
+            Assert.IsNotNull(_propertyInfo);
+            Assert.IsNotNull(_methodSetDefaultsAsync);
+            Assert.IsNotNull(_methodFetchAsync);
+            Assert.IsNotNull(_methodActivateAsync);
+            Assert.IsNotNull(_methodGetValue);
 
             var type1 = Type.GetType("Firebase.RemoteConfig.ConfigValue, Firebase.RemoteConfig");
             Assert.IsNotNull(type1);
@@ -38,15 +44,22 @@ namespace EE.Internal {
             _propertyLongValue = type1.GetProperty("LongValue");
             _propertyDoubleValue = type1.GetProperty("DoubleValue");
             _propertyStringValue = type1.GetProperty("StringValue");
+            Assert.IsNotNull(_propertyBooleanValue);
+            Assert.IsNotNull(_propertyLongValue);
+            Assert.IsNotNull(_propertyDoubleValue);
+            Assert.IsNotNull(_propertyStringValue);
 
             var type2 = Type.GetType("Firebase.RemoteConfig.ConfigInfo, Firebase.RemoteConfig");
             Assert.IsNotNull(type2);
             _propertyFetchTime = type2.GetProperty("FetchTime");
             _propertyLastFetchStatus = type2.GetProperty("LastFetchStatus");
+            Assert.IsNotNull(_propertyFetchTime);
+            Assert.IsNotNull(_propertyLastFetchStatus);
 
             var type3 = Type.GetType("Firebase.RemoteConfig.LastFetchStatus, Firebase.RemoteConfig");
             Assert.IsNotNull(type3);
             _lastFetchStatusSuccess = Enum.Parse(type3, "Success");
+            Assert.IsNotNull(_lastFetchStatusSuccess);
         }
 
         public bool IsLastFetchSuccessful {

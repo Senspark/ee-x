@@ -11,6 +11,7 @@ namespace EE.Internal {
             var type = Type.GetType("Firebase.Crashlytics.Crashlytics, Firebase.Crashlytics");
             Assert.IsNotNull(type);
             _methodLog = type.GetMethod("Log", new[] {typeof(string)});
+            Assert.IsNotNull(_methodLog);
         }
 
         public void Log(string message) {

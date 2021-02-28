@@ -24,10 +24,16 @@ namespace EE.Internal {
             _methodLogEvent = type.GetMethod("LogEvent", new[] {typeof(string)});
             _methodLogEventParameters =
                 type.GetMethod("LogEvent", new[] {typeof(string), _typeParameter.MakeArrayType()});
+            Assert.IsNotNull(_methodSetCurrentScreen);
+            Assert.IsNotNull(_methodLogEvent);
+            Assert.IsNotNull(_methodLogEventParameters);
 
             _constructorLong = _typeParameter.GetConstructor(new[] {typeof(string), typeof(long)});
             _constructorDouble = _typeParameter.GetConstructor(new[] {typeof(string), typeof(double)});
             _constructorString = _typeParameter.GetConstructor(new[] {typeof(string), typeof(string)});
+            Assert.IsNotNull(_constructorLong);
+            Assert.IsNotNull(_constructorDouble);
+            Assert.IsNotNull(_constructorString);
         }
 
         public void SetCurrentScreen(string screenName, string screenClass) {

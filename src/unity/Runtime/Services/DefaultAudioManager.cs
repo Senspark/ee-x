@@ -106,6 +106,8 @@ namespace EE {
         private async Task<bool> InitializeImpl() {
             await _dataManager.Initialize();
             LoadData();
+            UpdateMusic();
+            UpdateSound();
             await Task.WhenAll(_infos.Select(async entry => {
                 var clip = await Resources.LoadAsync<AudioClip>(entry.Value.Path) as AudioClip;
                 Assert.IsNotNull(clip);

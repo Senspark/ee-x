@@ -69,6 +69,9 @@ namespace EE.Internal {
             _bgmSource.loop = true;
 
             _oneShotSfxSource = gameObject.AddComponent<AudioSource>();
+
+            UpdateMusic();
+            UpdateSound();
         }
 
         private void UpdateMusic() {
@@ -79,6 +82,7 @@ namespace EE.Internal {
             if (_isSoundEnabled) {
                 // OK.
             } else {
+                // Ignored.
             }
         }
 

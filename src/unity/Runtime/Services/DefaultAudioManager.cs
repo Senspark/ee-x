@@ -10,8 +10,8 @@ using UnityEngine.Assertions;
 
 namespace EE {
     public interface IAudioInfo {
-        public string Path { get; }
-        public float Volume { get; }
+        string Path { get; }
+        float Volume { get; }
     }
 
     public class AudioInfo : IAudioInfo {

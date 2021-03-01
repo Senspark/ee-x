@@ -9,27 +9,27 @@
     + Use `EE.ServiceLocator.Resolve` to get a service.
 - Samples:
 ```csharp
-    // Creates services.
-    var sceneLoader = new EE.DefaultSceneLoader();
-    var dataMangaer = new EE.DefaultDataManager();
+// Creates services.
+var dataManager = new EE.DefaultDataManager();
+var sceneLoader = new EE.DefaultSceneLoader();
 
-    // Initializes services.
-    await sceneLoader.Initialize();
-    await dataManager.Initialize();
+// Initializes services.
+await dataManager.Initialize();
+await sceneLoader.Initialize();
 
-    // Registers services.
-    EE.ServiceLocator.Provide<EE.ISceneLoader>(sceneLoader);
-    EE.ServiceLocator.Provide<EE.IDataManager>(dataManager);
+// Registers services.
+EE.ServiceLocator.Provide<EE.IDataManager>(dataManager);
+EE.ServiceLocator.Provide<EE.ISceneLoader>(sceneLoader);
 
-    ...
+...
 
-    // Uses services.
-    EE.ServiceLocator.Resolve<EE.ISceneLoader>().LoadScene<GameScene>("GameScene");
+// Uses services.
+EE.ServiceLocator.Resolve<EE.ISceneLoader>().LoadScene<GameScene>("GameScene");
 
-    var dataManager = EE.ServiceLocator.Resolve<EE.IDataManager>();
-    var times = dataManager.Get("times", 1);
-    times++;
-    dataManager.Set("times", times);
+var dataManager = EE.ServiceLocator.Resolve<EE.IDataManager>();
+var times = dataManager.Get("times", 1);
+times++;
+dataManager.Set("times", times);
 ```
 ## Observer
 ## Decorator

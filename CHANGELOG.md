@@ -1,7 +1,8 @@
-## 2.6.0
+## 2.6.0 - 2020-03-01
 - [Native] Fix crash in fetch() in Firebase Remote Config.
 - [Android] Fix rewarded interstitial ad not registered correctly.
 - [Android/iOS/Native] Add AdMob mediation test suite.
+- [Unity] Add Audio, Analytics, RemoteConfig services.
 
 ## 2.5.0 - 2020-02-23
 - [Android] Update Firebase BoM version to 26.5.0

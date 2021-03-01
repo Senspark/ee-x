@@ -63,6 +63,10 @@ void Self::initializeFullScreenAd(AdFormat format) {
     fullScreenAds_.at(format)->setAd(ad);
 }
 
+void Self::openTestSuite() {
+    config_->openTestSuite(Network::AdMob);
+}
+
 std::shared_ptr<IBannerAd> Self::getBannerAd() {
     return bannerAds_.at(AdFormat::Banner);
 }

@@ -16,6 +16,7 @@ import {
     GenericAd,
     LazyBannerAd,
     LazyFullScreenAd,
+    Network,
 } from "./internal";
 
 export class DefaultAdsManager implements IAdsManager {
@@ -74,6 +75,10 @@ export class DefaultAdsManager implements IAdsManager {
             return;
         }
         this._fullScreenAds[format].ad = ad;
+    }
+
+    public openTestSuite(): void {
+        this._config.openTestSuite(Network.AdMob);
     }
 
     public get bannerAd(): IBannerAd {

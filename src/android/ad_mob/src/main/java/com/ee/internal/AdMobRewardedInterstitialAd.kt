@@ -13,18 +13,28 @@ import com.google.android.gms.ads.FullScreenContentCallback
 import com.google.android.gms.ads.LoadAdError
 import com.google.android.gms.ads.rewardedinterstitial.RewardedInterstitialAd
 import com.google.android.gms.ads.rewardedinterstitial.RewardedInterstitialAdLoadCallback
+import kotlinx.serialization.InternalSerializationApi
+import kotlinx.serialization.Serializable
 import java.util.concurrent.atomic.AtomicBoolean
 
+@InternalSerializationApi
 internal class AdMobRewardedInterstitialAd(
     private val _bridge: IMessageBridge,
     private val _logger: ILogger,
     private var _activity: Activity?,
     private val _adId: String) : IFullScreenAd {
+    @Serializable
+    @Suppress("unused")
+    private class ErrorResponse(
+        val code: Int,
+        val message: String
+    )
+
     companion object {
         private val kTag = AdMobRewardedInterstitialAd::class.java.name
     }
 
-    private val _messageHelper = MessageHelper("AdMobAppOpenAd", _adId)
+    private val _messageHelper = MessageHelper("AdMobRewardedInterstitialAd", _adId)
     private val _helper = FullScreenAdHelper(_bridge, this, _messageHelper)
     private val _isLoaded = AtomicBoolean(false)
     private var _ad: RewardedInterstitialAd? = null
@@ -83,12 +93,12 @@ internal class AdMobRewardedInterstitialAd(
                     }
                 }
 
-                override fun onAdFailedToShowFullScreenContent(error: AdError?) {
+                override fun onAdFailedToShowFullScreenContent(error: AdError) {
                     Thread.runOnMainThread {
-                        _logger.debug("$kTag: ${this::onAdFailedToShowFullScreenContent.name}: id = $_adId message = ${error?.message ?: ""}")
+                        _logger.debug("$kTag: ${this::onAdFailedToShowFullScreenContent.name}: id = $_adId message = ${error.message}")
                         _isLoaded.set(false)
                         _ad = null
-                        _bridge.callCpp(_messageHelper.onFailedToShow, error?.message ?: "")
+                        _bridge.callCpp(_messageHelper.onFailedToShow, ErrorResponse(error.code, error.message).serialize())
                     }
                 }
 
@@ -102,20 +112,21 @@ internal class AdMobRewardedInterstitialAd(
                 }
             }
             val loadCallback = object : RewardedInterstitialAdLoadCallback() {
-                override fun onRewardedInterstitialAdLoaded(ad: RewardedInterstitialAd) {
+                override fun onAdLoaded(ad: RewardedInterstitialAd) {
                     Thread.runOnMainThread {
-                        _logger.debug("${kTag}: ${this::onRewardedInterstitialAdLoaded.name}: id = $_adId")
-                        ad.setFullScreenContentCallback(showCallback)
+                        _logger.debug("${kTag}: ${this::onAdLoaded.name}: id = $_adId")
+                        ad.fullScreenContentCallback = showCallback
                         _isLoaded.set(true)
                         _ad = ad
                         _bridge.callCpp(_messageHelper.onLoaded)
                     }
                 }
 
-                override fun onRewardedInterstitialAdFailedToLoad(error: LoadAdError?) {
+                override fun onAdFailedToLoad(error: LoadAdError) {
                     Thread.runOnMainThread {
-                        _logger.debug("${kTag}: onRewardedInterstitialAdFailedToLoad: id = $_adId message = ${error?.message ?: ""} response = ${error?.responseInfo ?: ""}")
-                        _bridge.callCpp(_messageHelper.onFailedToLoad, error?.message ?: "")
+                        _logger.debug("${kTag}: ${this::onAdFailedToLoad.name}: id = $_adId message = ${error.message} response = ${error.responseInfo ?: ""}")
+                        _bridge.callCpp(_messageHelper.onFailedToLoad, ErrorResponse(error.code, error.message).serialize())
+
                     }
                 }
             }
@@ -129,12 +140,14 @@ internal class AdMobRewardedInterstitialAd(
             _logger.debug("${kTag}: ${this::show.name}: id = $_adId")
             val ad = _ad
             if (ad == null) {
-                _bridge.callCpp(_messageHelper.onFailedToShow, "Null ad")
+                _bridge.callCpp(_messageHelper.onFailedToShow, ErrorResponse(-1, "Null ad").serialize())
                 return@runOnMainThread
             }
             _rewarded = false
             ad.show(_activity) {
-                _rewarded = true
+                Thread.runOnMainThread {
+                    _rewarded = true
+                }
             }
         }
     }

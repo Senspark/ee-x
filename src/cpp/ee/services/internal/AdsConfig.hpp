@@ -39,6 +39,7 @@ class INetworkConfigManager {
 public:
     virtual ~INetworkConfigManager() = default;
     virtual Task<> initialize() = 0;
+    virtual void openTestSuite(Network network) = 0;
     virtual std::shared_ptr<IAd> createAd(Network network, AdFormat format,
                                           const std::string& id) = 0;
 };
@@ -48,6 +49,7 @@ public:
     explicit NetworkConfigManager(const nlohmann::json& node);
 
     virtual Task<> initialize() override;
+    virtual void openTestSuite(Network network) override;
     virtual std::shared_ptr<IAd> createAd(Network network, AdFormat format,
                                           const std::string& id) override;
 
@@ -63,6 +65,7 @@ public:
 
     virtual Task<> initialize() = 0;
     virtual Network network() const = 0;
+    virtual void openTestSuite() = 0;
     virtual std::shared_ptr<IAd> createAd(AdFormat format,
                                           const std::string& id) = 0;
 };
@@ -73,6 +76,7 @@ public:
 
     virtual Task<> initialize() override;
     virtual Network network() const override;
+    virtual void openTestSuite() override;
     virtual std::shared_ptr<IAd> createAd(AdFormat format,
                                           const std::string& id) override;
 
@@ -86,6 +90,7 @@ public:
 
     virtual Task<> initialize() override;
     virtual Network network() const override;
+    virtual void openTestSuite() override;
     virtual std::shared_ptr<IAd> createAd(AdFormat format,
                                           const std::string& id) override;
 
@@ -100,6 +105,7 @@ public:
 
     virtual Task<> initialize() override;
     virtual Network network() const override;
+    virtual void openTestSuite() override;
     virtual std::shared_ptr<IAd> createAd(AdFormat format,
                                           const std::string& id) override;
 
@@ -113,6 +119,7 @@ public:
 
     virtual Task<> initialize() override;
     virtual Network network() const override;
+    virtual void openTestSuite() override;
     virtual std::shared_ptr<IAd> createAd(AdFormat format,
                                           const std::string& id) override;
 
@@ -127,6 +134,7 @@ public:
 
     virtual Task<> initialize() override;
     virtual Network network() const override;
+    virtual void openTestSuite() override;
     virtual std::shared_ptr<IAd> createAd(AdFormat format,
                                           const std::string& id) override;
 
@@ -142,6 +150,7 @@ public:
 
     virtual Task<> initialize() override;
     virtual Network network() const override;
+    virtual void openTestSuite() override;
     virtual std::shared_ptr<IAd> createAd(AdFormat format,
                                           const std::string& id) override;
 
@@ -155,6 +164,7 @@ class NullNetworkConfig : public INetworkConfig {
 public:
     virtual Task<> initialize() override;
     virtual Network network() const override;
+    virtual void openTestSuite() override;
     virtual std::shared_ptr<IAd> createAd(AdFormat format,
                                           const std::string& id) override;
 };
@@ -328,6 +338,7 @@ public:
     static std::shared_ptr<AdsConfig> parse(const std::string& text);
 
     Task<> initialize();
+    void openTestSuite(Network network);
     std::shared_ptr<IAd> createAd(AdFormat format);
 
 private:

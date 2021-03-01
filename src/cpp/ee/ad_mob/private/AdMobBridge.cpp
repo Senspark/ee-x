@@ -30,6 +30,7 @@ const auto kInitialize                   = kPrefix + "Initialize";
 const auto kGetEmulatorTestDeviceHash    = kPrefix + "GetEmulatorTestDeviceHash";
 const auto kAddTestDevice                = kPrefix + "AddTestDevice";
 const auto kGetBannerAdSize              = kPrefix + "GetBannerAdSize";
+const auto kOpenTestSuite                = kPrefix + "OpenTestSuite";
 const auto kCreateBannerAd               = kPrefix + "CreateBannerAd";
 const auto kCreateNativeAd               = kPrefix + "CreateNativeAd";
 const auto kCreateAppOpenAd              = kPrefix + "CreateAppOpenAd";
@@ -82,6 +83,10 @@ std::pair<int, int> Self::getBannerAdSize(BannerAdSize adSize) {
     int width = json["width"];
     int height = json["height"];
     return std::pair(width, height);
+}
+
+void Self::openTestSuite() {
+    bridge_.call(kOpenTestSuite);
 }
 
 std::shared_ptr<IBannerAd> Self::createBannerAd(const std::string& adId,

@@ -87,6 +87,15 @@ Task<> NetworkConfigManager::initialize() {
     }
 }
 
+void NetworkConfigManager::openTestSuite(Network network) {
+    for (auto&& item : networks_) {
+        if (item->network() == network) {
+            item->openTestSuite();
+            break;
+        }
+    }
+}
+
 std::shared_ptr<IAd> NetworkConfigManager::createAd(Network network,
                                                     AdFormat format,
                                                     const std::string& id) {
@@ -130,6 +139,10 @@ Network AdMobConfig::network() const {
     return Network::AdMob;
 }
 
+void AdMobConfig::openTestSuite() {
+    plugin_->openTestSuite();
+}
+
 std::shared_ptr<IAd> AdMobConfig::createAd(AdFormat format,
                                            const std::string& id) {
     switch (format) {
@@ -163,6 +176,8 @@ Network AppLovinConfig::network() const {
     return Network::AppLovin;
 }
 
+void AppLovinConfig::openTestSuite() {}
+
 std::shared_ptr<IAd> AppLovinConfig::createAd(AdFormat format,
                                               const std::string& id) {
     switch (format) {
@@ -190,6 +205,8 @@ Task<> FacebookAdsConfig::initialize() {
 Network FacebookAdsConfig::network() const {
     return Network::FacebookAds;
 }
+
+void FacebookAdsConfig::openTestSuite() {}
 
 std::shared_ptr<IAd> FacebookAdsConfig::createAd(AdFormat format,
                                                  const std::string& id) {
@@ -224,6 +241,8 @@ Task<> IronSourceConfig::initialize() {
 Network IronSourceConfig::network() const {
     return Network::IronSource;
 }
+
+void IronSourceConfig::openTestSuite() {}
 
 std::shared_ptr<IAd> IronSourceConfig::createAd(AdFormat format,
                                                 const std::string& id) {
@@ -264,6 +283,8 @@ Network UnityAdsConfig::network() const {
     return Network::UnityAds;
 }
 
+void UnityAdsConfig::openTestSuite() {}
+
 std::shared_ptr<IAd> UnityAdsConfig::createAd(AdFormat format,
                                               const std::string& id) {
     switch (format) {
@@ -303,6 +324,8 @@ Network VungleConfig::network() const {
     return Network::Vungle;
 }
 
+void VungleConfig::openTestSuite() {}
+
 std::shared_ptr<IAd> VungleConfig::createAd(AdFormat format,
                                             const std::string& id) {
     switch (format) {
@@ -327,6 +350,8 @@ Task<> NullNetworkConfig::initialize() {
 Network NullNetworkConfig::network() const {
     return Network::Null;
 }
+
+void NullNetworkConfig::openTestSuite() {}
 
 std::shared_ptr<IAd> NullNetworkConfig::createAd(AdFormat format,
                                                  const std::string& id) {
@@ -548,6 +573,10 @@ std::shared_ptr<AdsConfig> Self::parse(const nlohmann::json& node) {
 
 Task<> Self::initialize() {
     co_await networkManager_->initialize();
+}
+
+void Self::openTestSuite(Network network) {
+    networkManager_->openTestSuite(network);
 }
 
 std::shared_ptr<IAd> Self::createAd(AdFormat format) {

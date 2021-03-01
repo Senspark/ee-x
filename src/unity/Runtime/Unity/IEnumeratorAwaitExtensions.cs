@@ -45,10 +45,22 @@ namespace EE {
                 yield return instruction;
                 awaiter.Complete(instruction, null);
             }
+
+            public static IEnumerator ResourceRequest(
+                SimpleCoroutineAwaiter<UnityEngine.Object> awaiter, ResourceRequest instruction) {
+                yield return instruction;
+                awaiter.Complete(instruction.asset, null);
+            }
         }
 
         public static SimpleCoroutineAwaiter<AsyncOperation> GetAwaiter(this AsyncOperation instruction) {
             return GetAwaiterReturnSelf(instruction);
+        }
+
+        public static SimpleCoroutineAwaiter<UnityEngine.Object> GetAwaiter(this ResourceRequest instruction) {
+            var awaiter = new SimpleCoroutineAwaiter<UnityEngine.Object>();
+            Thread.RunOnLibraryThread(() => Thread.Dispatch(InstructionWrappers.ResourceRequest(awaiter, instruction)));
+            return awaiter;
         }
 
         private static SimpleCoroutineAwaiter<T> GetAwaiterReturnSelf<T>(T instruction) {

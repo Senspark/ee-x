@@ -42,7 +42,10 @@ internal class AppLovinRewardedAdListener:
     func adService(_ adService: ALAdService, didFailToLoadAdWithError code: Int32) {
         Thread.runOnMainThread {
             self._logger.debug("\(kTag): \(#function): code \(code)")
-            self._bridge.callCpp(kOnRewardedAdFailedToLoad, "\(code)")
+            self._bridge.callCpp(kOnRewardedAdFailedToLoad, EEJsonUtils.convertDictionary(toString: [
+                "code": code,
+                "message": ""
+            ]))
         }
     }
 

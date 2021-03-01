@@ -15,6 +15,7 @@ namespace EE.Internal {
         private const string kGetEmulatorTestDeviceHash = kPrefix + "GetEmulatorTestDeviceHash";
         private const string kAddTestDevice = kPrefix + "AddTestDevice";
         private const string kGetBannerAdSize = kPrefix + "GetBannerAdSize";
+        private const string kOpenTestSuite = kPrefix + "OpenTestSuite";
         private const string kCreateBannerAd = kPrefix + "CreateBannerAd";
         private const string kCreateNativeAd = kPrefix + "CreateNativeAd";
         private const string kCreateAppOpenAd = kPrefix + "CreateAppOpenAd";
@@ -58,6 +59,10 @@ namespace EE.Internal {
 
         public void AddTestDevice(string hash) {
             _bridge.Call(kAddTestDevice, hash);
+        }
+
+        public void OpenTestSuite() {
+            _bridge.Call(kOpenTestSuite);
         }
 
         [Serializable]

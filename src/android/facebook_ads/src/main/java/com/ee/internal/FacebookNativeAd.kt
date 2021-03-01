@@ -27,6 +27,7 @@ import com.facebook.ads.NativeAdBase
 import com.facebook.ads.NativeAdListener
 import com.google.common.truth.Truth.assertThat
 import kotlinx.serialization.InternalSerializationApi
+import kotlinx.serialization.Serializable
 import java.util.concurrent.atomic.AtomicBoolean
 
 private typealias ViewProcessor<T> = (view: T) -> Unit
@@ -44,6 +45,13 @@ internal class FacebookNativeAd(
     private val _layoutName: String,
     private val _identifiers: Map<String, String>)
     : IBannerAd, NativeAdListener {
+    @Serializable
+    @Suppress("unused")
+    private class ErrorResponse(
+        val code: Int,
+        val message: String
+    )
+
     companion object {
         private val kTag = FacebookNativeAd::class.java.name
         private const val k__ad_choices = "ad_choices"
@@ -246,10 +254,10 @@ internal class FacebookNativeAd(
         return true
     }
 
-    override fun onError(ad: Ad, adError: AdError) {
-        _logger.debug("$kTag: ${this::onError.name}: ${adError.errorMessage}")
+    override fun onError(ad: Ad, error: AdError) {
+        _logger.debug("$kTag: ${this::onError.name}: ${error.errorMessage}")
         Thread.checkMainThread()
-        _bridge.callCpp(_messageHelper.onFailedToLoad, adError.errorMessage)
+        _bridge.callCpp(_messageHelper.onFailedToLoad, ErrorResponse(error.errorCode, error.errorMessage).serialize())
     }
 
     override fun onAdLoaded(nativeAd: Ad) {

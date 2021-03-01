@@ -1,6 +1,8 @@
 using System;
 using System.Threading.Tasks;
 
+using SimpleJSON;
+
 namespace EE.Internal {
     using Destroyer = Action;
 
@@ -35,7 +37,10 @@ namespace EE.Internal {
 
             _logger.Debug($"{kTag}: constructor: prefix = {_prefix} id = {_adId}");
             _bridge.RegisterHandler(_ => OnLoaded(), _messageHelper.OnLoaded);
-            _bridge.RegisterHandler(OnFailedToLoad, _messageHelper.OnFailedToLoad);
+            _bridge.RegisterHandler(message => {
+                var json = JSON.Parse(message);
+                OnFailedToLoad(json["code"], json["message"]);
+            }, _messageHelper.OnFailedToLoad);
             _bridge.RegisterHandler(_ => OnClicked(), _messageHelper.OnClicked);
         }
 
@@ -93,7 +98,7 @@ namespace EE.Internal {
             DispatchEvent(observer => observer.OnLoaded?.Invoke());
         }
 
-        private void OnFailedToLoad(string message) {
+        private void OnFailedToLoad(int code, string message) {
             _logger.Debug(
                 $"{kTag}: {nameof(OnFailedToLoad)}: prefix = {_prefix} id = {_adId} loading = {_loader.IsProcessing} message = {message}");
             if (_loader.IsProcessing) {

@@ -1,8 +1,10 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using UnityEngine.Scripting;
 
 namespace EE {
-    public interface IAdsManager {
+    [Preserve]
+    [Service("EE" + nameof(IAdsManager))]
+    public interface IAdsManager : IService {
+        void OpenTestSuite();
         IBannerAd BannerAd { get; }
         IBannerAd RectangleAd { get; }
         IFullScreenAd AppOpenAd { get; }

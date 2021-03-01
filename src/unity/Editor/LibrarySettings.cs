@@ -8,7 +8,7 @@ using UnityEngine;
 
 namespace EE.Editor {
     internal class LibrarySettings : ScriptableObject {
-        private const string LibraryVersion = "2.5.0";
+        private const string LibraryVersion = "2.6.0";
 
         private const string LibrarySettingsDir = "Assets/EE";
         private const string LibrarySettingsResDir = "Assets/EE/Resources";
@@ -30,27 +30,6 @@ namespace EE.Editor {
 
         [SerializeField]
         private bool _isCoreEnabled = true;
-
-        [SerializeField]
-        private bool _isFirebaseAnalyticsEnabled = false;
-
-        [SerializeField]
-        private bool _isFirebaseCrashlyticsEnabled = false;
-
-        [SerializeField]
-        private bool _isFirebaseDynamicLinksEnabled = false;
-
-        [SerializeField]
-        private bool _isFirebaseMessagingEnabled = false;
-
-        [SerializeField]
-        private bool _isFirebasePerformanceEnabled = false;
-
-        [SerializeField]
-        private bool _isFirebaseRemoteConfigEnabled = false;
-
-        [SerializeField]
-        private bool _isFirebaseStorageEnabled = false;
 
         [SerializeField]
         private bool _isAdjustEnabled = false;
@@ -100,41 +79,6 @@ namespace EE.Editor {
         public bool IsCoreEnabled {
             get => _isCoreEnabled;
             set => _isCoreEnabled = value;
-        }
-
-        public bool IsFirebaseAnalyticsEnabled {
-            get => _isFirebaseAnalyticsEnabled;
-            set => _isFirebaseAnalyticsEnabled = value;
-        }
-
-        public bool IsFirebaseCrashlyticsEnabled {
-            get => _isFirebaseCrashlyticsEnabled;
-            set => _isFirebaseCrashlyticsEnabled = value;
-        }
-
-        public bool IsFirebaseDynamicLinksEnabled {
-            get => _isFirebaseDynamicLinksEnabled;
-            set => _isFirebaseDynamicLinksEnabled = value;
-        }
-
-        public bool IsFirebaseMessagingEnabled {
-            get => _isFirebaseMessagingEnabled;
-            set => _isFirebaseMessagingEnabled = value;
-        }
-
-        public bool IsFirebasePerformanceEnabled {
-            get => _isFirebasePerformanceEnabled;
-            set => _isFirebasePerformanceEnabled = value;
-        }
-
-        public bool IsFirebaseRemoteConfigEnabled {
-            get => _isFirebaseRemoteConfigEnabled;
-            set => _isFirebaseRemoteConfigEnabled = value;
-        }
-
-        public bool IsFirebaseStorageEnabled {
-            get => _isFirebaseStorageEnabled;
-            set => _isFirebaseStorageEnabled = value;
         }
 
         public bool IsAdColonyEnabled {
@@ -248,34 +192,6 @@ namespace EE.Editor {
                 androidRepositories.Add("https://dl.bintray.com/enrevol/ee-x");
                 androidLibraries.Add($"com.senspark.ee:core:[{LibraryVersion}]");
                 iosLibraries.Add("ee-x/core");
-                if (IsFirebaseAnalyticsEnabled) {
-                    androidLibraries.Add($"com.senspark.ee:firebase-analytics:[{LibraryVersion}]");
-                    iosLibraries.Add("ee-x/firebase-analytics");
-                }
-                if (IsFirebaseCrashlyticsEnabled) {
-                    androidLibraries.Add($"com.senspark.ee:firebase-crashlytics:[{LibraryVersion}]");
-                    iosLibraries.Add("ee-x/firebase-crashlytics");
-                }
-                if (IsFirebaseDynamicLinksEnabled) {
-                    androidLibraries.Add($"com.senspark.ee:firebase-dynamic-links:[{LibraryVersion}]");
-                    iosLibraries.Add("ee-x/firebase-dynamic-links");
-                }
-                if (IsFirebasePerformanceEnabled) {
-                    androidLibraries.Add($"com.senspark.ee:firebase-messaging:[{LibraryVersion}]");
-                    iosLibraries.Add("ee-x/firebase-messaging");
-                }
-                if (IsFirebasePerformanceEnabled) {
-                    androidLibraries.Add($"com.senspark.ee:firebase-performance:[{LibraryVersion}]");
-                    iosLibraries.Add("ee-x/firebase-performance");
-                }
-                if (IsFirebaseRemoteConfigEnabled) {
-                    androidLibraries.Add($"com.senspark.ee:firebase-remote-config:[{LibraryVersion}]");
-                    iosLibraries.Add("ee-x/firebase-remote-config");
-                }
-                if (IsFirebaseStorageEnabled) {
-                    androidLibraries.Add($"com.senspark.ee:firebase-storage:[{LibraryVersion}]");
-                    iosLibraries.Add("ee-x/firebase-storage");
-                }
                 if (IsAdjustEnabled) {
                     androidLibraries.Add($"com.senspark.ee:adjust:[{LibraryVersion}]");
                     iosLibraries.Add("ee-x/adjust");

@@ -13,10 +13,6 @@ namespace EE {
                 [typeof(IAdMob)] = ("AdMob", (bridge, logger, destroyer) => new AdMob(bridge, logger, destroyer)),
                 [typeof(IFacebookAds)] = ("FacebookAds",
                     (bridge, logger, destroyer) => new FacebookAds(bridge, logger, destroyer)),
-                [typeof(IFirebaseCrashlytics)] = ("FirebaseCrashlytics",
-                    (bridge, logger, destroyer) => new FirebaseCrashlytics(bridge, logger, destroyer)),
-                [typeof(IFirebasePerformance)] = ("FirebasePerformance",
-                    (bridge, logger, destroyer) => new FirebasePerformance(bridge, logger, destroyer)),
                 [typeof(IIronSource)] = ("IronSource",
                     (bridge, logger, destroyer) => new IronSource(bridge, logger, destroyer)),
                 [typeof(IUnityAds)] = ("UnityAds",
@@ -37,7 +33,7 @@ namespace EE {
 
         public static void InitializePlugins() {
             _logger = new Logger("ee-x");
-            _impl.InitializePlugins("2.5.0");
+            _impl.InitializePlugins("2.6.0");
             _bridge = new MessageBridge();
             Thread.Initialize();
             Platform.Initialize(_bridge);

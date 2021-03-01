@@ -16,6 +16,7 @@ import com.ironsource.mediationsdk.IronSourceBannerLayout
 import com.ironsource.mediationsdk.logger.IronSourceError
 import com.ironsource.mediationsdk.sdk.BannerListener
 import kotlinx.serialization.InternalSerializationApi
+import kotlinx.serialization.Serializable
 import java.util.concurrent.atomic.AtomicBoolean
 
 @InternalSerializationApi
@@ -27,6 +28,13 @@ class IronSourceBannerAd(
     private val _adSize: ISBannerSize,
     bannerHelper: IronSourceBannerHelper)
     : IBannerAd, BannerListener {
+    @Serializable
+    @Suppress("unused")
+    private class ErrorResponse(
+        val code: Int,
+        val message: String
+    )
+
     companion object {
         private val kTag = IronSourceBannerAd::class.java.name
     }
@@ -137,7 +145,7 @@ class IronSourceBannerAd(
             IronSource.loadBanner(ad, _adId)
         }
     }
-    
+
     override var isVisible: Boolean
         @AnyThread get() = _viewHelper.isVisible
         @AnyThread set(value) {
@@ -164,10 +172,10 @@ class IronSourceBannerAd(
         }
     }
 
-    override fun onBannerAdLoadFailed(error: IronSourceError?) {
+    override fun onBannerAdLoadFailed(error: IronSourceError) {
         Thread.runOnMainThread {
-            _logger.debug("$kTag: onAdFailedToLoad: id = $_adId message = ${error?.errorMessage ?: ""}")
-            _bridge.callCpp(_messageHelper.onFailedToLoad, error?.errorMessage ?: "")
+            _logger.debug("$kTag: onAdFailedToLoad: id = $_adId message = ${error.errorMessage}")
+            _bridge.callCpp(_messageHelper.onFailedToLoad, ErrorResponse(error.errorCode, error.errorMessage).serialize())
         }
     }
 

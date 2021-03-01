@@ -62,12 +62,30 @@ export class IronSource implements IIronSource {
         this._displayer = MediationManager.getInstance().adDisplayer;
 
         this._bridge.registerHandler(_ => this.onInterstitialAdLoaded(), this.kOnInterstitialAdLoaded);
-        this._bridge.registerHandler(message => this.onInterstitialAdFailedToLoad(message), this.kOnInterstitialAdFailedToLoad);
-        this._bridge.registerHandler(message => this.onInterstitialAdFailedToShow(message), this.kOnInterstitialAdFailedToShow);
+        this._bridge.registerHandler(message => {
+            const json: {
+                code: number,
+                message: string,
+            } = JSON.parse(message);
+            this.onInterstitialAdFailedToLoad(json.code, json.message);
+        }, this.kOnInterstitialAdFailedToLoad);
+        this._bridge.registerHandler(message => {
+            const json: {
+                code: number,
+                message: string,
+            } = JSON.parse(message);
+            this.onInterstitialAdFailedToShow(json.code, json.message);
+        }, this.kOnInterstitialAdFailedToShow);
         this._bridge.registerHandler(_ => this.onInterstitialAdClicked(), this.kOnInterstitialAdClicked);
         this._bridge.registerHandler(_ => this.onInterstitialAdClosed(), this.kOnInterstitialAdClosed);
         this._bridge.registerHandler(_ => this.onRewardedAdLoaded(), this.kOnRewardedAdLoaded);
-        this._bridge.registerHandler(message => this.onRewardedAdFailedToShow(message), this.kOnRewardedAdFailedToShow);
+        this._bridge.registerHandler(message => {
+            const json: {
+                code: number,
+                message: string,
+            } = JSON.parse(message);
+            this.onRewardedAdFailedToShow(json.code, json.message);
+        }, this.kOnRewardedAdFailedToShow);
         this._bridge.registerHandler(_ => this.onRewardedAdClicked(), this.kOnRewardedAdClicked);
         this._bridge.registerHandler(message => this.onRewardedAdClosed(Utils.toBool(message)), this.kOnRewardedAdClosed);
     }
@@ -205,7 +223,7 @@ export class IronSource implements IIronSource {
         }
     }
 
-    private onInterstitialAdFailedToLoad(message: string): void {
+    private onInterstitialAdFailedToLoad(code: number, message: string): void {
         if (this._interstitialAd !== undefined) {
             this._interstitialAd.onFailedToLoad(message);
         } else {
@@ -213,7 +231,7 @@ export class IronSource implements IIronSource {
         }
     }
 
-    private onInterstitialAdFailedToShow(message: string): void {
+    private onInterstitialAdFailedToShow(code: number, message: string): void {
         if (this._interstitialAd !== undefined) {
             this._interstitialAd.onFailedToShow(message);
         } else {
@@ -245,7 +263,7 @@ export class IronSource implements IIronSource {
         }
     }
 
-    private onRewardedAdFailedToShow(message: string): void {
+    private onRewardedAdFailedToShow(code: number, message: string): void {
         if (this._rewardedAd !== undefined) {
             this._rewardedAd.onFailedToShow(message);
         } else {

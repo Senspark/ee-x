@@ -277,7 +277,7 @@ class UnityAdsBridge(
                     return@runOnMainThread
                 }
                 UnityAds.load(adId, object : IUnityAdsLoadListener {
-                    override fun onUnityAdsAdLoaded(placementId: String?) {
+                    override fun onUnityAdsAdLoaded(placementId: String) {
                         Thread.runOnMainThread {
                             _logger.debug("$kTag: ${this::onUnityAdsAdLoaded.name}: id = $adId")
                             _loadedAdIds.add(adId)
@@ -285,7 +285,7 @@ class UnityAdsBridge(
                         }
                     }
 
-                    override fun onUnityAdsFailedToLoad(placementId: String?) {
+                    override fun onUnityAdsFailedToLoad(placementId: String) {
                         Thread.runOnMainThread {
                             _logger.debug("$kTag: ${this::onUnityAdsFailedToLoad.name}: id = $adId")
                             cont.resume(false)

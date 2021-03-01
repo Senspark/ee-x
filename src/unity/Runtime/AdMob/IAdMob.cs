@@ -5,6 +5,7 @@ namespace EE {
         Task<bool> Initialize();
         string GetEmulatorTestDeviceHash();
         void AddTestDevice(string hash);
+        void OpenTestSuite();
         IBannerAd CreateBannerAd(string adId, AdMobBannerAdSize adSize);
         IFullScreenAd CreateAppOpenAd(string adId);
         IFullScreenAd CreateInterstitialAd(string adId);

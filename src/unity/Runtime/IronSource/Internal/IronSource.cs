@@ -1,6 +1,8 @@
 using System;
 using System.Threading.Tasks;
 
+using SimpleJSON;
+
 using UnityEngine;
 using UnityEngine.Assertions;
 
@@ -47,12 +49,21 @@ namespace EE.Internal {
             _displayer = MediationManager.Instance.AdDisplayer;
 
             _bridge.RegisterHandler(_ => OnInterstitialAdLoaded(), kOnInterstitialAdLoaded);
-            _bridge.RegisterHandler(OnInterstitialAdFailedToLoad, kOnInterstitialAdFailedToLoad);
-            _bridge.RegisterHandler(OnInterstitialAdFailedToShow, kOnInterstitialAdFailedToShow);
+            _bridge.RegisterHandler(message => {
+                var json = JSON.Parse(message);
+                OnInterstitialAdFailedToLoad(json["code"], json["message"]);
+            }, kOnInterstitialAdFailedToLoad);
+            _bridge.RegisterHandler(message => {
+                var json = JSON.Parse(message);
+                OnInterstitialAdFailedToShow(json["code"], json["message"]);
+            }, kOnInterstitialAdFailedToShow);
             _bridge.RegisterHandler(_ => OnInterstitialAdClicked(), kOnInterstitialAdClicked);
             _bridge.RegisterHandler(_ => OnInterstitialAdClosed(), kOnInterstitialAdClosed);
             _bridge.RegisterHandler(_ => OnRewardedAdLoaded(), kOnRewardedAdLoaded);
-            _bridge.RegisterHandler(OnRewardedAdFailedToShow, kOnRewardedAdFailedToShow);
+            _bridge.RegisterHandler(message => {
+                var json = JSON.Parse(message);
+                OnRewardedAdFailedToShow(json["code"], json["message"]);
+            }, kOnRewardedAdFailedToShow);
             _bridge.RegisterHandler(_ => OnRewardedAdClicked(), kOnRewardedAdClicked);
             _bridge.RegisterHandler(message => OnRewardedAdClosed(Utils.ToBool(message)), kOnRewardedAdClosed);
         }
@@ -197,7 +208,7 @@ namespace EE.Internal {
             }
         }
 
-        private void OnInterstitialAdFailedToLoad(string message) {
+        private void OnInterstitialAdFailedToLoad(int code, string message) {
             if (_interstitialAd != null) {
                 _interstitialAd.OnFailedToLoad(message);
             } else {
@@ -205,7 +216,7 @@ namespace EE.Internal {
             }
         }
 
-        private void OnInterstitialAdFailedToShow(string message) {
+        private void OnInterstitialAdFailedToShow(int code, string message) {
             if (_interstitialAd != null) {
                 _interstitialAd.OnFailedToShow(message);
             } else {
@@ -237,7 +248,7 @@ namespace EE.Internal {
             }
         }
 
-        private void OnRewardedAdFailedToShow(string message) {
+        private void OnRewardedAdFailedToShow(int code, string message) {
             if (_rewardedAd != null) {
                 _rewardedAd.OnFailedToShow(message);
             } else {

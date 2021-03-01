@@ -49,6 +49,7 @@ namespace EE.Internal {
 
     internal interface INetworkConfigManager {
         Task Initialize();
+        void OpenTestSuite(Network network);
         IAd CreateAd(Network network, AdFormat format, string id);
     }
 
@@ -68,6 +69,15 @@ namespace EE.Internal {
             }
         }
 
+        public void OpenTestSuite(Network network) {
+            foreach (var item in _networks) {
+                if (item.Network == network) {
+                    item.OpenTestSuite();
+                    break;
+                }
+            }
+        }
+
         public IAd CreateAd(Network network, AdFormat format, string id) {
             foreach (var item in _networks) {
                 if (item.Network == network) {
@@ -81,6 +91,7 @@ namespace EE.Internal {
     internal interface INetworkConfig {
         Task Initialize();
         Network Network { get; }
+        void OpenTestSuite();
         IAd CreateAd(AdFormat format, string id);
     }
 
@@ -110,6 +121,10 @@ namespace EE.Internal {
         }
 
         public Network Network => Network.AdMob;
+
+        public void OpenTestSuite() {
+            _plugin.OpenTestSuite();
+        }
 
         public IAd CreateAd(AdFormat format, string id) {
             switch (format) {
@@ -145,6 +160,9 @@ namespace EE.Internal {
 
         public Network Network => Network.FacebookAds;
 
+        public void OpenTestSuite() {
+        }
+
         public IAd CreateAd(AdFormat format, string id) {
             switch (format) {
                 case AdFormat.Banner:
@@ -179,6 +197,9 @@ namespace EE.Internal {
         }
 
         public Network Network => Network.IronSource;
+
+        public void OpenTestSuite() {
+        }
 
         public IAd CreateAd(AdFormat format, string id) {
             switch (format) {
@@ -217,6 +238,9 @@ namespace EE.Internal {
 
         public Network Network => Network.UnityAds;
 
+        public void OpenTestSuite() {
+        }
+
         public IAd CreateAd(AdFormat format, string id) {
             switch (format) {
                 case AdFormat.Banner:
@@ -243,6 +267,9 @@ namespace EE.Internal {
         }
 
         public Network Network => Network.Null;
+
+        public void OpenTestSuite() {
+        }
 
         public IAd CreateAd(AdFormat format, string id) {
             switch (format) {
@@ -487,6 +514,10 @@ namespace EE.Internal {
 
         public async Task Initialize() {
             await _networkManager.Initialize();
+        }
+
+        public void OpenTestSuite(Network network) {
+            _networkManager.OpenTestSuite(network);
         }
 
         public IAd CreateAd(AdFormat format) {

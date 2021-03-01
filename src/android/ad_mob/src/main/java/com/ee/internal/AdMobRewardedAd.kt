@@ -2,7 +2,6 @@ package com.ee.internal
 
 import android.app.Activity
 import androidx.annotation.AnyThread
-import androidx.annotation.UiThread
 import com.ee.IFullScreenAd
 import com.ee.ILogger
 import com.ee.IMessageBridge
@@ -10,22 +9,30 @@ import com.ee.Thread
 import com.ee.Utils
 import com.google.android.gms.ads.AdError
 import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.FullScreenContentCallback
 import com.google.android.gms.ads.LoadAdError
-import com.google.android.gms.ads.rewarded.RewardItem
 import com.google.android.gms.ads.rewarded.RewardedAd
-import com.google.android.gms.ads.rewarded.RewardedAdCallback
 import com.google.android.gms.ads.rewarded.RewardedAdLoadCallback
+import kotlinx.serialization.InternalSerializationApi
+import kotlinx.serialization.Serializable
 import java.util.concurrent.atomic.AtomicBoolean
 
 /**
  * Created by KietLe on 12/03/19.
  */
+@InternalSerializationApi
 internal class AdMobRewardedAd(
     private val _bridge: IMessageBridge,
     private val _logger: ILogger,
     private var _activity: Activity?,
-    private val _adId: String)
-    : IFullScreenAd, RewardedAdCallback() {
+    private val _adId: String) : IFullScreenAd {
+    @Serializable
+    @Suppress("unused")
+    private class ErrorResponse(
+        val code: Int,
+        val message: String
+    )
+
     companion object {
         private val kTag = AdMobRewardedAd::class.java.name
     }
@@ -58,7 +65,6 @@ internal class AdMobRewardedAd(
     override fun destroy() {
         _logger.info("$kTag: destroy: adId = $_adId")
         deregisterHandlers()
-        destroyInternalAd()
     }
 
     @AnyThread
@@ -71,27 +77,6 @@ internal class AdMobRewardedAd(
         _helper.deregisterHandlers()
     }
 
-    @UiThread
-    private fun createInternalAd(): RewardedAd {
-        _ad?.let {
-            return@createInternalAd it
-        }
-        // https://github.com/googleads/googleads-mobile-android-mediation/issues/113
-        // https://developers.google.com/admob/android/mediate#initialize_your_ad_object_with_an_activity_instance
-        val ad = RewardedAd(_activity, _adId)
-        _ad = ad
-        return ad
-    }
-
-    @AnyThread
-    private fun destroyInternalAd() {
-        Thread.runOnMainThread {
-            if (_ad == null) {
-                return@runOnMainThread
-            }
-            _ad = null
-        }
-    }
 
     override val isLoaded: Boolean
         @AnyThread get() = _isLoaded.get()
@@ -100,25 +85,56 @@ internal class AdMobRewardedAd(
     override fun load() {
         Thread.runOnMainThread {
             _logger.debug("$kTag: ${this::load.name}: id = $_adId")
-            val ad = createInternalAd()
-            val callback = object : RewardedAdLoadCallback() {
-                override fun onRewardedAdLoaded() {
+            val activity = _activity
+            if (activity == null) {
+                _bridge.callCpp(_messageHelper.onFailedToLoad, "Null activity")
+                return@runOnMainThread
+            }
+            val showCallback = object : FullScreenContentCallback() {
+                override fun onAdShowedFullScreenContent() {
                     Thread.runOnMainThread {
-                        _logger.debug("${kTag}: ${this::onRewardedAdLoaded.name}: id = $_adId")
+                        _logger.debug("${kTag}: ${this::onAdShowedFullScreenContent.name}: id = $_adId")
+                    }
+                }
+
+                override fun onAdFailedToShowFullScreenContent(error: AdError) {
+                    Thread.runOnMainThread {
+                        _logger.debug("${kTag}: ${this::onAdFailedToShowFullScreenContent.name}: id = $_adId message = ${error.message}")
+                        _isLoaded.set(false)
+                        _ad = null
+                        _bridge.callCpp(_messageHelper.onFailedToShow, ErrorResponse(error.code, error.message).serialize())
+                    }
+                }
+
+                override fun onAdDismissedFullScreenContent() {
+                    Thread.runOnMainThread {
+                        _logger.debug("${kTag}: ${this::onAdDismissedFullScreenContent.name}: id = $_adId")
+                        _isLoaded.set(false)
+                        _ad = null
+                        _bridge.callCpp(_messageHelper.onClosed, Utils.toString(_rewarded))
+                    }
+                }
+            }
+            val loadCallback = object : RewardedAdLoadCallback() {
+                override fun onAdLoaded(ad: RewardedAd) {
+                    Thread.runOnMainThread {
+                        _logger.debug("${kTag}: ${this::onAdLoaded.name}: id = $_adId")
+                        ad.fullScreenContentCallback = showCallback
                         _isLoaded.set(true)
+                        _ad = ad
                         _bridge.callCpp(_messageHelper.onLoaded)
                     }
                 }
 
-                override fun onRewardedAdFailedToLoad(error: LoadAdError?) {
+                override fun onAdFailedToLoad(error: LoadAdError) {
                     Thread.runOnMainThread {
-                        _logger.debug("${kTag}: onRewardedAdFailedToLoad: id = $_adId message = ${error?.message ?: ""} response = ${error?.responseInfo ?: ""}")
-                        destroyInternalAd()
-                        _bridge.callCpp(_messageHelper.onFailedToLoad, error?.message ?: "")
+                        _logger.debug("${kTag}: ${this::onAdFailedToLoad.name}: id = $_adId message = ${error.message} response = ${error.responseInfo ?: ""}")
+                        _bridge.callCpp(_messageHelper.onFailedToLoad, ErrorResponse(error.code, error.message).serialize())
+
                     }
                 }
             }
-            ad.loadAd(AdRequest.Builder().build(), callback)
+            RewardedAd.load(activity, _adId, AdRequest.Builder().build(), loadCallback)
         }
     }
 
@@ -126,40 +142,22 @@ internal class AdMobRewardedAd(
     override fun show() {
         Thread.runOnMainThread {
             _logger.debug("$kTag: ${this::show.name}: id = $_adId")
-            val ad = createInternalAd()
+            val ad = _ad
+            if (ad == null) {
+                _bridge.callCpp(_messageHelper.onFailedToShow, ErrorResponse(-1, "Null ad").serialize())
+                return@runOnMainThread
+            }
+            val activity = _activity
+            if (activity == null) {
+                _bridge.callCpp(_messageHelper.onFailedToShow, ErrorResponse(-1, "Null activity").serialize())
+                return@runOnMainThread
+            }
             _rewarded = false
-            ad.show(_activity, this)
-        }
-    }
-
-    override fun onRewardedAdFailedToShow(error: AdError?) {
-        Thread.runOnMainThread {
-            _logger.debug("$kTag: onRewardedAdFailedToShow: id = $_adId message = ${error?.message ?: ""}")
-            _isLoaded.set(false)
-            destroyInternalAd()
-            _bridge.callCpp(_messageHelper.onFailedToShow, error?.message ?: "")
-        }
-    }
-
-    override fun onRewardedAdOpened() {
-        Thread.runOnMainThread {
-            _logger.debug("$kTag: ${this::onRewardedAdOpened.name}: id = $_adId")
-        }
-    }
-
-    override fun onUserEarnedReward(reward: RewardItem) {
-        Thread.runOnMainThread {
-            _logger.debug("$kTag: ${this::onUserEarnedReward.name}: id = $_adId")
-            _rewarded = true
-        }
-    }
-
-    override fun onRewardedAdClosed() {
-        Thread.runOnMainThread {
-            _logger.debug("$kTag: ${this::onRewardedAdClosed.name}: id = $_adId")
-            _isLoaded.set(false)
-            destroyInternalAd()
-            _bridge.callCpp(_messageHelper.onClosed, Utils.toString(_rewarded))
+            ad.show(activity) {
+                Thread.runOnMainThread {
+                    _rewarded = true
+                }
+            }
         }
     }
 }

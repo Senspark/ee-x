@@ -12,6 +12,7 @@ namespace services {
 class IAdsManager {
 public:
     virtual ~IAdsManager() = default;
+    virtual void openTestSuite() = 0;
     virtual std::shared_ptr<IBannerAd> getBannerAd() = 0;
     virtual std::shared_ptr<IBannerAd> getRectangleAd() = 0;
     virtual std::shared_ptr<IFullScreenAd> getAppOpenAd() = 0;

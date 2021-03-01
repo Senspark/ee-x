@@ -12,6 +12,7 @@
 #include <ee/core/ILogger.hpp>
 #include <ee/core/IMessageBridge.hpp>
 #include <ee/core/Utils.hpp>
+#include <ee/nlohmann/json.hpp>
 
 #include "ee/ads/internal/AsyncHelper.hpp"
 #include "ee/ads/internal/Capper.hpp"
@@ -42,7 +43,8 @@ Self::DefaultBannerAd(const std::string& prefix, IMessageBridge& bridge,
         messageHelper_.onLoaded());
     bridge_.registerHandler(
         [this](const std::string& message) { //
-            onFailedToLoad(message);
+            auto json = nlohmann::json::parse(message);
+            onFailedToLoad(json["code"], json["message"]);
         },
         messageHelper_.onFailedToLoad());
     bridge_.registerHandler(
@@ -135,7 +137,7 @@ void Self::onLoaded() {
     });
 }
 
-void Self::onFailedToLoad(const std::string& message) {
+void Self::onFailedToLoad(int code, const std::string& message) {
     logger_.debug("%s: prefix = %s id = %s loading = %s message = %s",
                   __PRETTY_FUNCTION__, prefix_.c_str(), adId_.c_str(),
                   core::toString(loader_->isProcessing()).c_str(),

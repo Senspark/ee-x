@@ -20,7 +20,10 @@ namespace EE {
             _fullScreenAds = new Dictionary<AdFormat, LazyFullScreenAd>();
         }
 
-        public Task<bool> Initialize() => _initializer ?? (_initializer = InitializeImpl());
+        public Task<bool> Initialize() => _initializer = _initializer ?? (_initializer = InitializeImpl());
+
+        public void Destroy() {
+        }
 
         private async Task<bool> InitializeImpl() {
             _bannerAds[AdFormat.Banner] = new LazyBannerAd();
@@ -56,6 +59,10 @@ namespace EE {
                 return;
             }
             _fullScreenAds[format].Ad = ad;
+        }
+
+        public void OpenTestSuite() {
+            _config.OpenTestSuite(Network.AdMob);
         }
 
         public IBannerAd BannerAd => _bannerAds[AdFormat.Banner];

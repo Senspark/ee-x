@@ -1,0 +1,8 @@
+<linker>
+    <assembly fullname="Firebase.Analytics">
+    </assembly>
+    <assembly fullname="Firebase.App">
+    </assembly>
+    <assembly fullname="Firebase.Crashlytics">
+    </assembly>
+</linker>

@@ -14,6 +14,7 @@ import com.unity3d.services.banners.BannerErrorInfo
 import com.unity3d.services.banners.BannerView
 import com.unity3d.services.banners.UnityBannerSize
 import kotlinx.serialization.InternalSerializationApi
+import kotlinx.serialization.Serializable
 import java.util.concurrent.atomic.AtomicBoolean
 
 @InternalSerializationApi
@@ -25,6 +26,13 @@ class UnityBannerAd(
     private val _adSize: UnityBannerSize,
     bannerHelper: UnityBannerHelper)
     : IBannerAd, BannerView.IListener {
+    @Serializable
+    @Suppress("unused")
+    private class ErrorResponse(
+        val code: Int,
+        val message: String
+    )
+
     companion object {
         private val kTag = UnityBannerAd::class.java.name
     }
@@ -162,10 +170,10 @@ class UnityBannerAd(
         }
     }
 
-    override fun onBannerFailedToLoad(bannerAdView: BannerView, errorInfo: BannerErrorInfo) {
+    override fun onBannerFailedToLoad(bannerAdView: BannerView, error: BannerErrorInfo) {
         Thread.runOnMainThread {
-            _logger.debug("$kTag: ${this::onBannerFailedToLoad.name}: id = $_adId message = ${errorInfo.errorMessage}")
-            _bridge.callCpp(_messageHelper.onFailedToLoad, errorInfo.errorMessage)
+            _logger.debug("$kTag: ${this::onBannerFailedToLoad.name}: id = $_adId message = ${error.errorMessage}")
+            _bridge.callCpp(_messageHelper.onFailedToLoad, ErrorResponse(error.errorCode.ordinal, error.errorMessage).serialize())
         }
     }
 

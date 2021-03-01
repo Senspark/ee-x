@@ -61,6 +61,7 @@ nav:
   - Unity:
     - unity/getting-started.md
     - unity/design-patterns.md
+    - unity/services.md
     - unity/utils.md
     - unity/multi-ad.md
     # - unity/ad-mob.md

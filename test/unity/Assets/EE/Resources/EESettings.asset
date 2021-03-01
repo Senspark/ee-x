@@ -16,13 +16,6 @@ MonoBehaviour:
   _libraryPath: ../../
   _isMultiDexEnabled: 1
   _isCoreEnabled: 1
-  _isFirebaseAnalyticsEnabled: 0
-  _isFirebaseCrashlyticsEnabled: 0
-  _isFirebaseDynamicLinksEnabled: 0
-  _isFirebaseMessagingEnabled: 0
-  _isFirebasePerformanceEnabled: 0
-  _isFirebaseRemoteConfigEnabled: 0
-  _isFirebaseStorageEnabled: 0
   _isAdjustEnabled: 1
   _isAdColonyEnabled: 1
   _isAdMobEnabled: 1

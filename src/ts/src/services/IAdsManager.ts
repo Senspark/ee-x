@@ -4,6 +4,7 @@ import {
 } from "../ads";
 
 export interface IAdsManager {
+    openTestSuite(): void;
     bannerAd: IBannerAd;
     rectangleAd: IBannerAd;
     appOpenAd: IFullScreenAd;

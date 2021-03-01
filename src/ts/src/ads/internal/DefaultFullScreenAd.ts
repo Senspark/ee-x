@@ -53,8 +53,20 @@ export class DefaultFullScreenAd extends ObserverManager<AdObserver> implements 
 
         this._logger.debug(`${this.kTag}: constructor: prefix = ${this._prefix} id = ${this._adId}`);
         this._bridge.registerHandler(_ => this.onLoaded(), this._messageHelper.onLoaded);
-        this._bridge.registerHandler(message => this.onFailedToLoad(message), this._messageHelper.onFailedToLoad);
-        this._bridge.registerHandler(message => this.onFailedToShow(message), this._messageHelper.onFailedToShow);
+        this._bridge.registerHandler(message => {
+            const json: {
+                code: number,
+                message: string,
+            } = JSON.parse(message);
+            this.onFailedToLoad(json.code, json.message);
+        }, this._messageHelper.onFailedToLoad);
+        this._bridge.registerHandler(message => {
+            const json: {
+                code: number,
+                message: string,
+            } = JSON.parse(message);
+            this.onFailedToShow(json.code, json.message);
+        }, this._messageHelper.onFailedToShow);
         this._bridge.registerHandler(_ => this.onClicked(), this._messageHelper.onClicked);
         this._bridge.registerHandler(message => {
             const result = this._resultParser(message);
@@ -109,7 +121,7 @@ export class DefaultFullScreenAd extends ObserverManager<AdObserver> implements 
         this.dispatchEvent(observer => observer.onLoaded && observer.onLoaded());
     }
 
-    private onFailedToLoad(message: string): void {
+    private onFailedToLoad(code: number, message: string): void {
         this._logger.debug(`${this.kTag}: onFailedToLoad: prefix = ${this._prefix} id = ${this._adId} loading = ${this._loader.isProcessing} message = ${message}`);
         if (this._loader.isProcessing) {
             this._loader.resolve(false);
@@ -118,7 +130,7 @@ export class DefaultFullScreenAd extends ObserverManager<AdObserver> implements 
         }
     }
 
-    private onFailedToShow(message: string): void {
+    private onFailedToShow(code: number, message: string): void {
         this._logger.debug(`${this.kTag}: onFailedToLoad: prefix = ${this._prefix} id = ${this._adId} displaying = ${this._displayer.isProcessing} message = ${message}`);
         if (this._displayer.isProcessing) {
             this._displayer.resolve(AdResult.Failed);

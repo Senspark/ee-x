@@ -1,4 +1,4 @@
-## 2.5.1
+## 2.6.0
 - [Native] Fix crash in fetch() in Firebase Remote Config.
 - [Android] Fix rewarded interstitial ad not registered correctly.
 - [Android/iOS/Native] Add AdMob mediation test suite.

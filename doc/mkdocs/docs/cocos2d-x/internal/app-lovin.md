@@ -4,14 +4,14 @@
 Modify `build.gradle`
 ```java
 dependencies {
-    implementation 'com.senspark.ee:app-lovin:2.6.1'
+    implementation 'com.senspark.ee:app-lovin:2.6.2'
 }
 ```
 
 ### iOS
 Modify `Podfile`
 ```ruby
-pod 'ee-x/app-lovin', '2.6.1'
+pod 'ee-x/app-lovin', '2.6.2'
 ```
 
 ## Basic usage

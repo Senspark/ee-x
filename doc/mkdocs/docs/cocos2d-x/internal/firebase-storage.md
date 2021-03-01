@@ -4,7 +4,7 @@
 Modify `build.gradle`
 ```java
 dependencies {
-    implementation 'com.senspark.ee:firebase-storage:2.6.1'
+    implementation 'com.senspark.ee:firebase-storage:2.6.2'
 }
 ```
 
@@ -23,7 +23,7 @@ target_link_libraries(${PROJECT_NAME} ee_x_firebase_storage)
 ### iOS
 Modify `Podfile`
 ```ruby
-pod 'ee-x/firebase-storage', '2.6.1'
+pod 'ee-x/firebase-storage', '2.6.2'
 ```
 
 ## Basic usage

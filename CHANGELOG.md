@@ -1,3 +1,6 @@
+## 2.6.2 - 2020-03-01
+- [Unity] Fix cannot compile on Unity 2020.1.
+
 ## 2.6.0 - 2020-03-01
 - [Native] Fix crash in fetch() in Firebase Remote Config.
 - [Android] Fix rewarded interstitial ad not registered correctly.

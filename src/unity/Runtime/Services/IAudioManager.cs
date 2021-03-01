@@ -1,6 +1,9 @@
 ﻿using System;
 
+using UnityEngine.Scripting;
+
 namespace EE {
+    [Preserve]
     [Service("EE" + nameof(IAudioManager))]
     public interface IAudioManager : IService {
         bool IsMusicEnabled { get; set; }

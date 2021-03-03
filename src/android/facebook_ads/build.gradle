@@ -29,7 +29,7 @@ dependencies {
     // https://developers.facebook.com/docs/audience-network/android
     // https://developers.facebook.com/docs/audience-network/changelog-android/
     // Use "api" to inherit manifest elements.
-    api 'com.facebook.android:audience-network-sdk:6.2.1'
+    api 'com.facebook.android:audience-network-sdk:6.3.0'
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.4.2'

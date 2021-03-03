@@ -12,7 +12,7 @@ public:
     virtual ~IService() = default;
 
     /// Initializes this service.
-    virtual void initialize() = 0;
+    virtual Task<bool> initialize() = 0;
 
     /// Destroys this service.
     virtual void destroy() = 0;

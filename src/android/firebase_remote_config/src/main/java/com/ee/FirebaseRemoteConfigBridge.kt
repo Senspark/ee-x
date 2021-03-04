@@ -63,7 +63,6 @@ class FirebaseRemoteConfigBridge(
     private fun registerHandlers() {
         _bridge.registerAsyncHandler(kInitialize) {
             Utils.toString(initialize())
-            ""
         }
         _bridge.registerAsyncHandler(kSetSettings) { message ->
             @Serializable

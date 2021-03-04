@@ -1,3 +1,8 @@
+## 2.6.3 - 2020-03-04
+- [Unity] Add Json (.net) serializer using reflection.
+- [C++] Change initialize() method in IService.
+- [Android] Fix initializing FirebaseRemoteConfig.
+
 ## 2.6.2 - 2020-03-01
 - [Unity] Fix cannot compile on Unity 2020.1.
 

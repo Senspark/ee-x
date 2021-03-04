@@ -37,10 +37,10 @@ dependencies {
     api 'com.google.ads.mediation:applovin:9.14.12.0'
 
     // https://developers.google.com/admob/android/mediation/facebook#facebook-android-mediation-adapter-changelog
-    api 'com.google.ads.mediation:facebook:6.2.1.0'
+    api 'com.google.ads.mediation:facebook:6.3.0.0'
     
     // https://developers.google.com/admob/android/mediation/inmobi#inmobi-android-mediation-adapter-changelog
-    api 'com.google.ads.mediation:inmobi:9.1.0.0'
+    api 'com.google.ads.mediation:inmobi:9.1.6.0'
 
     // https://developers.google.com/admob/android/mediation/ironsource#ironsource-android-mediation-adapter-changelog
     api 'com.google.ads.mediation:ironsource:7.1.0.2.0'

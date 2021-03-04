@@ -36,7 +36,7 @@ dependencies {
     api 'com.adcolony:sdk:4.4.1'
 
     // https://developers.ironsrc.com/ironsource-mobile/android/admob-change-log/
-    api 'com.ironsource.adapters:admobadapter:4.3.15'
+    api 'com.ironsource.adapters:admobadapter:4.3.17'
     api 'com.google.android.gms:play-services-ads:19.7.0'
 
     // https://developers.ironsrc.com/ironsource-mobile/android/applovin-change-log/
@@ -44,12 +44,12 @@ dependencies {
     api 'com.applovin:applovin-sdk:9.14.12'
 
     // https://developers.ironsrc.com/ironsource-mobile/android/21769-2/
-    api 'com.ironsource.adapters:facebookadapter:4.3.24'
-    api 'com.facebook.android:audience-network-sdk:6.2.1'
+    api 'com.ironsource.adapters:facebookadapter:4.3.25'
+    api 'com.facebook.android:audience-network-sdk:6.3.0'
 
     // https://developers.ironsrc.com/ironsource-mobile/android/inmobi-change-log/
-    api 'com.ironsource.adapters:inmobiadapter:4.3.8'
-    api 'com.inmobi.monetization:inmobi-ads:9.1.0'
+    api 'com.ironsource.adapters:inmobiadapter:4.3.9'
+    api 'com.inmobi.monetization:inmobi-ads:9.1.6'
     
     // https://developers.ironsrc.com/ironsource-mobile/android/tapjoy-change-log/
     api 'com.ironsource.adapters:tapjoyadapter:4.1.15'

@@ -9,6 +9,7 @@ namespace EETest {
     public class MainScene : MonoBehaviour {
         private bool _initialized;
         private EE.IAnalyticsManager _analyticsManager;
+        private EE.IAudioManager _audioManager;
         private EE.ISceneLoader _sceneLoader;
         private EE.IAdsManager _adsManager;
 
@@ -16,6 +17,7 @@ namespace EETest {
             EE.Utils.NoAwait(async () => {
                 await ServiceUtils.Initialize();
                 _analyticsManager = EE.ServiceLocator.Resolve<EE.IAnalyticsManager>();
+                _audioManager = EE.ServiceLocator.Resolve<EE.IAudioManager>();
                 _sceneLoader = EE.ServiceLocator.Resolve<EE.ISceneLoader>();
                 var fileName = Application.platform == RuntimePlatform.Android
                     ? "Config/ads_config_android"
@@ -26,6 +28,14 @@ namespace EETest {
                 _adsManager = adsManager;
                 _initialized = true;
             });
+        }
+
+        public void OnAudioButtonPressed() {
+            if (!_initialized) {
+                return;
+            }
+            _audioManager.IsMusicEnabled = !_audioManager.IsMusicEnabled;
+            _audioManager.IsSoundEnabled = !_audioManager.IsSoundEnabled;
         }
 
         public void OnOpenTestSuiteButtonPressed() {

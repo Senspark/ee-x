@@ -35,7 +35,7 @@ private:
     friend Bridge;
 
     void onLoaded();
-    void onFailedToShow(const std::string& message);
+    void onFailedToShow(int code, const std::string& message);
     void onClicked();
     void onClosed(bool rewarded);
 

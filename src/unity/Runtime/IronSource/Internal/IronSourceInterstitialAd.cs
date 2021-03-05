@@ -6,13 +6,18 @@ namespace EE.Internal {
     internal class IronSourceInterstitialAd : ObserverManager<AdObserver>, IFullScreenAd {
         private readonly IAsyncHelper<AdResult> _displayer;
         private readonly IronSource _plugin;
+        private readonly string _network;
         private readonly string _adId;
         private readonly IAsyncHelper<bool> _loader;
 
         public IronSourceInterstitialAd(
-            IAsyncHelper<AdResult> displayer, IronSource plugin, string adId) {
+            IAsyncHelper<AdResult> displayer,
+            IronSource plugin,
+            string network,
+            string adId) {
             _displayer = displayer;
             _plugin = plugin;
+            _network = network;
             _adId = adId;
             _loader = new AsyncHelper<bool>();
         }
@@ -42,21 +47,31 @@ namespace EE.Internal {
         internal void OnLoaded() {
             if (_loader.IsProcessing) {
                 _loader.Resolve(true);
+                DispatchEvent(observer => observer.OnLoadResult?.Invoke(new AdLoadResult {
+                    Network = _network,
+                    Result = true
+                }));
             } else {
                 Assert.IsTrue(false);
             }
             DispatchEvent(observer => observer.OnLoaded?.Invoke());
         }
 
-        internal void OnFailedToLoad(string message) {
+        internal void OnFailedToLoad(int code, string message) {
             if (_loader.IsProcessing) {
                 _loader.Resolve(false);
+                DispatchEvent(observer => observer.OnLoadResult?.Invoke(new AdLoadResult {
+                    Network = _network,
+                    Result = true,
+                    ErrorCode = code,
+                    ErrorMessage = message
+                }));
             } else {
                 Assert.IsTrue(false);
             }
         }
 
-        internal void OnFailedToShow(string message) {
+        internal void OnFailedToShow(int code, string message) {
             if (_displayer.IsProcessing) {
                 _displayer.Resolve(AdResult.Failed);
             } else {

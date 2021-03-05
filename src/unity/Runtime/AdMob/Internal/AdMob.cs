@@ -27,6 +27,7 @@ namespace EE.Internal {
         private readonly IMessageBridge _bridge;
         private readonly ILogger _logger;
         private readonly Destroyer _destroyer;
+        private readonly string _network;
         private readonly Dictionary<string, IAd> _ads;
         private readonly IAsyncHelper<AdResult> _displayer;
 
@@ -35,6 +36,7 @@ namespace EE.Internal {
             _logger = logger;
             _destroyer = destroyer;
             _logger.Debug($"{kTag}: constructor");
+            _network = "ad_mob";
             _ads = new Dictionary<string, IAd>();
             _displayer = MediationManager.Instance.AdDisplayer;
         }
@@ -99,7 +101,7 @@ namespace EE.Internal {
             }
             var size = GetBannerAdSize(adSize);
             var ad = new GuardedBannerAd(new DefaultBannerAd("AdMobBannerAd", _bridge, _logger,
-                () => DestroyAd(adId), adId, size));
+                () => DestroyAd(adId), _network, adId, size));
             _ads.Add(adId, ad);
             return ad;
         }
@@ -109,7 +111,7 @@ namespace EE.Internal {
                 () => new DefaultFullScreenAd("AdMobAppOpenAd", _bridge, _logger, _displayer,
                     () => DestroyAd(adId),
                     _ => AdResult.Completed,
-                    adId));
+                    _network, adId));
         }
 
         public IFullScreenAd CreateInterstitialAd(string adId) {
@@ -117,7 +119,7 @@ namespace EE.Internal {
                 () => new DefaultFullScreenAd("AdMobInterstitialAd", _bridge, _logger, _displayer,
                     () => DestroyAd(adId),
                     _ => AdResult.Completed,
-                    adId));
+                    _network, adId));
         }
 
         public IFullScreenAd CreateRewardedInterstitialAd(string adId) {
@@ -127,7 +129,7 @@ namespace EE.Internal {
                     message => Utils.ToBool(message)
                         ? AdResult.Completed
                         : AdResult.Canceled,
-                    adId));
+                    _network, adId));
         }
 
         public IFullScreenAd CreateRewardedAd(string adId) {
@@ -137,7 +139,7 @@ namespace EE.Internal {
                     message => Utils.ToBool(message)
                         ? AdResult.Completed
                         : AdResult.Canceled,
-                    adId));
+                    _network, adId));
         }
 
         private IFullScreenAd CreateFullScreenAd(string handlerId, string adId, Func<IFullScreenAd> creator) {

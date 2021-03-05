@@ -24,7 +24,7 @@ public:
     explicit InterstitialAd(
         ILogger& logger,
         const std::shared_ptr<ads::IAsyncHelper<AdResult>>& displayer,
-        Bridge* plugin, const std::string& adId);
+        Bridge* plugin, const std::string& network, const std::string& adId);
     virtual ~InterstitialAd() override;
 
     virtual void destroy() override;
@@ -37,14 +37,15 @@ private:
     friend Bridge;
 
     void onLoaded();
-    void onFailedToLoad(const std::string& message);
-    void onFailedToShow(const std::string& message);
+    void onFailedToLoad(int code, const std::string& message);
+    void onFailedToShow(int code, const std::string& message);
     void onClicked();
     void onClosed();
 
     ILogger& logger_;
     std::shared_ptr<ads::IAsyncHelper<AdResult>> displayer_;
     Bridge* plugin_;
+    std::string network_;
     std::string adId_;
 
     std::unique_ptr<ads::IAsyncHelper<bool>> loader_;

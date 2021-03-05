@@ -41,6 +41,7 @@ export class AdMob implements IAdMob {
     private readonly _bridge: IMessageBridge;
     private readonly _logger: ILogger;
     private readonly _destroyer: Destroyer;
+    private readonly _network: string;
     private readonly _ads: { [index: string]: IAd };
     private readonly _displayer: IAsyncHelper<AdResult>;
 
@@ -49,6 +50,7 @@ export class AdMob implements IAdMob {
         this._logger = logger;
         this._destroyer = destroyer;
         this._logger.debug(`${this.kTag}: constructor`);
+        this._network = `ad_mob`;
         this._ads = {};
         this._displayer = MediationManager.getInstance().adDisplayer;
     }
@@ -106,7 +108,7 @@ export class AdMob implements IAdMob {
         const ad = new GuardedBannerAd(
             new DefaultBannerAd("AdMobBannerAd", this._bridge, this._logger,
                 () => this.destroyAd(adId),
-                adId, size));
+                this._network, adId, size));
         this._ads[adId] = ad;
         return ad;
     }
@@ -116,7 +118,7 @@ export class AdMob implements IAdMob {
             new DefaultFullScreenAd("AdMobAppOpenAd", this._bridge, this._logger, this._displayer,
                 () => this.destroyAd(adId),
                 _ => AdResult.Completed,
-                adId))
+                this._network, adId))
     }
 
     public createInterstitialAd(adId: string): IFullScreenAd {
@@ -124,7 +126,7 @@ export class AdMob implements IAdMob {
             new DefaultFullScreenAd("AdMobInterstitialAd", this._bridge, this._logger, this._displayer,
                 () => this.destroyAd(adId),
                 _ => AdResult.Completed,
-                adId))
+                this._network, adId))
     }
 
     public createRewardedInterstitialAd(adId: string): IFullScreenAd {
@@ -134,7 +136,7 @@ export class AdMob implements IAdMob {
                 message => Utils.toBool(message)
                     ? AdResult.Completed
                     : AdResult.Canceled,
-                adId))
+                this._network, adId))
     }
 
     public createRewardedAd(adId: string): IFullScreenAd {
@@ -144,7 +146,7 @@ export class AdMob implements IAdMob {
                 message => Utils.toBool(message)
                     ? AdResult.Completed
                     : AdResult.Canceled,
-                adId))
+                this._network, adId))
     }
 
     private createFullScreenAd(handlerId: string, adId: string, creator: () => IFullScreenAd): IFullScreenAd {

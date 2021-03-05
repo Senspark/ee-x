@@ -46,7 +46,8 @@ Self::Bridge(IMessageBridge& bridge, ILogger& logger,
              const Destroyer& destroyer)
     : bridge_(bridge)
     , logger_(logger)
-    , destroyer_(destroyer) {
+    , destroyer_(destroyer)
+    , network_("iron_source") {
     logger_.debug("%s", __PRETTY_FUNCTION__);
     auto&& mediation = ads::MediationManager::getInstance();
     displayer_ = mediation.getAdDisplayer();
@@ -157,12 +158,12 @@ std::shared_ptr<IBannerAd> Self::createBannerAd(const std::string& adId,
     }
     auto size = getBannerAdSize(adSize);
     bannerAd_ = std::make_shared<ads::GuardedBannerAd>(
-        std::make_shared<ads::DefaultBannerAd>(
+        std::make_shared<ads::DefaultBannerAd>( //
             "IronSourceBannerAd", bridge_, logger_,
             [this, adId] { //
                 destroyBannerAd(adId);
             },
-            adId, size));
+            network_, adId, size));
     return bannerAd_;
 }
 
@@ -189,8 +190,8 @@ Self::createInterstitialAd(const std::string& adId) {
     if (sharedInterstitialAd_) {
         return sharedInterstitialAd_;
     }
-    interstitialAd_ =
-        std::make_shared<InterstitialAd>(logger_, displayer_, this, adId);
+    interstitialAd_ = std::make_shared<InterstitialAd>(logger_, displayer_,
+                                                       this, network_, adId);
     sharedInterstitialAd_ =
         std::make_shared<ads::GuardedFullScreenAd>(interstitialAd_);
     return sharedInterstitialAd_;
@@ -263,7 +264,7 @@ void Self::onInterstitialAdLoaded() {
 void Self::onInterstitialAdFailedToLoad(int code, const std::string& message) {
     logger_.debug("%s", __PRETTY_FUNCTION__);
     if (interstitialAd_) {
-        interstitialAd_->onFailedToLoad(message);
+        interstitialAd_->onFailedToLoad(code, message);
     } else {
         assert(false);
     }
@@ -271,7 +272,7 @@ void Self::onInterstitialAdFailedToLoad(int code, const std::string& message) {
 
 void Self::onInterstitialAdFailedToShow(int code, const std::string& message) {
     if (interstitialAd_) {
-        interstitialAd_->onFailedToShow(message);
+        interstitialAd_->onFailedToShow(code, message);
     } else {
         assert(false);
     }
@@ -306,7 +307,7 @@ void Self::onRewardedAdLoaded() {
 
 void Self::onRewardedAdFailedToShow(int code, const std::string& message) {
     if (rewardedAd_) {
-        rewardedAd_->onFailedToShow(message);
+        rewardedAd_->onFailedToShow(code, message);
     } else {
         assert(false);
     }

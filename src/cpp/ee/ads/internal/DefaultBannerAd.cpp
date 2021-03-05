@@ -23,11 +23,13 @@ using Self = DefaultBannerAd;
 
 Self::DefaultBannerAd(const std::string& prefix, IMessageBridge& bridge,
                       ILogger& logger, const Destroyer& destroyer,
-                      const std::string& adId, const std::pair<int, int>& size)
+                      const std::string& network, const std::string& adId,
+                      const std::pair<int, int>& size)
     : prefix_(prefix)
     , bridge_(bridge)
     , logger_(logger)
     , destroyer_(destroyer)
+    , network_(network)
     , adId_(adId)
     , messageHelper_(prefix, adId)
     , helper_(bridge, messageHelper_, size) {
@@ -127,6 +129,14 @@ void Self::onLoaded() {
                   core::toString(loader_->isProcessing()).c_str());
     if (loader_->isProcessing()) {
         loader_->resolve(true);
+        dispatchEvent([this](auto&& observer) {
+            if (observer.onLoadResult) {
+                observer.onLoadResult({
+                    .network = network_,
+                    .result = true,
+                });
+            }
+        });
     } else {
         // Note: banner is auto-loading.
     }
@@ -144,6 +154,16 @@ void Self::onFailedToLoad(int code, const std::string& message) {
                   message.c_str());
     if (loader_->isProcessing()) {
         loader_->resolve(false);
+        dispatchEvent([this, code, message](auto&& observer) {
+            if (observer.onLoadResult) {
+                observer.onLoadResult({
+                    .network = network_,
+                    .result = false,
+                    .errorCode = code,
+                    .errorMessage = message,
+                });
+            }
+        });
     } else {
         // Note: AdMob banner is auto-loading.
     }

@@ -58,6 +58,7 @@ private:
     IMessageBridge& bridge_;
     ILogger& logger_;
     Destroyer destroyer_;
+    std::string network_;
 
     /// Share the same ad instance.
     std::shared_ptr<IBannerAd> bannerAd_;

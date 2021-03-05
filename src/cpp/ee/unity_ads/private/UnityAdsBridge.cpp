@@ -45,7 +45,8 @@ Self::Bridge(IMessageBridge& bridge, ILogger& logger,
              const Destroyer& destroyer)
     : bridge_(bridge)
     , logger_(logger)
-    , destroyer_(destroyer) {
+    , destroyer_(destroyer)
+    , network_("unity_ads") {
     logger_.debug("%s", __PRETTY_FUNCTION__);
     displaying_ = false;
 
@@ -127,12 +128,12 @@ std::shared_ptr<IBannerAd> Self::createBannerAd(const std::string& adId,
     }
     auto size = getBannerAdSize(adSize);
     auto ad = std::make_shared<ads::GuardedBannerAd>(
-        std::make_shared<ads::DefaultBannerAd>(
+        std::make_shared<ads::DefaultBannerAd>( //
             "UnityBannerAd", bridge_, logger_,
             [this, adId] { //
                 destroyAd(adId);
             },
-            adId, size));
+            network_, adId, size));
     ads_.emplace(adId, ad);
     return ad;
 }

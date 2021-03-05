@@ -26,13 +26,14 @@ Self::DefaultFullScreenAd(
     const std::string& prefix, IMessageBridge& bridge, ILogger& logger,
     const std::shared_ptr<IAsyncHelper<AdResult>>& displayer,
     const Destroyer& destroyer, const ResultParser& resultParser,
-    const std::string& adId)
+    const std::string& network, const std::string& adId)
     : prefix_(prefix)
     , bridge_(bridge)
     , logger_(logger)
     , displayer_(displayer)
     , destroyer_(destroyer)
     , resultParser_(resultParser)
+    , network_(network)
     , adId_(adId)
     , messageHelper_(prefix, adId) {
     logger_.debug("%s: prefix = %s id = %s", __PRETTY_FUNCTION__,
@@ -128,6 +129,14 @@ void Self::onLoaded() {
                   core::toString(loader_->isProcessing()).c_str());
     if (loader_->isProcessing()) {
         loader_->resolve(true);
+        dispatchEvent([this](auto&& observer) {
+            if (observer.onLoadResult) {
+                observer.onLoadResult({
+                    .network = network_,
+                    .result = true,
+                });
+            }
+        });
     } else {
         logger_.error("%s: this ad is expected to be loading",
                       __PRETTY_FUNCTION__);
@@ -147,6 +156,16 @@ void Self::onFailedToLoad(int code, const std::string& message) {
                   message.c_str());
     if (loader_->isProcessing()) {
         loader_->resolve(false);
+        dispatchEvent([this, code, message](auto&& observer) {
+            if (observer.onLoadResult) {
+                observer.onLoadResult({
+                    .network = network_,
+                    .result = false,
+                    .errorCode = code,
+                    .errorMessage = message,
+                });
+            }
+        });
     } else {
         logger_.error("%s: this ad is expected to be loading",
                       __PRETTY_FUNCTION__);

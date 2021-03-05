@@ -23,10 +23,11 @@ using Self = InterstitialAd;
 Self::InterstitialAd(
     ILogger& logger,
     const std::shared_ptr<ads::IAsyncHelper<AdResult>>& displayer,
-    Bridge* plugin, const std::string& adId)
+    Bridge* plugin, const std::string& network, const std::string& adId)
     : logger_(logger)
     , displayer_(displayer)
     , plugin_(plugin)
+    , network_(network)
     , adId_(adId) {
     logger_.debug("%s: adId = %s", __PRETTY_FUNCTION__, adId_.c_str());
     loader_ = std::make_unique<ads::AsyncHelper<bool>>();
@@ -77,6 +78,14 @@ void Self::onLoaded() {
                   core::toString(loader_->isProcessing()).c_str());
     if (loader_->isProcessing()) {
         loader_->resolve(true);
+        dispatchEvent([this](auto&& observer) {
+            if (observer.onLoadResult) {
+                observer.onLoadResult({
+                    .network = network_,
+                    .result = true,
+                });
+            }
+        });
     } else {
         logger_.error("%s: this ad is expected to be loading",
                       __PRETTY_FUNCTION__);
@@ -89,20 +98,30 @@ void Self::onLoaded() {
     });
 }
 
-void Self::onFailedToLoad(const std::string& message) {
+void Self::onFailedToLoad(int code, const std::string& message) {
     logger_.debug("%s: adId = %s loading = %s message = %s",
                   __PRETTY_FUNCTION__, adId_.c_str(),
                   core::toString(loader_->isProcessing()).c_str(),
                   message.c_str());
     if (loader_->isProcessing()) {
         loader_->resolve(false);
+        dispatchEvent([this, code, message](auto&& observer) {
+            if (observer.onLoadResult) {
+                observer.onLoadResult({
+                    .network = network_,
+                    .result = false,
+                    .errorCode = code,
+                    .errorMessage = message,
+                });
+            }
+        });
     } else {
         // IronSource may dispatches multiple interstitialDidFailToLoadWithError
         // events due to mediation.
     }
 }
 
-void Self::onFailedToShow(const std::string& message) {
+void Self::onFailedToShow(int code, const std::string& message) {
     logger_.debug("%s: adId = %s displaying = %s message = %s",
                   __PRETTY_FUNCTION__, adId_.c_str(),
                   core::toString(displayer_->isProcessing()).c_str(),

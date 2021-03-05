@@ -26,6 +26,7 @@ private:
     virtual bool init() override;
 
     std::shared_ptr<ee::IAdsManager> adsManager_;
+    std::shared_ptr<ee::ObserverHandle> handle_;
 };
 } // namespace eetest
 

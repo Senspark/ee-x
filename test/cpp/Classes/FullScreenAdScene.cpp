@@ -33,6 +33,33 @@ bool Self::init() {
     auto&& winSize = _director->getWinSize();
     setContentSize(winSize);
 
+    handle_ = std::make_shared<ee::ObserverHandle>();
+    auto adLoadResult = [](const ee::AdLoadResult& result) {
+        CCLOG("network = %s result = %d code = %d message = %s",
+              result.network.c_str(), static_cast<int>(result.result),
+              result.errorCode, result.errorMessage.c_str());
+    };
+    (*handle_)
+        .bind(*adsManager_->getAppOpenAd())
+        .addObserver({
+            .onLoadResult = adLoadResult,
+        });
+    (*handle_)
+        .bind(*adsManager_->getInterstitialAd())
+        .addObserver({
+            .onLoadResult = adLoadResult,
+        });
+    (*handle_)
+        .bind(*adsManager_->getRewardedInterstitialAd())
+        .addObserver({
+            .onLoadResult = adLoadResult,
+        });
+    (*handle_)
+        .bind(*adsManager_->getRewardedAd())
+        .addObserver({
+            .onLoadResult = adLoadResult,
+        });
+
     auto resultText = cocos2d::ui::Text::create();
     resultText->setContentSize(cocos2d::Size(250, 80));
     resultText->setPosition(

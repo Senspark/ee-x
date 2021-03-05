@@ -34,9 +34,15 @@ export class MultiBannerAd extends ObserverManager<AdObserver> implements IBanne
                     this._loadedItems.push(item);
                 }
                 this.invalidate();
-                this.dispatchEvent(observer => observer.onLoaded && observer.onLoaded());
+                this.dispatchEvent(observer =>
+                    observer.onLoaded && observer.onLoaded());
             },
-            onClicked: () => this.dispatchEvent(observer => observer.onClicked && observer.onClicked()),
+
+            onLoadResult: result => this.dispatchEvent(observer =>
+                observer.onLoadResult && observer.onLoadResult(result)),
+
+            onClicked: () => this.dispatchEvent(observer =>
+                observer.onClicked && observer.onClicked()),
         });
     }
 

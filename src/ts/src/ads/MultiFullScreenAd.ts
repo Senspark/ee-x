@@ -22,8 +22,14 @@ export class MultiFullScreenAd extends ObserverManager<AdObserver> implements IF
     public addItem(item: IFullScreenAd): void {
         this._items.push(item);
         this._handle.bind(item).addObserver({
-            onLoaded: () => this.dispatchEvent(observer => observer.onLoaded && observer.onLoaded()),
-            onClicked: () => this.dispatchEvent(observer => observer.onClicked && observer.onClicked()),
+            onLoaded: () => this.dispatchEvent(observer =>
+                observer.onLoaded && observer.onLoaded()),
+
+            onLoadResult: result => this.dispatchEvent(observer =>
+                observer.onLoadResult && observer.onLoadResult(result)),
+
+            onClicked: () => this.dispatchEvent(observer =>
+                observer.onClicked && observer.onClicked()),
         });
     }
 

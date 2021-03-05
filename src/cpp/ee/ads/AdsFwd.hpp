@@ -17,6 +17,7 @@ namespace ee {
 namespace ads {
 enum class AdResult;
 
+struct AdLoadResult;
 struct AdObserver;
 
 class ICapper;
@@ -52,6 +53,7 @@ using ads::AdResult;
 using FullScreenAdResult [[deprecated]] = AdResult;
 using IRewardedAdResult [[deprecated]] = AdResult;
 
+using ads::AdLoadResult;
 using ads::AdObserver;
 using IAdViewObserver [[deprecated]] = AdObserver;
 using IInterstitialAdObserver [[deprecated]] = AdObserver;

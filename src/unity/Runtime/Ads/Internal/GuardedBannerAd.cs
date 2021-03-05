@@ -10,8 +10,14 @@ namespace EE.Internal {
             _ad = ad;
             _handle = new ObserverHandle();
             _handle.Bind(ad).AddObserver(new AdObserver {
-                OnLoaded = () => DispatchEvent(observer => observer.OnLoaded?.Invoke()),
-                OnClicked = () => DispatchEvent(observer => observer.OnClicked?.Invoke())
+                OnLoaded = () => DispatchEvent(observer =>
+                    observer.OnLoaded?.Invoke()),
+
+                OnLoadResult = result => DispatchEvent(observer =>
+                    observer.OnLoadResult?.Invoke(result)),
+
+                OnClicked = () => DispatchEvent(observer =>
+                    observer.OnClicked?.Invoke())
             });
         }
 

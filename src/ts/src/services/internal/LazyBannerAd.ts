@@ -43,7 +43,12 @@ export class LazyBannerAd extends ObserverManager<AdObserver> implements IBanner
                     }
                     this.dispatchEvent(observer => observer.onLoaded && observer.onLoaded());
                 },
-                onClicked: () => this.dispatchEvent(observer => observer.onClicked && observer.onClicked()),
+
+                onLoadResult: result => this.dispatchEvent(observer =>
+                    observer.onLoadResult && observer.onLoadResult(result)),
+
+                onClicked: () => this.dispatchEvent(observer =>
+                    observer.onClicked && observer.onClicked()),
             });
         this._ad = value;
         this._ad.isVisible = this._visible;

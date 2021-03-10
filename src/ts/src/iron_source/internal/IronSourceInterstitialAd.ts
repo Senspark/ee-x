@@ -20,7 +20,7 @@ export class IronSourceInterstitialAd extends ObserverManager<AdObserver> implem
     public constructor(
         displayer: IAsyncHelper<AdResult>,
         plugin: IronSource,
-        network: string;
+        network: string,
         adId: string) {
         super();
         this._displayer = displayer;

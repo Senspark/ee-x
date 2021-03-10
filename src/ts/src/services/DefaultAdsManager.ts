@@ -22,17 +22,24 @@ import {
 export class DefaultAdsManager implements IAdsManager {
     private _initializer?: Promise<boolean>;
     private _initialized: boolean;
-    private readonly _displayCapper: ICapper;
     private readonly _config: AdsConfig;
     private readonly _bannerAds: { [key: string]: LazyBannerAd };
     private readonly _fullScreenAds: { [key: string]: LazyFullScreenAd };
 
     public constructor(configJson: string) {
         this._initialized = false;
-        this._displayCapper = new Capper(0.1);
         this._config = AdsConfig.parse(configJson);
-        this._bannerAds = {};
-        this._fullScreenAds = {};
+        const displayCapper = new Capper(0.1);
+        this._bannerAds = {
+            [AdFormat.Banner]: new LazyBannerAd(),
+            [AdFormat.Rectangle]: new LazyBannerAd()
+        };
+        this._fullScreenAds = {
+            [AdFormat.AppOpen]: new LazyFullScreenAd(displayCapper),
+            [AdFormat.Interstitial]: new LazyFullScreenAd(displayCapper),
+            [AdFormat.RewardedInterstitial]: new LazyFullScreenAd(displayCapper),
+            [AdFormat.Rewarded]: new LazyFullScreenAd(displayCapper),
+        };
     }
 
     public initialize(): Promise<boolean> {
@@ -40,12 +47,6 @@ export class DefaultAdsManager implements IAdsManager {
     }
 
     private async initializeImpl(): Promise<boolean> {
-        this._bannerAds[AdFormat.Banner] = new LazyBannerAd();
-        this._bannerAds[AdFormat.Rectangle] = new LazyBannerAd();
-        this._fullScreenAds[AdFormat.AppOpen] = new LazyFullScreenAd(this._displayCapper);
-        this._fullScreenAds[AdFormat.Interstitial] = new LazyFullScreenAd(this._displayCapper);
-        this._fullScreenAds[AdFormat.RewardedInterstitial] = new LazyFullScreenAd(this._displayCapper);
-        this._fullScreenAds[AdFormat.Rewarded] = new LazyFullScreenAd(this._displayCapper);
         await this._config.initialize();
         this.initializeBannerAd(AdFormat.Banner);
         this.initializeBannerAd(AdFormat.Rectangle);

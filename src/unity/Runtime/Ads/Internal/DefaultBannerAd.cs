@@ -12,6 +12,7 @@ namespace EE.Internal {
         private readonly IMessageBridge _bridge;
         private readonly Destroyer _destroyer;
         private readonly ILogger _logger;
+        private readonly string _network;
         private readonly string _adId;
         private readonly MessageHelper _messageHelper;
         private readonly BannerAdHelper _helper;
@@ -23,12 +24,14 @@ namespace EE.Internal {
             IMessageBridge bridge,
             ILogger logger,
             Destroyer destroyer,
+            string network,
             string adId,
             (int, int) size) {
             _prefix = prefix;
             _bridge = bridge;
             _logger = logger;
             _destroyer = destroyer;
+            _network = network;
             _adId = adId;
             _messageHelper = new MessageHelper(prefix, adId);
             _helper = new BannerAdHelper(_bridge, _messageHelper, size);
@@ -92,6 +95,10 @@ namespace EE.Internal {
                 $"{kTag}: {nameof(OnLoaded)}: prefix = {_prefix} id = {_adId} loading = {_loader.IsProcessing}");
             if (_loader.IsProcessing) {
                 _loader.Resolve(true);
+                DispatchEvent(observer => observer.OnLoadResult?.Invoke(new AdLoadResult {
+                    Network = _network,
+                    Result = true
+                }));
             } else {
                 // Ignored.
             }
@@ -103,6 +110,12 @@ namespace EE.Internal {
                 $"{kTag}: {nameof(OnFailedToLoad)}: prefix = {_prefix} id = {_adId} loading = {_loader.IsProcessing} message = {message}");
             if (_loader.IsProcessing) {
                 _loader.Resolve(false);
+                DispatchEvent(observer => observer.OnLoadResult?.Invoke(new AdLoadResult {
+                    Network = _network,
+                    Result = true,
+                    ErrorCode = code,
+                    ErrorMessage = message
+                }));
             } else {
                 // Ignored.
             }

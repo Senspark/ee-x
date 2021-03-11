@@ -33,7 +33,6 @@ private:
     void initializeFullScreenAd(AdFormat format);
 
     bool initialized_;
-    std::shared_ptr<ads::ICapper> displayCapper_;
     std::shared_ptr<AdsConfig> config_;
     std::map<AdFormat, std::shared_ptr<LazyBannerAd>> bannerAds_;
     std::map<AdFormat, std::shared_ptr<LazyFullScreenAd>> fullScreenAds_;

@@ -33,7 +33,12 @@ namespace EE.Internal {
                             }
                             DispatchEvent(observer => observer.OnLoaded?.Invoke());
                         },
-                        OnClicked = () => DispatchEvent(observer => observer.OnClicked?.Invoke())
+
+                        OnLoadResult = result => DispatchEvent(observer =>
+                            observer.OnLoadResult?.Invoke(result)),
+
+                        OnClicked = () => DispatchEvent(observer =>
+                            observer.OnClicked?.Invoke())
                     });
                 _ad = value;
                 _ad.IsVisible = _visible;

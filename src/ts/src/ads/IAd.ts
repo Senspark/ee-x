@@ -1,7 +1,15 @@
 import { IObserverManager } from "../core";
 
+export interface AdLoadResult {
+    network: string,
+    result: boolean,
+    errorCode: number,
+    errorMessage: string,
+}
+
 export interface AdObserver {
     onLoaded?(): void;
+    onLoadResult?(result: AdLoadResult): void
     onClicked?(): void;
 }
 

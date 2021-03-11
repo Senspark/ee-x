@@ -34,6 +34,7 @@ namespace EE.Internal {
         private readonly IMessageBridge _bridge;
         private readonly ILogger _logger;
         private readonly Destroyer _destroyer;
+        private readonly string _network;
         private IBannerAd _bannerAd;
         private IronSourceInterstitialAd _interstitialAd;
         private IFullScreenAd _sharedInterstitialAd;
@@ -46,6 +47,7 @@ namespace EE.Internal {
             _logger = logger;
             _destroyer = destroyer;
             _logger.Debug($"{kTag}: constructor");
+            _network = "iron_source";
             _displayer = MediationManager.Instance.AdDisplayer;
 
             _bridge.RegisterHandler(_ => OnInterstitialAdLoaded(), kOnInterstitialAdLoaded);
@@ -121,7 +123,7 @@ namespace EE.Internal {
             }
             var size = GetBannerAdSize(adSize);
             _bannerAd = new GuardedBannerAd(new DefaultBannerAd("IronSourceBannerAd", _bridge, _logger,
-                () => DestroyBannerAd(adId), adId, size));
+                () => DestroyBannerAd(adId), _network, adId, size));
             return _bannerAd;
         }
 
@@ -144,7 +146,7 @@ namespace EE.Internal {
             if (_sharedInterstitialAd != null) {
                 return _sharedInterstitialAd;
             }
-            _interstitialAd = new IronSourceInterstitialAd(_displayer, this, adId);
+            _interstitialAd = new IronSourceInterstitialAd(_displayer, this, _network, adId);
             _sharedInterstitialAd = new GuardedFullScreenAd(_interstitialAd);
             return _sharedInterstitialAd;
         }
@@ -163,7 +165,7 @@ namespace EE.Internal {
             if (_sharedRewardedAd != null) {
                 return _sharedRewardedAd;
             }
-            _rewardedAd = new IronSourceRewardedAd(_displayer, this, adId);
+            _rewardedAd = new IronSourceRewardedAd(_displayer, this, _network, adId);
             _sharedRewardedAd = new GuardedFullScreenAd(_rewardedAd);
             return _sharedRewardedAd;
         }
@@ -210,7 +212,7 @@ namespace EE.Internal {
 
         private void OnInterstitialAdFailedToLoad(int code, string message) {
             if (_interstitialAd != null) {
-                _interstitialAd.OnFailedToLoad(message);
+                _interstitialAd.OnFailedToLoad(code, message);
             } else {
                 Assert.IsTrue(false);
             }
@@ -218,7 +220,7 @@ namespace EE.Internal {
 
         private void OnInterstitialAdFailedToShow(int code, string message) {
             if (_interstitialAd != null) {
-                _interstitialAd.OnFailedToShow(message);
+                _interstitialAd.OnFailedToShow(code, message);
             } else {
                 Assert.IsTrue(false);
             }
@@ -250,7 +252,7 @@ namespace EE.Internal {
 
         private void OnRewardedAdFailedToShow(int code, string message) {
             if (_rewardedAd != null) {
-                _rewardedAd.OnFailedToShow(message);
+                _rewardedAd.OnFailedToShow(code, message);
             } else {
                 Assert.IsTrue(false);
             }

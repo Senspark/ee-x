@@ -35,6 +35,15 @@ Self::GenericAd(const std::shared_ptr<IFullScreenAd>& ad, int interval)
                     }
                 });
             },
+        .onLoadResult =
+            [this](const AdLoadResult& result) {
+                // Propagation.
+                dispatchEvent([result](auto&& observer) {
+                    if (observer.onLoadResult) {
+                        observer.onLoadResult(result);
+                    }
+                });
+            },
         .onClicked =
             [this] {
                 // Propagation.

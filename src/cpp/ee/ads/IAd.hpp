@@ -11,9 +11,19 @@
 
 namespace ee {
 namespace ads {
+struct AdLoadResult {
+    std::string network;
+    bool result;
+    int errorCode;
+    std::string errorMessage;
+};
+
 struct AdObserver {
     /// Occurs when this ad is loaded.
     std::function<void()> onLoaded;
+
+    /// Occurs when this ad finishes loading.
+    std::function<void(const AdLoadResult& result)> onLoadResult;
 
     /// Occurs when the user clicks this ad.
     std::function<void()> onClicked;

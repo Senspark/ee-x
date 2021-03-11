@@ -39,6 +39,7 @@ export class FacebookAds implements IFacebookAds {
     private readonly _bridge: IMessageBridge;
     private readonly _logger: ILogger;
     private readonly _destroyer: Destroyer;
+    private readonly _network: string;
     private readonly _ads: { [index: string]: IAd };
     private readonly _displayer: IAsyncHelper<AdResult>;
 
@@ -47,6 +48,7 @@ export class FacebookAds implements IFacebookAds {
         this._logger = logger;
         this._destroyer = destroyer;
         this._logger.debug(`${this.kTag}: constructor`);
+        this._network = `facebook_ads`;
         this._ads = {};
         this._displayer = MediationManager.getInstance().adDisplayer;
     }
@@ -105,7 +107,7 @@ export class FacebookAds implements IFacebookAds {
         const ad = new GuardedBannerAd(
             new DefaultBannerAd("FacebookBannerAd", this._bridge, this._logger,
                 () => this.destroyAd(adId),
-                adId, size));
+                this._network, adId, size));
         this._ads[adId] = ad;
         return ad;
     }
@@ -115,7 +117,7 @@ export class FacebookAds implements IFacebookAds {
             new DefaultFullScreenAd("FacebookInterstitialAd", this._bridge, this._logger, this._displayer,
                 () => this.destroyAd(adId),
                 _ => AdResult.Completed,
-                adId))
+                this._network, adId))
     }
 
     public createRewardedAd(adId: string): IFullScreenAd {
@@ -125,7 +127,7 @@ export class FacebookAds implements IFacebookAds {
                 message => Utils.toBool(message)
                     ? AdResult.Completed
                     : AdResult.Canceled,
-                adId))
+                this._network, adId))
     }
 
     private createFullScreenAd(handlerId: string, adId: string, creator: () => IFullScreenAd): IFullScreenAd {

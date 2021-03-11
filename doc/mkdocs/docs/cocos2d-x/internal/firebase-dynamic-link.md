@@ -4,7 +4,7 @@
 Modify `build.gradle`
 ```java
 dependencies {
-    implementation 'com.senspark.ee:firebase-dynamic-link:2.6.3'
+    implementation 'com.senspark.ee:firebase-dynamic-link:2.6.4'
 }
 ```
 
@@ -23,7 +23,7 @@ target_link_libraries(${PROJECT_NAME} ee_x_firebase_dynamic_link)
 ### iOS
 Modify `Podfile`
 ```ruby
-pod 'ee-x/firebase-dynamic-link', '2.6.3'
+pod 'ee-x/firebase-dynamic-link', '2.6.4'
 ```
 
 ## Basic usage

@@ -42,6 +42,15 @@ void Self::setAd(const std::shared_ptr<IFullScreenAd>& ad) {
                         }
                     });
                 },
+            .onLoadResult =
+                [this](const AdLoadResult& result) {
+                    // Propagation.
+                    dispatchEvent([result](auto&& observer) {
+                        if (observer.onLoadResult) {
+                            observer.onLoadResult(result);
+                        }
+                    });
+                },
             .onClicked =
                 [this] {
                     // Propagation.

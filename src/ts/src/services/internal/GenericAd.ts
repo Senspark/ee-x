@@ -27,8 +27,14 @@ export class GenericAd extends ObserverManager<AdObserver> implements IFullScree
         this._handle = new ObserverHandle();
         this._handle.bind(this._ad)
             .addObserver({
-                onLoaded: () => this.dispatchEvent(observer => observer.onLoaded && observer.onLoaded()),
-                onClicked: () => this.dispatchEvent(observer => observer.onClicked && observer.onClicked()),
+                onLoaded: () => this.dispatchEvent(observer =>
+                    observer.onLoaded && observer.onLoaded()),
+
+                onLoadResult: result => this.dispatchEvent(observer =>
+                    observer.onLoadResult && observer.onLoadResult(result)),
+
+                onClicked: () => this.dispatchEvent(observer =>
+                    observer.onClicked && observer.onClicked()),
             });
     }
 

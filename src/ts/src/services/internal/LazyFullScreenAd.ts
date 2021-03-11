@@ -32,8 +32,14 @@ export class LazyFullScreenAd extends ObserverManager<AdObserver> implements IFu
         }
         this._handle.bind(value)
             .addObserver({
-                onLoaded: () => this.dispatchEvent(observer => observer.onLoaded && observer.onLoaded()),
-                onClicked: () => this.dispatchEvent(observer => observer.onClicked && observer.onClicked()),
+                onLoaded: () => this.dispatchEvent(observer =>
+                    observer.onLoaded && observer.onLoaded()),
+
+                onLoadResult: result => this.dispatchEvent(observer =>
+                    observer.onLoadResult && observer.onLoadResult(result)),
+
+                onClicked: () => this.dispatchEvent(observer =>
+                    observer.onClicked && observer.onClicked()),
             });
         this._ad = value;
         Utils.noAwait(async () => {

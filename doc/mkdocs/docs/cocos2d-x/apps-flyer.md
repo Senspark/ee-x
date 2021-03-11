@@ -4,14 +4,14 @@
 Modify `build.gradle`
 ```java
 dependencies {
-    implementation 'com.senspark.ee:apps-flyer:2.6.3'
+    implementation 'com.senspark.ee:apps-flyer:2.6.4'
 }
 ```
 
 ### iOS
 Modify `Podfile`
 ```ruby
-pod 'ee-x/apps-flyer', '2.6.3'
+pod 'ee-x/apps-flyer', '2.6.4'
 ```
 
 ## Basic usage

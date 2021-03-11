@@ -17,6 +17,7 @@ namespace EE.Internal {
         private readonly IAsyncHelper<AdResult> _displayer;
         private readonly Destroyer _destroyer;
         private readonly ResultParser _resultParser;
+        private readonly string _network;
         private readonly string _adId;
         private readonly MessageHelper _messageHelper;
         private readonly ICapper _loadCapper;
@@ -29,6 +30,7 @@ namespace EE.Internal {
             IAsyncHelper<AdResult> displayer,
             Destroyer destroyer,
             ResultParser resultParser,
+            string network,
             string adId) {
             _prefix = prefix;
             _bridge = bridge;
@@ -36,6 +38,7 @@ namespace EE.Internal {
             _displayer = displayer;
             _destroyer = destroyer;
             _resultParser = resultParser;
+            _network = network;
             _adId = adId;
             _messageHelper = new MessageHelper(_prefix, adId);
             _loadCapper = new Capper(30);
@@ -103,6 +106,10 @@ namespace EE.Internal {
                 $"{kTag}: {nameof(OnLoaded)}: prefix = {_prefix} id = {_adId} loading = {_loader.IsProcessing}");
             if (_loader.IsProcessing) {
                 _loader.Resolve(true);
+                DispatchEvent(observer => observer.OnLoadResult?.Invoke(new AdLoadResult {
+                    Network = _network,
+                    Result = true
+                }));
             } else {
                 Assert.IsTrue(false);
             }
@@ -114,6 +121,12 @@ namespace EE.Internal {
                 $"{kTag}: {nameof(OnFailedToLoad)}: prefix = {_prefix} id = {_adId} loading = {_loader.IsProcessing} message = {message}");
             if (_loader.IsProcessing) {
                 _loader.Resolve(false);
+                DispatchEvent(observer => observer.OnLoadResult?.Invoke(new AdLoadResult {
+                    Network = _network,
+                    Result = true,
+                    ErrorCode = code,
+                    ErrorMessage = message
+                }));
             } else {
                 Assert.IsTrue(false);
             }

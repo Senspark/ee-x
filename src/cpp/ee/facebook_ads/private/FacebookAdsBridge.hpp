@@ -51,6 +51,7 @@ private:
     IMessageBridge& bridge_;
     ILogger& logger_;
     Destroyer destroyer_;
+    std::string network_;
     std::map<std::string, std::shared_ptr<IAd>> ads_;
     std::shared_ptr<ads::IAsyncHelper<AdResult>> displayer_;
 };

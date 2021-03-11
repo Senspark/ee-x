@@ -10,13 +10,18 @@ import { IronSource } from "./IronSource";
 export class IronSourceRewardedAd extends ObserverManager<AdObserver> implements IFullScreenAd {
     private readonly _displayer: IAsyncHelper<AdResult>;
     private readonly _plugin: IronSource;
+    private readonly _network: string;
     private readonly _adId: string;
 
     public constructor(
-        displayer: IAsyncHelper<AdResult>, plugin: IronSource, adId: string) {
+        displayer: IAsyncHelper<AdResult>,
+        plugin: IronSource,
+        network: string,
+        adId: string) {
         super();
         this._displayer = displayer;
         this._plugin = plugin;
+        this._network = network;
         this._adId = adId;
     }
 
@@ -44,7 +49,7 @@ export class IronSourceRewardedAd extends ObserverManager<AdObserver> implements
         this.dispatchEvent(observer => observer.onLoaded && observer.onLoaded());
     }
 
-    public onFailedToShow(message: string): void {
+    public onFailedToShow(code: number, message: string): void {
         if (this._displayer.isProcessing) {
             this._displayer.resolve(AdResult.Failed);
         } else {

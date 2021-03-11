@@ -26,6 +26,7 @@ export class DefaultFullScreenAd extends ObserverManager<AdObserver> implements 
     private readonly _displayer: IAsyncHelper<AdResult>;
     private readonly _destroyer: Destroyer;
     private readonly _resultParser: ResultParser;
+    private readonly _network: string;
     private readonly _adId: string;
     private readonly _messageHelper: MessageHelper;
     private readonly _loadCapper: ICapper;
@@ -38,6 +39,7 @@ export class DefaultFullScreenAd extends ObserverManager<AdObserver> implements 
         displayer: IAsyncHelper<AdResult>,
         destroyer: Destroyer,
         resultParser: ResultParser,
+        network: string,
         adId: string) {
         super();
         this._prefix = prefix;
@@ -46,6 +48,7 @@ export class DefaultFullScreenAd extends ObserverManager<AdObserver> implements 
         this._displayer = displayer;
         this._destroyer = destroyer;
         this._resultParser = resultParser;
+        this._network = network;
         this._adId = adId;
         this._messageHelper = new MessageHelper(prefix, adId);
         this._loadCapper = new Capper(30);
@@ -115,6 +118,12 @@ export class DefaultFullScreenAd extends ObserverManager<AdObserver> implements 
         this._logger.debug(`${this.kTag}: onLoaded: prefix = ${this._prefix} id = ${this._adId} loading = ${this._loader.isProcessing}`);
         if (this._loader.isProcessing) {
             this._loader.resolve(true);
+            this.dispatchEvent(observer => observer.onLoadResult && observer.onLoadResult({
+                network: this._network,
+                result: true,
+                errorCode: 0,
+                errorMessage: ``,
+            }));
         } else {
             // Assert.
         }
@@ -125,6 +134,12 @@ export class DefaultFullScreenAd extends ObserverManager<AdObserver> implements 
         this._logger.debug(`${this.kTag}: onFailedToLoad: prefix = ${this._prefix} id = ${this._adId} loading = ${this._loader.isProcessing} message = ${message}`);
         if (this._loader.isProcessing) {
             this._loader.resolve(false);
+            this.dispatchEvent(observer => observer.onLoadResult && observer.onLoadResult({
+                network: this._network,
+                result: true,
+                errorCode: code,
+                errorMessage: message,
+            }));
         } else {
             // Assert.
         }

@@ -22,78 +22,6 @@
 
 namespace ee {
 namespace app_lovin {
-enum class Error {
-    // Loading & Displaying Ads
-
-    // Indicates that no ads are currently eligible for your device & location.
-    NoFill = 204,
-
-    // Indicates that a fetch ad request timed out (usually due to poor
-    // connectivity).
-    AdRequestNetworkTimeout = -1001,
-
-    // Indicates that the device is not connected to internet (for instance if
-    // user
-    // is in Airplane mode). This returns the same code as
-    // NSURLErrorNotConnectedToInternet.
-    NotConnectedToInternet = -1009,
-
-    // Indicates that an unspecified network issue occurred.
-    AdRequestUnspecifiedError = -1,
-
-    // Indicates that there has been a failure to render an ad on screen.
-    UnableToRenderAd = -6,
-
-    // Indicates that an attempt to cache a resource to the filesystem failed;
-    // the
-    // device may be out of space.
-    UnableToPrecacheResources = -200,
-
-    // Indicates that an attempt to cache an image resource to the filesystem
-    // failed; the device may be out of space.
-    UnableToPrecacheImageResources = -201,
-
-    // Indicates that an attempt to cache a video resource to the filesystem
-    // failed;
-    // the device may be out of space.
-    UnableToPrecacheVideoResources = -202,
-
-    // Indicates that a AppLovin servers have returned an invalid response.
-    InvalidResponse = -800,
-
-    // Indicates that there was an error while attempting to render a native ad
-    UnableToRenderNativeAd = -700,
-
-    // Indicates that an unspecified network issue occurred.
-    UnableToPreloadNativeAd = -701,
-
-    // Indicates that the impression has already been tracked.
-    NativeAdImpressionAlreadyTracked = -702,
-
-    //
-    // Rewarded Videos
-    //
-
-    // Indicates that the developer called for a rewarded video before one was
-    // available.
-    IncentiviziedAdNotPreloaded = -300,
-
-    // Indicates that an unknown server-side error occurred.
-    IncentivizedUnknownServerError = -400,
-
-    // Indicates that a reward validation requested timed out (usually due to
-    // poor
-    // connectivity).
-    IncentivizedValidationNetworkTimeout = -500,
-
-    // Indicates that the user exited out of the rewarded ad early
-    // You may or may not wish to grant a reward depending on your preference.
-    IncentivizedUserClosedVideo = -600,
-
-    // Indicates that a postback URL you attempted to dispatch was empty or nil.
-    InvalidURL = -900
-};
-
 namespace {
 // clang-format off
 const std::string kPrefix = "AppLovinBridge";
@@ -128,7 +56,8 @@ Self::Bridge(IMessageBridge& bridge, ILogger& logger,
              const Destroyer& destroyer)
     : bridge_(bridge)
     , logger_(logger)
-    , destroyer_(destroyer) {
+    , destroyer_(destroyer)
+    , network_("app_lovin") {
     logger_.debug("%s", __PRETTY_FUNCTION__);
     auto&& mediation = ads::MediationManager::getInstance();
     displayer_ = mediation.getAdDisplayer();
@@ -226,7 +155,7 @@ std::shared_ptr<IFullScreenAd> Self::createRewardedAd() {
     if (sharedRewardedAd_) {
         return sharedRewardedAd_;
     }
-    rewardedAd_ = new RewardedAd(logger_, displayer_, this);
+    rewardedAd_ = new RewardedAd(logger_, displayer_, this, network_);
     sharedRewardedAd_ = std::make_shared<ads::GuardedFullScreenAd>(
         std::shared_ptr<RewardedAd>(rewardedAd_));
     return sharedRewardedAd_;
@@ -288,7 +217,7 @@ void Self::onRewardedAdLoaded() {
 void Self::onRewardedAdFailedToLoad(int code, const std::string& message) {
     logger_.debug("%s: message = %s", __PRETTY_FUNCTION__, message.c_str());
     if (rewardedAd_) {
-        rewardedAd_->onFailedToLoad(message);
+        rewardedAd_->onFailedToLoad(code, message);
     } else {
         assert(false);
     }

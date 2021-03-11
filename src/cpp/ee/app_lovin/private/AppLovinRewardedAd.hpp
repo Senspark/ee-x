@@ -21,7 +21,7 @@ public:
     explicit RewardedAd(
         ILogger& logger,
         const std::shared_ptr<ads::IAsyncHelper<AdResult>>& displayer,
-        Bridge* plugin);
+        Bridge* plugin, const std::string& network);
     virtual ~RewardedAd() override;
 
     virtual void destroy() override;
@@ -34,14 +34,14 @@ private:
     friend Bridge;
 
     void onLoaded();
-    void onFailedToLoad(const std::string& message);
+    void onFailedToLoad(int code, const std::string& message);
     void onClicked();
     void onClosed(bool rewarded);
 
     ILogger& logger_;
     std::shared_ptr<ads::IAsyncHelper<AdResult>> displayer_;
     Bridge* plugin_;
-
+    std::string network_;
     std::unique_ptr<ads::IAsyncHelper<bool>> loader_;
 };
 } // namespace app_lovin

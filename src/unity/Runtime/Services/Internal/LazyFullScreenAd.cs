@@ -20,8 +20,14 @@ namespace EE.Internal {
                 }
                 _handle.Bind(value)
                     .AddObserver(new AdObserver {
-                        OnLoaded = () => DispatchEvent(observer => observer.OnLoaded?.Invoke()),
-                        OnClicked = () => DispatchEvent(observer => observer.OnClicked?.Invoke())
+                        OnLoaded = () => DispatchEvent(observer =>
+                            observer.OnLoaded?.Invoke()),
+
+                        OnLoadResult = result => DispatchEvent(observer =>
+                            observer.OnLoadResult?.Invoke(result)),
+
+                        OnClicked = () => DispatchEvent(observer =>
+                            observer.OnClicked?.Invoke())
                     });
                 _ad = value;
                 Utils.NoAwait(async () => await _ad.Load());

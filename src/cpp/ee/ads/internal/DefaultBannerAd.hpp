@@ -23,6 +23,7 @@ public:
 
     explicit DefaultBannerAd(const std::string& prefix, IMessageBridge& bridge,
                              ILogger& logger, const Destroyer& destroyer,
+                             const std::string& network,
                              const std::string& adId,
                              const std::pair<int, int>& size);
     virtual ~DefaultBannerAd() override;
@@ -53,6 +54,7 @@ private:
     IMessageBridge& bridge_;
     ILogger& logger_;
     Destroyer destroyer_;
+    std::string network_;
     std::string adId_;
     MessageHelper messageHelper_;
     BannerAdHelper helper_;

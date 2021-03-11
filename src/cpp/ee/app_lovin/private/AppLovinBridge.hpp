@@ -54,6 +54,7 @@ private:
     IMessageBridge& bridge_;
     ILogger& logger_;
     Destroyer destroyer_;
+    std::string network_;
 
     /// Share the same instance.
     RewardedAd* rewardedAd_;

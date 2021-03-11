@@ -47,6 +47,7 @@ export class IronSource implements IIronSource {
     private readonly _bridge: IMessageBridge;
     private readonly _logger: ILogger;
     private readonly _destroyer: Destroyer;
+    private readonly _network: string;
     private _bannerAd?: IBannerAd;
     private _interstitialAd?: IronSourceInterstitialAd;
     private _sharedInterstitialAd?: IFullScreenAd;
@@ -59,6 +60,7 @@ export class IronSource implements IIronSource {
         this._logger = logger;
         this._destroyer = destroyer;
         this._logger.debug(`${this.kTag}: constructor`);
+        this._network = `iron_source`;
         this._displayer = MediationManager.getInstance().adDisplayer;
 
         this._bridge.registerHandler(_ => this.onInterstitialAdLoaded(), this.kOnInterstitialAdLoaded);
@@ -135,7 +137,7 @@ export class IronSource implements IIronSource {
         this._bannerAd = new GuardedBannerAd(
             new DefaultBannerAd("IronSourceBannerAd", this._bridge, this._logger,
                 () => this.destroyBannerAd(adId),
-                adId, size));
+                this._network, adId, size));
         return this._bannerAd;
     }
 
@@ -158,7 +160,8 @@ export class IronSource implements IIronSource {
         if (this._sharedInterstitialAd !== undefined) {
             return this._sharedInterstitialAd;
         }
-        this._interstitialAd = new IronSourceInterstitialAd(this._displayer, this, adId);
+        this._interstitialAd = new IronSourceInterstitialAd(
+            this._displayer, this, this._network, adId);
         this._sharedInterstitialAd = new GuardedFullScreenAd(this._interstitialAd);
         return this._sharedInterstitialAd;
     }
@@ -178,7 +181,8 @@ export class IronSource implements IIronSource {
         if (this._sharedRewardedAd !== undefined) {
             return this._sharedRewardedAd;
         }
-        this._rewardedAd = new IronSourceRewardedAd(this._displayer, this, adId);
+        this._rewardedAd = new IronSourceRewardedAd(
+            this._displayer, this, this._network, adId);
         this._sharedRewardedAd = new GuardedFullScreenAd(this._rewardedAd);
         return this._sharedRewardedAd;
     }
@@ -225,7 +229,7 @@ export class IronSource implements IIronSource {
 
     private onInterstitialAdFailedToLoad(code: number, message: string): void {
         if (this._interstitialAd !== undefined) {
-            this._interstitialAd.onFailedToLoad(message);
+            this._interstitialAd.onFailedToLoad(code, message);
         } else {
             // Assert.
         }
@@ -233,7 +237,7 @@ export class IronSource implements IIronSource {
 
     private onInterstitialAdFailedToShow(code: number, message: string): void {
         if (this._interstitialAd !== undefined) {
-            this._interstitialAd.onFailedToShow(message);
+            this._interstitialAd.onFailedToShow(code, message);
         } else {
             // Assert.
         }
@@ -265,7 +269,7 @@ export class IronSource implements IIronSource {
 
     private onRewardedAdFailedToShow(code: number, message: string): void {
         if (this._rewardedAd !== undefined) {
-            this._rewardedAd.onFailedToShow(message);
+            this._rewardedAd.onFailedToShow(code, message);
         } else {
             // Assert.
         }

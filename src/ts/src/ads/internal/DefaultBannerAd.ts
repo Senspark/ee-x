@@ -20,6 +20,7 @@ export class DefaultBannerAd extends ObserverManager<AdObserver> implements IBan
     private readonly _bridge: IMessageBridge;
     private readonly _logger: ILogger;
     private readonly _destroyer: Destroyer;
+    private readonly _network: string;
     private readonly _adId: string;
     private readonly _messageHelper: MessageHelper;
     private readonly _helper: BannerAdHelper;
@@ -31,6 +32,7 @@ export class DefaultBannerAd extends ObserverManager<AdObserver> implements IBan
         bridge: IMessageBridge,
         logger: ILogger,
         destroyer: Destroyer,
+        network: string,
         adId: string,
         size: [number, number]) {
         super();
@@ -38,6 +40,7 @@ export class DefaultBannerAd extends ObserverManager<AdObserver> implements IBan
         this._bridge = bridge;
         this._logger = logger;
         this._destroyer = destroyer;
+        this._network = network;
         this._adId = adId;
         this._messageHelper = new MessageHelper(prefix, adId);
         this._helper = new BannerAdHelper(this._bridge, this._messageHelper, size);
@@ -117,6 +120,12 @@ export class DefaultBannerAd extends ObserverManager<AdObserver> implements IBan
         this._logger.debug(`${this.kTag}: onLoaded: prefix = ${this._prefix} id = ${this._adId} loading = ${this._loader.isProcessing}`);
         if (this._loader.isProcessing) {
             this._loader.resolve(true);
+            this.dispatchEvent(observer => observer.onLoadResult && observer.onLoadResult({
+                network: this._network,
+                result: true,
+                errorCode: 0,
+                errorMessage: ``,
+            }));
         } else {
             // Ignored.
         }
@@ -127,6 +136,12 @@ export class DefaultBannerAd extends ObserverManager<AdObserver> implements IBan
         this._logger.debug(`${this.kTag}: onFailedToLoad: prefix = ${this._prefix} id = ${this._adId} loading = ${this._loader.isProcessing} message = ${message}`);
         if (this._loader.isProcessing) {
             this._loader.resolve(false);
+            this.dispatchEvent(observer => observer.onLoadResult && observer.onLoadResult({
+                network: this._network,
+                result: true,
+                errorCode: code,
+                errorMessage: message,
+            }));
         } else {
             // Ignored.
         }

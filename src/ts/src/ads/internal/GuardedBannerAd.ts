@@ -18,8 +18,14 @@ export class GuardedBannerAd extends ObserverManager<AdObserver> implements IBan
         this._loading = false;
         this._handle = new ObserverHandle();
         this._handle.bind(ad).addObserver({
-            onLoaded: () => this.dispatchEvent(observer => observer.onLoaded && observer.onLoaded()),
-            onClicked: () => this.dispatchEvent(observer => observer.onClicked && observer.onClicked()),
+            onLoaded: () => this.dispatchEvent(observer =>
+                observer.onLoaded && observer.onLoaded()),
+
+            onLoadResult: result => this.dispatchEvent(observer =>
+                observer.onLoadResult && observer.onLoadResult(result)),
+
+            onClicked: () => this.dispatchEvent(observer =>
+                observer.onClicked && observer.onClicked()),
         });
     }
 

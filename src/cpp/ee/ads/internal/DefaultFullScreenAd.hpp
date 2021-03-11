@@ -25,7 +25,7 @@ public:
         const std::string& prefix, IMessageBridge& bridge, ILogger& logger,
         const std::shared_ptr<IAsyncHelper<AdResult>>& displayer,
         const Destroyer& destroyer, const ResultParser& resultParser,
-        const std::string& adId);
+        const std::string& network, const std::string& adId);
 
     virtual ~DefaultFullScreenAd() override;
 
@@ -48,6 +48,7 @@ private:
     std::shared_ptr<IAsyncHelper<AdResult>> displayer_;
     Destroyer destroyer_;
     ResultParser resultParser_;
+    std::string network_;
     std::string adId_;
     MessageHelper messageHelper_;
     std::shared_ptr<ICapper> loadCapper_;

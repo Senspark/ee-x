@@ -13,7 +13,7 @@ private let kSchedule = "\(kPrefix)Schedule"
 private let kUnschedule = "\(kPrefix)Unschedule"
 private let kClearAll = "\(kPrefix)ClearAll"
 
-@objc(EENotification)
+@objc(EENotificationBridge)
 class NotificationBridge: NSObject, IPlugin {
     private let _bridge: IMessageBridge
     private let _logger: ILogger

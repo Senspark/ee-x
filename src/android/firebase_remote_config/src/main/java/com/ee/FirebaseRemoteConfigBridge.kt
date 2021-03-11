@@ -192,7 +192,11 @@ class FirebaseRemoteConfigBridge(
             Thread.runOnMainThread {
                 val plugin = _plugin
                     ?: throw IllegalStateException("Please call initialize() first")
-                plugin.setDefaultsAsync(defaults).addOnCompleteListener {
+                val values = HashMap<String, Any>()
+                for ((key, value) in defaults) {
+                    values[key] = value.content
+                }
+                plugin.setDefaultsAsync(values).addOnCompleteListener {
                     Thread.runOnMainThread {
                         cont.resume(Unit)
                     }

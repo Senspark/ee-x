@@ -43,6 +43,15 @@ Self& Self::addItem(const std::shared_ptr<IBannerAd>& item) {
                         }
                     });
                 },
+            .onLoadResult =
+                [this](const AdLoadResult& result) {
+                    // Propagation.
+                    dispatchEvent([result](auto&& observer) {
+                        if (observer.onLoadResult) {
+                            observer.onLoadResult(result);
+                        }
+                    });
+                },
             .onClicked =
                 [this] {
                     // Propagation.

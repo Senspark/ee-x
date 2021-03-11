@@ -47,7 +47,8 @@ Self::Bridge(IMessageBridge& bridge, ILogger& logger,
              const Destroyer& destroyer)
     : bridge_(bridge)
     , logger_(logger)
-    , destroyer_(destroyer) {
+    , destroyer_(destroyer)
+    , network_("ad_mob") {
     logger_.debug("%s", __PRETTY_FUNCTION__);
     auto&& mediation = ads::MediationManager::getInstance();
     displayer_ = mediation.getAdDisplayer();
@@ -109,12 +110,12 @@ std::shared_ptr<IBannerAd> Self::createBannerAd(const std::string& adId,
     }
     auto size = getBannerAdSize(adSize);
     auto ad = std::make_shared<ads::GuardedBannerAd>(
-        std::make_shared<ads::DefaultBannerAd>(
+        std::make_shared<ads::DefaultBannerAd>( //
             "AdMobBannerAd", bridge_, logger_,
             [this, adId] { //
                 destroyAd(adId);
             },
-            adId, size));
+            network_, adId, size));
     ads_.emplace(adId, ad);
     return ad;
 }
@@ -144,7 +145,7 @@ Self::createNativeAd(const std::string& adId, const std::string& layoutName,
             [this, adId] { //
                 destroyAd(adId);
             },
-            adId, std::pair(0, 0)));
+            network_, adId, std::pair(0, 0)));
     ads_.emplace(adId, ad);
     return ad;
 }
@@ -159,7 +160,7 @@ std::shared_ptr<IFullScreenAd> Self::createAppOpenAd(const std::string& adId) {
             [](const std::string& message) { //
                 return AdResult::Completed;
             },
-            adId);
+            network_, adId);
     });
 }
 
@@ -174,7 +175,7 @@ Self::createInterstitialAd(const std::string& adId) {
             [](const std::string& message) { //
                 return AdResult::Completed;
             },
-            adId);
+            network_, adId);
     });
 }
 
@@ -191,7 +192,7 @@ Self::createRewardedInterstitialAd(const std::string& adId) {
                     return core::toBool(message) ? AdResult::Completed
                                                  : AdResult::Canceled;
                 },
-                adId);
+                network_, adId);
         });
 }
 
@@ -206,7 +207,7 @@ std::shared_ptr<IFullScreenAd> Self::createRewardedAd(const std::string& adId) {
                 return core::toBool(message) ? AdResult::Completed
                                              : AdResult::Canceled;
             },
-            adId);
+            network_, adId);
     });
 }
 

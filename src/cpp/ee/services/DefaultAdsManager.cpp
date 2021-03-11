@@ -20,21 +20,23 @@ using Self = DefaultAdsManager;
 
 Self::DefaultAdsManager(const std::string& configJson) {
     initialized_ = false;
-    displayCapper_ = std::make_shared<ads::Capper>(0.1f);
     config_ = AdsConfig::parse(configJson);
+    auto displayCapper = std::make_shared<ads::Capper>(0.1f);
+    bannerAds_ = {
+        {AdFormat::Banner, std::make_shared<LazyBannerAd>()},
+        {AdFormat::Rectangle, std::make_shared<LazyBannerAd>()},
+    };
+    fullScreenAds_ = {
+        {AdFormat::AppOpen, std::make_shared<LazyFullScreenAd>(displayCapper)},
+        {AdFormat::Interstitial,
+         std::make_shared<LazyFullScreenAd>(displayCapper)},
+        {AdFormat::RewardedInterstitial,
+         std::make_shared<LazyFullScreenAd>(displayCapper)},
+        {AdFormat::Rewarded, std::make_shared<LazyFullScreenAd>(displayCapper)},
+    };
 }
 
 Task<bool> Self::initialize() {
-    bannerAds_[AdFormat::Banner] = std::make_shared<LazyBannerAd>();
-    bannerAds_[AdFormat::Rectangle] = std::make_shared<LazyBannerAd>();
-    fullScreenAds_[AdFormat::AppOpen] =
-        std::make_shared<LazyFullScreenAd>(displayCapper_);
-    fullScreenAds_[AdFormat::Interstitial] =
-        std::make_shared<LazyFullScreenAd>(displayCapper_);
-    fullScreenAds_[AdFormat::RewardedInterstitial] =
-        std::make_shared<LazyFullScreenAd>(displayCapper_);
-    fullScreenAds_[AdFormat::Rewarded] =
-        std::make_shared<LazyFullScreenAd>(displayCapper_);
     co_await config_->initialize();
     initializeBannerAd(AdFormat::Banner);
     initializeBannerAd(AdFormat::Rectangle);

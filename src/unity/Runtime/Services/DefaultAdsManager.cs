@@ -7,17 +7,24 @@ namespace EE {
     public class DefaultAdsManager : IAdsManager {
         private Task<bool> _initializer;
         private bool _initialized;
-        private readonly ICapper _displayCapper;
         private readonly AdsConfig _config;
         private readonly Dictionary<AdFormat, LazyBannerAd> _bannerAds;
         private readonly Dictionary<AdFormat, LazyFullScreenAd> _fullScreenAds;
 
         public DefaultAdsManager(string configJson) {
             _initialized = false;
-            _displayCapper = new Capper(0.1f);
             _config = AdsConfig.Parse(configJson);
-            _bannerAds = new Dictionary<AdFormat, LazyBannerAd>();
-            _fullScreenAds = new Dictionary<AdFormat, LazyFullScreenAd>();
+            var displayCapper = new Capper(0.1f);
+            _bannerAds = new Dictionary<AdFormat, LazyBannerAd> {
+                [AdFormat.Banner] = new LazyBannerAd(),
+                [AdFormat.Rectangle] = new LazyBannerAd()
+            };
+            _fullScreenAds = new Dictionary<AdFormat, LazyFullScreenAd> {
+                [AdFormat.AppOpen] = new LazyFullScreenAd(displayCapper),
+                [AdFormat.Interstitial] = new LazyFullScreenAd(displayCapper),
+                [AdFormat.RewardedInterstitial] = new LazyFullScreenAd(displayCapper),
+                [AdFormat.Rewarded] = new LazyFullScreenAd(displayCapper)
+            };
         }
 
         public Task<bool> Initialize() => _initializer = _initializer ?? (_initializer = InitializeImpl());
@@ -26,12 +33,6 @@ namespace EE {
         }
 
         private async Task<bool> InitializeImpl() {
-            _bannerAds[AdFormat.Banner] = new LazyBannerAd();
-            _bannerAds[AdFormat.Rectangle] = new LazyBannerAd();
-            _fullScreenAds[AdFormat.AppOpen] = new LazyFullScreenAd(_displayCapper);
-            _fullScreenAds[AdFormat.Interstitial] = new LazyFullScreenAd(_displayCapper);
-            _fullScreenAds[AdFormat.RewardedInterstitial] = new LazyFullScreenAd(_displayCapper);
-            _fullScreenAds[AdFormat.Rewarded] = new LazyFullScreenAd(_displayCapper);
             await _config.Initialize();
             InitializeBannerAd(AdFormat.Banner);
             InitializeBannerAd(AdFormat.Rectangle);

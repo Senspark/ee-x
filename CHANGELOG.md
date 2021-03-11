@@ -1,3 +1,6 @@
+## 2.6.4 - 2020-03-11
+- [Android] Fix setDefaults in FirebaseRemoteConfig not work.
+
 ## 2.6.3 - 2020-03-04
 - [Unity] Add Json (.net) serializer using reflection.
 - [C++] Change initialize() method in IService.

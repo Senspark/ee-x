@@ -6,13 +6,13 @@ using SimpleJSON;
 
 namespace EE.Internal {
     internal static class AdsConfigUtils {
-        public static Network ParseNetwork(string id) {
+        public static AdNetwork ParseNetwork(string id) {
             switch (id) {
-                case "ad_mob": return Network.AdMob;
-                case "facebook_ads": return Network.FacebookAds;
-                case "iron_source": return Network.IronSource;
-                case "unity_ads": return Network.UnityAds;
-                default: return Network.Null;
+                case "ad_mob": return AdNetwork.AdMob;
+                case "facebook_ads": return AdNetwork.FacebookAds;
+                case "iron_source": return AdNetwork.IronSource;
+                case "unity_ads": return AdNetwork.UnityAds;
+                default: return AdNetwork.Null;
             }
         }
 
@@ -29,28 +29,10 @@ namespace EE.Internal {
         }
     }
 
-    internal enum Network {
-        AdMob,
-        FacebookAds,
-        IronSource,
-        UnityAds,
-        Null
-    }
-
-    internal enum AdFormat {
-        Banner,
-        Rectangle,
-        AppOpen,
-        Interstitial,
-        RewardedInterstitial,
-        Rewarded,
-        Null
-    }
-
     internal interface INetworkConfigManager {
         Task Initialize();
-        void OpenTestSuite(Network network);
-        IAd CreateAd(Network network, AdFormat format, string id);
+        void OpenTestSuite(AdNetwork network);
+        IAd CreateAd(AdNetwork network, AdFormat format, string id);
     }
 
     internal class NetworkConfigManager : INetworkConfigManager {
@@ -69,7 +51,7 @@ namespace EE.Internal {
             }
         }
 
-        public void OpenTestSuite(Network network) {
+        public void OpenTestSuite(AdNetwork network) {
             foreach (var item in _networks) {
                 if (item.Network == network) {
                     item.OpenTestSuite();
@@ -78,7 +60,7 @@ namespace EE.Internal {
             }
         }
 
-        public IAd CreateAd(Network network, AdFormat format, string id) {
+        public IAd CreateAd(AdNetwork network, AdFormat format, string id) {
             foreach (var item in _networks) {
                 if (item.Network == network) {
                     return item.CreateAd(format, id);
@@ -90,7 +72,7 @@ namespace EE.Internal {
 
     internal interface INetworkConfig {
         Task Initialize();
-        Network Network { get; }
+        AdNetwork Network { get; }
         void OpenTestSuite();
         IAd CreateAd(AdFormat format, string id);
     }
@@ -99,11 +81,11 @@ namespace EE.Internal {
         public static INetworkConfig Parse(JSONNode node) {
             var network = AdsConfigUtils.ParseNetwork(node["network"].Value);
             switch (network) {
-                case Network.AdMob: return new AdMobConfig(node);
-                case Network.FacebookAds: return new FacebookAdsConfig(node);
-                case Network.IronSource: return new IronSourceConfig(node);
-                case Network.UnityAds: return new UnityAdsConfig(node);
-                case Network.Null: return new NullNetworkConfig();
+                case AdNetwork.AdMob: return new AdMobConfig(node);
+                case AdNetwork.FacebookAds: return new FacebookAdsConfig(node);
+                case AdNetwork.IronSource: return new IronSourceConfig(node);
+                case AdNetwork.UnityAds: return new UnityAdsConfig(node);
+                case AdNetwork.Null: return new NullNetworkConfig();
             }
             throw new ArgumentException();
         }
@@ -120,7 +102,7 @@ namespace EE.Internal {
             await _plugin.Initialize();
         }
 
-        public Network Network => Network.AdMob;
+        public AdNetwork Network => AdNetwork.AdMob;
 
         public void OpenTestSuite() {
             _plugin.OpenTestSuite();
@@ -158,7 +140,7 @@ namespace EE.Internal {
             await _plugin.Initialize();
         }
 
-        public Network Network => Network.FacebookAds;
+        public AdNetwork Network => AdNetwork.FacebookAds;
 
         public void OpenTestSuite() {
         }
@@ -196,7 +178,7 @@ namespace EE.Internal {
             await _plugin.Initialize(_appId);
         }
 
-        public Network Network => Network.IronSource;
+        public AdNetwork Network => AdNetwork.IronSource;
 
         public void OpenTestSuite() {
         }
@@ -236,7 +218,7 @@ namespace EE.Internal {
             await Task.WhenAny(Task.Delay(_timeOut * 1000), _plugin.Initialize(_appId, false));
         }
 
-        public Network Network => Network.UnityAds;
+        public AdNetwork Network => AdNetwork.UnityAds;
 
         public void OpenTestSuite() {
         }
@@ -266,7 +248,7 @@ namespace EE.Internal {
             return Task.FromResult<object>(null);
         }
 
-        public Network Network => Network.Null;
+        public AdNetwork Network => AdNetwork.Null;
 
         public void OpenTestSuite() {
         }
@@ -457,7 +439,7 @@ namespace EE.Internal {
 
     internal class SingleInstanceConfig<Ad> : IAdInstanceConfig<Ad> where Ad : class, IAd {
         private readonly AdFormat _format;
-        private readonly Network _network;
+        private readonly AdNetwork _network;
         private readonly string _id;
 
         public SingleInstanceConfig(AdFormat format, JSONNode node) {
@@ -516,7 +498,7 @@ namespace EE.Internal {
             await _networkManager.Initialize();
         }
 
-        public void OpenTestSuite(Network network) {
+        public void OpenTestSuite(AdNetwork network) {
             _networkManager.OpenTestSuite(network);
         }
 

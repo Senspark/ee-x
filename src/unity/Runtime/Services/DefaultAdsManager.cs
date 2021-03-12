@@ -63,7 +63,7 @@ namespace EE {
         }
 
         public void OpenTestSuite() {
-            _config.OpenTestSuite(Network.AdMob);
+            _config.OpenTestSuite(AdNetwork.AdMob);
         }
 
         public IBannerAd BannerAd => _bannerAds[AdFormat.Banner];

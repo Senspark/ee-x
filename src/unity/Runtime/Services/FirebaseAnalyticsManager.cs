@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 using EE.Internal;
@@ -80,13 +79,7 @@ namespace EE {
             if (!_initialized) {
                 return;
             }
-            var type = typeof(T);
-            var fields = type.GetFields();
-            var parameters = fields.Select(item => {
-                var name = item.Name;
-                var value = item.GetValue(analyticsEvent);
-                return (name, value);
-            });
+            var parameters = AnalyticsUtils.ParseParameter(analyticsEvent);
             _impl.LogEvent(analyticsEvent.EventName, parameters.ToArray());
         }
     }

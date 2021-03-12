@@ -2,6 +2,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
+using EE.Internal;
+
 namespace EE {
     public class NullAnalyticsManager : IAnalyticsManager {
         private readonly ILogManager _logManager;
@@ -79,9 +81,9 @@ namespace EE {
             var tokens = new[] {
                 $"[{analyticsEvent.EventName}]"
             };
-            tokens = tokens.Concat(fields.Select(item => {
-                var name = item.Name;
-                var value = item.GetValue(analyticsEvent);
+            var parameters = AnalyticsUtils.ParseParameter(analyticsEvent);
+            tokens = tokens.Concat(parameters.Select(item => {
+                var (name, value) = item;
                 return $"[{name}={value}]";
             })).ToArray();
             _logManager.Log($"{string.Join(" ", tokens)}");

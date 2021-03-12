@@ -20,7 +20,7 @@ EE.Utils.NoAwait(async () => {
 Normal banner ad
 ```csharp
 // Show ad.
-manager.IsBannerAdVisible = true;
+manager.BannerAd.IsVisible = true;
 
 // Set ad position and anchor.
 var (viewWidth, viewHeight) = EE.Platform.GetViewSize();
@@ -31,7 +31,7 @@ adsManager.BannerAd.Position = (viewWidth * 0.5f, viewHeight * 0.5f);
 Rectangle banner ad
 ```csharp
 // Show ad.
-manager.IsRectangleAdVisible = true;
+manager.RectangleAd.IsVisible = true;
 
 // Set ad position and anchor.
 var (viewWidth, viewHeight) = EE.Platform.GetViewSize();

@@ -1,7 +1,7 @@
 using UnityEngine;
 
 namespace EE.Internal {
-    public class JsonUnityConverter : IJsonConverter {
+    internal class JsonUnityConverter : IJsonConverter {
         public bool Initialize() {
             return true;
         }

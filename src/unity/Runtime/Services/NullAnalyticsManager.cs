@@ -7,12 +7,14 @@ using EE.Internal;
 namespace EE {
     public class NullAnalyticsManager : IAnalyticsManager {
         private readonly ILogManager _logManager;
+        private readonly IAnalyticsParser _parser;
         private readonly Stack<string> _screens = new Stack<string>();
         private Task<bool> _initializer;
         private bool _initialized;
 
         public NullAnalyticsManager(ILogManager logManager) {
             _logManager = logManager;
+            _parser = new NullAnalyticsParser();
         }
 
         public Task<bool> Initialize() => _initializer = _initializer ?? (_initializer = InitializeImpl(1f));
@@ -76,16 +78,15 @@ namespace EE {
             if (!_initialized) {
                 return;
             }
-            var type = typeof(T);
-            var fields = type.GetFields();
+            var impl = _parser.Parse(analyticsEvent);
+            if (impl == null) {
+                return;
+            }
             var tokens = new[] {
                 $"[{analyticsEvent.EventName}]"
             };
-            var parameters = AnalyticsUtils.ParseParameter(analyticsEvent);
-            tokens = tokens.Concat(parameters.Select(item => {
-                var (name, value) = item;
-                return $"[{name}={value}]";
-            })).ToArray();
+            tokens = tokens.Concat(impl.Parameters.Select(item =>
+                $"[{item.Key}={item.Value}]")).ToArray();
             _logManager.Log($"{string.Join(" ", tokens)}");
         }
     }

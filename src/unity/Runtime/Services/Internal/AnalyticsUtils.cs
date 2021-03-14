@@ -1,14 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 
 using UnityEngine.Assertions;
 
 namespace EE.Internal {
     internal static class AnalyticsUtils {
-        public static List<(string, object)> ParseParameter<T>(T analyticsEvent) where T : IAnalyticsEvent {
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static string MakeEvent(string name) {
+            return $"ee_{name}";
+        }
+
+        public static AnalyticsEventImpl ParseParameter<T>(T analyticsEvent) where T : IAnalyticsEvent {
             var type = typeof(T);
-            var parameters = new List<(string, object)>();
+            var parameters = new Dictionary<string, object>();
             var infos = type.GetMembers(
                 BindingFlags.Instance |
                 BindingFlags.Public |
@@ -34,9 +40,12 @@ namespace EE.Internal {
                         Assert.IsFalse(true);
                         break;
                 }
-                parameters.Add((name, value));
+                parameters[name] = value;
             }
-            return parameters;
+            return new AnalyticsEventImpl {
+                EventName = analyticsEvent.EventName,
+                Parameters = parameters
+            };
         }
     }
 }

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 using EE.Internal;
@@ -79,8 +80,11 @@ namespace EE {
             if (!_initialized) {
                 return;
             }
-            var parameters = AnalyticsUtils.ParseParameter(analyticsEvent);
-            _impl.LogEvent(analyticsEvent.EventName, parameters.ToArray());
+            var impl = AnalyticsUtils.ParseParameter(analyticsEvent);
+            var parameters = impl.Parameters
+                .Select(item => (item.Key, item.Value))
+                .ToArray();
+            _impl.LogEvent(analyticsEvent.EventName, parameters);
         }
     }
 }

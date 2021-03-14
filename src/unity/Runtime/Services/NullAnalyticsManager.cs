@@ -2,19 +2,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-using EE.Internal;
-
 namespace EE {
     public class NullAnalyticsManager : IAnalyticsManager {
         private readonly ILogManager _logManager;
-        private readonly IAnalyticsParser _parser;
         private readonly Stack<string> _screens = new Stack<string>();
         private Task<bool> _initializer;
         private bool _initialized;
 
         public NullAnalyticsManager(ILogManager logManager) {
             _logManager = logManager;
-            _parser = new NullAnalyticsParser();
         }
 
         public Task<bool> Initialize() => _initializer = _initializer ?? (_initializer = InitializeImpl(1f));
@@ -74,19 +70,16 @@ namespace EE {
             _logManager.Log($"[{name}]");
         }
 
-        public void LogEvent<T>(T analyticsEvent) where T : IAnalyticsEvent {
+        public void LogEvent(IAnalyticsEvent analyticsEvent) {
             if (!_initialized) {
-                return;
-            }
-            var impl = _parser.Parse(analyticsEvent);
-            if (impl == null) {
                 return;
             }
             var tokens = new[] {
                 $"[{analyticsEvent.EventName}]"
             };
-            tokens = tokens.Concat(impl.Parameters.Select(item =>
-                $"[{item.Key}={item.Value}]")).ToArray();
+            tokens = tokens
+                .Concat(analyticsEvent.Parameters.Select(item => $"[{item.Key}={item.Value}]"))
+                .ToArray();
             _logManager.Log($"{string.Join(" ", tokens)}");
         }
     }

@@ -1,9 +1,15 @@
-﻿namespace EE.Internal {
+﻿using System.Collections.Generic;
+
+namespace EE.Internal {
     internal class NullAnalyticsParser : IAnalyticsParser {
-        public AnalyticsEventImpl Parse<T>(T analyticsEvent) where T : IAnalyticsEvent {
-            return analyticsEvent.EventName.StartsWith("ee_")
-                ? null
-                : AnalyticsUtils.ParseParameter(analyticsEvent);
+        public List<IAnalyticsEvent> Parse(IAnalyticsEvent analyticsEvent) {
+            var events = new List<IAnalyticsEvent>();
+            if (AnalyticsUtils.IsLibraryEvent(analyticsEvent.EventName)) {
+                // Ignored.
+            } else {
+                events.Add(analyticsEvent);
+            }
+            return events;
         }
     }
 }

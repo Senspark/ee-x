@@ -76,12 +76,11 @@ namespace EE {
             _impl.LogEvent(name);
         }
 
-        public void LogEvent<T>(T analyticsEvent) where T : IAnalyticsEvent {
+        public void LogEvent(IAnalyticsEvent analyticsEvent) {
             if (!_initialized) {
                 return;
             }
-            var impl = AnalyticsUtils.ParseParameter(analyticsEvent);
-            var parameters = impl.Parameters
+            var parameters = analyticsEvent.Parameters
                 .Select(item => (item.Key, item.Value))
                 .ToArray();
             _impl.LogEvent(analyticsEvent.EventName, parameters);

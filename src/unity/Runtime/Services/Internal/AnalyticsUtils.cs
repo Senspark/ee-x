@@ -8,12 +8,43 @@ using UnityEngine.Assertions;
 namespace EE.Internal {
     internal static class AnalyticsUtils {
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static string MakeEvent(string name) {
+        public static string MakeLibraryEvent(string name) {
             return $"ee_{name}";
         }
 
-        public static AnalyticsEventImpl ParseParameter<T>(T analyticsEvent) where T : IAnalyticsEvent {
-            var type = typeof(T);
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool IsLibraryEvent(string name) {
+            return name.StartsWith("ee_");
+        }
+
+        public static string ParseAdFormat(AdFormat value) {
+            switch (value) {
+                case AdFormat.AppOpen: return "app_open";
+                case AdFormat.Interstitial: return "interstitial";
+                case AdFormat.RewardedInterstitial: return "rewarded_interstitial";
+                case AdFormat.Rewarded: return "rewarded";
+            }
+            Assert.IsTrue(false);
+            return "null";
+        }
+
+        public static string ParseAdResult(AdResult value) {
+            switch (value) {
+                case AdResult.Failed: return "failed";
+                case AdResult.Canceled: return "canceled";
+                case AdResult.Completed: return "completed";
+                case AdResult.NotInitialized: return "not_initialized";
+                case AdResult.NotConfigured: return "not_configured";
+                case AdResult.Capped: return "capped";
+                case AdResult.NoInternet: return "no_internet";
+                case AdResult.NotLoaded: return "not_loaded";
+            }
+            Assert.IsTrue(false);
+            return "null";
+        }
+
+        public static Dictionary<string, object> ParseParameter(IAnalyticsEvent analyticsEvent) {
+            var type = analyticsEvent.GetType();
             var parameters = new Dictionary<string, object>();
             var infos = type.GetMembers(
                 BindingFlags.Instance |
@@ -42,10 +73,7 @@ namespace EE.Internal {
                 }
                 parameters[name] = value;
             }
-            return new AnalyticsEventImpl {
-                EventName = analyticsEvent.EventName,
-                Parameters = parameters
-            };
+            return parameters;
         }
     }
 }

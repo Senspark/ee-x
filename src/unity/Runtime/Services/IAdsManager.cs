@@ -1,13 +1,19 @@
-﻿using UnityEngine.Scripting;
+﻿using System.Collections.Generic;
+
+using EE.Internal;
+
+using UnityEngine.Scripting;
 
 namespace EE {
     public class AdEvent : IAnalyticsEvent {
-        public string EventName => "ee_ad_event";
+        public string EventName => AnalyticsUtils.MakeLibraryEvent("ad");
 
-        [AnalyticsParameter("format")]
+        public Dictionary<string, object> Parameters => new Dictionary<string, object> {
+            ["format"] = AnalyticsUtils.ParseAdFormat(Format),
+            ["result"] = AnalyticsUtils.ParseAdResult(Result)
+        };
+
         public AdFormat Format;
-
-        [AnalyticsParameter("result")]
         public AdResult Result;
     }
 

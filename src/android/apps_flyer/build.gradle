@@ -26,7 +26,7 @@ if (rootProject.ext.has('buildMaven') && rootProject.buildMaven) {
 }
 
 dependencies {
-    implementation 'androidx.annotation:annotation:1.1.0'
+    implementation 'androidx.annotation:annotation:1.2.0'
 
     // https://stackoverflow.com/questions/59263642/install-referrer-library-v1-1-adds-permissions
     // https://developer.android.com/google/play/installreferrer/release-notes

@@ -28,6 +28,7 @@ namespace EE {
             new PluginManagerImplIos();
 #endif
 
+        private static readonly Dictionary<Type, IPlugin> _plugins = new Dictionary<Type, IPlugin>();
         private static Logger _logger;
         private static IMessageBridge _bridge;
 
@@ -41,9 +42,16 @@ namespace EE {
 
         public static T CreatePlugin<T>() where T : IPlugin {
             var type = typeof(T);
+            if (_plugins.TryGetValue(type, out var plugin)) {
+                return (T) plugin;
+            }
             var (name, constructor) = _pluginInfo[type];
             _impl.AddPlugin(name);
-            var instance = (T) constructor(_bridge, _logger, () => _impl.RemovePlugin(name));
+            var instance = (T) constructor(_bridge, _logger, () => {
+                _impl.RemovePlugin(name);
+                _plugins.Remove(type);
+            });
+            _plugins.Add(type, instance);
             return instance;
         }
 

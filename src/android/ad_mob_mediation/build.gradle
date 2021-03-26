@@ -43,7 +43,7 @@ dependencies {
     api 'com.google.ads.mediation:inmobi:9.1.6.0'
 
     // https://developers.google.com/admob/android/mediation/ironsource#ironsource-android-mediation-adapter-changelog
-    api 'com.google.ads.mediation:ironsource:7.1.0.2.0'
+    api 'com.google.ads.mediation:ironsource:7.1.2.0'
     
     // https://developers.google.com/admob/android/mediation/tapjoy#tapjoy-android-mediation-adapter-changelog
     api 'com.google.ads.mediation:tapjoy:12.7.1.0'

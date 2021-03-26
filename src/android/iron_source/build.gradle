@@ -35,7 +35,7 @@ dependencies {
     // https://bintray.com/ironsource-mobile/android-sdk
     // https://developers.ironsrc.com/ironsource-mobile/android/sdk-change-log/
     // Use "api" to inherit manifest elements.
-    api 'com.ironsource.sdk:mediationsdk:7.1.0.2'
+    api 'com.ironsource.sdk:mediationsdk:7.1.2'
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
     implementation 'org.jetbrains.kotlinx:kotlinx-serialization-json:1.0.1'

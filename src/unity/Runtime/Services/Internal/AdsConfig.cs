@@ -31,6 +31,7 @@ namespace EE.Internal {
 
     internal interface INetworkConfigManager {
         Task Initialize();
+        void AddTestDevice(string hash);
         void OpenTestSuite(AdNetwork network);
         IAd CreateAd(AdNetwork network, AdFormat format, string id);
     }
@@ -48,6 +49,12 @@ namespace EE.Internal {
         public async Task Initialize() {
             foreach (var network in _networks) {
                 await network.Initialize();
+            }
+        }
+
+        public void AddTestDevice(string hash) {
+            foreach (var item in _networks) {
+                item.AddTestDevice(hash);
             }
         }
 
@@ -73,6 +80,7 @@ namespace EE.Internal {
     internal interface INetworkConfig {
         Task Initialize();
         AdNetwork Network { get; }
+        void AddTestDevice(string hash);
         void OpenTestSuite();
         IAd CreateAd(AdFormat format, string id);
     }
@@ -103,6 +111,10 @@ namespace EE.Internal {
         }
 
         public AdNetwork Network => AdNetwork.AdMob;
+
+        public void AddTestDevice(string hash) {
+            _plugin.AddTestDevice(hash);
+        }
 
         public void OpenTestSuite() {
             _plugin.OpenTestSuite();
@@ -142,6 +154,10 @@ namespace EE.Internal {
 
         public AdNetwork Network => AdNetwork.FacebookAds;
 
+        public void AddTestDevice(string hash) {
+            _plugin.AddTestDevice(hash);
+        }
+
         public void OpenTestSuite() {
         }
 
@@ -179,6 +195,9 @@ namespace EE.Internal {
         }
 
         public AdNetwork Network => AdNetwork.IronSource;
+
+        public void AddTestDevice(string hash) {
+        }
 
         public void OpenTestSuite() {
         }
@@ -220,6 +239,9 @@ namespace EE.Internal {
 
         public AdNetwork Network => AdNetwork.UnityAds;
 
+        public void AddTestDevice(string hash) {
+        }
+
         public void OpenTestSuite() {
         }
 
@@ -249,6 +271,9 @@ namespace EE.Internal {
         }
 
         public AdNetwork Network => AdNetwork.Null;
+
+        public void AddTestDevice(string hash) {
+        }
 
         public void OpenTestSuite() {
         }
@@ -496,6 +521,10 @@ namespace EE.Internal {
 
         public async Task Initialize() {
             await _networkManager.Initialize();
+        }
+
+        public void AddTestDevice(string hash) {
+            _networkManager.AddTestDevice(hash);
         }
 
         public void OpenTestSuite(AdNetwork network) {

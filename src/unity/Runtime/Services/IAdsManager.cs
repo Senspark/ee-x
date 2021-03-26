@@ -20,6 +20,7 @@ namespace EE {
     [Preserve]
     [Service("EE" + nameof(IAdsManager))]
     public interface IAdsManager : IService {
+        void AddTestDevice(string hash);
         void OpenTestSuite();
         IBannerAd BannerAd { get; }
         IBannerAd RectangleAd { get; }

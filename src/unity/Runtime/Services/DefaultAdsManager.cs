@@ -82,6 +82,10 @@ namespace EE {
             _fullScreenAds[format].Initializer(ad);
         }
 
+        public void AddTestDevice(string hash) {
+            _config.AddTestDevice(hash);
+        }
+
         public void OpenTestSuite() {
             _config.OpenTestSuite(AdNetwork.AdMob);
         }

@@ -1,5 +1,3 @@
-using System;
-
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -47,7 +45,7 @@ namespace EETest {
 
         public void OnShowAppOpenAdButtonPressed() {
             _analyticsManager.LogEvent(new ClickEvent {
-                button = "show_app_open_ad"
+                Button = "show_app_open_ad"
             });
             EE.Utils.NoAwait(async () => {
                 _resultText.text = "---";
@@ -58,7 +56,7 @@ namespace EETest {
 
         public void OnShowInterstitialAdButtonPressed() {
             _analyticsManager.LogEvent(new ClickEvent {
-                button = "show_interstitial_ad"
+                Button = "show_interstitial_ad"
             });
             EE.Utils.NoAwait(async () => {
                 _resultText.text = "---";
@@ -69,7 +67,7 @@ namespace EETest {
 
         public void OnShowRewardedInterstitialAdButtonPressed() {
             _analyticsManager.LogEvent(new ClickEvent {
-                button = "show_rewarded_interstitial_ad"
+                Button = "show_rewarded_interstitial_ad"
             });
             EE.Utils.NoAwait(async () => {
                 _resultText.text = "---";
@@ -80,7 +78,7 @@ namespace EETest {
 
         public void OnShowRewardedAdButtonPressed() {
             _analyticsManager.LogEvent(new ClickEvent {
-                button = "show_rewarded_ad"
+                Button = "show_rewarded_ad"
             });
             EE.Utils.NoAwait(async () => {
                 _resultText.text = "---";

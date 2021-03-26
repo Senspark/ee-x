@@ -1,9 +1,11 @@
 using UnityEngine;
 
 namespace EETest {
-    public struct ClickEvent : EE.IAnalyticsEvent {
-        public string EventName => "click";
-        public string button;
+    public class ClickEvent : EE.DynamicAnalyticsEvent {
+        public override string EventName => "click";
+
+        [EE.AnalyticsParameter("button")]
+        public string Button;
     }
 
     public class MainScene : MonoBehaviour {
@@ -43,7 +45,7 @@ namespace EETest {
                 return;
             }
             _analyticsManager.LogEvent(new ClickEvent {
-                button = "open_test_suite"
+                Button = "open_test_suite"
             });
             _adsManager.OpenTestSuite();
         }
@@ -53,7 +55,7 @@ namespace EETest {
                 return;
             }
             _analyticsManager.LogEvent(new ClickEvent {
-                button = "test_banner_ad"
+                Button = "test_banner_ad"
             });
             EE.Utils.NoAwait(async () => {
                 var scene = await _sceneLoader.LoadScene<BannerAdScene>(nameof(BannerAdScene));
@@ -67,7 +69,7 @@ namespace EETest {
                 return;
             }
             _analyticsManager.LogEvent(new ClickEvent {
-                button = "test_full_screen_ad"
+                Button = "test_full_screen_ad"
             });
             EE.Utils.NoAwait(async () => {
                 var scene = await _sceneLoader.LoadScene<FullScreenAdScene>(nameof(FullScreenAdScene));

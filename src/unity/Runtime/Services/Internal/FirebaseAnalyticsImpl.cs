@@ -49,21 +49,28 @@ namespace EE.Internal {
             for (var i = 0; i < parameters.Length; ++i) {
                 object param = null;
                 var (paramName, paramValue) = parameters[i];
+                var validatedParamName = LimitLength(paramName, 40);
                 var paramType = paramValue.GetType();
                 if (paramType == typeof(bool)) {
-                    param = _constructorLong.Invoke(new object[] {paramName, (bool) paramValue ? 1 : 0});
+                    param = _constructorLong.Invoke(new object[] {validatedParamName, (bool) paramValue ? 1 : 0});
                 } else if (paramType == typeof(int) || paramType == typeof(long)) {
-                    param = _constructorLong.Invoke(new[] {paramName, paramValue});
+                    param = _constructorLong.Invoke(new[] {validatedParamName, paramValue});
                 } else if (paramType == typeof(float) || paramType == typeof(double)) {
-                    param = _constructorDouble.Invoke(new[] {paramName, paramValue});
+                    param = _constructorDouble.Invoke(new[] {validatedParamName, paramValue});
                 } else if (paramType == typeof(string)) {
-                    param = _constructorString.Invoke(new[] {paramName, paramValue});
+                    var validatedParamValue = LimitLength((string) paramValue, 100);
+                    param = _constructorString.Invoke(new object[] {validatedParamName, validatedParamValue});
                 } else {
                     Assert.IsFalse(true);
                 }
                 firebaseParameters.SetValue(param, i);
             }
-            _methodLogEventParameters.Invoke(null, new object[] {name, firebaseParameters});
+            var validatedName = LimitLength(name, 40);
+            _methodLogEventParameters.Invoke(null, new object[] {validatedName, firebaseParameters});
+        }
+
+        private static string LimitLength(string value, int length) {
+            return value.Length <= length ? value : value.Substring(0, length);
         }
     }
 }

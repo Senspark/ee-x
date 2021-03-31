@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Text.RegularExpressions;
 
-using SimpleJSON;
+using Jsonite;
 
 using UnityEngine.Assertions;
 
@@ -20,17 +20,14 @@ namespace EE.Internal {
         private class MapperManager : IMapperManager {
             private readonly Dictionary<string, Dictionary<string, string>> _mappers;
 
-            public MapperManager(JSONNode node) {
-                _mappers = new Dictionary<string, Dictionary<string, string>>();
-                if (node.HasKey("mappers")) {
-                    foreach (var item in node["mappers"]) {
-                        var mapper = new Dictionary<string, string>();
-                        foreach (var mapItem in item.Value) {
-                            mapper[mapItem.Key] = mapItem.Value.Value;
-                        }
-                        _mappers[item.Key] = mapper;
-                    }
-                }
+            public MapperManager(JsonObject node) {
+                var mappers = node.TryGetValue("mappers", out var value)
+                    ? (JsonObject) value
+                    : new JsonObject();
+                _mappers = mappers.ToDictionary(entry => entry.Key,
+                    entry => ((JsonObject) entry.Value).ToDictionary(
+                        innerEntry => innerEntry.Key,
+                        innerEntry => (string) innerEntry.Value));
             }
 
             public string Find(string entry, string key) {
@@ -45,15 +42,16 @@ namespace EE.Internal {
         private class EventManager : IEventManager {
             private readonly List<(IFromEvent, IToEvent)> _events;
 
-            public EventManager(JSONNode node) {
-                _events = new List<(IFromEvent, IToEvent)>();
-                if (node.HasKey("events")) {
-                    foreach (var item in node["events"]) {
-                        var from = new FromEvent(item.Value["from"]);
-                        var to = new ToEvent(item.Value["to"]);
-                        _events.Add((from, to));
-                    }
-                }
+            public EventManager(JsonObject node) {
+                var events = node.TryGetValue("events", out var value)
+                    ? (JsonArray) value
+                    : new JsonArray();
+                _events = events.Select(entry => {
+                    var obj = (JsonObject) entry;
+                    var from = (IFromEvent) new FromEvent((JsonObject) obj["from"]);
+                    var to = (IToEvent) new ToEvent((JsonObject) obj["to"]);
+                    return (from, to);
+                }).ToList();
             }
 
             public List<IAnalyticsEvent> Map(IMapperManager mapperManager, IAnalyticsEvent analyticsEvent) {
@@ -75,17 +73,16 @@ namespace EE.Internal {
             private readonly string _name;
             private readonly Dictionary<string, string> _parameters;
 
-            public FromEvent(JSONNode node) {
-                _name = node.HasKey("name")
-                    ? AnalyticsUtils.MakeLibraryEvent(node["name"].Value)
+            public FromEvent(JsonObject node) {
+                _name = node.TryGetValue("name", out var name)
+                    ? AnalyticsUtils.MakeLibraryEvent((string) name)
                     : null;
-                _parameters = new Dictionary<string, string>();
-                if (node.HasKey("parameters")) {
-                    var parameters = node["parameters"];
-                    foreach (var item in parameters) {
-                        _parameters[item.Key] = item.Value.Value;
-                    }
-                }
+                var parameters = node.TryGetValue("parameters", out var value)
+                    ? (JsonObject) value
+                    : new JsonObject();
+                _parameters = parameters.ToDictionary(
+                    entry => entry.Key,
+                    entry => (string) entry.Value);
             }
 
             public bool IsMatched(IAnalyticsEvent analyticsEvent) {
@@ -112,22 +109,22 @@ namespace EE.Internal {
             private readonly IEvaluator _nameEvaluator;
             private readonly Dictionary<string, IEvaluator> _parameterEvaluators;
 
-            public ToEvent(JSONNode node) {
-                Assert.IsTrue(node.HasKey("name"));
-                _nameEvaluator = new Evaluator(node["name"].Value);
-                _parameterEvaluators = new Dictionary<string, IEvaluator>();
-                if (node.HasKey("parameters")) {
-                    foreach (var item in node["parameters"]) {
-                        _parameterEvaluators[item.Key] = new Evaluator(item.Value);
-                    }
-                }
+            public ToEvent(JsonObject node) {
+                Assert.IsTrue(node.ContainsKey("name"));
+                _nameEvaluator = new Evaluator((string) node["name"]);
+                var parameters = node.TryGetValue("parameters", out var value)
+                    ? (JsonObject) value
+                    : new JsonObject();
+                _parameterEvaluators = parameters.ToDictionary(
+                    entry => entry.Key,
+                    entry => (IEvaluator) new Evaluator((string) entry.Value));
             }
 
             public IAnalyticsEvent Map(IMapperManager mapperManager, IAnalyticsEvent analyticsEvent) {
                 var name = (string) _nameEvaluator.Evaluate(mapperManager, analyticsEvent);
                 var parameters = _parameterEvaluators.ToDictionary(
-                    item => item.Key,
-                    item => item.Value.Evaluate(mapperManager, analyticsEvent));
+                    entry => entry.Key,
+                    entry => entry.Value.Evaluate(mapperManager, analyticsEvent));
                 return new AnalyticsEventImpl {
                     EventName = name,
                     Parameters = parameters
@@ -249,11 +246,11 @@ namespace EE.Internal {
         private IEventManager _eventManager;
 
         public static AnalyticsConfig Parse(string text) {
-            var node = JSON.Parse(text);
+            var node = (JsonObject) Json.Deserialize(text);
             return Parse(node);
         }
 
-        private static AnalyticsConfig Parse(JSONNode node) {
+        private static AnalyticsConfig Parse(JsonObject node) {
             var mapperManager = new MapperManager(node);
             var eventManager = new EventManager(node);
             var result = new AnalyticsConfig {

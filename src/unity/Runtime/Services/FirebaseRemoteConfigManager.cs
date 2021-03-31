@@ -1,8 +1,13 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 using EE.Internal;
+
+using Jsonite;
+
+using UnityEngine.Assertions;
 
 namespace EE {
     public class FirebaseRemoteConfigManager : IRemoteConfigManager {
@@ -17,6 +22,30 @@ namespace EE {
         private bool _initialized;
         private Data _data;
         private bool _fetched;
+
+        public FirebaseRemoteConfigManager(
+            IDataManager dataManager,
+            string defaults) {
+            _dataManager = dataManager;
+            _impl = new FirebaseRemoteConfigImpl();
+
+            var node = (JsonObject) Json.Deserialize(defaults);
+            Assert.IsNotNull(node);
+            _defaults = node.ToDictionary(
+                entry => entry.Key,
+                entry => {
+                    var value = entry.Value;
+                    switch (value) {
+                        case JsonObject item: {
+                            return item.ToString();
+                        }
+                        case JsonArray item: {
+                            return item.ToString();
+                        }
+                    }
+                    return value;
+                });
+        }
 
         public FirebaseRemoteConfigManager(
             IDataManager dataManager,

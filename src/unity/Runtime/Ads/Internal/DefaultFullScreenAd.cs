@@ -1,7 +1,7 @@
 using System;
 using System.Threading.Tasks;
 
-using SimpleJSON;
+using Jsonite;
 
 using UnityEngine.Assertions;
 
@@ -47,12 +47,12 @@ namespace EE.Internal {
             _logger.Debug($"{kTag}: constructor: prefix = {_prefix} id = {_adId}");
             _bridge.RegisterHandler(_ => OnLoaded(), _messageHelper.OnLoaded);
             _bridge.RegisterHandler(message => {
-                var json = JSON.Parse(message);
-                OnFailedToLoad(json["code"], json["message"]);
+                var json = (JsonObject) Json.Deserialize(message);
+                OnFailedToLoad((int) json["code"], (string) json["message"]);
             }, _messageHelper.OnFailedToLoad);
             _bridge.RegisterHandler(message => {
-                var json = JSON.Parse(message);
-                OnFailedToShow(json["code"], json["message"]);
+                var json = (JsonObject) Json.Deserialize(message);
+                OnFailedToShow((int) json["code"], (string) json["message"]);
             }, _messageHelper.OnFailedToShow);
             _bridge.RegisterHandler(_ => OnClicked(), _messageHelper.OnClicked);
             _bridge.RegisterHandler(message => {

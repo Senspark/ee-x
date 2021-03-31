@@ -6,20 +6,21 @@ using UnityEngine;
 
 namespace EETest {
     public class BannerAdScene : MonoBehaviour {
+        private EE.IAdsManager _adsManager;
         private readonly List<Tween> _tweens = new List<Tween>();
         private int _viewWidth;
         private int _viewHeight;
 
-        public EE.IAdsManager AdsManager { get; set; }
-
         private void Awake() {
+            _adsManager = EE.ServiceLocator.Resolve<EE.IAdsManager>();
             (_viewWidth, _viewHeight) = EE.Platform.GetViewSize();
+            Execute();
         }
 
-        public void Execute() {
+        private void Execute() {
             var density = EE.Platform.GetDensity();
-            var bannerAd = AdsManager.BannerAd;
-            var rectangleAd = AdsManager.RectangleAd;
+            var bannerAd = _adsManager.BannerAd;
+            var rectangleAd = _adsManager.RectangleAd;
             bannerAd.IsVisible = true;
             bannerAd.Size = (320 * density, 50 * density);
             rectangleAd.IsVisible = true;

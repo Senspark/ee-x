@@ -21,13 +21,7 @@ namespace EETest {
                 _analyticsManager = EE.ServiceLocator.Resolve<EE.IAnalyticsManager>();
                 _audioManager = EE.ServiceLocator.Resolve<EE.IAudioManager>();
                 _sceneLoader = EE.ServiceLocator.Resolve<EE.ISceneLoader>();
-                var fileName = Application.platform == RuntimePlatform.Android
-                    ? "Config/ads_config_android"
-                    : "Config/ads_config_ios";
-                var adsConfig = Resources.Load<TextAsset>(fileName).text;
-                var adsManager = new EE.DefaultAdsManager(adsConfig);
-                EE.Utils.NoAwait(adsManager.Initialize);
-                _adsManager = adsManager;
+                _adsManager = EE.ServiceLocator.Resolve<EE.IAdsManager>();
                 _initialized = true;
             });
         }
@@ -59,8 +53,6 @@ namespace EETest {
             });
             EE.Utils.NoAwait(async () => {
                 var scene = await _sceneLoader.LoadScene<BannerAdScene>(nameof(BannerAdScene));
-                scene.AdsManager = _adsManager;
-                scene.Execute();
             });
         }
 
@@ -73,7 +65,6 @@ namespace EETest {
             });
             EE.Utils.NoAwait(async () => {
                 var scene = await _sceneLoader.LoadScene<FullScreenAdScene>(nameof(FullScreenAdScene));
-                scene.AdsManager = _adsManager;
             });
         }
     }

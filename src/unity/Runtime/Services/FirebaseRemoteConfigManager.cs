@@ -25,26 +25,9 @@ namespace EE {
 
         public FirebaseRemoteConfigManager(
             IDataManager dataManager,
-            string defaults) {
-            _dataManager = dataManager;
-            _impl = new FirebaseRemoteConfigImpl();
-
-            var node = (JsonObject) Json.Deserialize(defaults);
-            Assert.IsNotNull(node);
-            _defaults = node.ToDictionary(
-                entry => entry.Key,
-                entry => {
-                    var value = entry.Value;
-                    switch (value) {
-                        case JsonObject item: {
-                            return item.ToString();
-                        }
-                        case JsonArray item: {
-                            return item.ToString();
-                        }
-                    }
-                    return value;
-                });
+            string defaults) : this(
+            dataManager,
+            FirebaseUtils.ParseDefaults(defaults)) {
         }
 
         public FirebaseRemoteConfigManager(

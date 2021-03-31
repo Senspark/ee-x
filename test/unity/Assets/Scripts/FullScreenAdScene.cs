@@ -6,11 +6,11 @@ namespace EETest {
         [SerializeField]
         private Text _resultText;
 
+        private EE.IAdsManager _adsManager;
         private EE.IAnalyticsManager _analyticsManager;
 
-        public EE.IAdsManager AdsManager { get; set; }
-
         private void Awake() {
+            _adsManager = EE.ServiceLocator.Resolve<EE.IAdsManager>();
             _analyticsManager = EE.ServiceLocator.Resolve<EE.IAnalyticsManager>();
         }
 
@@ -49,7 +49,7 @@ namespace EETest {
             });
             EE.Utils.NoAwait(async () => {
                 _resultText.text = "---";
-                var result = await AdsManager.AppOpenAd.Show();
+                var result = await _adsManager.AppOpenAd.Show();
                 UpdateResult(result);
             });
         }
@@ -60,7 +60,7 @@ namespace EETest {
             });
             EE.Utils.NoAwait(async () => {
                 _resultText.text = "---";
-                var result = await AdsManager.InterstitialAd.Show();
+                var result = await _adsManager.InterstitialAd.Show();
                 UpdateResult(result);
             });
         }
@@ -71,7 +71,7 @@ namespace EETest {
             });
             EE.Utils.NoAwait(async () => {
                 _resultText.text = "---";
-                var result = await AdsManager.RewardedInterstitialAd.Show();
+                var result = await _adsManager.RewardedInterstitialAd.Show();
                 UpdateResult(result);
             });
         }
@@ -82,7 +82,7 @@ namespace EETest {
             });
             EE.Utils.NoAwait(async () => {
                 _resultText.text = "---";
-                var result = await AdsManager.RewardedAd.Show();
+                var result = await _adsManager.RewardedAd.Show();
                 UpdateResult(result);
             });
         }

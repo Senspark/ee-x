@@ -20,7 +20,7 @@ namespace EE {
             };
 
         private static readonly IPluginManagerImpl _impl =
-#if UNITY_EDITOR
+#if UNITY_EDITOR || UNITY_STANDALONE_OSX
             new PluginManagerImplEditor();
 #elif UNITY_ANDROID
             new PluginManagerImplAndroid();

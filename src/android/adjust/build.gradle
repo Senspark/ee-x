@@ -26,7 +26,7 @@ if (rootProject.ext.has('buildMaven') && rootProject.buildMaven) {
 }
 
 dependencies {
-    implementation 'androidx.annotation:annotation:1.1.0'
+    implementation 'androidx.annotation:annotation:1.2.0'
 
     api 'com.android.installreferrer:installreferrer:2.2'
 
@@ -34,5 +34,5 @@ dependencies {
     api 'com.adjust.sdk:adjust-android:4.26.0'
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
-    implementation 'org.jetbrains.kotlinx:kotlinx-serialization-json:1.0.1'
+    implementation "org.jetbrains.kotlinx:kotlinx-serialization-json:$kotlinSerializationVersion"
 }

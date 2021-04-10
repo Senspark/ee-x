@@ -21,7 +21,7 @@ namespace EE {
         private static Func<Action, bool> _libraryThreadExecuter;
 
         private static readonly IThreadImpl _impl =
-#if UNITY_EDITOR
+#if UNITY_EDITOR || UNITY_STANDALONE_OSX
             new ThreadImplEditor(ee_runOnMainThreadCallback, ee_runOnMainThreadDelayedCallback);
 #elif UNITY_ANDROID
             new ThreadImplAndroid(ee_runOnMainThreadCallback, ee_runOnMainThreadDelayedCallback);

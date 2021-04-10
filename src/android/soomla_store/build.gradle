@@ -26,7 +26,7 @@ if (rootProject.ext.has('buildMaven') && rootProject.buildMaven) {
 }
 
 dependencies {
-    api 'com.android.billingclient:billing:3.0.2'
+    api 'com.android.billingclient:billing:3.0.3'
 
     // OkHttp3 3.13.x requires Android 5+ API 21.
     // https://stackoverflow.com/questions/55813654/exception-android-java-util-objects-in-android-version-4-3
@@ -40,5 +40,5 @@ dependencies {
     implementation 'io.reactivex.rxjava3:rxandroid:3.0.0'
     implementation 'io.reactivex.rxjava3:rxjava:3.0.2'
     implementation 'io.reactivex.rxjava3:rxkotlin:3.0.0'
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.4.2'
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$kotlinCoroutinesVersion"
 }

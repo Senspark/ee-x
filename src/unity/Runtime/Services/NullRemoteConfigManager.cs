@@ -2,9 +2,14 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
+using EE.Internal;
+
 namespace EE {
     public class NullRemoteConfigManager : IRemoteConfigManager {
         private readonly Dictionary<string, object> _defaultValues;
+
+        public NullRemoteConfigManager(string defaults) : this(FirebaseUtils.ParseDefaults(defaults)) {
+        }
 
         public NullRemoteConfigManager(Dictionary<string, object> defaultValues) {
             _defaultValues = defaultValues;

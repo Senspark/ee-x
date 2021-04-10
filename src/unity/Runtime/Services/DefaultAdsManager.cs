@@ -1,29 +1,40 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 using EE.Internal;
 
 namespace EE {
     public class DefaultAdsManager : IAdsManager {
+        private class AdEntry {
+            public IFullScreenAd Ad;
+            public Action<IFullScreenAd> Initializer;
+        }
+
         private Task<bool> _initializer;
-        private bool _initialized;
+        private readonly IAnalyticsManager _analyticsManager;
+        private readonly ICapper _displayCapper;
         private readonly AdsConfig _config;
         private readonly Dictionary<AdFormat, LazyBannerAd> _bannerAds;
-        private readonly Dictionary<AdFormat, LazyFullScreenAd> _fullScreenAds;
+        private readonly Dictionary<AdFormat, AdEntry> _fullScreenAds;
 
-        public DefaultAdsManager(string configJson) {
-            _initialized = false;
+        public DefaultAdsManager(string configJson) :
+            this(configJson, new NullAnalyticsManager(new NullLogManager())) {
+        }
+
+        public DefaultAdsManager(string configJson, IAnalyticsManager analyticsManager) {
+            _analyticsManager = analyticsManager;
+            _displayCapper = new Capper(0.1f);
             _config = AdsConfig.Parse(configJson);
-            var displayCapper = new Capper(0.1f);
             _bannerAds = new Dictionary<AdFormat, LazyBannerAd> {
                 [AdFormat.Banner] = new LazyBannerAd(),
                 [AdFormat.Rectangle] = new LazyBannerAd()
             };
-            _fullScreenAds = new Dictionary<AdFormat, LazyFullScreenAd> {
-                [AdFormat.AppOpen] = new LazyFullScreenAd(displayCapper),
-                [AdFormat.Interstitial] = new LazyFullScreenAd(displayCapper),
-                [AdFormat.RewardedInterstitial] = new LazyFullScreenAd(displayCapper),
-                [AdFormat.Rewarded] = new LazyFullScreenAd(displayCapper)
+            _fullScreenAds = new Dictionary<AdFormat, AdEntry> {
+                [AdFormat.AppOpen] = CreateFullScreenAd(AdFormat.AppOpen),
+                [AdFormat.Interstitial] = CreateFullScreenAd(AdFormat.Interstitial),
+                [AdFormat.RewardedInterstitial] = CreateFullScreenAd(AdFormat.RewardedInterstitial),
+                [AdFormat.Rewarded] = CreateFullScreenAd(AdFormat.Rewarded)
             };
         }
 
@@ -40,8 +51,17 @@ namespace EE {
             InitializeFullScreenAd(AdFormat.Interstitial);
             InitializeFullScreenAd(AdFormat.RewardedInterstitial);
             InitializeFullScreenAd(AdFormat.Rewarded);
-            _initialized = true;
             return true;
+        }
+
+        private AdEntry CreateFullScreenAd(AdFormat format) {
+            var ad = new LazyFullScreenAd(_displayCapper);
+            var analyticsAd = new AnalyticsFullScreenAd(ad, _analyticsManager, format);
+            void Initializer(IFullScreenAd item) => ad.Ad = item;
+            return new AdEntry {
+                Ad = analyticsAd,
+                Initializer = Initializer
+            };
         }
 
         private void InitializeBannerAd(AdFormat format) {
@@ -59,18 +79,22 @@ namespace EE {
             } else {
                 return;
             }
-            _fullScreenAds[format].Ad = ad;
+            _fullScreenAds[format].Initializer(ad);
+        }
+
+        public void AddTestDevice(string hash) {
+            _config.AddTestDevice(hash);
         }
 
         public void OpenTestSuite() {
-            _config.OpenTestSuite(Network.AdMob);
+            _config.OpenTestSuite(AdNetwork.AdMob);
         }
 
         public IBannerAd BannerAd => _bannerAds[AdFormat.Banner];
         public IBannerAd RectangleAd => _bannerAds[AdFormat.Rectangle];
-        public IFullScreenAd AppOpenAd => _fullScreenAds[AdFormat.AppOpen];
-        public IFullScreenAd InterstitialAd => _fullScreenAds[AdFormat.Interstitial];
-        public IFullScreenAd RewardedInterstitialAd => _fullScreenAds[AdFormat.RewardedInterstitial];
-        public IFullScreenAd RewardedAd => _fullScreenAds[AdFormat.Rewarded];
+        public IFullScreenAd AppOpenAd => _fullScreenAds[AdFormat.AppOpen].Ad;
+        public IFullScreenAd InterstitialAd => _fullScreenAds[AdFormat.Interstitial].Ad;
+        public IFullScreenAd RewardedInterstitialAd => _fullScreenAds[AdFormat.RewardedInterstitial].Ad;
+        public IFullScreenAd RewardedAd => _fullScreenAds[AdFormat.Rewarded].Ad;
     }
 }

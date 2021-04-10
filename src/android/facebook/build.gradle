@@ -31,5 +31,5 @@ dependencies {
     api 'com.facebook.android:facebook-login:8.2.0'
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
-    implementation 'org.jetbrains.kotlinx:kotlinx-serialization-json:1.0.1'
+    implementation "org.jetbrains.kotlinx:kotlinx-serialization-json:$kotlinSerializationVersion"
 }

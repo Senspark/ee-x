@@ -2,7 +2,7 @@
 
 namespace EE.Internal {
     [DisallowMultipleComponent]
-    public class AudioPlayer : MonoBehaviour {
+    internal class AudioPlayer : MonoBehaviour {
         private static AudioPlayer _sharedInstance;
         private bool _isMusicEnabled;
         private bool _isSoundEnabled;

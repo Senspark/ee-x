@@ -17,7 +17,7 @@ namespace EE.Internal {
             _callbackCounter = 0;
             _handlers = new Dictionary<string, MessageHandler>();
             _impl =
-#if UNITY_EDITOR
+#if UNITY_EDITOR || UNITY_STANDALONE_OSX
                 new MessageBridgeImplEditor();
 #elif UNITY_ANDROID
                 new MessageBridgeImplAndroid(CallCpp);

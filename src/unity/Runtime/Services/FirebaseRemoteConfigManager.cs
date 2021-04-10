@@ -1,8 +1,13 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 using EE.Internal;
+
+using Jsonite;
+
+using UnityEngine.Assertions;
 
 namespace EE {
     public class FirebaseRemoteConfigManager : IRemoteConfigManager {
@@ -17,6 +22,13 @@ namespace EE {
         private bool _initialized;
         private Data _data;
         private bool _fetched;
+
+        public FirebaseRemoteConfigManager(
+            IDataManager dataManager,
+            string defaults) : this(
+            dataManager,
+            FirebaseUtils.ParseDefaults(defaults)) {
+        }
 
         public FirebaseRemoteConfigManager(
             IDataManager dataManager,

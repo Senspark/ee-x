@@ -26,14 +26,14 @@ if (rootProject.ext.has('buildMaven') && rootProject.buildMaven) {
 }
 
 dependencies {
-    implementation 'androidx.annotation:annotation:1.1.0'
+    implementation 'androidx.annotation:annotation:1.2.0'
 
-    api 'com.android.billingclient:billing-ktx:3.0.2'
+    api 'com.android.billingclient:billing-ktx:3.0.3'
 
     implementation 'io.reactivex.rxjava3:rxandroid:3.0.0'
     implementation 'io.reactivex.rxjava3:rxjava:3.0.2'
     implementation 'io.reactivex.rxjava3:rxkotlin:3.0.0'
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.4.2'
-    implementation 'org.jetbrains.kotlinx:kotlinx-serialization-json:1.0.1'
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$kotlinCoroutinesVersion"
+    implementation "org.jetbrains.kotlinx:kotlinx-serialization-json:$kotlinSerializationVersion"
 }

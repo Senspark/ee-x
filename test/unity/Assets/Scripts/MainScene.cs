@@ -1,9 +1,11 @@
 using UnityEngine;
 
 namespace EETest {
-    public struct ClickEvent : EE.IAnalyticsEvent {
-        public string EventName => "click";
-        public string button;
+    public class ClickEvent : EE.DynamicAnalyticsEvent {
+        public override string EventName => "click";
+
+        [EE.AnalyticsParameter("button")]
+        public string Button;
     }
 
     public class MainScene : MonoBehaviour {
@@ -19,13 +21,7 @@ namespace EETest {
                 _analyticsManager = EE.ServiceLocator.Resolve<EE.IAnalyticsManager>();
                 _audioManager = EE.ServiceLocator.Resolve<EE.IAudioManager>();
                 _sceneLoader = EE.ServiceLocator.Resolve<EE.ISceneLoader>();
-                var fileName = Application.platform == RuntimePlatform.Android
-                    ? "Config/ads_config_android"
-                    : "Config/ads_config_ios";
-                var adsConfig = Resources.Load<TextAsset>(fileName).text;
-                var adsManager = new EE.DefaultAdsManager(adsConfig);
-                EE.Utils.NoAwait(adsManager.Initialize);
-                _adsManager = adsManager;
+                _adsManager = EE.ServiceLocator.Resolve<EE.IAdsManager>();
                 _initialized = true;
             });
         }
@@ -43,7 +39,7 @@ namespace EETest {
                 return;
             }
             _analyticsManager.LogEvent(new ClickEvent {
-                button = "open_test_suite"
+                Button = "open_test_suite"
             });
             _adsManager.OpenTestSuite();
         }
@@ -53,12 +49,10 @@ namespace EETest {
                 return;
             }
             _analyticsManager.LogEvent(new ClickEvent {
-                button = "test_banner_ad"
+                Button = "test_banner_ad"
             });
             EE.Utils.NoAwait(async () => {
                 var scene = await _sceneLoader.LoadScene<BannerAdScene>(nameof(BannerAdScene));
-                scene.AdsManager = _adsManager;
-                scene.Execute();
             });
         }
 
@@ -67,11 +61,10 @@ namespace EETest {
                 return;
             }
             _analyticsManager.LogEvent(new ClickEvent {
-                button = "test_full_screen_ad"
+                Button = "test_full_screen_ad"
             });
             EE.Utils.NoAwait(async () => {
                 var scene = await _sceneLoader.LoadScene<FullScreenAdScene>(nameof(FullScreenAdScene));
-                scene.AdsManager = _adsManager;
             });
         }
     }

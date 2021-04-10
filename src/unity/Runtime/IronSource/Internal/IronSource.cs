@@ -1,7 +1,7 @@
 using System;
 using System.Threading.Tasks;
 
-using SimpleJSON;
+using Jsonite;
 
 using UnityEngine;
 using UnityEngine.Assertions;
@@ -52,19 +52,19 @@ namespace EE.Internal {
 
             _bridge.RegisterHandler(_ => OnInterstitialAdLoaded(), kOnInterstitialAdLoaded);
             _bridge.RegisterHandler(message => {
-                var json = JSON.Parse(message);
-                OnInterstitialAdFailedToLoad(json["code"], json["message"]);
+                var json = (JsonObject) Json.Deserialize(message);
+                OnInterstitialAdFailedToLoad((int) json["code"], (string) json["message"]);
             }, kOnInterstitialAdFailedToLoad);
             _bridge.RegisterHandler(message => {
-                var json = JSON.Parse(message);
-                OnInterstitialAdFailedToShow(json["code"], json["message"]);
+                var json = (JsonObject) Json.Deserialize(message);
+                OnInterstitialAdFailedToShow((int) json["code"], (string) json["message"]);
             }, kOnInterstitialAdFailedToShow);
             _bridge.RegisterHandler(_ => OnInterstitialAdClicked(), kOnInterstitialAdClicked);
             _bridge.RegisterHandler(_ => OnInterstitialAdClosed(), kOnInterstitialAdClosed);
             _bridge.RegisterHandler(_ => OnRewardedAdLoaded(), kOnRewardedAdLoaded);
             _bridge.RegisterHandler(message => {
-                var json = JSON.Parse(message);
-                OnRewardedAdFailedToShow(json["code"], json["message"]);
+                var json = (JsonObject) Json.Deserialize(message);
+                OnRewardedAdFailedToShow((int) json["code"], (string) json["message"]);
             }, kOnRewardedAdFailedToShow);
             _bridge.RegisterHandler(_ => OnRewardedAdClicked(), kOnRewardedAdClicked);
             _bridge.RegisterHandler(message => OnRewardedAdClosed(Utils.ToBool(message)), kOnRewardedAdClosed);

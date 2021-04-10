@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using UnityEngine.Assertions;
 
 namespace EE.Internal {
-    public class FirebaseRemoteConfigImpl : IFirebaseRemoteConfigImpl {
+    internal class FirebaseRemoteConfigImpl : IFirebaseRemoteConfigImpl {
         private readonly PropertyInfo _propertyDefaultInstance;
         private readonly PropertyInfo _propertyInfo;
         private readonly MethodInfo _methodSetDefaultsAsync;

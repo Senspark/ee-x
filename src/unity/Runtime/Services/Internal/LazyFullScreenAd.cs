@@ -1,7 +1,7 @@
 using System.Threading.Tasks;
 
 namespace EE.Internal {
-    public class LazyFullScreenAd : ObserverManager<AdObserver>, IFullScreenAd {
+    internal class LazyFullScreenAd : ObserverManager<AdObserver>, IFullScreenAd {
         private IFullScreenAd _ad;
         private readonly ICapper _displayCapper;
         private readonly ObserverHandle _handle;

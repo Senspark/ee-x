@@ -80,7 +80,6 @@ void Self::onFailedToShow(int code, const std::string& message) {
     } else {
         logger_.error("%s: this ad is expected to be displaying",
                       __PRETTY_FUNCTION__);
-        assert(false);
     }
 }
 
@@ -104,7 +103,6 @@ void Self::onClosed(bool rewarded) {
     } else {
         logger_.error("%s: this ad is expected to be displaying",
                       __PRETTY_FUNCTION__);
-        assert(false);
     }
 }
 } // namespace iron_source

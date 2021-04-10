@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace EE.Internal {
-    public interface IFirebaseRemoteConfigImpl {
+    internal interface IFirebaseRemoteConfigImpl {
         bool IsLastFetchSuccessful { get; }
         DateTime FetchTime { get; }
         void Initialize();

@@ -1,0 +1,18 @@
+{
+  "bool_value": true,
+  "int_value": 1,
+  "double_value": 2.0,
+  "string_value": "value",
+  "json_object_value": {
+    "bool_value": true,
+    "int_value": 1,
+    "double_value": 2.0,
+    "string_value": "value"
+  },
+  "json_array_value": {
+    "bool_value": true,
+    "int_value": 1,
+    "double_value": 2.0,
+    "string_value": "value"
+  }
+}

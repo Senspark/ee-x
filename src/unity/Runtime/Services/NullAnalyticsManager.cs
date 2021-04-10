@@ -70,20 +70,16 @@ namespace EE {
             _logManager.Log($"[{name}]");
         }
 
-        public void LogEvent<T>(T analyticsEvent) where T : IAnalyticsEvent {
+        public void LogEvent(IAnalyticsEvent analyticsEvent) {
             if (!_initialized) {
                 return;
             }
-            var type = typeof(T);
-            var fields = type.GetFields();
             var tokens = new[] {
                 $"[{analyticsEvent.EventName}]"
             };
-            tokens = tokens.Concat(fields.Select(item => {
-                var name = item.Name;
-                var value = item.GetValue(analyticsEvent);
-                return $"[{name}={value}]";
-            })).ToArray();
+            tokens = tokens
+                .Concat(analyticsEvent.Parameters.Select(item => $"[{item.Key}={item.Value}]"))
+                .ToArray();
             _logManager.Log($"{string.Join(" ", tokens)}");
         }
     }

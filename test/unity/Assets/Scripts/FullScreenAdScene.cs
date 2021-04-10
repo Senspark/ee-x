@@ -1,5 +1,3 @@
-using System;
-
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -8,11 +6,11 @@ namespace EETest {
         [SerializeField]
         private Text _resultText;
 
+        private EE.IAdsManager _adsManager;
         private EE.IAnalyticsManager _analyticsManager;
 
-        public EE.IAdsManager AdsManager { get; set; }
-
         private void Awake() {
+            _adsManager = EE.ServiceLocator.Resolve<EE.IAdsManager>();
             _analyticsManager = EE.ServiceLocator.Resolve<EE.IAnalyticsManager>();
         }
 
@@ -47,44 +45,44 @@ namespace EETest {
 
         public void OnShowAppOpenAdButtonPressed() {
             _analyticsManager.LogEvent(new ClickEvent {
-                button = "show_app_open_ad"
+                Button = "show_app_open_ad"
             });
             EE.Utils.NoAwait(async () => {
                 _resultText.text = "---";
-                var result = await AdsManager.AppOpenAd.Show();
+                var result = await _adsManager.AppOpenAd.Show();
                 UpdateResult(result);
             });
         }
 
         public void OnShowInterstitialAdButtonPressed() {
             _analyticsManager.LogEvent(new ClickEvent {
-                button = "show_interstitial_ad"
+                Button = "show_interstitial_ad"
             });
             EE.Utils.NoAwait(async () => {
                 _resultText.text = "---";
-                var result = await AdsManager.InterstitialAd.Show();
+                var result = await _adsManager.InterstitialAd.Show();
                 UpdateResult(result);
             });
         }
 
         public void OnShowRewardedInterstitialAdButtonPressed() {
             _analyticsManager.LogEvent(new ClickEvent {
-                button = "show_rewarded_interstitial_ad"
+                Button = "show_rewarded_interstitial_ad"
             });
             EE.Utils.NoAwait(async () => {
                 _resultText.text = "---";
-                var result = await AdsManager.RewardedInterstitialAd.Show();
+                var result = await _adsManager.RewardedInterstitialAd.Show();
                 UpdateResult(result);
             });
         }
 
         public void OnShowRewardedAdButtonPressed() {
             _analyticsManager.LogEvent(new ClickEvent {
-                button = "show_rewarded_ad"
+                Button = "show_rewarded_ad"
             });
             EE.Utils.NoAwait(async () => {
                 _resultText.text = "---";
-                var result = await AdsManager.RewardedAd.Show();
+                var result = await _adsManager.RewardedAd.Show();
                 UpdateResult(result);
             });
         }

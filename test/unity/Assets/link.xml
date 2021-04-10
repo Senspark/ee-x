@@ -5,6 +5,8 @@
     </assembly>
     <assembly fullname="Firebase.Crashlytics">
     </assembly>
+    <assembly fullname="Firebase.RemoteConfig">
+    </assembly>
     <assembly fullname="Newtonsoft.Json">
     </assembly>
 </linker>

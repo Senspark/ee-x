@@ -1,18 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
-using SimpleJSON;
+using Jsonite;
 
 namespace EE.Internal {
     internal static class AdsConfigUtils {
-        public static Network ParseNetwork(string id) {
+        public static AdNetwork ParseNetwork(string id) {
             switch (id) {
-                case "ad_mob": return Network.AdMob;
-                case "facebook_ads": return Network.FacebookAds;
-                case "iron_source": return Network.IronSource;
-                case "unity_ads": return Network.UnityAds;
-                default: return Network.Null;
+                case "ad_mob": return AdNetwork.AdMob;
+                case "facebook_ads": return AdNetwork.FacebookAds;
+                case "iron_source": return AdNetwork.IronSource;
+                case "unity_ads": return AdNetwork.UnityAds;
+                default: return AdNetwork.Null;
             }
         }
 
@@ -29,38 +30,21 @@ namespace EE.Internal {
         }
     }
 
-    internal enum Network {
-        AdMob,
-        FacebookAds,
-        IronSource,
-        UnityAds,
-        Null
-    }
-
-    internal enum AdFormat {
-        Banner,
-        Rectangle,
-        AppOpen,
-        Interstitial,
-        RewardedInterstitial,
-        Rewarded,
-        Null
-    }
-
     internal interface INetworkConfigManager {
         Task Initialize();
-        void OpenTestSuite(Network network);
-        IAd CreateAd(Network network, AdFormat format, string id);
+        void AddTestDevice(string hash);
+        void OpenTestSuite(AdNetwork network);
+        IAd CreateAd(AdNetwork network, AdFormat format, string id);
     }
 
     internal class NetworkConfigManager : INetworkConfigManager {
-        private readonly List<INetworkConfig> _networks = new List<INetworkConfig>();
+        private readonly List<INetworkConfig> _networks;
 
-        public NetworkConfigManager(JSONNode node) {
-            foreach (var value in node["networks"].Children) {
-                var network = NetworkConfig.Parse(value);
-                _networks.Add(network);
-            }
+        public NetworkConfigManager(JsonObject node) {
+            var networks = node.TryGetValue("networks", out var value)
+                ? (JsonArray) value
+                : new JsonArray();
+            _networks = networks.Select(entry => NetworkConfig.Parse((JsonObject) entry)).ToList();
         }
 
         public async Task Initialize() {
@@ -69,7 +53,13 @@ namespace EE.Internal {
             }
         }
 
-        public void OpenTestSuite(Network network) {
+        public void AddTestDevice(string hash) {
+            foreach (var item in _networks) {
+                item.AddTestDevice(hash);
+            }
+        }
+
+        public void OpenTestSuite(AdNetwork network) {
             foreach (var item in _networks) {
                 if (item.Network == network) {
                     item.OpenTestSuite();
@@ -78,7 +68,7 @@ namespace EE.Internal {
             }
         }
 
-        public IAd CreateAd(Network network, AdFormat format, string id) {
+        public IAd CreateAd(AdNetwork network, AdFormat format, string id) {
             foreach (var item in _networks) {
                 if (item.Network == network) {
                     return item.CreateAd(format, id);
@@ -90,20 +80,21 @@ namespace EE.Internal {
 
     internal interface INetworkConfig {
         Task Initialize();
-        Network Network { get; }
+        AdNetwork Network { get; }
+        void AddTestDevice(string hash);
         void OpenTestSuite();
         IAd CreateAd(AdFormat format, string id);
     }
 
     internal static class NetworkConfig {
-        public static INetworkConfig Parse(JSONNode node) {
-            var network = AdsConfigUtils.ParseNetwork(node["network"].Value);
+        public static INetworkConfig Parse(JsonObject node) {
+            var network = AdsConfigUtils.ParseNetwork((string) node["network"]);
             switch (network) {
-                case Network.AdMob: return new AdMobConfig(node);
-                case Network.FacebookAds: return new FacebookAdsConfig(node);
-                case Network.IronSource: return new IronSourceConfig(node);
-                case Network.UnityAds: return new UnityAdsConfig(node);
-                case Network.Null: return new NullNetworkConfig();
+                case AdNetwork.AdMob: return new AdMobConfig(node);
+                case AdNetwork.FacebookAds: return new FacebookAdsConfig(node);
+                case AdNetwork.IronSource: return new IronSourceConfig(node);
+                case AdNetwork.UnityAds: return new UnityAdsConfig(node);
+                case AdNetwork.Null: return new NullNetworkConfig();
             }
             throw new ArgumentException();
         }
@@ -112,7 +103,7 @@ namespace EE.Internal {
     internal class AdMobConfig : INetworkConfig {
         private IAdMob _plugin;
 
-        public AdMobConfig(JSONNode node) {
+        public AdMobConfig(JsonObject node) {
         }
 
         public async Task Initialize() {
@@ -120,7 +111,11 @@ namespace EE.Internal {
             await _plugin.Initialize();
         }
 
-        public Network Network => Network.AdMob;
+        public AdNetwork Network => AdNetwork.AdMob;
+
+        public void AddTestDevice(string hash) {
+            _plugin.AddTestDevice(hash);
+        }
 
         public void OpenTestSuite() {
             _plugin.OpenTestSuite();
@@ -150,7 +145,7 @@ namespace EE.Internal {
     internal class FacebookAdsConfig : INetworkConfig {
         private IFacebookAds _plugin;
 
-        public FacebookAdsConfig(JSONNode node) {
+        public FacebookAdsConfig(JsonObject node) {
         }
 
         public async Task Initialize() {
@@ -158,7 +153,11 @@ namespace EE.Internal {
             await _plugin.Initialize();
         }
 
-        public Network Network => Network.FacebookAds;
+        public AdNetwork Network => AdNetwork.FacebookAds;
+
+        public void AddTestDevice(string hash) {
+            _plugin.AddTestDevice(hash);
+        }
 
         public void OpenTestSuite() {
         }
@@ -187,8 +186,8 @@ namespace EE.Internal {
         private IIronSource _plugin;
         private readonly string _appId;
 
-        public IronSourceConfig(JSONNode node) {
-            _appId = node["app_id"];
+        public IronSourceConfig(JsonObject node) {
+            _appId = (string) node["app_id"];
         }
 
         public async Task Initialize() {
@@ -196,7 +195,10 @@ namespace EE.Internal {
             await _plugin.Initialize(_appId);
         }
 
-        public Network Network => Network.IronSource;
+        public AdNetwork Network => AdNetwork.IronSource;
+
+        public void AddTestDevice(string hash) {
+        }
 
         public void OpenTestSuite() {
         }
@@ -226,9 +228,9 @@ namespace EE.Internal {
         private readonly string _appId;
         private readonly int _timeOut;
 
-        public UnityAdsConfig(JSONNode node) {
-            _appId = node["app_id"];
-            _timeOut = node.HasKey("time_out") ? node["time_out"].AsInt : 30;
+        public UnityAdsConfig(JsonObject node) {
+            _appId = (string) node["app_id"];
+            _timeOut = node.TryGetValue("time_out", out var value) ? (int) value : 30;
         }
 
         public async Task Initialize() {
@@ -236,7 +238,10 @@ namespace EE.Internal {
             await Task.WhenAny(Task.Delay(_timeOut * 1000), _plugin.Initialize(_appId, false));
         }
 
-        public Network Network => Network.UnityAds;
+        public AdNetwork Network => AdNetwork.UnityAds;
+
+        public void AddTestDevice(string hash) {
+        }
 
         public void OpenTestSuite() {
         }
@@ -266,7 +271,10 @@ namespace EE.Internal {
             return Task.FromResult<object>(null);
         }
 
-        public Network Network => Network.Null;
+        public AdNetwork Network => AdNetwork.Null;
+
+        public void AddTestDevice(string hash) {
+        }
 
         public void OpenTestSuite() {
         }
@@ -294,14 +302,14 @@ namespace EE.Internal {
 
     internal class AdConfigManager : IAdConfigManager {
         private readonly INetworkConfigManager _manager;
-        private readonly List<IAdConfig> _ads = new List<IAdConfig>();
+        private readonly List<IAdConfig> _ads;
 
-        public AdConfigManager(INetworkConfigManager manager, JSONNode node) {
+        public AdConfigManager(INetworkConfigManager manager, JsonObject node) {
             _manager = manager;
-            foreach (var value in node["ads"].Children) {
-                var ad = AdConfig.Parse(value);
-                _ads.Add(ad);
-            }
+            var ads = node.TryGetValue("ads", out var value)
+                ? (JsonArray) value
+                : new JsonArray();
+            _ads = ads.Select(entry => AdConfig.Parse((JsonObject) entry)).ToList();
         }
 
         public IAd CreateAd(AdFormat format) {
@@ -320,8 +328,8 @@ namespace EE.Internal {
     }
 
     internal static class AdConfig {
-        public static IAdConfig Parse(JSONNode node) {
-            var format = AdsConfigUtils.ParseAdFormat(node["format"].Value);
+        public static IAdConfig Parse(JsonObject node) {
+            var format = AdsConfigUtils.ParseAdFormat((string) node["format"]);
             switch (format) {
                 case AdFormat.Banner: return new BannerConfig(node);
                 case AdFormat.Rectangle: return new RectangleConfig(node);
@@ -338,7 +346,7 @@ namespace EE.Internal {
     internal class BannerConfig : IAdConfig {
         private readonly IAdInstanceConfig<IBannerAd> _instance;
 
-        public BannerConfig(JSONNode node) {
+        public BannerConfig(JsonObject node) {
             _instance = AdInstanceConfig<IBannerAd>.Parse<MultiBannerAd>(AdFormat.Banner, node["instance"]);
         }
 
@@ -353,7 +361,7 @@ namespace EE.Internal {
     internal class RectangleConfig : IAdConfig {
         private readonly IAdInstanceConfig<IBannerAd> _instance;
 
-        public RectangleConfig(JSONNode node) {
+        public RectangleConfig(JsonObject node) {
             _instance = AdInstanceConfig<IBannerAd>.Parse<MultiBannerAd>(AdFormat.Rectangle, node["instance"]);
         }
 
@@ -369,8 +377,8 @@ namespace EE.Internal {
         private readonly int _interval;
         private readonly IAdInstanceConfig<IFullScreenAd> _instance;
 
-        public AppOpenConfig(JSONNode node) {
-            _interval = node.HasKey("interval") ? node["interval"].AsInt : 0;
+        public AppOpenConfig(JsonObject node) {
+            _interval = node.TryGetValue("interval", out var value) ? (int) value : 0;
             _instance = AdInstanceConfig<IFullScreenAd>.Parse<MultiFullScreenAd>(AdFormat.AppOpen, node["instance"]);
         }
 
@@ -386,8 +394,8 @@ namespace EE.Internal {
         private readonly int _interval;
         private readonly IAdInstanceConfig<IFullScreenAd> _instance;
 
-        public InterstitialConfig(JSONNode node) {
-            _interval = node.HasKey("interval") ? node["interval"].AsInt : 0;
+        public InterstitialConfig(JsonObject node) {
+            _interval = node.TryGetValue("interval", out var value) ? (int) value : 0;
             _instance = AdInstanceConfig<IFullScreenAd>.Parse<MultiFullScreenAd>(AdFormat.Interstitial,
                 node["instance"]);
         }
@@ -404,8 +412,8 @@ namespace EE.Internal {
         private readonly int _interval;
         private readonly IAdInstanceConfig<IFullScreenAd> _instance;
 
-        public RewardedInterstitialConfig(JSONNode node) {
-            _interval = node.HasKey("interval") ? node["interval"].AsInt : 0;
+        public RewardedInterstitialConfig(JsonObject node) {
+            _interval = node.TryGetValue("interval", out var value) ? (int) value : 0;
             _instance = AdInstanceConfig<IFullScreenAd>.Parse<MultiFullScreenAd>(AdFormat.RewardedInterstitial,
                 node["instance"]);
         }
@@ -421,7 +429,7 @@ namespace EE.Internal {
     internal class RewardedConfig : IAdConfig {
         private readonly IAdInstanceConfig<IFullScreenAd> _instance;
 
-        public RewardedConfig(JSONNode node) {
+        public RewardedConfig(JsonObject node) {
             _instance = AdInstanceConfig<IFullScreenAd>.Parse<MultiFullScreenAd>(AdFormat.Rewarded, node["instance"]);
         }
 
@@ -446,25 +454,25 @@ namespace EE.Internal {
     }
 
     internal static class AdInstanceConfig<Ad> where Ad : class, IAd {
-        public static IAdInstanceConfig<Ad> Parse<MultiAd>(AdFormat format, JSONNode node)
+        public static IAdInstanceConfig<Ad> Parse<MultiAd>(AdFormat format, object node)
             where MultiAd : IMultiAd<Ad>, Ad, new() {
-            if (node.IsArray) {
-                return new WaterfallInstanceConfig<Ad, MultiAd>(format, node);
+            if (node is JsonArray array) {
+                return new WaterfallInstanceConfig<Ad, MultiAd>(format, array);
             }
-            return new SingleInstanceConfig<Ad>(format, node);
+            return new SingleInstanceConfig<Ad>(format, (JsonObject) node);
         }
     }
 
     internal class SingleInstanceConfig<Ad> : IAdInstanceConfig<Ad> where Ad : class, IAd {
         private readonly AdFormat _format;
-        private readonly Network _network;
+        private readonly AdNetwork _network;
         private readonly string _id;
 
-        public SingleInstanceConfig(AdFormat format, JSONNode node) {
+        public SingleInstanceConfig(AdFormat format, JsonObject node) {
             _format = format;
-            var network = node["network"].Value;
+            var network = (string) node["network"];
             _network = AdsConfigUtils.ParseNetwork(network);
-            _id = node.HasKey("id") ? node["id"].Value : "";
+            _id = node.TryGetValue("id", out var value) ? (string) value : "";
         }
 
         public Ad CreateAd(INetworkConfigManager manager) {
@@ -478,8 +486,8 @@ namespace EE.Internal {
         where MultiAd : IMultiAd<Ad>, Ad, new() {
         private readonly List<IAdInstanceConfig<Ad>> _instances = new List<IAdInstanceConfig<Ad>>();
 
-        public WaterfallInstanceConfig(AdFormat format, JSONNode node) {
-            foreach (var value in node.Children) {
+        public WaterfallInstanceConfig(AdFormat format, JsonArray node) {
+            foreach (var value in node) {
                 _instances.Add(AdInstanceConfig<Ad>.Parse<MultiAd>(format, value));
             }
         }
@@ -498,11 +506,11 @@ namespace EE.Internal {
         private IAdConfigManager _adManager;
 
         public static AdsConfig Parse(string text) {
-            var node = JSON.Parse(text);
+            var node = (JsonObject) Json.Deserialize(text);
             return Parse(node);
         }
 
-        private static AdsConfig Parse(JSONNode node) {
+        private static AdsConfig Parse(JsonObject node) {
             var networkManager = new NetworkConfigManager(node);
             var adManager = new AdConfigManager(networkManager, node);
             var result = new AdsConfig {
@@ -516,7 +524,11 @@ namespace EE.Internal {
             await _networkManager.Initialize();
         }
 
-        public void OpenTestSuite(Network network) {
+        public void AddTestDevice(string hash) {
+            _networkManager.AddTestDevice(hash);
+        }
+
+        public void OpenTestSuite(AdNetwork network) {
             _networkManager.OpenTestSuite(network);
         }
 

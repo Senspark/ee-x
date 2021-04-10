@@ -34,7 +34,7 @@ ext {
     firebaseVersion = '26.7.0'
     buildPrefab = true
     buildMaven = true
-    pluginVersion = '2.7.0'
+    pluginVersion = '2.7.1'
     pluginDependencies = [
         'core'                  : [],
         'ads'                   : ['core'],

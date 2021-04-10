@@ -1,39 +1,39 @@
-## 2.6.4 - 2020-03-11
+## 2.6.4 - 2021-03-11
 - [Android] Fix setDefaults in FirebaseRemoteConfig not work.
 
-## 2.6.3 - 2020-03-04
+## 2.6.3 - 2021-03-04
 - [Unity] Add Json (.net) serializer using reflection.
 - [C++] Change initialize() method in IService.
 - [Android] Fix initializing FirebaseRemoteConfig.
 
-## 2.6.2 - 2020-03-01
+## 2.6.2 - 2021-03-01
 - [Unity] Fix cannot compile on Unity 2020.1.
 
-## 2.6.0 - 2020-03-01
+## 2.6.0 - 2021-03-01
 - [Native] Fix crash in fetch() in Firebase Remote Config.
 - [Android] Fix rewarded interstitial ad not registered correctly.
 - [Android/iOS/Native] Add AdMob mediation test suite.
 - [Unity] Add Audio, Analytics, RemoteConfig services.
 
-## 2.5.0 - 2020-02-23
+## 2.5.0 - 2021-02-23
 - [Android] Update Firebase BoM version to 26.5.0
 - [Native] IAdsManager now has methods for each type of ad item.
 - [JS] Fix to escape JSON message
 - [C#] Auto inject SKAdNetworkItems list.
 
-## 2.4.3 - 2020-02-15
+## 2.4.3 - 2021-02-15
 - [Native] Handle invalid network / ad format in IAdsManager.
 - [Native] getBool / getLong / getDouble / getString are now synchronized methods in Firebase Remote Config.
 - [Native] Add Unity banner ad.
 
-## 2.4.2 - 2020-02-11
+## 2.4.2 - 2021-02-11
 - [iOS] Fix IronSource banner ad not displayed.
 - [Native] Fix to reload banner ad in MultiBannerAd.
 
-## 2.4.1 - 2020-02-05
+## 2.4.1 - 2021-02-05
 - [C++] Remove Firebase C++ SDK.
 
-## 2.4.0 - 2020-02-04
+## 2.4.0 - 2021-02-04
 - [Android/iOS/Native] Add rewarded interstitial ads.
 - [Android/iOS] Add TapJoy mediation adapters.
 - [Android/iOS] Add Firebase Analytics / Remote Config.
@@ -42,7 +42,7 @@
 - [JS] Fix ad callbacks not called.
 - [JS] Remove Facebook JSB (use manual Facebook).
 
-## 2.3.0 - 2020-01-25
+## 2.3.0 - 2021-01-25
 - [Android/iOS/Native] Add IronSource banner ad.
 - [JS] Remove legacy JSB libs (use manual libs):
   - AdMob.
@@ -53,10 +53,10 @@
   - Notification.
   - UnityAds.
 
-## 2.2.3 - 2020-01-13
+## 2.2.3 - 2021-01-13
 - [Native] Add capping when display consecutive full screen ads.
 
-## 2.2.2 - 2020-01-09
+## 2.2.2 - 2021-01-09
 - [C#] Fix crash when creating Facebook Ads interstitial ads.
 - [C#] Fix rectangle banner ad not work in ads JSON config.
 

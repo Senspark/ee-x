@@ -38,5 +38,5 @@ dependencies {
     api 'com.ironsource.sdk:mediationsdk:7.1.2'
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
-    implementation 'org.jetbrains.kotlinx:kotlinx-serialization-json:1.0.1'
+    implementation "org.jetbrains.kotlinx:kotlinx-serialization-json:$kotlinSerializationVersion"
 }

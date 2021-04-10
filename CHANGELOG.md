@@ -1,3 +1,9 @@
+## 2.7.0 - 2021-04-10
+- [Android] Upload libraries to maven central.
+- [Unity] Add addTestDevice method to IAdsManager.
+- [Unity] Add test rectangle banner ads.
+- [Unity] Add option to parse default values from json file for FirebaseRemoteConfig.
+
 ## 2.6.4 - 2021-03-11
 - [Android] Fix setDefaults in FirebaseRemoteConfig not work.
 

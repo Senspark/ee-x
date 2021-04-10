@@ -28,7 +28,7 @@ if (rootProject.ext.has('buildMaven') && rootProject.buildMaven) {
 dependencies {
     implementation 'androidx.localbroadcastmanager:localbroadcastmanager:1.0.0'
 
-    // https://support.vungle.com/hc/en-us/articles/115000468071-Get-Started-with-Vungle-Android-or-Amazon-SDK-v-5-
+    // https://support.vungle.com/hc/en-us/articles/360002922871#requirements-0-1
     // https://github.com/Vungle/Android-SDK/blob/master/CHANGELOG.md
     // Use "api" to inherit manifest elements.
     api 'com.vungle:publisher-sdk-android:6.9.1'

@@ -2,6 +2,7 @@ apply plugin: 'com.android.library'
 
 repositories {
     maven { url 'https://adcolony.bintray.com/AdColony' }
+    maven { url 'https://sdk.tapjoy.com' }
 }
 
 android {

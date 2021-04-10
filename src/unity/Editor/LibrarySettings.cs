@@ -206,6 +206,7 @@ namespace EE.Editor {
                 if (IsAdMobEnabled) {
                     if (IsAdMobMediationEnabled) {
                         androidRepositories.Add("https://adcolony.bintray.com/AdColony");
+                        androidRepositories.Add("https://sdk.tapjoy.com");
                         androidLibraries.Add($"com.senspark.ee:ad-mob-mediation:[{LibraryVersion}]");
                         iosLibraries.Add("ee-x/ad-mob-mediation");
                     } else {
@@ -222,6 +223,7 @@ namespace EE.Editor {
                     if (IsIronSourceMediationEnabled) {
                         androidRepositories.Add("https://dl.bintray.com/ironsource-mobile/android-adapters");
                         androidRepositories.Add("https://adcolony.bintray.com/AdColony");
+                        androidRepositories.Add("https://sdk.tapjoy.com");
                         androidLibraries.Add($"com.senspark.ee:iron-source-mediation:[{LibraryVersion}]");
                         iosLibraries.Add("ee-x/iron-source-mediation");
                     } else {

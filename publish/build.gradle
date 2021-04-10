@@ -155,6 +155,7 @@ def publishToMaven(String libraryName, String libraryVersion) {
                         groupId = 'com.senspark.ee'
                         artifactId = libraryName
                         version = libraryVersion
+                        artifact("$buildDir/outputs/aar/${project.getName()}-release.aar")
                         artifact androidSourcesJar
                         pom {
                             name = libraryName

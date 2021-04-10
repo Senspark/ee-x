@@ -155,7 +155,38 @@ def publishToMaven(String libraryName, String libraryVersion) {
                         artifactId = libraryName
                         version = libraryVersion
                         artifact androidSourcesJar
-                        from project.components.release
+                        pom {
+                            name = libraryName
+                            description = 'Cross-platform library for Cocos2d-x and Unity'
+                            url = 'https://github.com/senspark/ee-x'
+                            licenses {
+                                license {
+                                    name = 'MIT License'
+                                    url = 'https://github.com/senspark/ee-x/blob/master/LICENSE'
+                                }
+                            }
+                            developers {
+                                developer {
+                                    id = 'enrevol'
+                                    name = 'Hai Hoang'
+                                    email = 'enrevol@gmail.com'
+                                }
+                            }
+                            scm {
+                                connection = 'scm:git:github.com/senspark/ee-x.git'
+                                developerConnection = 'scm:git:ssh://github.com/senspark/ee-x.git'
+                                url = 'https://github.com/senspark/ee-x'
+                            }
+                            withXml {
+                                def dependenciesNode = asNode().appendNode('dependencies')
+                                project.configurations.implementation.allDependencies.each {
+                                    def dependencyNode = dependenciesNode.appendNode('dependency')
+                                    dependencyNode.appendNode('groupId', it.group)
+                                    dependencyNode.appendNode('artifactId', it.name)
+                                    dependencyNode.appendNode('version', it.version)
+                                }
+                            }
+                        }
                     }
                 }
                 repositories {

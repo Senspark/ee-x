@@ -54,7 +54,7 @@ dependencies {
     
     // https://developers.ironsrc.com/ironsource-mobile/android/tapjoy-change-log/
     api 'com.ironsource.adapters:tapjoyadapter:4.1.16'
-    api 'com.tapjoy:tapjoy-android-sdk:12.8.0'
+    api 'com.tapjoy:tapjoy-android-sdk:12.8.0@aar'
 
     // https://developers.ironsrc.com/ironsource-mobile/android/unityads-change-log/
     api 'com.ironsource.adapters:unityadsadapter:4.3.10'

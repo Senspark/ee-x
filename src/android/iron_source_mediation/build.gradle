@@ -58,7 +58,7 @@ dependencies {
 
     // https://developers.ironsrc.com/ironsource-mobile/android/unityads-change-log/
     api 'com.ironsource.adapters:unityadsadapter:4.3.10'
-    api 'com.unity3d.ads:unity-ads:3.6.0'
+    api 'com.unity3d.ads:unity-ads:3.6.2'
 
     // https://developers.ironsrc.com/ironsource-mobile/android/vungle-change-log/
     api 'com.ironsource.adapters:vungleadapter:4.3.8'

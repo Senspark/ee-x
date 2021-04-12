@@ -52,6 +52,8 @@ namespace EE.Editor {
             ++EditorGUI.indentLevel;
             settings.IsAdMobMediationEnabled =
                 EditorGUILayout.Toggle(new GUIContent("Use Mediation"), settings.IsAdMobMediationEnabled);
+            settings.IsAdMobTestSuiteEnabled =
+                EditorGUILayout.Toggle(new GUIContent("Add Test Suite"), settings.IsAdMobTestSuiteEnabled);
             settings.AdMobAndroidAppId = EditorGUILayout.TextField("Android App ID", settings.AdMobAndroidAppId);
             settings.AdMobIosAppId = EditorGUILayout.TextField("iOS App ID", settings.AdMobIosAppId);
             --EditorGUI.indentLevel;

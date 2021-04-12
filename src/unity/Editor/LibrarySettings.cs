@@ -44,6 +44,9 @@ namespace EE.Editor {
         private bool _isAdMobMediationEnabled = false;
 
         [SerializeField]
+        private bool _isAdMobTestSuiteEnabled = false;
+
+        [SerializeField]
         private string _adMobAndroidAppId;
 
         [SerializeField]
@@ -94,6 +97,11 @@ namespace EE.Editor {
         public bool IsAdMobMediationEnabled {
             get => _isAdMobMediationEnabled;
             set => _isAdMobMediationEnabled = value;
+        }
+
+        public bool IsAdMobTestSuiteEnabled {
+            get => _isAdMobTestSuiteEnabled;
+            set => _isAdMobTestSuiteEnabled = value;
         }
 
         public string AdMobAndroidAppId {
@@ -204,14 +212,19 @@ namespace EE.Editor {
                     iosLibraries.Add("ee-x/ad-colony");
                 }
                 if (IsAdMobEnabled) {
+                    androidLibraries.Add($"com.senspark.ee:ad-mob:[{LibraryVersion}]");
+                    iosLibraries.Add("ee-x/ad-mob");
                     if (IsAdMobMediationEnabled) {
                         androidRepositories.Add("https://adcolony.bintray.com/AdColony");
                         androidRepositories.Add("https://sdk.tapjoy.com");
                         androidLibraries.Add($"com.senspark.ee:ad-mob-mediation:[{LibraryVersion}]");
                         iosLibraries.Add("ee-x/ad-mob-mediation");
-                    } else {
-                        androidLibraries.Add($"com.senspark.ee:ad-mob:[{LibraryVersion}]");
-                        iosLibraries.Add("ee-x/ad-mob");
+                    }
+                    if (IsAdMobTestSuiteEnabled) {
+                        androidLibraries.Add($"com.senspark.ee:ad-mob-test-suite:[{LibraryVersion}]");
+
+                        // FIXME: fix in podspec first.
+                        // iosLibraries.Add("ee-x/ad-mob-test-suite");
                     }
                 }
                 if (IsFacebookAdsEnabled) {

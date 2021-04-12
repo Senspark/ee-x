@@ -42,6 +42,7 @@ ext {
         'ad-colony'             : ['ads'],
         'ad-mob'                : ['ads'],
         'ad-mob-mediation'      : ['ad-mob'],
+        'ad-mob-test-suite'     : ['ad-mob'],
         'app-lovin'             : ['ads'],
         'facebook-ads'          : ['ads'],
         'iron-source'           : ['ads'],

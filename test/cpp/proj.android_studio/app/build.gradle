@@ -170,6 +170,7 @@ dependencies {
     implementation project(':ee-x-ad-colony')
     implementation project(':ee-x-ad-mob')
     implementation project(':ee-x-ad-mob-mediation')
+    implementation project(':ee-x-ad-mob-test-suite')
     implementation project(':ee-x-adjust')
     implementation project(':ee-x-app-lovin')
     implementation project(':ee-x-apps-flyer')

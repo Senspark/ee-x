@@ -1,0 +1,28 @@
+apply plugin: 'com.android.library'
+
+android {
+    buildToolsVersion rootProject.buildToolsVersion
+    compileSdkVersion rootProject.compileSdkVersion
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    defaultConfig {
+        minSdkVersion 16
+        targetSdkVersion rootProject.targetSdkVersion
+    }
+}
+
+if (rootProject.ext.has('buildMaven') && rootProject.buildMaven) {
+    configureAndPublish('ad-mob-test-suite')
+} else {
+    dependencies {
+        api project(':ee-x-ad-mob')
+    }
+}
+
+dependencies {
+    api 'com.google.android.ads:mediation-test-suite:1.5.0'
+}

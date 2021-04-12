@@ -16,7 +16,7 @@ internal class AdMobRewardedAd: NSObject, IFullScreenAd, GADFullScreenContentDel
     private let _messageHelper: MessageHelper
     private var _helper: FullScreenAdHelper?
     private var _isLoaded = false
-    private var _ad: GADRewardedAdBeta?
+    private var _ad: GADRewardedAd?
     private var _rewarded = false
     
     init(_ bridge: IMessageBridge,
@@ -50,7 +50,7 @@ internal class AdMobRewardedAd: NSObject, IFullScreenAd, GADFullScreenContentDel
     func load() {
         Thread.runOnMainThread {
             self._logger.debug("\(kTag): \(#function): id = \(self._adId)")
-            GADRewardedAdBeta.load(withAdUnitID: self._adId, request: GADRequest()) { ad, error in
+            GADRewardedAd.load(withAdUnitID: self._adId, request: GADRequest()) { ad, error in
                 if let error = error {
                     Thread.runOnMainThread {
                         self._logger.debug("\(kTag): \(#function): failed id = \(self._adId) message = \(error.localizedDescription)")

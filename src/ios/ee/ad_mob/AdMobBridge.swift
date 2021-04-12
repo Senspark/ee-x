@@ -6,7 +6,6 @@
 //
 
 import GoogleMobileAds
-import GoogleMobileAdsMediationTestSuite
 import RxSwift
 
 private let kTag = "\(AdMobBridge.self)"
@@ -183,7 +182,10 @@ class AdMobBridge: NSObject, IPlugin {
             guard let rootView = Utils.getCurrentRootViewController() else {
                 return
             }
+            /*
+             FIXME
             GoogleMobileAdsMediationTestSuite.present(on: rootView, delegate: nil)
+             */
         }
     }
 
@@ -194,9 +196,12 @@ class AdMobBridge: NSObject, IPlugin {
     }
 
     func createNativeAd(_ adId: String, _ layoutName: String) -> Bool {
-        return createAd(adId) {
-            AdMobNativeAd(_bridge, _logger, adId, layoutName)
-        }
+        return false
+        /* FIXME:
+         return createAd(adId) {
+             AdMobNativeAd(_bridge, _logger, adId, layoutName)
+         }
+        */
     }
 
     func createAppOpenAd(_ adId: String) -> Bool {

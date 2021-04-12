@@ -124,6 +124,12 @@ internal class IronSourceBannerAd: NSObject, IBannerAd, ISBannerDelegate {
         }
     }
 
+    func bannerDidShow() {
+        Thread.runOnMainThread {
+            self._logger.debug("\(kTag): \(#function): id = \(self._adId)")
+        }
+    }
+
     func didClickBanner() {
         Thread.runOnMainThread {
             self._logger.debug("\(kTag): \(#function): id = \(self._adId)")

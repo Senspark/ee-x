@@ -334,7 +334,7 @@ Pod::Spec.new do |spec|
     s.source_files = 'src/ios/ee/store/**/*'
     s.header_mappings_dir = 'src/ios'
     s.dependency 'ee-x/core'
-    s.dependency 'TPInAppReceipt'
+    s.dependency 'TPInAppReceipt', '3.1.1'
   end
 
   spec.subspec 'unity-ads' do |s|

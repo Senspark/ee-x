@@ -179,14 +179,14 @@ def publishToMaven(String libraryName, String libraryVersion) {
                                 connection = 'scm:git:github.com/senspark/ee-x.git'
                                 developerConnection = 'scm:git:ssh://github.com/senspark/ee-x.git'
                                 url = 'https://github.com/senspark/ee-x'
-                            }
+                            }   
                             withXml {
                                 def dependenciesNode = asNode().appendNode('dependencies')
                                 project.configurations.implementation.allDependencies.each {
                                     def node = dependenciesNode.appendNode('dependency')
                                     if (it.version == 'unspecified') {
                                         node.appendNode('groupId', 'com.senspark.ee')
-                                        node.appendNode('artifactId', libraryName)
+                                        node.appendNode('artifactId', it.name.substring('ee-x-'.length()))
                                         node.appendNode('version', rootProject.ext.pluginVersion)
                                     } else {
                                         node.appendNode('groupId', it.group)

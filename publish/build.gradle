@@ -127,19 +127,6 @@ def applyPrefabSettings(project, String libraryName, headerPaths) {
      */
 }
 
-def recursiveDepends(String libraryName, String dependentLibraryName) {
-    project("ee-x-$libraryName") {
-        def plugins = rootProject.ext.pluginDependencies[dependentLibraryName]
-        for (int i = 0; i < plugins.size(); ++i) {
-            def plugin = plugins[i];
-            dependencies {
-                compileOnly project(":ee-x-$plugin")
-                recursiveDepends(libraryName, plugin)
-            }
-        }
-    }
-}
-
 def configureAndPublish(String libraryName) {
     project("ee-x-$libraryName") {
         def version = rootProject.ext.pluginVersion
@@ -147,9 +134,7 @@ def configureAndPublish(String libraryName) {
         for (int i = 0; i < plugins.size(); ++i) {
             def plugin = plugins[i]
             dependencies {
-                api "com.senspark.ee:$plugin:${version}"
-                compileOnly project(":ee-x-$plugin")
-                recursiveDepends(libraryName, plugin)
+                api project(":ee-x-$plugin")
             }
         }
         publishToMaven(libraryName, version)
@@ -198,10 +183,16 @@ def publishToMaven(String libraryName, String libraryVersion) {
                             withXml {
                                 def dependenciesNode = asNode().appendNode('dependencies')
                                 project.configurations.implementation.allDependencies.each {
-                                    def dependencyNode = dependenciesNode.appendNode('dependency')
-                                    dependencyNode.appendNode('groupId', it.group)
-                                    dependencyNode.appendNode('artifactId', it.name)
-                                    dependencyNode.appendNode('version', it.version)
+                                    def node = dependenciesNode.appendNode('dependency')
+                                    if (it.version == 'unspecified') {
+                                        node.appendNode('groupId', 'com.senspark.ee')
+                                        node.appendNode('artifactId', libraryName)
+                                        node.appendNode('version', rootProject.ext.pluginVersion)
+                                    } else {
+                                        node.appendNode('groupId', it.group)
+                                        node.appendNode('artifactId', it.name)
+                                        node.appendNode('version', it.version)
+                                    }
                                 }
                             }
                         }

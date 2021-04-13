@@ -2,6 +2,8 @@
 
 #include <cassert>
 
+#include <ee/ads/AdFormat.hpp>
+#include <ee/ads/AdNetwork.hpp>
 #include <ee/ads/internal/Capper.hpp>
 #include <ee/cocos/CocosBannerAd.hpp>
 #include <ee/core/Delay.hpp>
@@ -65,8 +67,12 @@ void Self::initializeFullScreenAd(AdFormat format) {
     fullScreenAds_.at(format)->setAd(ad);
 }
 
+void Self::addTestDevice(const std::string& hash) {
+    config_->addTestDevice(hash);
+}
+
 void Self::openTestSuite() {
-    config_->openTestSuite(Network::AdMob);
+    config_->openTestSuite(AdNetwork::AdMob);
 }
 
 std::shared_ptr<IBannerAd> Self::getBannerAd() {

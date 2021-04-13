@@ -19,6 +19,7 @@ public:
 
     Task<bool> initialize();
 
+    virtual void addTestDevice(const std::string& hash) override;
     virtual void openTestSuite() override;
     virtual std::shared_ptr<IBannerAd> getBannerAd() override;
     virtual std::shared_ptr<IBannerAd> getRectangleAd() override;

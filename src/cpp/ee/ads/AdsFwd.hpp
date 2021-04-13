@@ -15,6 +15,8 @@
 
 namespace ee {
 namespace ads {
+enum class AdFormat;
+enum class AdNetwork;
 enum class AdResult;
 
 struct AdLoadResult;
@@ -48,6 +50,9 @@ class AsyncHelper;
 class Retrier;
 class MediationManager;
 } // namespace ads
+
+using ads::AdFormat;
+using ads::AdNetwork;
 
 using ads::AdResult;
 using FullScreenAdResult [[deprecated]] = AdResult;

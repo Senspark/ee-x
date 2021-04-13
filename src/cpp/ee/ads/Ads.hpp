@@ -13,6 +13,8 @@
 
 #include <ee/core/Core.hpp>
 
+#include "ee/ads/AdFormat.hpp"
+#include "ee/ads/AdNetwork.hpp"
 #include "ee/ads/IAd.hpp"
 #include "ee/ads/IBannerAd.hpp"
 #include "ee/ads/IFullScreenAd.hpp"

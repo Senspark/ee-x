@@ -13,24 +13,10 @@
 
 namespace ee {
 namespace services {
-enum class Network {
-    AdMob,
-    AppLovin,
-    FacebookAds,
-    IronSource,
-    UnityAds,
-    Vungle,
-    Null,
-};
-
-enum class AdFormat {
-    Banner,
-    Rectangle,
-    AppOpen,
-    Interstitial,
-    RewardedInterstitial,
-    Rewarded,
-    Null,
+class AdsConfigUtils {
+public:
+    static AdNetwork parseNetwork(const std::string& id);
+    static AdFormat parseFormat(const std::string& id);
 };
 
 class INetworkConfig;
@@ -39,8 +25,9 @@ class INetworkConfigManager {
 public:
     virtual ~INetworkConfigManager() = default;
     virtual Task<> initialize() = 0;
-    virtual void openTestSuite(Network network) = 0;
-    virtual std::shared_ptr<IAd> createAd(Network network, AdFormat format,
+    virtual void addTestDevice(const std::string& hash) = 0;
+    virtual void openTestSuite(AdNetwork network) = 0;
+    virtual std::shared_ptr<IAd> createAd(AdNetwork network, AdFormat format,
                                           const std::string& id) = 0;
 };
 
@@ -49,8 +36,9 @@ public:
     explicit NetworkConfigManager(const nlohmann::json& node);
 
     virtual Task<> initialize() override;
-    virtual void openTestSuite(Network network) override;
-    virtual std::shared_ptr<IAd> createAd(Network network, AdFormat format,
+    virtual void addTestDevice(const std::string& hash) override;
+    virtual void openTestSuite(AdNetwork network) override;
+    virtual std::shared_ptr<IAd> createAd(AdNetwork network, AdFormat format,
                                           const std::string& id) override;
 
 private:
@@ -64,7 +52,8 @@ public:
     virtual ~INetworkConfig() = default;
 
     virtual Task<> initialize() = 0;
-    virtual Network network() const = 0;
+    virtual AdNetwork network() const = 0;
+    virtual void addTestDevice(const std::string& hash) = 0;
     virtual void openTestSuite() = 0;
     virtual std::shared_ptr<IAd> createAd(AdFormat format,
                                           const std::string& id) = 0;
@@ -75,7 +64,8 @@ public:
     explicit AdMobConfig(const nlohmann::json& node);
 
     virtual Task<> initialize() override;
-    virtual Network network() const override;
+    virtual AdNetwork network() const override;
+    virtual void addTestDevice(const std::string& hash) override;
     virtual void openTestSuite() override;
     virtual std::shared_ptr<IAd> createAd(AdFormat format,
                                           const std::string& id) override;
@@ -89,7 +79,8 @@ public:
     explicit AppLovinConfig(const nlohmann::json& node);
 
     virtual Task<> initialize() override;
-    virtual Network network() const override;
+    virtual AdNetwork network() const override;
+    virtual void addTestDevice(const std::string& hash) override;
     virtual void openTestSuite() override;
     virtual std::shared_ptr<IAd> createAd(AdFormat format,
                                           const std::string& id) override;
@@ -104,7 +95,8 @@ public:
     explicit FacebookAdsConfig(const nlohmann::json& node);
 
     virtual Task<> initialize() override;
-    virtual Network network() const override;
+    virtual AdNetwork network() const override;
+    virtual void addTestDevice(const std::string& hash) override;
     virtual void openTestSuite() override;
     virtual std::shared_ptr<IAd> createAd(AdFormat format,
                                           const std::string& id) override;
@@ -118,7 +110,8 @@ public:
     explicit IronSourceConfig(const nlohmann::json& node);
 
     virtual Task<> initialize() override;
-    virtual Network network() const override;
+    virtual AdNetwork network() const override;
+    virtual void addTestDevice(const std::string& hash) override;
     virtual void openTestSuite() override;
     virtual std::shared_ptr<IAd> createAd(AdFormat format,
                                           const std::string& id) override;
@@ -133,7 +126,8 @@ public:
     explicit UnityAdsConfig(const nlohmann::json& node);
 
     virtual Task<> initialize() override;
-    virtual Network network() const override;
+    virtual AdNetwork network() const override;
+    virtual void addTestDevice(const std::string& hash) override;
     virtual void openTestSuite() override;
     virtual std::shared_ptr<IAd> createAd(AdFormat format,
                                           const std::string& id) override;
@@ -149,7 +143,8 @@ public:
     explicit VungleConfig(const nlohmann::json& node);
 
     virtual Task<> initialize() override;
-    virtual Network network() const override;
+    virtual AdNetwork network() const override;
+    virtual void addTestDevice(const std::string& hash) override;
     virtual void openTestSuite() override;
     virtual std::shared_ptr<IAd> createAd(AdFormat format,
                                           const std::string& id) override;
@@ -163,7 +158,8 @@ private:
 class NullNetworkConfig : public INetworkConfig {
 public:
     virtual Task<> initialize() override;
-    virtual Network network() const override;
+    virtual AdNetwork network() const override;
+    virtual void addTestDevice(const std::string& hash) override;
     virtual void openTestSuite() override;
     virtual std::shared_ptr<IAd> createAd(AdFormat format,
                                           const std::string& id) override;
@@ -316,7 +312,7 @@ public:
 
 private:
     AdFormat format_;
-    Network network_;
+    AdNetwork network_;
     std::string id_;
 };
 
@@ -338,7 +334,8 @@ public:
     static std::shared_ptr<AdsConfig> parse(const std::string& text);
 
     Task<> initialize();
-    void openTestSuite(Network network);
+    void addTestDevice(const std::string& hash);
+    void openTestSuite(AdNetwork network);
     std::shared_ptr<IAd> createAd(AdFormat format);
 
 private:

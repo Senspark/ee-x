@@ -1,3 +1,12 @@
+## 2.7.1 - 2021-04-14
+- [Android] Update ads libraries.
+- [Android] Separate AdMob test suite library.
+- [iOS] Update Google Mobile Ads SDK from 7.x to 8.x.
+- [Unity] Fix wrong parsing in GetDensity() method.
+- [Unity] Fix info.plist not updated when build to iOS.
+- [C++] Add addTestDevice method to IAdsManager.
+- [Native] Not allow to display another full screen ad while displaying a full screen ad.
+
 ## 2.7.0 - 2021-04-10
 - [Android] Upload libraries to maven central.
 - [Unity] Add addTestDevice method to IAdsManager.

@@ -17,6 +17,8 @@ public:
     virtual ~ICapper() = default;
     virtual bool isCapped() const = 0;
     virtual void cap() = 0;
+    virtual void lock() = 0;
+    virtual void unlock() = 0;
 };
 } // namespace ads
 } // namespace ee

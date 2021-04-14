@@ -18,20 +18,17 @@ android {
 }
 
 if (rootProject.ext.has('buildMaven') && rootProject.buildMaven) {
-    configureAndPublish('unity-ads')
-} else {
-    dependencies {
-        api project(':ee-x-ads')
-    }
+    configureMaven('unity-ads')
 }
 
 dependencies {
-    implementation 'androidx.annotation:annotation:1.2.0'
+    api project(':ee-x-ads')
 
     // https://github.com/Unity-Technologies/unity-ads-android/releases
     // Use "api" to inherit manifest elements.
-    api 'com.unity3d.ads:unity-ads:3.6.0'
+    api 'com.unity3d.ads:unity-ads:3.6.2'
 
+    implementation 'androidx.annotation:annotation:1.2.0'
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$kotlinCoroutinesVersion"
     implementation "org.jetbrains.kotlinx:kotlinx-serialization-json:$kotlinSerializationVersion"

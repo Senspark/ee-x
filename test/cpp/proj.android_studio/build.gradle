@@ -23,6 +23,7 @@ allprojects {
         maven { url 'https://adcolony.bintray.com/AdColony' }
         maven { url 'https://dl.bintray.com/ironsource-mobile/android-adapters' }
         maven { url 'https://dl.bintray.com/ironsource-mobile/android-sdk' }
+        maven { url 'https://sdk.tapjoy.com' }
     }
 }
 
@@ -30,5 +31,5 @@ ext {
     compileSdkVersion = 30
     buildToolsVersion = '30.0.3'
     targetSdkVersion = 30
-    firebaseVersion = '26.7.0'
+    firebaseVersion = '26.8.0'
 }

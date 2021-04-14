@@ -1,6 +1,4 @@
 apply plugin: 'com.android.library'
-apply plugin: 'kotlin-android'
-apply plugin: 'kotlinx-serialization'
 
 android {
     buildToolsVersion rootProject.buildToolsVersion
@@ -12,18 +10,16 @@ android {
     }
 
     defaultConfig {
-        minSdkVersion 14
+        minSdkVersion 16
         targetSdkVersion rootProject.targetSdkVersion
     }
 }
 
 if (rootProject.ext.has('buildMaven') && rootProject.buildMaven) {
-    configureMaven('ads')
+    configureMaven('ad-mob-test-suite')
 }
 
 dependencies {
-    api project(':ee-x-core')    
-    implementation 'androidx.annotation:annotation:1.2.0'
-    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
-    implementation "org.jetbrains.kotlinx:kotlinx-serialization-json:$kotlinSerializationVersion"
+    api project(':ee-x-ad-mob')
+    api 'com.google.android.ads:mediation-test-suite:1.5.0'
 }

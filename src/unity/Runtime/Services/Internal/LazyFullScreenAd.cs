@@ -55,7 +55,9 @@ namespace EE.Internal {
             if (_displayCapper.IsCapped) {
                 return AdResult.Capped;
             }
+            _displayCapper.Lock();
             var result = await _ad.Show();
+            _displayCapper.Unlock();
             _displayCapper.Cap();
             return result;
         }

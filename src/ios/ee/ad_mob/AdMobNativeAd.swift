@@ -8,6 +8,9 @@
 import Foundation
 import GoogleMobileAds
 
+/*
+  FIXME.
+ 
 private let kTag = "\(AdMobNativeAd.self)"
 
 /// https://stackoverflow.com/a/24592029
@@ -283,3 +286,5 @@ internal class AdMobNativeAd: NSObject, IBannerAd,
         }
     }
 }
+
+ */

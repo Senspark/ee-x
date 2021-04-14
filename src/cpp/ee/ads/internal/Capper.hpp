@@ -19,10 +19,13 @@ public:
 
     virtual bool isCapped() const override;
     virtual void cap() override;
+    virtual void lock() override;
+    virtual void unlock() override;
 
 private:
     float interval_;
     bool capped_;
+    bool locked_;
 };
 } // namespace ads
 } // namespace ee

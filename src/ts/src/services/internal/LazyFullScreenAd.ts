@@ -70,7 +70,9 @@ export class LazyFullScreenAd extends ObserverManager<AdObserver> implements IFu
         if (this._displayCapper.isCapped) {
             return AdResult.Capped;
         }
+        this._displayCapper.lock();
         var result = await this._ad.show();
+        this._displayCapper.unlock();
         this._displayCapper.cap();
         return result;
     }

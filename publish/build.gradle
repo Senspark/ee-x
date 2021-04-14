@@ -23,6 +23,7 @@ allprojects {
         maven { url 'https://adcolony.bintray.com/AdColony' }
         maven { url 'https://dl.bintray.com/ironsource-mobile/android-adapters' }
         maven { url 'https://dl.bintray.com/ironsource-mobile/android-sdk' }
+        maven { url 'https://sdk.tapjoy.com' }
         mavenLocal()
     }
 }
@@ -31,56 +32,10 @@ ext {
     compileSdkVersion = 30
     buildToolsVersion = '30.0.3'
     targetSdkVersion = 30
-    firebaseVersion = '26.7.0'
+    firebaseVersion = '26.8.0'
     buildPrefab = true
     buildMaven = true
-    pluginVersion = '2.7.0'
-    pluginDependencies = [
-        'core'                  : [],
-        'ads'                   : ['core'],
-        'ad-colony'             : ['ads'],
-        'ad-mob'                : ['ads'],
-        'ad-mob-mediation'      : ['ad-mob'],
-        'app-lovin'             : ['ads'],
-        'facebook-ads'          : ['ads'],
-        'iron-source'           : ['ads'],
-        'iron-source-mediation' : ['iron-source'],
-        'unity-ads'             : ['ads'],
-        'vungle'                : ['ads'],
-        'adjust'                : ['core'],
-        'apps-flyer'            : ['core'],
-        'facebook'              : ['core'],
-        'firebase-core'         : ['core'],
-        'firebase-analytics'    : ['firebase-core'],
-        'firebase-crashlytics'  : ['firebase-core'],
-        // 'firebase-dynamic-link' : ['firebase-core'],
-        // 'firebase-messaging'    : ['firebase-core'],
-        'firebase-performance'  : ['firebase-core'],
-        'firebase-remote-config': ['firebase-core'],
-        // 'firebase-storage'      : ['firebase-core'],
-        'notification'          : ['core'],
-        'play'                  : ['core'],
-        'recorder'              : ['core'],
-        'soomla-store'          : ['store'],
-        'store'                 : ['core'],
-    ]
-}
-
-rootProject.ext.pluginDependencies.each { plugin, dependencies ->
-    task "publish_plugin_$plugin" {
-        group 'publishing helper'
-        dependencies.each { dependency ->
-            dependsOn "publish_plugin_$dependency"
-        }
-        dependsOn ":ee-x-$plugin:publishToMavenLocal"
-    }
-}
-
-task "publish_all_plugins" {
-    group 'publishing helper'
-    rootProject.ext.pluginDependencies.each { plugin, _ ->
-        dependsOn "publish_plugin_$plugin"
-    }
+    pluginVersion = '2.7.1'
 }
 
 def applyPrefabSettings(project, String libraryName, headerPaths) {
@@ -125,21 +80,7 @@ def applyPrefabSettings(project, String libraryName, headerPaths) {
      */
 }
 
-def configureAndPublish(String libraryName) {
-    project("ee-x-$libraryName") {
-        def version = rootProject.ext.pluginVersion
-        def plugins = rootProject.ext.pluginDependencies[libraryName]
-        for (int i = 0; i < plugins.size(); ++i) {
-            def plugin = plugins[i]
-            dependencies {
-                api "com.senspark.ee:$plugin:${version}"
-            }
-        }
-        publishToMaven(libraryName, version)
-    }
-}
-
-def publishToMaven(String libraryName, String libraryVersion) {
+def configureMaven(String libraryName) {
     project("ee-x-$libraryName") {
         apply plugin: 'signing'
         apply plugin: 'maven-publish'
@@ -153,7 +94,8 @@ def publishToMaven(String libraryName, String libraryVersion) {
                     create(libraryName, MavenPublication) {
                         groupId = 'com.senspark.ee'
                         artifactId = libraryName
-                        version = libraryVersion
+                        version = rootProject.ext.pluginVersion
+                        artifact("$buildDir/outputs/aar/${project.getName()}-release.aar")
                         artifact androidSourcesJar
                         pom {
                             name = libraryName
@@ -176,14 +118,20 @@ def publishToMaven(String libraryName, String libraryVersion) {
                                 connection = 'scm:git:github.com/senspark/ee-x.git'
                                 developerConnection = 'scm:git:ssh://github.com/senspark/ee-x.git'
                                 url = 'https://github.com/senspark/ee-x'
-                            }
+                            }   
                             withXml {
                                 def dependenciesNode = asNode().appendNode('dependencies')
                                 project.configurations.implementation.allDependencies.each {
-                                    def dependencyNode = dependenciesNode.appendNode('dependency')
-                                    dependencyNode.appendNode('groupId', it.group)
-                                    dependencyNode.appendNode('artifactId', it.name)
-                                    dependencyNode.appendNode('version', it.version)
+                                    def node = dependenciesNode.appendNode('dependency')
+                                    if (it.version == 'unspecified') {
+                                        node.appendNode('groupId', 'com.senspark.ee')
+                                        node.appendNode('artifactId', it.name.substring('ee-x-'.length()))
+                                        node.appendNode('version', rootProject.ext.pluginVersion)
+                                    } else {
+                                        node.appendNode('groupId', it.group)
+                                        node.appendNode('artifactId', it.name)
+                                        node.appendNode('version', it.version)
+                                    }
                                 }
                             }
                         }

@@ -18,21 +18,17 @@ android {
 }
 
 if (rootProject.ext.has('buildMaven') && rootProject.buildMaven) {
-    configureAndPublish('adjust')
-} else {
-    dependencies {
-        api project(':ee-x-core')
-    }
+    configureMaven('adjust')
 }
 
 dependencies {
-    implementation 'androidx.annotation:annotation:1.2.0'
-
-    api 'com.android.installreferrer:installreferrer:2.2'
+    api project(':ee-x-core')
 
     // https://github.com/adjust/android_sdk/blob/master/CHANGELOG.md
-    api 'com.adjust.sdk:adjust-android:4.26.0'
+    api 'com.adjust.sdk:adjust-android:4.27.0'
 
+    api 'com.android.installreferrer:installreferrer:2.2'
+    implementation 'androidx.annotation:annotation:1.2.0'
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
     implementation "org.jetbrains.kotlinx:kotlinx-serialization-json:$kotlinSerializationVersion"
 }

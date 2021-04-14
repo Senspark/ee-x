@@ -22,21 +22,18 @@ android {
 }
 
 if (rootProject.ext.has('buildMaven') && rootProject.buildMaven) {
-    configureAndPublish('iron-source')
-} else {
-    dependencies {
-        api project(':ee-x-ads')
-    }
+    configureMaven('iron-source')
 }
 
 dependencies {
-    implementation 'androidx.annotation:annotation:1.2.0'
+    api project(':ee-x-ads')
 
     // https://bintray.com/ironsource-mobile/android-sdk
     // https://developers.ironsrc.com/ironsource-mobile/android/sdk-change-log/
     // Use "api" to inherit manifest elements.
-    api 'com.ironsource.sdk:mediationsdk:7.1.2'
+    api 'com.ironsource.sdk:mediationsdk:7.1.4.1'
 
+    implementation 'androidx.annotation:annotation:1.2.0'
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
     implementation "org.jetbrains.kotlinx:kotlinx-serialization-json:$kotlinSerializationVersion"
 }

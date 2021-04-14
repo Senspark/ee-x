@@ -12,6 +12,7 @@ def include_lib(name) {
 include_lib('ad-colony')
 include_lib('ad-mob')
 include_lib('ad-mob-mediation')
+include_lib('ad-mob-test-suite')
 include_lib('adjust')
 include_lib('ads')
 include_lib('app-lovin')

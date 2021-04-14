@@ -45,6 +45,7 @@ namespace EE.Editor {
                 "3rd42ekr43.skadnetwork"
             };
             AddSkAdNetwork(plist, networks.ToArray());
+            plist.WriteToFile(plistPath);
         }
 
         private static void AddSkAdNetwork(PlistDocument plist, params string[] networks) {

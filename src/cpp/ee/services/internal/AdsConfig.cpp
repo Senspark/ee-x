@@ -4,6 +4,8 @@
 
 #include <ee/ad_mob/AdMobBannerAdSize.hpp>
 #include <ee/ad_mob/IAdMobBridge.hpp>
+#include <ee/ads/AdFormat.hpp>
+#include <ee/ads/AdNetwork.hpp>
 #include <ee/ads/MultiBannerAd.hpp>
 #include <ee/ads/MultiFullScreenAd.hpp>
 #include <ee/ads/NullAd.hpp>
@@ -28,30 +30,29 @@
 
 namespace ee {
 namespace services {
-namespace {
-Network parseNetwork(const std::string& id) {
+AdNetwork AdsConfigUtils::parseNetwork(const std::string& id) {
     if (id == "ad_mob") {
-        return Network::AdMob;
+        return AdNetwork::AdMob;
     }
     if (id == "app_lovin") {
-        return Network::AppLovin;
+        return AdNetwork::AppLovin;
     }
     if (id == "facebook_ads") {
-        return Network::FacebookAds;
+        return AdNetwork::FacebookAds;
     }
     if (id == "iron_source") {
-        return Network::IronSource;
+        return AdNetwork::IronSource;
     }
     if (id == "unity_ads") {
-        return Network::UnityAds;
+        return AdNetwork::UnityAds;
     }
     if (id == "vungle") {
-        return Network::Vungle;
+        return AdNetwork::Vungle;
     }
-    return Network::Null;
+    return AdNetwork::Null;
 }
 
-AdFormat parseAdFormat(const std::string& id) {
+AdFormat AdsConfigUtils::parseFormat(const std::string& id) {
     if (id == "banner") {
         return AdFormat::Banner;
     }
@@ -72,7 +73,6 @@ AdFormat parseAdFormat(const std::string& id) {
     }
     return AdFormat::Null;
 }
-} // namespace
 
 NetworkConfigManager::NetworkConfigManager(const nlohmann::json& node) {
     for (auto&& [key, value] : node["networks"].items()) {
@@ -87,7 +87,13 @@ Task<> NetworkConfigManager::initialize() {
     }
 }
 
-void NetworkConfigManager::openTestSuite(Network network) {
+void NetworkConfigManager::addTestDevice(const std::string& hash) {
+    for (auto&& item : networks_) {
+        item->addTestDevice(hash);
+    }
+}
+
+void NetworkConfigManager::openTestSuite(AdNetwork network) {
     for (auto&& item : networks_) {
         if (item->network() == network) {
             item->openTestSuite();
@@ -96,7 +102,7 @@ void NetworkConfigManager::openTestSuite(Network network) {
     }
 }
 
-std::shared_ptr<IAd> NetworkConfigManager::createAd(Network network,
+std::shared_ptr<IAd> NetworkConfigManager::createAd(AdNetwork network,
                                                     AdFormat format,
                                                     const std::string& id) {
     for (auto&& item : networks_) {
@@ -109,21 +115,21 @@ std::shared_ptr<IAd> NetworkConfigManager::createAd(Network network,
 
 std::shared_ptr<INetworkConfig>
 INetworkConfig::parse(const nlohmann::json& node) {
-    auto&& network = parseNetwork(node["network"]);
+    auto&& network = AdsConfigUtils::parseNetwork(node["network"]);
     switch (network) {
-    case Network::AdMob:
+    case AdNetwork::AdMob:
         return std::make_shared<AdMobConfig>(node);
-    case Network::AppLovin:
+    case AdNetwork::AppLovin:
         return std::make_shared<AppLovinConfig>(node);
-    case Network::FacebookAds:
+    case AdNetwork::FacebookAds:
         return std::make_shared<FacebookAdsConfig>(node);
-    case Network::IronSource:
+    case AdNetwork::IronSource:
         return std::make_shared<IronSourceConfig>(node);
-    case Network::UnityAds:
+    case AdNetwork::UnityAds:
         return std::make_shared<UnityAdsConfig>(node);
-    case Network::Vungle:
+    case AdNetwork::Vungle:
         return std::make_shared<VungleConfig>(node);
-    case Network::Null:
+    case AdNetwork::Null:
         return std::make_shared<NullNetworkConfig>();
     }
 }
@@ -135,8 +141,12 @@ Task<> AdMobConfig::initialize() {
     co_await plugin_->initialize();
 }
 
-Network AdMobConfig::network() const {
-    return Network::AdMob;
+AdNetwork AdMobConfig::network() const {
+    return AdNetwork::AdMob;
+}
+
+void AdMobConfig::addTestDevice(const std::string& hash) {
+    plugin_->addTestDevice(hash);
 }
 
 void AdMobConfig::openTestSuite() {
@@ -172,9 +182,11 @@ Task<> AppLovinConfig::initialize() {
     co_await plugin_->initialize(appId_);
 }
 
-Network AppLovinConfig::network() const {
-    return Network::AppLovin;
+AdNetwork AppLovinConfig::network() const {
+    return AdNetwork::AppLovin;
 }
+
+void AppLovinConfig::addTestDevice(const std::string& hash) {}
 
 void AppLovinConfig::openTestSuite() {}
 
@@ -202,8 +214,12 @@ Task<> FacebookAdsConfig::initialize() {
     co_await plugin_->initialize();
 }
 
-Network FacebookAdsConfig::network() const {
-    return Network::FacebookAds;
+AdNetwork FacebookAdsConfig::network() const {
+    return AdNetwork::FacebookAds;
+}
+
+void FacebookAdsConfig::addTestDevice(const std::string& hash) {
+    plugin_->addTestDevice(hash);
 }
 
 void FacebookAdsConfig::openTestSuite() {}
@@ -238,9 +254,11 @@ Task<> IronSourceConfig::initialize() {
     co_await plugin_->initialize(appId_);
 }
 
-Network IronSourceConfig::network() const {
-    return Network::IronSource;
+AdNetwork IronSourceConfig::network() const {
+    return AdNetwork::IronSource;
 }
+
+void IronSourceConfig::addTestDevice(const std::string& hash) {}
 
 void IronSourceConfig::openTestSuite() {}
 
@@ -279,9 +297,11 @@ Task<> UnityAdsConfig::initialize() {
         });
 }
 
-Network UnityAdsConfig::network() const {
-    return Network::UnityAds;
+AdNetwork UnityAdsConfig::network() const {
+    return AdNetwork::UnityAds;
 }
+
+void UnityAdsConfig::addTestDevice(const std::string& hash) {}
 
 void UnityAdsConfig::openTestSuite() {}
 
@@ -320,9 +340,11 @@ Task<> VungleConfig::initialize() {
         });
 }
 
-Network VungleConfig::network() const {
-    return Network::Vungle;
+AdNetwork VungleConfig::network() const {
+    return AdNetwork::Vungle;
 }
+
+void VungleConfig::addTestDevice(const std::string& hash) {}
 
 void VungleConfig::openTestSuite() {}
 
@@ -347,9 +369,11 @@ Task<> NullNetworkConfig::initialize() {
     co_return;
 }
 
-Network NullNetworkConfig::network() const {
-    return Network::Null;
+AdNetwork NullNetworkConfig::network() const {
+    return AdNetwork::Null;
 }
+
+void NullNetworkConfig::addTestDevice(const std::string& hash) {}
 
 void NullNetworkConfig::openTestSuite() {}
 
@@ -389,7 +413,7 @@ std::shared_ptr<IAd> AdConfigManager::createAd(AdFormat format) {
 }
 
 std::shared_ptr<IAdConfig> IAdConfig::parse(const nlohmann::json& node) {
-    auto&& format = parseAdFormat(node["format"]);
+    auto&& format = AdsConfigUtils::parseFormat(node["format"]);
     switch (format) {
     case AdFormat::Banner:
         return std::make_shared<BannerConfig>(node);
@@ -526,7 +550,7 @@ template <class Ad>
 SingleInstanceConfig<Ad>::SingleInstanceConfig(AdFormat format,
                                                const nlohmann::json& node) {
     format_ = format;
-    network_ = parseNetwork(node["network"]);
+    network_ = AdsConfigUtils::parseNetwork(node["network"]);
     id_ = node.value("id", "");
 }
 
@@ -575,7 +599,11 @@ Task<> Self::initialize() {
     co_await networkManager_->initialize();
 }
 
-void Self::openTestSuite(Network network) {
+void Self::addTestDevice(const std::string& hash) {
+    networkManager_->addTestDevice(hash);
+}
+
+void Self::openTestSuite(AdNetwork network) {
     networkManager_->openTestSuite(network);
 }
 

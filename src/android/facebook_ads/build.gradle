@@ -18,14 +18,12 @@ android {
 }
 
 if (rootProject.ext.has('buildMaven') && rootProject.buildMaven) {
-    configureAndPublish('facebook-ads')
-} else {
-    dependencies {
-        api project(':ee-x-ads')
-    }
+    configureMaven('facebook-ads')
 }
 
 dependencies {
+    api project(':ee-x-ads')
+
     // https://developers.facebook.com/docs/audience-network/android
     // https://developers.facebook.com/docs/audience-network/changelog-android/
     // Use "api" to inherit manifest elements.

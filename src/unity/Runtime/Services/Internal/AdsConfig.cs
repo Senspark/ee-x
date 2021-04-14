@@ -17,7 +17,7 @@ namespace EE.Internal {
             }
         }
 
-        public static AdFormat ParseAdFormat(string id) {
+        public static AdFormat ParseFormat(string id) {
             switch (id) {
                 case "banner": return AdFormat.Banner;
                 case "rect": return AdFormat.Rectangle;
@@ -329,7 +329,7 @@ namespace EE.Internal {
 
     internal static class AdConfig {
         public static IAdConfig Parse(JsonObject node) {
-            var format = AdsConfigUtils.ParseAdFormat((string) node["format"]);
+            var format = AdsConfigUtils.ParseFormat((string) node["format"]);
             switch (format) {
                 case AdFormat.Banner: return new BannerConfig(node);
                 case AdFormat.Rectangle: return new RectangleConfig(node);

@@ -94,7 +94,9 @@ Task<AdResult> Self::show() {
     if (displayCapper_->isCapped()) {
         co_return AdResult::Capped;
     }
+    displayCapper_->lock();
     auto result = co_await ad_->show();
+    displayCapper_->unlock();
     displayCapper_->cap();
     co_return result;
 }

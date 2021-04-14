@@ -7,8 +7,6 @@
 
 namespace ee {
 namespace services {
-enum class AdFormat;
-
 class AdsConfig;
 class LazyBannerAd;
 class LazyFullScreenAd;

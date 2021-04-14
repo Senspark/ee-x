@@ -2,6 +2,7 @@ apply plugin: 'com.android.library'
 
 repositories {
     maven { url 'https://adcolony.bintray.com/AdColony' }
+    maven { url 'https://sdk.tapjoy.com' }
 }
 
 android {
@@ -20,14 +21,12 @@ android {
 }
 
 if (rootProject.ext.has('buildMaven') && rootProject.buildMaven) {
-    configureAndPublish('ad-mob-mediation')
-} else {
-    dependencies {
-        api project(':ee-x-ad-mob')
-    }
+    configureMaven('ad-mob-mediation')
 }
 
 dependencies {
+    api project(':ee-x-ad-mob')
+
     // https://bintray.com/google/mobile-ads-adapters-android
     // https://developers.google.com/admob/android/mediation/adcolony#adcolony-android-mediation-adapter-changelog
     // Use "api" to inherit manifest elements.
@@ -38,13 +37,13 @@ dependencies {
 
     // https://developers.google.com/admob/android/mediation/facebook#facebook-android-mediation-adapter-changelog
     api 'com.google.ads.mediation:facebook:6.3.0.1'
-    
+
     // https://developers.google.com/admob/android/mediation/inmobi#inmobi-android-mediation-adapter-changelog
-    api 'com.google.ads.mediation:inmobi:9.1.6.0'
+    api 'com.google.ads.mediation:inmobi:9.1.7.0'
 
     // https://developers.google.com/admob/android/mediation/ironsource#ironsource-android-mediation-adapter-changelog
-    api 'com.google.ads.mediation:ironsource:7.1.2.0'
-    
+    api 'com.google.ads.mediation:ironsource:7.1.4.0'
+
     // https://developers.google.com/admob/android/mediation/tapjoy#tapjoy-android-mediation-adapter-changelog
     api 'com.google.ads.mediation:tapjoy:12.7.1.0'
 

@@ -17,12 +17,13 @@ using Self = Capper;
 
 Self::Capper(float interval)
     : interval_(interval)
-    , capped_(false) {}
+    , capped_(false)
+    , locked_(false) {}
 
 Self::~Capper() = default;
 
 bool Self::isCapped() const {
-    return capped_;
+    return capped_ || locked_;
 }
 
 void Self::cap() {
@@ -31,6 +32,14 @@ void Self::cap() {
         co_await Delay(interval_);
         capped_ = false;
     });
+}
+
+void Self::lock() {
+    locked_ = true;
+}
+
+void Self::unlock() {
+    locked_ = false;
 }
 } // namespace ads
 } // namespace ee

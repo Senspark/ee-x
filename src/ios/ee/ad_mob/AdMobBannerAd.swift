@@ -110,7 +110,7 @@ internal class AdMobBannerAd: NSObject, IBannerAd, GADBannerViewDelegate {
         set(value) { _viewHelper.size = value }
     }
 
-    func adViewDidReceiveAd(_ bannerView: GADBannerView) {
+    func bannerViewDidReceiveAd(_ bannerView: GADBannerView) {
         Thread.runOnMainThread {
             self._logger.debug("\(kTag): \(#function): id = \(self._adId)")
             self._isLoaded = true
@@ -118,7 +118,7 @@ internal class AdMobBannerAd: NSObject, IBannerAd, GADBannerViewDelegate {
         }
     }
 
-    func adView(_ bannerView: GADBannerView, didFailToReceiveAdWithError error: GADRequestError) {
+    func bannerView(_ bannerView: GADBannerView, didFailToReceiveAdWithError error: Error) {
         Thread.runOnMainThread {
             self._logger.debug("\(kTag): \(#function): id = \(self._adId) message = \(error.localizedDescription)")
             self._bridge.callCpp(self._messageHelper.onFailedToLoad, EEJsonUtils.convertDictionary(toString: [
@@ -128,26 +128,25 @@ internal class AdMobBannerAd: NSObject, IBannerAd, GADBannerViewDelegate {
         }
     }
 
-    func adViewWillPresentScreen(_ bannerView: GADBannerView) {
+    func bannerViewDidRecordImpression(_ bannerView: GADBannerView) {
         Thread.runOnMainThread {
             self._logger.debug("\(kTag): \(#function): id = \(self._adId)")
         }
     }
 
-    func adViewWillLeaveApplication(_ bannerView: GADBannerView) {
-        Thread.runOnMainThread {
-            self._logger.debug("\(kTag): \(#function): id = \(self._adId)")
-            self._bridge.callCpp(self._messageHelper.onClicked)
-        }
-    }
-
-    func adViewWillDismissScreen(_ bannerView: GADBannerView) {
+    func bannerViewWillPresentScreen(_ bannerView: GADBannerView) {
         Thread.runOnMainThread {
             self._logger.debug("\(kTag): \(#function): id = \(self._adId)")
         }
     }
 
-    func adViewDidDismissScreen(_ bannerView: GADBannerView) {
+    func bannerViewWillDismissScreen(_ bannerView: GADBannerView) {
+        Thread.runOnMainThread {
+            self._logger.debug("\(kTag): \(#function): id = \(self._adId)")
+        }
+    }
+
+    func bannerViewDidDismissScreen(_ bannerView: GADBannerView) {
         Thread.runOnMainThread {
             self._logger.debug("\(kTag): \(#function): id = \(self._adId)")
         }

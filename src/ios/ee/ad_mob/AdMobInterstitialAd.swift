@@ -16,7 +16,7 @@ internal class AdMobInterstitialAd: NSObject, IFullScreenAd, GADFullScreenConten
     private let _messageHelper: MessageHelper
     private var _helper: FullScreenAdHelper?
     private var _isLoaded = false
-    private var _ad: GADInterstitialAdBeta?
+    private var _ad: GADInterstitialAd?
     
     init(_ bridge: IMessageBridge,
          _ logger: ILogger,
@@ -49,7 +49,7 @@ internal class AdMobInterstitialAd: NSObject, IFullScreenAd, GADFullScreenConten
     func load() {
         Thread.runOnMainThread {
             self._logger.debug("\(kTag): \(#function): id = \(self._adId)")
-            GADInterstitialAdBeta.load(withAdUnitID: self._adId, request: GADRequest()) { ad, error in
+            GADInterstitialAd.load(withAdUnitID: self._adId, request: GADRequest()) { ad, error in
                 if let error = error {
                     Thread.runOnMainThread {
                         self._logger.debug("\(kTag): \(#function): failed id = \(self._adId) message = \(error.localizedDescription)")

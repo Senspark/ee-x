@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Threading.Tasks;
 
 using UnityEngine;
@@ -98,7 +99,7 @@ namespace EE.Internal {
 
         public float GetDensity() {
             var response = _bridge.Call(kGetDensity);
-            return float.Parse(response);
+            return float.Parse(response, CultureInfo.InvariantCulture);
         }
 
         [Serializable]

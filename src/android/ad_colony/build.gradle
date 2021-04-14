@@ -22,22 +22,18 @@ android {
 }
 
 if (rootProject.ext.has('buildMaven') && rootProject.buildMaven) {
-    configureAndPublish('ad-colony')
-} else {
-    dependencies {
-        api project(':ee-x-ads')
-    }
+    configureMaven('ad-colony')
 }
 
 dependencies {
-    implementation 'androidx.appcompat:appcompat:1.2.0'
+    api project(':ee-x-ads')
 
     // https://github.com/AdColony/AdColony-Android-SDK
     // Use "api" to inherit manifest elements.
     api 'com.adcolony:sdk:4.4.1'
 
+    implementation 'androidx.appcompat:appcompat:1.2.0'
     implementation 'com.google.android.gms:play-services-ads-identifier:17.0.0'
-
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$kotlinCoroutinesVersion"
     implementation "org.jetbrains.kotlinx:kotlinx-serialization-json:$kotlinSerializationVersion"

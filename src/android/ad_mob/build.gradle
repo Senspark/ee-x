@@ -18,20 +18,17 @@ android {
 }
 
 if (rootProject.ext.has('buildMaven') && rootProject.buildMaven) {
-    configureAndPublish('ad-mob')
-} else {
-    dependencies {
-        api project(':ee-x-ads')
-    }
+    configureMaven('ad-mob')
 }
 
 dependencies {
-    implementation 'androidx.appcompat:appcompat:1.2.0'
+    api project(':ee-x-ads')
 
     // https://developers.google.com/admob/android/rel-notes
     api 'com.google.android.gms:play-services-ads:19.8.0'
 
     compileOnly 'com.google.android.ads:mediation-test-suite:1.5.0'
+    implementation 'androidx.appcompat:appcompat:1.2.0'
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$kotlinCoroutinesVersion"
     implementation "org.jetbrains.kotlinx:kotlinx-serialization-json:$kotlinSerializationVersion"

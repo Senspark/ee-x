@@ -18,14 +18,11 @@ android {
 }
 
 if (rootProject.ext.has('buildMaven') && rootProject.buildMaven) {
-    configureAndPublish('ads')
-} else {
-    dependencies {
-        api project(':ee-x-core')
-    }
+    configureMaven('ads')
 }
 
 dependencies {
+    api project(':ee-x-core')    
     implementation 'androidx.annotation:annotation:1.2.0'
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
     implementation "org.jetbrains.kotlinx:kotlinx-serialization-json:$kotlinSerializationVersion"

@@ -16,13 +16,10 @@ android {
 }
 
 if (rootProject.ext.has('buildMaven') && rootProject.buildMaven) {
-    configureAndPublish('ad-mob-test-suite')
-} else {
-    dependencies {
-        api project(':ee-x-ad-mob')
-    }
+    configureMaven('ad-mob-test-suite')
 }
 
 dependencies {
+    api project(':ee-x-ad-mob')
     api 'com.google.android.ads:mediation-test-suite:1.5.0'
 }

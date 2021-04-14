@@ -22,14 +22,12 @@ android {
 }
 
 if (rootProject.ext.has('buildMaven') && rootProject.buildMaven) {
-    configureAndPublish('iron-source-mediation')
-} else {
-    dependencies {
-        api project(':ee-x-iron-source')
-    }
+    configureMaven('iron-source-mediation')
 }
 
 dependencies {
+    api project(':ee-x-iron-source')
+    
     // https://bintray.com/ironsource-mobile/android-adapters
     // https://developers.ironsrc.com/ironsource-mobile/android/adcolony-change-log/
     // Use "api" to inherit manifest elements.
@@ -51,7 +49,7 @@ dependencies {
     // https://developers.ironsrc.com/ironsource-mobile/android/inmobi-change-log/
     api 'com.ironsource.adapters:inmobiadapter:4.3.9'
     api 'com.inmobi.monetization:inmobi-ads:9.1.7'
-    
+
     // https://developers.ironsrc.com/ironsource-mobile/android/tapjoy-change-log/
     api 'com.ironsource.adapters:tapjoyadapter:4.1.15'
     api 'com.tapjoy:tapjoy-android-sdk:12.7.1'

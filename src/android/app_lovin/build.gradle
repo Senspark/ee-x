@@ -18,14 +18,12 @@ android {
 }
 
 if (rootProject.ext.has('buildMaven') && rootProject.buildMaven) {
-    configureAndPublish('app-lovin')
-} else {
-    dependencies {
-        api project(':ee-x-ads')
-    }
+    configureMaven('app-lovin')
 }
 
 dependencies {
+    api project(':ee-x-ads')
+    
     // https://bintray.com/applovin/Android/sdk_android
     // https://dash.applovin.com/docs/integration#androidIntegration
     // https://github.com/AppLovin/AppLovin-MAX-SDK-Android/releases

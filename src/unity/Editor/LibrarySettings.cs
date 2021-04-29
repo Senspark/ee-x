@@ -232,6 +232,7 @@ namespace EE.Editor {
                     iosLibraries.Add("ee-x/facebook-ads");
                 }
                 if (IsIronSourceEnabled) {
+                    androidRepositories.Add("https://android-sdk.is.com");
                     androidRepositories.Add("https://dl.bintray.com/ironsource-mobile/android-sdk");
                     if (IsIronSourceMediationEnabled) {
                         androidRepositories.Add("https://dl.bintray.com/ironsource-mobile/android-adapters");

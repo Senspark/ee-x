@@ -3,6 +3,7 @@ apply plugin: 'com.android.library'
 repositories {
     maven { url 'https://adcolony.bintray.com/AdColony' }
     maven { url 'https://sdk.tapjoy.com' }
+    maven { url 'https://android-sdk.is.com' }
 }
 
 android {
@@ -28,6 +29,7 @@ dependencies {
     api project(':ee-x-ad-mob')
 
     // https://bintray.com/google/mobile-ads-adapters-android
+    // https://maven.google.com/web/index.html#com.google.ads.mediation
     // https://developers.google.com/admob/android/mediation/adcolony#adcolony-android-mediation-adapter-changelog
     // Use "api" to inherit manifest elements.
     api 'com.google.ads.mediation:adcolony:4.4.1.0'

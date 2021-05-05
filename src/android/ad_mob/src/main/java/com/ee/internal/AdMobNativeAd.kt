@@ -23,9 +23,6 @@ import com.google.android.gms.ads.AdLoader
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.LoadAdError
 import com.google.android.gms.ads.VideoController.VideoLifecycleCallbacks
-import com.google.android.gms.ads.formats.MediaView
-import com.google.android.gms.ads.formats.UnifiedNativeAd
-import com.google.android.gms.ads.formats.UnifiedNativeAdView
 import kotlinx.serialization.InternalSerializationApi
 import kotlinx.serialization.Serializable
 import java.util.concurrent.atomic.AtomicBoolean
@@ -35,6 +32,8 @@ private typealias ViewProcessor<T> = (view: T) -> Unit
 /**
  * Created by Zinge on 10/16/17.
  */
+
+/*
 @InternalSerializationApi
 internal class AdMobNativeAd(
     private val _bridge: IMessageBridge,
@@ -391,3 +390,4 @@ internal class AdMobNativeAd(
         }
     }
 }
+ */

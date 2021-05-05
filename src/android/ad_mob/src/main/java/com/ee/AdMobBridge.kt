@@ -7,7 +7,6 @@ import com.ee.internal.AdMobAppOpenAd
 import com.ee.internal.AdMobBannerAd
 import com.ee.internal.AdMobBannerHelper
 import com.ee.internal.AdMobInterstitialAd
-import com.ee.internal.AdMobNativeAd
 import com.ee.internal.AdMobRewardedAd
 import com.ee.internal.AdMobRewardedInterstitialAd
 import com.ee.internal.deserialize
@@ -255,9 +254,12 @@ class AdMobBridge(
     @AnyThread
     fun createNativeAd(adId: String, layoutName: String,
                        identifiers: Map<String, String>): Boolean {
+        return false
+        /* FIXME
         return createAd(adId) {
             AdMobNativeAd(_bridge, _logger, _application, _activity, adId, layoutName, identifiers)
         }
+         */
     }
 
     @AnyThread

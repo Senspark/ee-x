@@ -8,13 +8,11 @@ import com.google.firebase.ktx.Firebase
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import com.google.firebase.remoteconfig.ktx.remoteConfig
 import com.google.firebase.remoteconfig.ktx.remoteConfigSettings
-import kotlinx.serialization.InternalSerializationApi
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.JsonPrimitive
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
-@InternalSerializationApi
 class FirebaseRemoteConfigBridge(
     private val _bridge: IMessageBridge,
     private val _logger: ILogger,
@@ -59,41 +57,41 @@ class FirebaseRemoteConfigBridge(
         deregisterHandlers()
     }
 
+    @Serializable
+    private class SetSettingsRequest(
+        val fetchTimeOut: Long,
+        val fetchInterval: Long,
+    )
+
+    @Serializable
+    private class FetchRequest(
+        val fetchInterval: Long,
+    )
+
+    @Serializable
+    private class SetDefaultsRequest(
+        val defaults: Map<String, JsonPrimitive>,
+    )
+
     @AnyThread
     private fun registerHandlers() {
         _bridge.registerAsyncHandler(kInitialize) {
             Utils.toString(initialize())
         }
         _bridge.registerAsyncHandler(kSetSettings) { message ->
-            @Serializable
-            class Request(
-                val fetchTimeOut: Long,
-                val fetchInterval: Long,
-            )
-
-            val request = deserialize<Request>(message)
+            val request = deserialize<SetSettingsRequest>(message)
             setSettings(request.fetchTimeOut, request.fetchInterval)
             ""
         }
         _bridge.registerAsyncHandler(kFetch) { message ->
-            @Serializable
-            class Request(
-                val fetchInterval: Long,
-            )
-
-            val request = deserialize<Request>(message)
+            val request = deserialize<FetchRequest>(message)
             fetch(request.fetchInterval).toString()
         }
         _bridge.registerAsyncHandler(kActivate) {
             Utils.toString(activate())
         }
         _bridge.registerAsyncHandler(kSetDefaults) { message ->
-            @Serializable
-            class Request(
-                val defaults: Map<String, JsonPrimitive>,
-            )
-
-            val request = deserialize<Request>(message)
+            val request = deserialize<SetDefaultsRequest>(message)
             setDefaults(request.defaults)
             ""
         }

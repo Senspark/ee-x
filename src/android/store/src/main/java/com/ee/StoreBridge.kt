@@ -37,7 +37,6 @@ import kotlinx.coroutines.cancel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.suspendCancellableCoroutine
-import kotlinx.serialization.InternalSerializationApi
 import kotlinx.serialization.Serializable
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
@@ -45,7 +44,6 @@ import kotlin.coroutines.resumeWithException
 /**
  * Created by Zinge on 5/16/17.
  */
-@InternalSerializationApi
 class StoreBridge(
     private val _bridge: IMessageBridge,
     private val _logger: ILogger,
@@ -100,6 +98,12 @@ class StoreBridge(
         _scope.cancel()
     }
 
+    @Serializable
+    private class ProductRequest(
+        val productJson: String,
+        val transactionId: String
+    )
+
     @AnyThread
     private fun registerHandlers() {
         _bridge.registerHandler(kRetrieveProducts) { message ->
@@ -111,13 +115,7 @@ class StoreBridge(
             ""
         }
         _bridge.registerHandler(kFinishTransaction) { message ->
-            @Serializable
-            class Request(
-                val productJson: String,
-                val transactionId: String
-            )
-
-            val request = deserialize<Request>(message)
+            val request = deserialize<ProductRequest>(message)
             _purchasing.finishTransaction(request.productJson, request.transactionId)
             ""
         }
@@ -128,13 +126,7 @@ class StoreBridge(
             Utils.toString(_purchasing.restoreTransactions())
         }
         _bridge.registerHandler(kFinishAdditionalTransaction) { message ->
-            @Serializable
-            class Request(
-                val productJson: String,
-                val transactionId: String
-            )
-
-            val request = deserialize<Request>(message)
+            val request = deserialize<ProductRequest>(message)
             _scope.launch {
                 _purchasing.finishAdditionalTransaction(request.productJson, request.transactionId)
             }
@@ -159,16 +151,16 @@ class StoreBridge(
         _bridge.callCpp(kOnProductsRetrieved, json)
     }
 
-    override fun onPurchaseSucceeded(id: String, receipt: String, transactionId: String) {
-        @Serializable
-        @Suppress("unused")
-        class Response(
-            val id: String,
-            val receipt: String,
-            val transactionId: String
-        )
+    @Serializable
+    @Suppress("unused")
+    private class PurchaseResponse(
+        val id: String,
+        val receipt: String,
+        val transactionId: String
+    )
 
-        val response = Response(id, receipt, transactionId)
+    override fun onPurchaseSucceeded(id: String, receipt: String, transactionId: String) {
+        val response = PurchaseResponse(id, receipt, transactionId)
         _bridge.callCpp(kOnPurchaseSucceeded, response.serialize())
     }
 

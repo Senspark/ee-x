@@ -15,7 +15,6 @@ import com.facebook.ads.AdSettings
 import com.facebook.ads.AdSize
 import com.facebook.ads.AudienceNetworkAds
 import kotlinx.coroutines.suspendCancellableCoroutine
-import kotlinx.serialization.InternalSerializationApi
 import kotlinx.serialization.Serializable
 import java.util.concurrent.ConcurrentHashMap
 import kotlin.coroutines.resume
@@ -23,7 +22,6 @@ import kotlin.coroutines.resume
 /**
  * Created by Pham Xuan Han on 17/05/17.
  */
-@InternalSerializationApi
 class FacebookAdsBridge(
     private val _bridge: IMessageBridge,
     private val _logger: ILogger,
@@ -92,6 +90,26 @@ class FacebookAdsBridge(
         _ads.clear()
     }
 
+    @Serializable
+    @Suppress("unused")
+    private class GetBannerAdSizeResponse(
+        val width: Int,
+        val height: Int
+    )
+
+    @Serializable
+    private class CreateBannerAdRequest(
+        val adId: String,
+        val adSize: Int
+    )
+
+    @Serializable
+    private class CreateNativeAdRequest(
+        val adId: String,
+        val layoutName: String,
+        val identifiers: Map<String, String>
+    )
+
     @AnyThread
     private fun registerHandlers() {
         _bridge.registerAsyncHandler(kInitialize) {
@@ -109,38 +127,18 @@ class FacebookAdsBridge(
             ""
         }
         _bridge.registerHandler(kGetBannerAdSize) { message ->
-            @Serializable
-            @Suppress("unused")
-            class Response(
-                val width: Int,
-                val height: Int
-            )
-
             val index = message.toInt()
             val size = _bannerHelper.getSize(index)
-            val response = Response(size.x, size.y)
+            val response = GetBannerAdSizeResponse(size.x, size.y)
             response.serialize()
         }
         _bridge.registerHandler(kCreateBannerAd) { message ->
-            @Serializable
-            class Request(
-                val adId: String,
-                val adSize: Int
-            )
-
-            val request = deserialize<Request>(message)
+            val request = deserialize<CreateBannerAdRequest>(message)
             val adSize = _bannerHelper.getAdSize(request.adSize)
             Utils.toString(createBannerAd(request.adId, adSize))
         }
         _bridge.registerHandler(kCreateNativeAd) { message ->
-            @Serializable
-            class Request(
-                val adId: String,
-                val layoutName: String,
-                val identifiers: Map<String, String>
-            )
-
-            val request = deserialize<Request>(message)
+            val request = deserialize<CreateNativeAdRequest>(message)
             Utils.toString(createNativeAd(request.adId, request.layoutName, request.identifiers))
         }
         _bridge.registerHandler(kCreateInterstitialAd) { message ->

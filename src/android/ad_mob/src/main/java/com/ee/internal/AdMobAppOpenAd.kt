@@ -14,11 +14,9 @@ import com.google.android.gms.ads.FullScreenContentCallback
 import com.google.android.gms.ads.LoadAdError
 import com.google.android.gms.ads.appopen.AppOpenAd
 import com.google.android.gms.ads.appopen.AppOpenAd.AppOpenAdLoadCallback
-import kotlinx.serialization.InternalSerializationApi
 import kotlinx.serialization.Serializable
 import java.util.concurrent.atomic.AtomicBoolean
 
-@InternalSerializationApi
 internal class AdMobAppOpenAd(
     private val _bridge: IMessageBridge,
     private val _logger: ILogger,

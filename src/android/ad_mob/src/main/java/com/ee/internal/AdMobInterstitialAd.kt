@@ -12,14 +12,12 @@ import com.google.android.gms.ads.FullScreenContentCallback
 import com.google.android.gms.ads.LoadAdError
 import com.google.android.gms.ads.interstitial.InterstitialAd
 import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
-import kotlinx.serialization.InternalSerializationApi
 import kotlinx.serialization.Serializable
 import java.util.concurrent.atomic.AtomicBoolean
 
 /**
  * Created by Zinge on 10/13/17.
  */
-@InternalSerializationApi
 internal class AdMobInterstitialAd(
     private val _bridge: IMessageBridge,
     private val _logger: ILogger,
@@ -90,13 +88,13 @@ internal class AdMobInterstitialAd(
             val showCallback = object : FullScreenContentCallback() {
                 override fun onAdShowedFullScreenContent() {
                     Thread.runOnMainThread {
-                        _logger.debug("${kTag}: ${this::onAdShowedFullScreenContent.name}: id = $_adId")
+                        _logger.debug("$kTag: ${this::onAdShowedFullScreenContent.name}: id = $_adId")
                     }
                 }
 
                 override fun onAdFailedToShowFullScreenContent(error: AdError) {
                     Thread.runOnMainThread {
-                        _logger.debug("${kTag}: ${this::onAdFailedToShowFullScreenContent.name}: id = $_adId message = ${error.message}")
+                        _logger.debug("$kTag: ${this::onAdFailedToShowFullScreenContent.name}: id = $_adId message = ${error.message}")
                         _isLoaded.set(false)
                         _ad = null
                         _bridge.callCpp(_messageHelper.onFailedToShow, ErrorResponse(error.code, error.message).serialize())
@@ -105,7 +103,7 @@ internal class AdMobInterstitialAd(
 
                 override fun onAdDismissedFullScreenContent() {
                     Thread.runOnMainThread {
-                        _logger.debug("${kTag}: ${this::onAdDismissedFullScreenContent.name}: id = $_adId")
+                        _logger.debug("$kTag: ${this::onAdDismissedFullScreenContent.name}: id = $_adId")
                         _isLoaded.set(false)
                         _ad = null
                         _bridge.callCpp(_messageHelper.onClosed)
@@ -115,7 +113,7 @@ internal class AdMobInterstitialAd(
             val loadCallback = object : InterstitialAdLoadCallback() {
                 override fun onAdLoaded(ad: InterstitialAd) {
                     Thread.runOnMainThread {
-                        _logger.debug("${kTag}: ${this::onAdLoaded.name}: id = $_adId")
+                        _logger.debug("$kTag: ${this::onAdLoaded.name}: id = $_adId")
                         ad.fullScreenContentCallback = showCallback
                         _isLoaded.set(true)
                         _ad = ad
@@ -125,7 +123,7 @@ internal class AdMobInterstitialAd(
 
                 override fun onAdFailedToLoad(error: LoadAdError) {
                     Thread.runOnMainThread {
-                        _logger.debug("${kTag}: ${this::onAdFailedToLoad.name}: id = $_adId message = ${error.message} response = ${error.responseInfo ?: ""}")
+                        _logger.debug("$kTag: ${this::onAdFailedToLoad.name}: id = $_adId message = ${error.message} response = ${error.responseInfo ?: ""}")
                         _bridge.callCpp(_messageHelper.onFailedToLoad, ErrorResponse(error.code, error.message).serialize())
                     }
                 }

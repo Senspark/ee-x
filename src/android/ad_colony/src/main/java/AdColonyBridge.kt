@@ -5,12 +5,10 @@ import android.app.Application
 import androidx.annotation.AnyThread
 import com.adcolony.sdk.AdColony
 import com.ee.internal.deserialize
-import kotlinx.serialization.InternalSerializationApi
 import kotlinx.serialization.Serializable
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
-@InternalSerializationApi
 class AdColonyBridge(
     private val _bridge: IMessageBridge,
     private val _logger: ILogger,
@@ -48,16 +46,16 @@ class AdColonyBridge(
         deregisterHandlers()
     }
 
+    @Serializable
+    private class InitializeRequest(
+        val appId: String,
+        val zoneIds: List<String>
+    )
+
     @AnyThread
     private fun registerHandlers() {
         _bridge.registerAsyncHandler(kInitialize) { message ->
-            @Serializable
-            class Request(
-                val appId: String,
-                val zoneIds: List<String>
-            )
-
-            val request = deserialize<Request>(message)
+            val request = deserialize<InitializeRequest>(message)
             Utils.toString(initialize(request.appId, request.zoneIds))
         }
     }

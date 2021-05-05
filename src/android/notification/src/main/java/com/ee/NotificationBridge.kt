@@ -10,13 +10,11 @@ import androidx.annotation.AnyThread
 import com.ee.internal.NotificationReceiver
 import com.ee.internal.NotificationUtils
 import com.ee.internal.deserialize
-import kotlinx.serialization.InternalSerializationApi
 import kotlinx.serialization.Serializable
 
 /**
  * Created by Zinge on 3/29/17.
  */
-@InternalSerializationApi
 class NotificationBridge(
     private val _bridge: IMessageBridge,
     private val _logger: ILogger,
@@ -54,20 +52,25 @@ class NotificationBridge(
         deregisterHandlers()
     }
 
+    @Serializable
+    private class ScheduleRequest(
+        val title: String,
+        val ticker: String,
+        val body: String,
+        val delay: Int,
+        val interval: Int,
+        val tag: Int
+    )
+
+    @Serializable
+    private class UnscheduleRequest(
+        val tag: Int
+    )
+
     @AnyThread
     private fun registerHandlers() {
         _bridge.registerHandler(kSchedule) { message ->
-            @Serializable
-            class Request(
-                val title: String,
-                val ticker: String,
-                val body: String,
-                val delay: Int,
-                val interval: Int,
-                val tag: Int
-            )
-
-            val request = deserialize<Request>(message)
+            val request = deserialize<ScheduleRequest>(message)
             schedule(request.ticker, request.title, request.body, request.delay, request.interval, request.tag)
             ""
         }
@@ -76,12 +79,7 @@ class NotificationBridge(
             ""
         }
         _bridge.registerHandler(kUnschedule) { message ->
-            @Serializable
-            class Request(
-                val tag: Int
-            )
-
-            val request = deserialize<Request>(message)
+            val request = deserialize<UnscheduleRequest>(message)
             unschedule(request.tag)
             ""
         }

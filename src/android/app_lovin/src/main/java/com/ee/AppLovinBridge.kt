@@ -12,10 +12,8 @@ import com.applovin.sdk.AppLovinSdkSettings
 import com.ee.internal.AppLovinInterstitialAdListener
 import com.ee.internal.AppLovinRewardedAdListener
 import kotlinx.coroutines.suspendCancellableCoroutine
-import kotlinx.serialization.InternalSerializationApi
 import kotlin.coroutines.resume
 
-@InternalSerializationApi
 class AppLovinBridge(
     private val _bridge: IMessageBridge,
     private val _logger: ILogger,

@@ -7,7 +7,6 @@ import com.ee.MessageHandler
 import com.ee.PluginManager
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
-import kotlinx.serialization.InternalSerializationApi
 import kotlinx.serialization.Serializable
 
 typealias MessageBridgeHandler = (tag: String, message: String) -> Unit
@@ -44,15 +43,14 @@ class MessageBridge(
         }
     }
 
-    @InternalSerializationApi
+    @Serializable
+    private class Request(
+        val callback_tag: String,
+        val message: String
+    )
+
     override fun registerAsyncHandler(tag: String, handler: AsyncMessageHandler) {
         return registerHandler(tag) { message ->
-            @Serializable
-            class Request(
-                val callback_tag: String,
-                val message: String
-            )
-
             val request = deserialize<Request>(message)
             _scope.launch {
                 val response = handler(request.message)

@@ -8,12 +8,10 @@ import com.adjust.sdk.AdjustConfig
 import com.adjust.sdk.AdjustEvent
 import com.adjust.sdk.LogLevel
 import com.ee.internal.deserialize
-import kotlinx.serialization.InternalSerializationApi
 import kotlinx.serialization.Serializable
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
-@InternalSerializationApi
 class AdjustBridge(
     private val _bridge: IMessageBridge,
     private val _logger: ILogger,
@@ -59,18 +57,18 @@ class AdjustBridge(
         deregisterHandlers()
     }
 
+    @Serializable
+    private class InitializeRequest(
+        val token: String,
+        val environment: Int,
+        val logLevel: Int,
+        val eventBufferingEnabled: Boolean,
+    )
+
     @AnyThread
     private fun registerHandlers() {
         _bridge.registerHandler(kInitialize) { message ->
-            @Serializable
-            class Request(
-                val token: String,
-                val environment: Int,
-                val logLevel: Int,
-                val eventBufferingEnabled: Boolean,
-            )
-
-            val request = deserialize<Request>(message)
+            val request = deserialize<InitializeRequest>(message)
             initialize(request.token, parseEnvironment(request.environment),
                 parseLogLevel(request.logLevel), request.eventBufferingEnabled)
             ""

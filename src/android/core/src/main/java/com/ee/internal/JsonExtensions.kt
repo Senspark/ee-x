@@ -4,13 +4,14 @@ import androidx.annotation.AnyThread
 import kotlinx.serialization.InternalSerializationApi
 import kotlinx.serialization.builtins.ListSerializer
 import kotlinx.serialization.builtins.MapSerializer
+import kotlinx.serialization.decodeFromString
+import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.serializer
 
 @AnyThread
-@InternalSerializationApi
 inline fun <reified T : Any> deserialize(string: String): T {
-    return Json.decodeFromString(T::class.serializer(), string)
+    return Json.decodeFromString(string)
 }
 
 @AnyThread
@@ -31,9 +32,8 @@ inline fun <reified K : Any, reified V : Any> deserializeMap(string: String): Ma
 }
 
 @AnyThread
-@InternalSerializationApi
 inline fun <reified T : Any> T.serialize(): String {
-    return Json.encodeToString(T::class.serializer(), this)
+    return Json.encodeToString(this)
 }
 
 @AnyThread

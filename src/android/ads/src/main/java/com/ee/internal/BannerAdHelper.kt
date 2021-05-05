@@ -5,16 +5,40 @@ import androidx.annotation.AnyThread
 import com.ee.IBannerAd
 import com.ee.IMessageBridge
 import com.ee.Utils
-import kotlinx.serialization.InternalSerializationApi
 import kotlinx.serialization.Serializable
 
 /**
  * Created by Zinge on 10/12/17.
  */
-@InternalSerializationApi
 class BannerAdHelper(private val _bridge: IMessageBridge,
                      private val _view: IBannerAd,
                      private val _helper: MessageHelper) {
+    @Serializable
+    @Suppress("unused")
+    private class GetPositionResponse(
+        val x: Int,
+        val y: Int
+    )
+
+    @Serializable
+    private class SetPositionRequest(
+        val x: Int,
+        val y: Int
+    )
+
+    @Serializable
+    @Suppress("unused")
+    private class GetSizeResponse(
+        val width: Int,
+        val height: Int
+    )
+
+    @Serializable
+    private class SetSizeRequest(
+        val width: Int,
+        val height: Int
+    )
+
     @AnyThread
     fun registerHandlers() {
         _bridge.registerHandler(_helper.isLoaded) {
@@ -25,48 +49,22 @@ class BannerAdHelper(private val _bridge: IMessageBridge,
             ""
         }
         _bridge.registerHandler(_helper.getPosition) {
-            @Serializable
-            @Suppress("unused")
-            class Response(
-                val x: Int,
-                val y: Int
-            )
-
             val position = _view.position
-            val response = Response(position.x, position.y)
+            val response = GetPositionResponse(position.x, position.y)
             response.serialize()
         }
         _bridge.registerHandler(_helper.setPosition) { message ->
-            @Serializable
-            class Request(
-                val x: Int,
-                val y: Int
-            )
-
-            val request = deserialize<Request>(message)
+            val request = deserialize<SetPositionRequest>(message)
             _view.position = Point(request.x, request.y)
             ""
         }
         _bridge.registerHandler(_helper.getSize) {
-            @Serializable
-            @Suppress("unused")
-            class Response(
-                val width: Int,
-                val height: Int
-            )
-
             val size = _view.size
-            val response = Response(size.x, size.y)
+            val response = GetSizeResponse(size.x, size.y)
             response.serialize()
         }
         _bridge.registerHandler(_helper.setSize) { message ->
-            @Serializable
-            class Request(
-                val width: Int,
-                val height: Int
-            )
-
-            val request = deserialize<Request>(message)
+            val request = deserialize<SetSizeRequest>(message)
             _view.size = Point(request.width, request.height)
             ""
         }

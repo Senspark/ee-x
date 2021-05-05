@@ -28,7 +28,6 @@ import com.facebook.share.model.SharePhotoContent
 import com.facebook.share.model.ShareVideo
 import com.facebook.share.model.ShareVideoContent
 import com.facebook.share.widget.ShareDialog
-import kotlinx.serialization.InternalSerializationApi
 import kotlinx.serialization.Serializable
 import java.io.File
 import java.io.UnsupportedEncodingException
@@ -39,7 +38,6 @@ import kotlin.coroutines.suspendCoroutine
 /**
  * Created by Pham Xuan Han on 17/05/17.
  */
-@InternalSerializationApi
 class FacebookBridge(
     private val _bridge: IMessageBridge,
     private val _logger: ILogger,
@@ -126,6 +124,55 @@ class FacebookBridge(
         _accessTokenTracker.startTracking()
     }
 
+    @Serializable
+    private class LogInRequest(
+        val permissions: List<String>,
+    )
+
+    @Serializable
+    @Suppress("unused")
+    private class LogInResponse(
+        val successful: Boolean,
+        val canceled: Boolean,
+        val errorMessage: String,
+    )
+
+    @Serializable
+    @Suppress("unused")
+    private class GetAccessTokenResponse(
+        val token: String,
+        val applicationId: String,
+        val userId: String
+    )
+
+    @Serializable
+    private class GraphRequestRequest(
+        val path: String,
+        val parameters: Map<String, String>,
+    )
+
+    @Serializable
+    @Suppress("unused")
+    private class GraphRequestResponse(
+        val successful: Boolean,
+        val response: String,
+        val errorMessage: String,
+    )
+
+    @Serializable
+    private class ShareContentRequest(
+        val type: Int,
+        val url: String,
+    )
+
+    @Serializable
+    @Suppress("unused")
+    private class ShareContentResponse(
+        val successful: Boolean,
+        val canceled: Boolean,
+        val errorMessage: String,
+    )
+
     @AnyThread
     private fun registerHandlers() {
         _bridge.registerHandler(kRegisterNotifications) {
@@ -136,32 +183,19 @@ class FacebookBridge(
             Utils.toString(isLoggedIn)
         }
         _bridge.registerAsyncHandler(kLogIn) { message ->
-            @Serializable
-            class Request(
-                val permissions: List<String>,
-            )
-
-            @Serializable
-            @Suppress("unused")
-            class Response(
-                val successful: Boolean,
-                val canceled: Boolean,
-                val errorMessage: String,
-            )
-
-            val request = deserialize<Request>(message)
-            val response = suspendCoroutine<Response> { cont ->
+            val request = deserialize<LogInRequest>(message)
+            val response = suspendCoroutine<LogInResponse> { cont ->
                 logIn(request.permissions, object : FacebookCallback<LoginResult> {
                     override fun onSuccess(result: LoginResult) {
-                        cont.resume(Response(successful = true, canceled = false, ""))
+                        cont.resume(LogInResponse(successful = true, canceled = false, ""))
                     }
 
                     override fun onCancel() {
-                        cont.resume(Response(successful = false, canceled = true, ""))
+                        cont.resume(LogInResponse(successful = false, canceled = true, ""))
                     }
 
                     override fun onError(error: FacebookException) {
-                        cont.resume(Response(successful = false, canceled = false,
+                        cont.resume(LogInResponse(successful = false, canceled = false,
                             error.localizedMessage ?: ""))
                     }
                 })
@@ -173,47 +207,25 @@ class FacebookBridge(
             ""
         }
         _bridge.registerHandler(kGetAccessToken) {
-            @Serializable
-            @Suppress("unused")
-            class Response(
-                val token: String,
-                val applicationId: String,
-                val userId: String
-            )
-
             val token = accessToken ?: return@registerHandler ""
-            val response = Response(
+            val response = GetAccessTokenResponse(
                 token.token,
                 token.applicationId,
                 token.userId)
             response.serialize()
         }
         _bridge.registerAsyncHandler(kGraphRequest) { message ->
-            @Serializable
-            class Request(
-                val path: String,
-                val parameters: Map<String, String>,
-            )
-
-            @Serializable
-            @Suppress("unused")
-            class Response(
-                val successful: Boolean,
-                val response: String,
-                val errorMessage: String,
-            )
-
-            val request = deserialize<Request>(message)
+            val request = deserialize<GraphRequestRequest>(message)
             val parameters = Bundle()
             for ((key, value) in request.parameters) {
                 parameters.putString(key, value)
             }
-            val response = suspendCoroutine<Response> { cont ->
+            val response = suspendCoroutine<GraphRequestResponse> { cont ->
                 graphRequest(request.path, parameters) { result ->
                     if (result.error != null) {
-                        cont.resume(Response(false, "", result.error.errorMessage))
+                        cont.resume(GraphRequestResponse(false, "", result.error.errorMessage))
                     } else {
-                        cont.resume(Response(true, result.rawResponse, ""))
+                        cont.resume(GraphRequestResponse(true, result.rawResponse, ""))
                     }
                 }
             }
@@ -225,33 +237,19 @@ class FacebookBridge(
         }
          */
         _bridge.registerAsyncHandler(kShareContent) { message ->
-            @Serializable
-            class Request(
-                val type: Int,
-                val url: String,
-            )
-
-            @Serializable
-            @Suppress("unused")
-            class Response(
-                val successful: Boolean,
-                val canceled: Boolean,
-                val errorMessage: String,
-            )
-
-            val request = deserialize<Request>(message)
-            val response = suspendCoroutine<Response> { cont ->
+            val request = deserialize<ShareContentRequest>(message)
+            val response = suspendCoroutine<ShareContentResponse> { cont ->
                 val callback = object : FacebookCallback<Sharer.Result> {
                     override fun onSuccess(result: Sharer.Result) {
-                        cont.resume(Response(successful = true, canceled = false, ""))
+                        cont.resume(ShareContentResponse(successful = true, canceled = false, ""))
                     }
 
                     override fun onCancel() {
-                        cont.resume(Response(successful = false, canceled = true, ""))
+                        cont.resume(ShareContentResponse(successful = false, canceled = true, ""))
                     }
 
                     override fun onError(error: FacebookException) {
-                        cont.resume(Response(successful = false, canceled = false,
+                        cont.resume(ShareContentResponse(successful = false, canceled = false,
                             error.localizedMessage ?: ""))
                     }
                 }

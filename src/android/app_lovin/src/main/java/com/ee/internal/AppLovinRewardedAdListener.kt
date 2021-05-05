@@ -10,11 +10,9 @@ import com.ee.ILogger
 import com.ee.IMessageBridge
 import com.ee.Thread
 import com.ee.Utils
-import kotlinx.serialization.InternalSerializationApi
 import kotlinx.serialization.Serializable
 import java.util.concurrent.atomic.AtomicBoolean
 
-@InternalSerializationApi
 internal class AppLovinRewardedAdListener(
     private val _bridge: IMessageBridge,
     private val _logger: ILogger)

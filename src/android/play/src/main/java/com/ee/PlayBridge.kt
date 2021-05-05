@@ -14,12 +14,10 @@ import com.google.android.gms.games.Games
 import com.google.android.gms.games.LeaderboardsClient
 import com.google.android.gms.games.achievement.Achievement
 import com.google.common.truth.Truth.assertThat
-import kotlinx.serialization.InternalSerializationApi
 import kotlinx.serialization.Serializable
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
-@InternalSerializationApi
 class PlayBridge(
     private val _bridge: IMessageBridge,
     private val _logger: ILogger,
@@ -70,18 +68,40 @@ class PlayBridge(
         deregisterHandlers()
     }
 
+    @Serializable
+    private class LogInRequest(
+        val silently: Boolean
+    )
+
+    @Serializable
+    private class IncrementAchievementRequest(
+        val achievement_id: String,
+        val increment: Double
+    )
+
+    @Serializable
+    private class UnlockAchievementRequest(
+        val achievement_id: String
+    )
+
+    @Serializable
+    private class ShowLeaderboardRequest(
+        val leaderboard_id: String
+    )
+
+    @Serializable
+    private class SubmitScoreRequest(
+        val leaderboard_id: String,
+        val score: Long
+    )
+
     @AnyThread
     private fun registerHandlers() {
         _bridge.registerHandler(kIsLoggedIn) {
             Utils.toString(isLoggedIn)
         }
         _bridge.registerAsyncHandler(kLogIn) { message ->
-            @Serializable
-            class Request(
-                val silently: Boolean
-            )
-
-            val request = deserialize<Request>(message)
+            val request = deserialize<LogInRequest>(message)
             suspendCoroutine { cont ->
                 logIn(request.silently) { successful ->
                     cont.resume(Utils.toString(successful))
@@ -100,33 +120,17 @@ class PlayBridge(
             ""
         }
         _bridge.registerHandler(kIncrementAchievement) { message ->
-            @Serializable
-            class Request(
-                val achievement_id: String,
-                val increment: Double
-            )
-
-            val request = deserialize<Request>(message)
+            val request = deserialize<IncrementAchievementRequest>(message)
             incrementAchievement(request.achievement_id, request.increment)
             ""
         }
         _bridge.registerHandler(kUnlockAchievement) { message ->
-            @Serializable
-            class Request(
-                val achievement_id: String
-            )
-
-            val request = deserialize<Request>(message)
+            val request = deserialize<UnlockAchievementRequest>(message)
             unlockAchievement(request.achievement_id)
             ""
         }
         _bridge.registerHandler(kShowLeaderboard) { message ->
-            @Serializable
-            class Request(
-                val leaderboard_id: String
-            )
-
-            val request = deserialize<Request>(message)
+            val request = deserialize<ShowLeaderboardRequest>(message)
             showLeaderboard(request.leaderboard_id)
             ""
         }
@@ -135,13 +139,7 @@ class PlayBridge(
             ""
         }
         _bridge.registerHandler(kSubmitScore) { message ->
-            @Serializable
-            class Request(
-                val leaderboard_id: String,
-                val score: Long
-            )
-
-            val request = deserialize<Request>(message)
+            val request = deserialize<SubmitScoreRequest>(message)
             submitScore(request.leaderboard_id, request.score)
             ""
         }

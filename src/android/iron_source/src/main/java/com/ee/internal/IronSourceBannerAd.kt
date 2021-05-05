@@ -15,11 +15,9 @@ import com.ironsource.mediationsdk.IronSource
 import com.ironsource.mediationsdk.IronSourceBannerLayout
 import com.ironsource.mediationsdk.logger.IronSourceError
 import com.ironsource.mediationsdk.sdk.BannerListener
-import kotlinx.serialization.InternalSerializationApi
 import kotlinx.serialization.Serializable
 import java.util.concurrent.atomic.AtomicBoolean
 
-@InternalSerializationApi
 class IronSourceBannerAd(
     private val _bridge: IMessageBridge,
     private val _logger: ILogger,

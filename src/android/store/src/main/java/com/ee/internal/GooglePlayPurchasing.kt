@@ -11,12 +11,13 @@ import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import kotlinx.serialization.InternalSerializationApi
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.SerializationException
+import kotlinx.serialization.builtins.MapSerializer
+import kotlinx.serialization.builtins.serializer
+import kotlinx.serialization.json.Json
 import kotlin.math.min
 
-@InternalSerializationApi
 class GooglePlayPurchasing(
     private val _logger: ILogger,
     private val _plugin: IStoreBridge,
@@ -177,21 +178,21 @@ class GooglePlayPurchasing(
             }
             descriptions.add(description)
         }
-        _productJson = products.serialize()
+        _productJson = Json.encodeToString(MapSerializer(String.serializer(), String.serializer()), products)
         _unityPurchasing.onProductsRetrieved(descriptions)
     }
 
-    private fun encodeReceipt(purchase: Purchase, skuDetails: SkuDetails): String {
-        @Serializable
-        @Suppress("unused")
-        class Data(
-            val json: String,
-            val signature: String,
-            val skuDetails: String,
-            val isPurchaseHistorySupported: Boolean
-        )
+    @Serializable
+    @Suppress("unused")
+    private class EncodeReceiptData(
+        val json: String,
+        val signature: String,
+        val skuDetails: String,
+        val isPurchaseHistorySupported: Boolean
+    )
 
-        val data = Data(
+    private fun encodeReceipt(purchase: Purchase, skuDetails: SkuDetails): String {
+        val data = EncodeReceiptData(
             purchase.originalJson,
             purchase.signature,
             skuDetails.originalJson,

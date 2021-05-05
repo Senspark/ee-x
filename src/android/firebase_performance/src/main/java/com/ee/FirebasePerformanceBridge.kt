@@ -7,10 +7,8 @@ import com.ee.internal.FirebasePerformanceTrace
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.perf.FirebasePerformance
 import com.google.firebase.perf.ktx.performance
-import kotlinx.serialization.InternalSerializationApi
 import java.util.concurrent.ConcurrentHashMap
 
-@InternalSerializationApi
 class FirebasePerformanceBridge(
     private val _bridge: IMessageBridge,
     private val _logger: ILogger,

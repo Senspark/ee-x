@@ -8,11 +8,9 @@ import com.applovin.sdk.AppLovinAdLoadListener
 import com.ee.ILogger
 import com.ee.IMessageBridge
 import com.ee.Thread
-import kotlinx.serialization.InternalSerializationApi
 import kotlinx.serialization.Serializable
 import java.util.concurrent.atomic.AtomicBoolean
 
-@InternalSerializationApi
 internal class AppLovinInterstitialAdListener(
     private val _bridge: IMessageBridge,
     private val _logger: ILogger)

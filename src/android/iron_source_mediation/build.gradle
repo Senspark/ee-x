@@ -40,7 +40,7 @@ dependencies {
 
     // https://developers.ironsrc.com/ironsource-mobile/android/applovin-change-log/
     api 'com.ironsource.adapters:applovinadapter:4.3.23'
-    api 'com.applovin:applovin-sdk:10.1.2'
+    api 'com.applovin:applovin-sdk:10.0.1'
 
     // https://developers.ironsrc.com/ironsource-mobile/android/21769-2/
     api 'com.ironsource.adapters:facebookadapter:4.3.26'
@@ -52,7 +52,7 @@ dependencies {
 
     // https://developers.ironsrc.com/ironsource-mobile/android/tapjoy-change-log/
     api 'com.ironsource.adapters:tapjoyadapter:4.1.16'
-    api 'com.tapjoy:tapjoy-android-sdk:12.8.0'
+    api 'com.tapjoy:tapjoy-android-sdk:12.8.0@aar'
 
     // https://developers.ironsrc.com/ironsource-mobile/android/unityads-change-log/
     api 'com.ironsource.adapters:unityadsadapter:4.3.10'

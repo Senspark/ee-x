@@ -13,11 +13,9 @@ import com.ee.Utils
 import com.unity3d.services.banners.BannerErrorInfo
 import com.unity3d.services.banners.BannerView
 import com.unity3d.services.banners.UnityBannerSize
-import kotlinx.serialization.InternalSerializationApi
 import kotlinx.serialization.Serializable
 import java.util.concurrent.atomic.AtomicBoolean
 
-@InternalSerializationApi
 class UnityBannerAd(
     private val _bridge: IMessageBridge,
     private val _logger: ILogger,

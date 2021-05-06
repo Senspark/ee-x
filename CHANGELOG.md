@@ -1,3 +1,6 @@
+## 2.7.2 - 2021-05-06
+- [Android/iOS] Update ads libraries.
+
 ## 2.7.1 - 2021-04-14
 - [Android] Update ads libraries.
 - [Android] Separate AdMob test suite library.

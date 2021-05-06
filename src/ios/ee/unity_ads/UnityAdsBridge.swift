@@ -55,7 +55,7 @@ private class LoadDelegate: NSObject, UnityAdsLoadDelegate {
         _onLoaded(placementId)
     }
 
-    func unityAdsAdFailed(toLoad placementId: String) {
+    func unityAdsAdFailed(toLoad placementId: String, withError error: UnityAdsLoadError, withMessage message: String) {
         _onFailed(placementId)
     }
 }

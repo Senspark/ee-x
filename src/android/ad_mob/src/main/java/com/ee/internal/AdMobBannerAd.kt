@@ -15,14 +15,12 @@ import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.AdSize
 import com.google.android.gms.ads.AdView
 import com.google.android.gms.ads.LoadAdError
-import kotlinx.serialization.InternalSerializationApi
 import kotlinx.serialization.Serializable
 import java.util.concurrent.atomic.AtomicBoolean
 
 /**
  * Created by Zinge on 10/13/17.
  */
-@InternalSerializationApi
 internal class AdMobBannerAd(
     private val _bridge: IMessageBridge,
     private val _logger: ILogger,
@@ -95,8 +93,9 @@ internal class AdMobBannerAd(
             if (_ad != null) {
                 return@runOnMainThread
             }
+            val activity = _activity ?: return@runOnMainThread
             _isLoaded.set(false)
-            val ad = AdView(_activity)
+            val ad = AdView(activity)
             ad.adSize = _adSize
             ad.adUnitId = _adId
             ad.adListener = this
@@ -117,7 +116,6 @@ internal class AdMobBannerAd(
             val ad = _ad ?: return@runOnMainThread
             _isLoaded.set(false)
             removeFromActivity()
-            ad.adListener = null
             ad.destroy()
             _ad = null
             _viewHelper.view = null

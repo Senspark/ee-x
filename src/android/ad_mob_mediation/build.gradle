@@ -2,6 +2,7 @@ apply plugin: 'com.android.library'
 
 repositories {
     maven { url 'https://adcolony.bintray.com/AdColony' }
+    maven { url 'https://android-sdk.is.com' }
     maven { url 'https://sdk.tapjoy.com' }
 }
 
@@ -28,27 +29,28 @@ dependencies {
     api project(':ee-x-ad-mob')
 
     // https://bintray.com/google/mobile-ads-adapters-android
+    // https://maven.google.com/web/index.html#com.google.ads.mediation
     // https://developers.google.com/admob/android/mediation/adcolony#adcolony-android-mediation-adapter-changelog
     // Use "api" to inherit manifest elements.
-    api 'com.google.ads.mediation:adcolony:4.4.1.0'
+    api 'com.google.ads.mediation:adcolony:4.5.0.0'
 
     // https://developers.google.com/admob/android/mediation/applovin#applovin-android-mediation-adapter-changelog
-    api 'com.google.ads.mediation:applovin:9.15.2.0'
+    api 'com.google.ads.mediation:applovin:10.0.1.0'
 
     // https://developers.google.com/admob/android/mediation/facebook#facebook-android-mediation-adapter-changelog
-    api 'com.google.ads.mediation:facebook:6.3.0.1'
+    api 'com.google.ads.mediation:facebook:6.4.0.0'
 
     // https://developers.google.com/admob/android/mediation/inmobi#inmobi-android-mediation-adapter-changelog
     api 'com.google.ads.mediation:inmobi:9.1.7.0'
 
     // https://developers.google.com/admob/android/mediation/ironsource#ironsource-android-mediation-adapter-changelog
-    api 'com.google.ads.mediation:ironsource:7.1.4.0'
+    api 'com.google.ads.mediation:ironsource:7.1.5.1.0'
 
     // https://developers.google.com/admob/android/mediation/tapjoy#tapjoy-android-mediation-adapter-changelog
-    api 'com.google.ads.mediation:tapjoy:12.7.1.0'
+    api 'com.google.ads.mediation:tapjoy:12.8.0.1'
 
     // https://developers.google.com/admob/android/mediation/unity#unity-ads-android-mediation-adapter-changelog
-    api 'com.google.ads.mediation:unity:3.6.0.0'
+    api 'com.google.ads.mediation:unity:3.6.2.0'
 
     // https://developers.google.com/admob/android/mediation/vungle#vungle-android-mediation-adapter-changelog
     api 'com.google.ads.mediation:vungle:6.9.1.0'

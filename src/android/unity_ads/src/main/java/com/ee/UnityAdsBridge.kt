@@ -16,14 +16,12 @@ import com.unity3d.ads.UnityAds.FinishState
 import com.unity3d.ads.UnityAds.UnityAdsError
 import com.unity3d.services.banners.UnityBannerSize
 import kotlinx.coroutines.suspendCancellableCoroutine
-import kotlinx.serialization.InternalSerializationApi
 import kotlinx.serialization.Serializable
 import java.util.Collections
 import java.util.concurrent.ConcurrentHashMap
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
-@InternalSerializationApi
 class UnityAdsBridge(
     private val _bridge: IMessageBridge,
     private val _logger: ILogger,
@@ -96,16 +94,29 @@ class UnityAdsBridge(
         }
     }
 
+    @Serializable
+    private class InitializeRequest(
+        val gameId: String,
+        val testModeEnabled: Boolean
+    )
+
+    @Serializable
+    @Suppress("unused")
+    private class GetBannerAdSizeResponse(
+        val width: Int,
+        val height: Int
+    )
+
+    @Serializable
+    private class CreateBannerAdRequest(
+        val adId: String,
+        val adSize: Int
+    )
+
     @AnyThread
     private fun registerHandlers() {
         _bridge.registerAsyncHandler(kInitialize) { message ->
-            @Serializable
-            class Request(
-                val gameId: String,
-                val testModeEnabled: Boolean
-            )
-
-            val request = deserialize<Request>(message)
+            val request = deserialize<InitializeRequest>(message)
             Utils.toString(initialize(request.gameId, request.testModeEnabled))
         }
         _bridge.registerHandler(kSetDebugModeEnabled) { message ->
@@ -113,26 +124,13 @@ class UnityAdsBridge(
             ""
         }
         _bridge.registerHandler(kGetBannerAdSize) { message ->
-            @Serializable
-            @Suppress("unused")
-            class Response(
-                val width: Int,
-                val height: Int
-            )
-
             val index = message.toInt()
             val size = _bannerHelper.getSize(index)
-            val response = Response(size.x, size.y)
+            val response = GetBannerAdSizeResponse(size.x, size.y)
             response.serialize()
         }
         _bridge.registerHandler(kCreateBannerAd) { message ->
-            @Serializable
-            class Request(
-                val adId: String,
-                val adSize: Int
-            )
-
-            val request = deserialize<Request>(message)
+            val request = deserialize<CreateBannerAdRequest>(message)
             val adSize = _bannerHelper.getAdSize(request.adSize)
             Utils.toString(createBannerAd(request.adId, adSize))
         }
@@ -296,20 +294,27 @@ class UnityAdsBridge(
         }
     }
 
+    @Serializable
+    @Suppress("unused")
+    private class ErrorResponse(
+        val ad_id: String,
+        val message: String
+    )
+
+    @Serializable
+    @Suppress("unused")
+    private class ResultResponse(
+        val ad_id: String,
+        val rewarded: Boolean
+    )
+
     @AnyThread
     fun showRewardedAd(adId: String) {
         Thread.runOnMainThread {
             _logger.debug("$kTag: ${this::showRewardedAd.name}: id = $adId")
             if (!_initialized) {
                 _logger.error("$kTag: ${this::showRewardedAd.name}: not initialized")
-                @Serializable
-                @Suppress("unused")
-                class ResponseA(
-                    val ad_id: String,
-                    val message: String
-                )
-
-                val response = ResponseA(adId, "not initialized")
+                val response = ErrorResponse(adId, "not initialized")
                 _bridge.callCpp(kOnFailedToShow, response.serialize())
                 return@runOnMainThread
             }
@@ -338,38 +343,17 @@ class UnityAdsBridge(
             UnityAds.removeListener(this)
             _loadedAdIds.remove(adId)
             if (state == FinishState.ERROR) {
-                @Serializable
-                @Suppress("unused")
-                class ResponseA(
-                    val ad_id: String,
-                    val message: String
-                )
-
-                val response = ResponseA(adId, "")
+                val response = ErrorResponse(adId, "")
                 _bridge.callCpp(kOnFailedToShow, response.serialize())
                 return@runOnMainThread
             }
             if (state == FinishState.SKIPPED) {
-                @Serializable
-                @Suppress("unused")
-                class ResponseB(
-                    val ad_id: String,
-                    val rewarded: Boolean
-                )
-
-                val response = ResponseB(adId, false)
+                val response = ResultResponse(adId, false)
                 _bridge.callCpp(kOnClosed, response.serialize())
                 return@runOnMainThread
             }
             if (state == FinishState.COMPLETED) {
-                @Serializable
-                @Suppress("unused")
-                class ResponseC(
-                    val ad_id: String,
-                    val rewarded: Boolean
-                )
-
-                val response = ResponseC(adId, true)
+                val response = ResultResponse(adId, true)
                 _bridge.callCpp(kOnClosed, response.serialize())
                 return@runOnMainThread
             }

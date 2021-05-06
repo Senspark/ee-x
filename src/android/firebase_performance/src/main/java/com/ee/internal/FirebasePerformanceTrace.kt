@@ -3,10 +3,8 @@ package com.ee.internal
 import androidx.annotation.AnyThread
 import com.ee.IMessageBridge
 import com.google.firebase.perf.metrics.Trace
-import kotlinx.serialization.InternalSerializationApi
 import kotlinx.serialization.Serializable
 
-@InternalSerializationApi
 internal class FirebasePerformanceTrace(
     private val _bridge: IMessageBridge,
     private val _trace: Trace,
@@ -38,6 +36,18 @@ internal class FirebasePerformanceTrace(
     private val kPutMetric: String
         @AnyThread get() = "${kPrefix}_putMetric_$_traceName"
 
+    @Serializable
+    private class IncrementMetricRequest(
+        val key: String,
+        val value: Long
+    )
+
+    @Serializable
+    private class PutMetricRequest(
+        val key: String,
+        val value: Long
+    )
+
     @AnyThread
     private fun registerHandlers() {
         _bridge.registerHandler(kStart) {
@@ -49,24 +59,12 @@ internal class FirebasePerformanceTrace(
             ""
         }
         _bridge.registerHandler(kIncrementMetric) { message ->
-            @Serializable
-            class Request(
-                val key: String,
-                val value: Long
-            )
-
-            val request = deserialize<Request>(message)
+            val request = deserialize<IncrementMetricRequest>(message)
             incrementMetric(request.key, request.value)
             ""
         }
         _bridge.registerHandler(kPutMetric) { message ->
-            @Serializable
-            class Request(
-                val key: String,
-                val value: Long
-            )
-
-            val request = deserialize<Request>(message)
+            val request = deserialize<PutMetricRequest>(message)
             putMetric(request.key, request.value)
             ""
         }

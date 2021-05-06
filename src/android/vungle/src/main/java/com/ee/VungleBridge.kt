@@ -12,7 +12,6 @@ import com.vungle.warren.PlayAdCallback
 import com.vungle.warren.Vungle
 import com.vungle.warren.error.VungleException
 import kotlinx.coroutines.suspendCancellableCoroutine
-import kotlinx.serialization.InternalSerializationApi
 import kotlinx.serialization.Serializable
 import java.util.Collections
 import java.util.concurrent.ConcurrentHashMap
@@ -21,7 +20,6 @@ import kotlin.coroutines.resume
 /**
  * Created by Pham Xuan Han on 17/05/17.
  */
-@InternalSerializationApi
 class VungleBridge(
     private val _bridge: IMessageBridge,
     private val _logger: ILogger,
@@ -69,15 +67,15 @@ class VungleBridge(
         deregisterHandlers()
     }
 
+    @Serializable
+    private class InitializeRequest(
+        val appId: String
+    )
+
     @AnyThread
     private fun registerHandlers() {
         _bridge.registerAsyncHandler(kInitialize) { message ->
-            @Serializable
-            class Request(
-                val appId: String
-            )
-
-            val request = deserialize<Request>(message)
+            val request = deserialize<InitializeRequest>(message)
             Utils.toString(initialize(request.appId))
         }
         _bridge.registerHandler(kHasRewardedAd) { message ->
@@ -157,20 +155,20 @@ class VungleBridge(
         return _loadedAdIds.contains(adId)
     }
 
+    @Serializable
+    @Suppress("unused")
+    private class ResultResponse(
+        val ad_id: String,
+        val message: String
+    )
+
     @AnyThread
     private fun loadRewardedAd(adId: String) {
         Thread.runOnMainThread {
             _logger.debug("$kTag: loadRewardedAd: id = $adId")
             if (!_initialized) {
                 _logger.error("$kTag: ${this::loadRewardedAd.name}: not initialized")
-                @Serializable
-                @Suppress("unused")
-                class Response(
-                    val ad_id: String,
-                    val message: String
-                )
-
-                val response = Response(adId, "not initialized")
+                val response = ResultResponse(adId, "not initialized")
                 _bridge.callCpp(kOnFailedToLoad, response.serialize())
                 return@runOnMainThread
             }
@@ -179,14 +177,7 @@ class VungleBridge(
                     Thread.runOnMainThread {
                         _logger.debug("$kTag: ${VungleBridge::loadRewardedAd.name}: ${this::onAdLoad.name}: id = $adId")
                         _loadedAdIds.add(adId)
-
-                        @Serializable
-                        @Suppress("unused")
-                        class Response(
-                            val ad_id: String
-                        )
-
-                        val response = Response(adId)
+                        val response = ResultResponse(adId, "")
                         _bridge.callCpp(kOnLoaded, response.serialize())
                     }
                 }
@@ -194,14 +185,7 @@ class VungleBridge(
                 override fun onError(adId: String, exception: VungleException) {
                     Thread.runOnMainThread {
                         _logger.debug("$kTag: ${VungleBridge::loadRewardedAd.name}: ${this::onError.name}: id = $adId reason: ${exception.localizedMessage}")
-                        @Serializable
-                        @Suppress("unused")
-                        class Response(
-                            val ad_id: String,
-                            val message: String
-                        )
-
-                        val response = Response(adId, exception.localizedMessage ?: "")
+                        val response = ResultResponse(adId, exception.localizedMessage ?: "")
                         _bridge.callCpp(kOnFailedToLoad, response.serialize())
                     }
                 }
@@ -209,19 +193,19 @@ class VungleBridge(
         }
     }
 
+    @Serializable
+    @Suppress("unused")
+    private class RewardedResponse(
+        val ad_id: String,
+        val rewarded: Boolean
+    )
+
     @AnyThread
     private fun showRewardedAd(adId: String) {
         Thread.runOnMainThread {
             if (!_initialized) {
                 _logger.error("$kTag: ${this::showRewardedAd.name}: id = $adId not initialized")
-                @Serializable
-                @Suppress("unused")
-                class Response(
-                    val ad_id: String,
-                    val message: String
-                )
-
-                val response = Response(adId, "not initialized")
+                val response = ResultResponse(adId, "not initialized")
                 _bridge.callCpp(kOnFailedToShow, response.serialize())
                 return@runOnMainThread
             }
@@ -230,14 +214,7 @@ class VungleBridge(
                 override fun onError(adId: String, exception: VungleException) {
                     Thread.runOnMainThread {
                         _logger.debug("$kTag: ${VungleBridge::showRewardedAd.name}: ${this::onError.name}: id = $adId message = ${exception.localizedMessage}")
-                        @Serializable
-                        @Suppress("unused")
-                        class Response(
-                            val ad_id: String,
-                            val message: String
-                        )
-
-                        val response = Response(adId, exception.localizedMessage ?: "")
+                        val response = ResultResponse(adId, exception.localizedMessage ?: "")
                         _bridge.callCpp(kOnFailedToShow, response.serialize())
                     }
                 }
@@ -277,15 +254,8 @@ class VungleBridge(
                 override fun onAdEnd(adId: String) {
                     Thread.runOnMainThread {
                         _logger.debug("$kTag: ${VungleBridge::showRewardedAd.name}: onAdEnd: id = $adId")
-                        @Serializable
-                        @Suppress("unused")
-                        class Response(
-                            val ad_id: String,
-                            val rewarded: Boolean
-                        )
-
                         _loadedAdIds.remove(adId)
-                        val response = Response(adId, _rewarded)
+                        val response = RewardedResponse(adId, _rewarded)
                         _bridge.callCpp(kOnClosed, response.serialize())
                     }
                 }

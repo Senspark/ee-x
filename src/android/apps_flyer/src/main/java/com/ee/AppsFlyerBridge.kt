@@ -7,10 +7,8 @@ import com.appsflyer.AppsFlyerConversionListener
 import com.appsflyer.AppsFlyerLib
 import com.ee.internal.deserialize
 import kotlinx.serialization.Contextual
-import kotlinx.serialization.InternalSerializationApi
 import kotlinx.serialization.Serializable
 
-@InternalSerializationApi
 class AppsFlyerBridge(
     private val _bridge: IMessageBridge,
     private val _logger: ILogger,
@@ -52,6 +50,12 @@ class AppsFlyerBridge(
         deregisterHandlers()
     }
 
+    @Serializable
+    private class TrackEventRequest(
+        val name: String,
+        val values: Map<String, @Contextual Any>
+    )
+
     @AnyThread
     private fun registerHandlers() {
         _bridge.registerHandler(kInitialize) { message ->
@@ -74,13 +78,7 @@ class AppsFlyerBridge(
             ""
         }
         _bridge.registerHandler(kTrackEvent) { message ->
-            @Serializable
-            class Request(
-                val name: String,
-                val values: Map<String, @Contextual Any>
-            )
-
-            val request = deserialize<Request>(message)
+            val request = deserialize<TrackEventRequest>(message)
             trackEvent(request.name, request.values)
             ""
         }

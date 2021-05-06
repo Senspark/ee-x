@@ -11,14 +11,12 @@ import com.facebook.ads.Ad
 import com.facebook.ads.AdError
 import com.facebook.ads.InterstitialAd
 import com.facebook.ads.InterstitialAdListener
-import kotlinx.serialization.InternalSerializationApi
 import kotlinx.serialization.Serializable
 import java.util.concurrent.atomic.AtomicBoolean
 
 /**
  * Created by Zinge on 10/11/17.
  */
-@InternalSerializationApi
 internal class FacebookInterstitialAd(
     private val _bridge: IMessageBridge,
     private val _logger: ILogger,

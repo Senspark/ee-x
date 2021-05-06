@@ -28,7 +28,6 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
 import kotlinx.coroutines.withContext
 import kotlinx.coroutines.withTimeout
-import kotlinx.serialization.InternalSerializationApi
 import kotlinx.serialization.Serializable
 import java.lang.reflect.InvocationTargetException
 import java.net.InetAddress
@@ -60,7 +59,59 @@ object Platform {
     private const val kShowInstallPrompt = kPrefix + "showInstallPrompt"
     private const val kGetInstallReferrer = kPrefix + "getInstallReferrer"
 
-    @InternalSerializationApi
+    @Serializable
+    private class GetApplicationSignaturesRequest(
+        val algorithm: String
+    )
+
+    @Serializable
+    @Suppress("unused")
+    private class GetApplicationSignaturesResponse(
+        val signatures: List<String>
+    )
+
+    @Serializable
+    @Suppress("unused")
+    private class GetViewSizeResponse(
+        val width: Int,
+        val height: Int
+    )
+
+    @Serializable
+    @Suppress("unused")
+    private class GetScreenSizeResponse(
+        val width: Int,
+        val height: Int
+    )
+
+    @Serializable
+    @Suppress("unused")
+    private class GetSafeInsetResponse(
+        val left: Int,
+        val right: Int,
+        val top: Int,
+        val bottom: Int
+    )
+
+    @Serializable
+    private class SendMailRequest(
+        val recipient: String,
+        val subject: String,
+        val body: String
+    )
+
+    @Serializable
+    private class TestConnectionRequest(
+        val host_name: String,
+        val time_out: Float
+    )
+
+    @Serializable
+    private class ShowInstallPromptRequest(
+        val url: String,
+        val referrer: String
+    )
+
     fun registerHandlers(bridge: IMessageBridge, context: Context) {
         bridge.registerHandler(kIsApplicationInstalled) { message ->
             Utils.toString(isApplicationInstalled(context, message))
@@ -81,20 +132,9 @@ object Platform {
             getVersionCode(context)
         }
         bridge.registerHandler(kGetApplicationSignatures) { message ->
-            @Serializable
-            class Request(
-                val algorithm: String
-            )
-
-            @Serializable
-            @Suppress("unused")
-            class Response(
-                val signatures: List<String>
-            )
-
-            val request = deserialize<Request>(message)
+            val request = deserialize<GetApplicationSignaturesRequest>(message)
             val signatures = getApplicationSignatures(context, request.algorithm)
-            val response = Response(signatures)
+            val response = GetApplicationSignaturesResponse(signatures)
             response.serialize()
         }
         bridge.registerHandler(kIsInstantApp) {
@@ -107,54 +147,31 @@ object Platform {
             getDensity().toString()
         }
         bridge.registerHandler(kGetViewSize) {
-            @Serializable
-            @Suppress("unused")
-            class Response(
-                val width: Int,
-                val height: Int
-            )
-
             val activity = PluginManager.instance.activity
             if (activity == null) {
                 assertThat(false).isTrue()
                 return@registerHandler ""
             }
             val size = getViewSize(activity)
-            val response = Response(size.x, size.y)
+            val response = GetViewSizeResponse(size.x, size.y)
             response.serialize()
         }
         bridge.registerHandler(kGetScreenSize) {
-            @Serializable
-            @Suppress("unused")
-            class Response(
-                val width: Int,
-                val height: Int
-            )
-
             val size = getScreenSize(context)
-            val response = Response(size.x, size.y)
+            val response = GetScreenSizeResponse(size.x, size.y)
             response.serialize()
         }
         bridge.registerAsyncHandler(kGetDeviceId) {
             getDeviceId(context)
         }
         bridge.registerHandler(kGetSafeInset) {
-            @Serializable
-            @Suppress("unused")
-            class Response(
-                val left: Int,
-                val right: Int,
-                val top: Int,
-                val bottom: Int
-            )
-
             val activity = PluginManager.instance.activity
             if (activity == null) {
                 assertThat(false).isTrue()
                 return@registerHandler ""
             }
             val inset = getSafeInset(activity)
-            val response = Response(
+            val response = GetSafeInsetResponse(
                 inset.left,
                 inset.right,
                 inset.top,
@@ -163,24 +180,11 @@ object Platform {
             response.serialize()
         }
         bridge.registerHandler(kSendMail) { message: String ->
-            @Serializable
-            class Request(
-                val recipient: String,
-                val subject: String,
-                val body: String
-            )
-
-            val request = deserialize<Request>(message)
+            val request = deserialize<SendMailRequest>(message)
             Utils.toString(sendMail(context, request.recipient, request.subject, request.body))
         }
         bridge.registerAsyncHandler(kTestConnection) { message ->
-            @Serializable
-            class Request(
-                val host_name: String,
-                val time_out: Float
-            )
-
-            val request = deserialize<Request>(message)
+            val request = deserialize<TestConnectionRequest>(message)
             val result = testConnection(context, request.host_name, request.time_out)
             Utils.toString(result)
         }
@@ -190,16 +194,10 @@ object Platform {
                 assertThat(false).isTrue()
                 return@registerAsyncHandler ""
             }
-            getInstallReferrer(activity);
+            getInstallReferrer(activity)
         }
         bridge.registerHandler(kShowInstallPrompt) { message ->
-            @Serializable
-            class Request(
-                val url: String,
-                val referrer: String
-            )
-
-            val request = deserialize<Request>(message)
+            val request = deserialize<ShowInstallPromptRequest>(message)
             val activity = PluginManager.instance.activity
             if (activity == null) {
                 assertThat(false).isTrue()
@@ -229,8 +227,8 @@ object Platform {
         bridge.deregisterHandler(kShowInstallPrompt)
     }
 
-    fun isApplicationInstalled(context: Context,
-                               applicationId: String): Boolean {
+    @Suppress("MemberVisibilityCanBePrivate")
+    fun isApplicationInstalled(context: Context, applicationId: String): Boolean {
         val packetManager = context.packageManager
         var installed = false
         try {
@@ -278,7 +276,7 @@ object Platform {
         return versionName
     }
 
-    fun getVersionCode(context: Context): String {
+    private fun getVersionCode(context: Context): String {
         val packetManager = context.packageManager
         var versionCode = ""
         try {
@@ -374,11 +372,13 @@ object Platform {
         return metrics.density.toDouble()
     }
 
+    @Suppress("MemberVisibilityCanBePrivate")
     fun getViewSize(activity: Activity): Point {
         val view = activity.window.decorView
         return Point(view.width, view.height)
     }
 
+    @Suppress("MemberVisibilityCanBePrivate")
     fun getScreenSize(context: Context): Point {
         val manager = context.getSystemService(Context.WINDOW_SERVICE) as WindowManager
         val display = manager.defaultDisplay

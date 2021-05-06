@@ -15,14 +15,12 @@ import com.facebook.ads.AdError
 import com.facebook.ads.AdListener
 import com.facebook.ads.AdSize
 import com.facebook.ads.AdView
-import kotlinx.serialization.InternalSerializationApi
 import kotlinx.serialization.Serializable
 import java.util.concurrent.atomic.AtomicBoolean
 
 /**
  * Created by Zinge on 10/9/17.
  */
-@InternalSerializationApi
 internal class FacebookBannerAd(
     private val _bridge: IMessageBridge,
     private val _logger: ILogger,

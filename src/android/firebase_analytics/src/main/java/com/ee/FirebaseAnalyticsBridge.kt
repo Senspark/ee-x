@@ -10,13 +10,11 @@ import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.ktx.analytics
 import com.google.firebase.analytics.ktx.logEvent
 import com.google.firebase.ktx.Firebase
-import kotlinx.serialization.InternalSerializationApi
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.JsonPrimitive
 import kotlinx.serialization.json.doubleOrNull
 import kotlinx.serialization.json.longOrNull
 
-@InternalSerializationApi
 class FirebaseAnalyticsBridge(
     private val _bridge: IMessageBridge,
     private val _logger: ILogger,
@@ -56,19 +54,25 @@ class FirebaseAnalyticsBridge(
         deregisterHandlers()
     }
 
+    @Serializable
+    private class SetUserPropertyRequest(
+        val key: String,
+        val value: String,
+    )
+
+    @Serializable
+    private class LogEventRequest(
+        val name: String,
+        val parameters: Map<String, JsonPrimitive>
+    )
+
     @AnyThread
     private fun registerHandlers() {
         _bridge.registerAsyncHandler(kInitialize) {
             Utils.toString(initialize())
         }
         _bridge.registerHandler(kSetUserProperty) { message ->
-            @Serializable
-            class Request(
-                val key: String,
-                val value: String,
-            )
-
-            val request = deserialize<Request>(message)
+            val request = deserialize<SetUserPropertyRequest>(message)
             setUserProperty(request.key, request.value)
             ""
         }
@@ -77,13 +81,7 @@ class FirebaseAnalyticsBridge(
             ""
         }
         _bridge.registerHandler(kLogEvent) { message ->
-            @Serializable
-            class Request(
-                val name: String,
-                val parameters: Map<String, JsonPrimitive>
-            )
-
-            val request = deserialize<Request>(message)
+            val request = deserialize<LogEventRequest>(message)
             logEvent(request.name, request.parameters)
             ""
         }

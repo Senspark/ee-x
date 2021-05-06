@@ -4,7 +4,7 @@
 Modify `build.gradle`
 ```java
 dependencies {
-    implementation 'com.senspark.ee:firebase-messaging:2.7.1'
+    implementation 'com.senspark.ee:firebase-messaging:2.7.2'
 }
 ```
 
@@ -23,7 +23,7 @@ target_link_libraries(${PROJECT_NAME} ee_x_firebase_messaging)
 ### iOS
 Modify `Podfile`
 ```ruby
-pod 'ee-x/firebase-messaging', '2.7.1'
+pod 'ee-x/firebase-messaging', '2.7.2'
 ```
 
 ## Basic usage

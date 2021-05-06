@@ -26,7 +26,6 @@ import com.facebook.ads.NativeAd
 import com.facebook.ads.NativeAdBase
 import com.facebook.ads.NativeAdListener
 import com.google.common.truth.Truth.assertThat
-import kotlinx.serialization.InternalSerializationApi
 import kotlinx.serialization.Serializable
 import java.util.concurrent.atomic.AtomicBoolean
 
@@ -35,7 +34,6 @@ private typealias ViewProcessor<T> = (view: T) -> Unit
 /**
  * Created by Zinge on 10/9/17.
  */
-@InternalSerializationApi
 internal class FacebookNativeAd(
     private val _bridge: IMessageBridge,
     private val _logger: ILogger,

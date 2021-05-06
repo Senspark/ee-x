@@ -8,7 +8,7 @@ using UnityEngine;
 
 namespace EE.Editor {
     internal class LibrarySettings : ScriptableObject {
-        private const string LibraryVersion = "2.7.1";
+        private const string LibraryVersion = "2.7.2";
 
         private const string LibrarySettingsDir = "Assets/EE";
         private const string LibrarySettingsResDir = "Assets/EE/Resources";
@@ -232,6 +232,7 @@ namespace EE.Editor {
                     iosLibraries.Add("ee-x/facebook-ads");
                 }
                 if (IsIronSourceEnabled) {
+                    androidRepositories.Add("https://android-sdk.is.com");
                     androidRepositories.Add("https://dl.bintray.com/ironsource-mobile/android-sdk");
                     if (IsIronSourceMediationEnabled) {
                         androidRepositories.Add("https://dl.bintray.com/ironsource-mobile/android-adapters");

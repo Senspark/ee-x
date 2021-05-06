@@ -3,7 +3,7 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlinx-serialization'
 
 repositories {
-    maven { url 'https://dl.bintray.com/ironsource-mobile/android-sdk' }
+    maven { url 'https://android-sdk.is.com' }
 }
 
 android {
@@ -31,7 +31,7 @@ dependencies {
     // https://bintray.com/ironsource-mobile/android-sdk
     // https://developers.ironsrc.com/ironsource-mobile/android/sdk-change-log/
     // Use "api" to inherit manifest elements.
-    api 'com.ironsource.sdk:mediationsdk:7.1.4.1'
+    api 'com.ironsource.sdk:mediationsdk:7.1.5.1'
 
     implementation 'androidx.annotation:annotation:1.2.0'
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"

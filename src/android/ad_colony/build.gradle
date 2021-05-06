@@ -30,7 +30,7 @@ dependencies {
 
     // https://github.com/AdColony/AdColony-Android-SDK
     // Use "api" to inherit manifest elements.
-    api 'com.adcolony:sdk:4.4.1'
+    api 'com.adcolony:sdk:4.5.0'
 
     implementation 'androidx.appcompat:appcompat:1.2.0'
     implementation 'com.google.android.gms:play-services-ads-identifier:17.0.0'

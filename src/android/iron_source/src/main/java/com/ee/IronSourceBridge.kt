@@ -13,7 +13,6 @@ import com.ironsource.mediationsdk.logger.IronSourceError
 import com.ironsource.mediationsdk.model.Placement
 import com.ironsource.mediationsdk.sdk.InterstitialListener
 import com.ironsource.mediationsdk.sdk.RewardedVideoListener
-import kotlinx.serialization.InternalSerializationApi
 import kotlinx.serialization.Serializable
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.atomic.AtomicBoolean
@@ -23,7 +22,6 @@ import kotlin.coroutines.suspendCoroutine
 /**
  * Created by Pham Xuan Han on 17/05/17.
  */
-@InternalSerializationApi
 class IronSourceBridge(
     private val _bridge: IMessageBridge,
     private val _logger: ILogger,
@@ -115,32 +113,32 @@ class IronSourceBridge(
         IronSource.removeRewardedVideoListener()
     }
 
+    @Serializable
+    @Suppress("unused")
+    private class GetBannerAdSizeResponse(
+        val width: Int,
+        val height: Int
+    )
+
+    @Serializable
+    private class CreateBannerAdRequest(
+        val adId: String,
+        val adSize: Int
+    )
+
     @AnyThread
     private fun registerHandlers() {
         _bridge.registerAsyncHandler(kInitialize) { message ->
             Utils.toString(initialize(message))
         }
         _bridge.registerHandler(kGetBannerAdSize) { message ->
-            @Serializable
-            @Suppress("unused")
-            class Response(
-                val width: Int,
-                val height: Int
-            )
-
             val index = message.toInt()
             val size = _bannerHelper.getSize(index)
-            val response = Response(size.x, size.y)
+            val response = GetBannerAdSizeResponse(size.x, size.y)
             response.serialize()
         }
         _bridge.registerHandler(kCreateBannerAd) { message ->
-            @Serializable
-            class Request(
-                val adId: String,
-                val adSize: Int
-            )
-
-            val request = deserialize<Request>(message)
+            val request = deserialize<CreateBannerAdRequest>(message)
             val adSize = _bannerHelper.getAdSize(request.adSize)
             Utils.toString(createBannerAd(request.adId, adSize))
         }

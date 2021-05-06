@@ -4,14 +4,14 @@
 Modify `build.gradle`
 ```java
 dependencies {
-    implementation 'com.senspark.ee:ad-mob-mediation:2.7.1'
+    implementation 'com.senspark.ee:ad-mob-mediation:2.7.2'
 }
 ```
 
 ### iOS
 Modify `Podfile`
 ```ruby
-pod 'ee-x/ad-mob-mediation', '2.7.1'
+pod 'ee-x/ad-mob-mediation', '2.7.2'
 ```
 
 ## Basic usage

@@ -29,6 +29,9 @@ namespace EE.Editor {
         private bool _isMultiDexEnabled = false;
 
         [SerializeField]
+        private bool _isFixPackageOptionsEnabled = false;
+
+        [SerializeField]
         private bool _isCoreEnabled = true;
 
         [SerializeField]
@@ -77,6 +80,11 @@ namespace EE.Editor {
         public bool IsMultiDexEnabled {
             get => _isMultiDexEnabled;
             set => _isMultiDexEnabled = value;
+        }
+
+        public bool IsFixPackageOptionsEnabled {
+            get => _isFixPackageOptionsEnabled;
+            set => _isFixPackageOptionsEnabled = value;
         }
 
         public bool IsCoreEnabled {
@@ -197,7 +205,6 @@ namespace EE.Editor {
                 androidLibraries.Add("androidx.multidex:multidex:[2.0.1]");
             }
             if (IsCoreEnabled) {
-                androidRepositories.Add("https://dl.bintray.com/enrevol/ee-x");
                 androidLibraries.Add($"com.senspark.ee:core:[{LibraryVersion}]");
                 iosLibraries.Add("ee-x/core");
                 if (IsAdjustEnabled) {
@@ -233,9 +240,7 @@ namespace EE.Editor {
                 }
                 if (IsIronSourceEnabled) {
                     androidRepositories.Add("https://android-sdk.is.com");
-                    androidRepositories.Add("https://dl.bintray.com/ironsource-mobile/android-sdk");
                     if (IsIronSourceMediationEnabled) {
-                        androidRepositories.Add("https://dl.bintray.com/ironsource-mobile/android-adapters");
                         androidRepositories.Add("https://adcolony.bintray.com/AdColony");
                         androidRepositories.Add("https://sdk.tapjoy.com");
                         androidLibraries.Add($"com.senspark.ee:iron-source-mediation:[{LibraryVersion}]");

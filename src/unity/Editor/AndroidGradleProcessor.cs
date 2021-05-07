@@ -13,6 +13,9 @@ namespace EE.Editor {
             if (settings.IsMultiDexEnabled) {
                 SetMultiDexEnabled(gradleConfig, true);
             }
+            if (settings.IsFixPackageOptionsEnabled) {
+                SetFixPackageOptionsEnabled(gradleConfig, true);
+            }
             gradleConfig.Save();
         }
 
@@ -21,6 +24,16 @@ namespace EE.Editor {
             var defaultConfig = android.TryGetNode("defaultConfig");
             defaultConfig.RemoveContentNode("multiDexEnabled false");
             defaultConfig.AppendContentNode("multiDexEnabled true");
+        }
+
+        private static void SetFixPackageOptionsEnabled(GradleConfig config, bool enabled) {
+            var android = config.Root.TryGetNode("android");
+            var packagingOptions = android.TryGetNode("packagingOptions");
+            if (packagingOptions == null) {
+                packagingOptions = new GradleNode("packagingOptions");
+                android.AppendChildNode(packagingOptions);
+            }
+            packagingOptions.AppendContentNode("exclude 'META-INF/kotlinx-serialization-json.kotlin_module'");
         }
     }
 }

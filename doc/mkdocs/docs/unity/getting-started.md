@@ -44,7 +44,9 @@
 - Go to **Window/Package Manager** and install **Senspark EE-x** package in **My Registries** packages
 ![](getting-started-2.png)
 
-- Go to **Assets/Senspark EE-x/Settings** to customize plugin settings
+- Go to **Assets/Senspark EE-x/Settings** to customize plugin settings:
+    - **Use MultiDex**: tick this option to fix MultiDex related issues.
+    - **Fix PackageOptions**: tick this option fix `More than one file was found with OS independent path 'META-INF/kotlinx-serialization-json.kotlin_module'`
 
 ## Initialization
 ```csharp

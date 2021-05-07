@@ -15,11 +15,13 @@ MonoBehaviour:
   _isDeveloperModeEnabled: 1
   _libraryPath: ../../
   _isMultiDexEnabled: 1
+  _isFixPackageOptionsEnabled: 1
   _isCoreEnabled: 1
   _isAdjustEnabled: 1
   _isAdColonyEnabled: 1
   _isAdMobEnabled: 1
   _isAdMobMediationEnabled: 1
+  _isAdMobTestSuiteEnabled: 0
   _adMobAndroidAppId: ca-app-pub-2101587572072038~7060281508
   _adMobIosAppId: ca-app-pub-2101587572072038~3967214308
   _isFacebookAdsEnabled: 1

@@ -13,11 +13,11 @@
 Modify `build.gradle`
 ```java
 repositories {
-    maven { url 'https://dl.bintray.com/enrevol/ee-x' }
+    mavenCentral()
 }
 
 dependencies {
-    implementation 'com.senspark.ee:core:2.7.2'
+    implementation 'com.senspark.ee:core:2.7.3'
 }
 ```
 
@@ -40,7 +40,7 @@ target_link_libraries(${PROJECT_NAME} ee_x)
 ### iOS
 Install CocoaPods and modify `Podfile`
 ```ruby
-pod 'ee-x/cpp', '2.7.2'
+pod 'ee-x/cpp', '2.7.3'
 ```
 
 ## Initialization

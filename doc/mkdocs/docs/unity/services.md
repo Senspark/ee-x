@@ -1,6 +1,6 @@
 # Services
 ## Audio
-Initialization
+### Initialization
 ```csharp
 // Declare audio enum.
 public enum Audio {
@@ -27,7 +27,7 @@ await audioManager.Initialize();
 EE.ServiceLocator.Provide(audioManager);
 ```
 
-Basic usage
+### Basic usage
 ```csharp
 var manager = EE.ServiceLocator.Resolve<EE.IAudioManager>();
 
@@ -47,7 +47,7 @@ manager.PlaySound(Audio.Tap);
 ```
 
 ## Scene Loader
-Initialization
+### Initialization
 ```csharp
 // Create services
 var sceneLoader = new EE.DefaultSceneLoader();
@@ -58,7 +58,7 @@ await sceneLoader.Initialize();
 EE.ServiceLocator.Provide(sceneLoader);
 ```
 
-Basic usage
+### Basic usage
 ```csharp
 // Load a scene asynchronously.
 var loader = EE.ServiceLocator.Resolve<EE.ISceneLoader>();
@@ -69,7 +69,7 @@ scene.OpenOfferDialog();
 ```
 
 ## Firebase Analytics
-Initialization
+### Initialization
 ```csharp
 // Create services.
 #if UNITY_EDITOR
@@ -84,7 +84,7 @@ await analyticsManager.Initialize();
 EE.ServiceLocator.Provide(analyticsManager);
 ```
 
-Basic usage
+### Basic usage
 ```csharp
 // Track screen.
 // Used in scene.
@@ -114,9 +114,11 @@ var manager = EE.ServiceLocator.Resolve<EE.IAnalyticsManager>();
 manager.LogEvent("conversion_level_start");
 
 // Track custom events.
-public class LevelEvent : EE.IAnalyticsEvent {
+public class LevelEvent : EE.DynamicAnalyticsEvent {
     public string EventName => "track_level";
-    public int level;
+    
+    [EE.AnalyticsParameter("button")]
+    public int Level;
 }
 
 var manager = EE.ServiceLocator.Resolve<EE.IAnalyticsManager>();
@@ -126,7 +128,7 @@ manager.LogEvent(new LevelEvent {
 ```
 
 ## Firebase Remote Config
-Initialization
+### Initialization
 ```csharp
 // Create services.
 var dataManager = new EE.DefaultDataManager();
@@ -149,7 +151,7 @@ await remoteConfigManager.Initialize();
 EE.ServiceLocator.Provide(remoteConfigManager);
 ```
 
-Basic usage.
+### Basic usage.
 ```csharp
 var manager = EE.ServiceLocator.Resolve<EE.IRemoteConfigManager>();
 

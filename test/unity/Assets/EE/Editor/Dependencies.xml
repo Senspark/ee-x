@@ -5,6 +5,7 @@
     <iosPod name="ee-x/core" path="../../" />
     <iosPod name="ee-x/adjust" path="../../" />
     <iosPod name="ee-x/ad-colony" path="../../" />
+    <iosPod name="ee-x/ad-mob" path="../../" />
     <iosPod name="ee-x/ad-mob-mediation" path="../../" />
     <iosPod name="ee-x/facebook-ads" path="../../" />
     <iosPod name="ee-x/iron-source-mediation" path="../../" />
@@ -12,20 +13,21 @@
   </iosPods>
   <androidPackages>
     <repositories>
-      <repository>https://dl.bintray.com/enrevol/ee-x</repository>
       <repository>https://adcolony.bintray.com/AdColony</repository>
       <repository>https://adcolony.bintray.com/AdColony</repository>
-      <repository>https://dl.bintray.com/ironsource-mobile/android-sdk</repository>
-      <repository>https://dl.bintray.com/ironsource-mobile/android-adapters</repository>
+      <repository>https://sdk.tapjoy.com</repository>
+      <repository>https://android-sdk.is.com</repository>
       <repository>https://adcolony.bintray.com/AdColony</repository>
+      <repository>https://sdk.tapjoy.com</repository>
     </repositories>
     <androidPackage spec="androidx.multidex:multidex:[2.0.1]" />
-    <androidPackage spec="com.senspark.ee:core:[2.6.4]" />
-    <androidPackage spec="com.senspark.ee:adjust:[2.6.4]" />
-    <androidPackage spec="com.senspark.ee:ad-colony:[2.6.4]" />
-    <androidPackage spec="com.senspark.ee:ad-mob-mediation:[2.6.4]" />
-    <androidPackage spec="com.senspark.ee:facebook-ads:[2.6.4]" />
-    <androidPackage spec="com.senspark.ee:iron-source-mediation:[2.6.4]" />
-    <androidPackage spec="com.senspark.ee:unity-ads:[2.6.4]" />
+    <androidPackage spec="com.senspark.ee:core:[2.7.2]" />
+    <androidPackage spec="com.senspark.ee:adjust:[2.7.2]" />
+    <androidPackage spec="com.senspark.ee:ad-colony:[2.7.2]" />
+    <androidPackage spec="com.senspark.ee:ad-mob:[2.7.2]" />
+    <androidPackage spec="com.senspark.ee:ad-mob-mediation:[2.7.2]" />
+    <androidPackage spec="com.senspark.ee:facebook-ads:[2.7.2]" />
+    <androidPackage spec="com.senspark.ee:iron-source-mediation:[2.7.2]" />
+    <androidPackage spec="com.senspark.ee:unity-ads:[2.7.2]" />
   </androidPackages>
 </dependencies>

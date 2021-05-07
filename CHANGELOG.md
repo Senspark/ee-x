@@ -1,3 +1,6 @@
+## 2.7.3 - 2021-05-07
+- [Unity] Add option to fix package options related issues when building for Android.
+
 ## 2.7.2 - 2021-05-06
 - [Android/iOS] Update ads libraries.
 

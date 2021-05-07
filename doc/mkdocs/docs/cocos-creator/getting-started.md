@@ -18,7 +18,7 @@ npm install @senspark/ee-x
 Modify `build.gradle`
 ```java
 repositories {
-    maven { url 'https://dl.bintray.com/enrevol/ee-x' }
+    mavenCentral()
 }
 
 dependencies {

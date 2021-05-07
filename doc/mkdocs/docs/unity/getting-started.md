@@ -7,6 +7,21 @@
 ## Configuration
 ### Prerequisite
 - External Dependency Manager: <https://github.com/googlesamples/unity-jar-resolver>
+- Add the following packages to [link.xml](https://docs.unity3d.com/Manual/ManagedCodeStripping.html#LinkXML)
+```xml
+<linker>
+    <assembly fullname="Firebase.Analytics">
+    </assembly>
+    <assembly fullname="Firebase.App">
+    </assembly>
+    <assembly fullname="Firebase.Crashlytics">
+    </assembly>
+    <assembly fullname="Firebase.RemoteConfig">
+    </assembly>
+    <assembly fullname="Newtonsoft.Json">
+    </assembly>
+</linker>
+```
 
 ### Installation
 - Add the **Senspark** to your Unity project

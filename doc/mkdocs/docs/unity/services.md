@@ -114,9 +114,11 @@ var manager = EE.ServiceLocator.Resolve<EE.IAnalyticsManager>();
 manager.LogEvent("conversion_level_start");
 
 // Track custom events.
-public class LevelEvent : EE.IAnalyticsEvent {
+public class LevelEvent : EE.DynamicAnalyticsEvent {
     public string EventName => "track_level";
-    public int level;
+    
+    [EE.AnalyticsParameter("button")]
+    public int Level;
 }
 
 var manager = EE.ServiceLocator.Resolve<EE.IAnalyticsManager>();

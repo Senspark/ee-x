@@ -127,8 +127,7 @@ internal class AdMobRewardedAd(
                 override fun onAdFailedToLoad(error: LoadAdError) {
                     Thread.runOnMainThread {
                         _logger.debug("$kTag: ${this::onAdFailedToLoad.name}: id = $_adId message = ${error.message} response = ${error.responseInfo ?: ""}")
-                        _bridge.callCpp(_messageHelper.onFailedToLoad, ErrorResponse(error.code, error.message).serialize())
-
+                        _bridge.callCpp(_messageHelper.onFailedToLoad, ErrorResponse(error.code, "").serialize())
                     }
                 }
             }

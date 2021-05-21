@@ -1,3 +1,7 @@
+## 2.7.4 - 2021-05-21
+- [Android] Fix crash with kotlin serialization library.
+- [Android/iOS] Update ad and firebase libraries.
+
 ## 2.7.3 - 2021-05-07
 - [Unity] Add option to fix package options related issues when building for Android.
 

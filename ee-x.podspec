@@ -122,7 +122,7 @@ Pod::Spec.new do |spec|
     s.dependency 'ee-x/ads'
 
     # https://github.com/AdColony/AdColony-iOS-SDK
-    s.dependency 'AdColony', '4.6.1'
+    s.dependency 'AdColony', '4.6.0'
   end
 
   spec.subspec 'ad-mob' do |s|
@@ -151,7 +151,7 @@ Pod::Spec.new do |spec|
 
     # https://developers.google.com/admob/ios/mediation/adcolony#adcolony-ios-mediation-adapter-changelog
     # FIXME: hanging on iPad iOS 13.5.1, need test.
-    s.dependency 'GoogleMobileAdsMediationAdColony', '4.6.1.0'
+    s.dependency 'GoogleMobileAdsMediationAdColony', '4.6.0.0'
 
     # https://developers.google.com/admob/ios/mediation/applovin#applovin-ios-mediation-adapter-changelog
     s.dependency 'GoogleMobileAdsMediationAppLovin', '10.1.1.0'
@@ -297,7 +297,7 @@ Pod::Spec.new do |spec|
     s.dependency 'ee-x/iron-source'
 
     # https://developers.ironsrc.com/ironsource-mobile/ios/adcolony-change-log/
-    s.dependency 'IronSourceAdColonyAdapter', '4.3.10.0'
+    s.dependency 'IronSourceAdColonyAdapter', '4.3.9.0'
 
     # https://developers.ironsrc.com/ironsource-mobile/ios/admob-change-log/
     s.dependency 'IronSourceAdMobAdapter', '4.3.22.0'

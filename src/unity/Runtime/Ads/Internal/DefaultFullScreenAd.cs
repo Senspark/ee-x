@@ -20,7 +20,6 @@ namespace EE.Internal {
         private readonly string _network;
         private readonly string _adId;
         private readonly MessageHelper _messageHelper;
-        private readonly ICapper _loadCapper;
         private readonly IAsyncHelper<bool> _loader;
 
         public DefaultFullScreenAd(
@@ -41,7 +40,6 @@ namespace EE.Internal {
             _network = network;
             _adId = adId;
             _messageHelper = new MessageHelper(_prefix, adId);
-            _loadCapper = new Capper(30);
             _loader = new AsyncHelper<bool>();
 
             _logger.Debug($"{kTag}: constructor: prefix = {_prefix} id = {_adId}");
@@ -80,10 +78,6 @@ namespace EE.Internal {
 
         public async Task<bool> Load() {
             _logger.Debug($"{kTag}: {nameof(Load)}: prefix = {_prefix} id = {_adId} loading = {_loader.IsProcessing}");
-            if (_loadCapper.IsCapped) {
-                return false;
-            }
-            _loadCapper.Cap();
             return await _loader.Process(
                 () => _bridge.Call(_messageHelper.Load),
                 result => {

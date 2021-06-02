@@ -26,7 +26,7 @@ namespace EE.Internal {
         private readonly IMessageBridge _bridge;
         private readonly ILogger _logger;
         private readonly Destroyer _destroyer;
-        private string _network;
+        private readonly string _network;
         private bool _displaying;
         private string _adId;
         private readonly Dictionary<string, IAd> _ads;
@@ -132,7 +132,8 @@ namespace EE.Internal {
             }
             var size = GetBannerAdSize(adSize);
             var ad = new GuardedBannerAd(new DefaultBannerAd("UnityBannerAd", _bridge, _logger,
-                () => DestroyAd(adId), _network, adId, size));
+                    () => DestroyAd(adId), _network, adId, size),
+                new Capper(15f), new Retrier(3f, 3f, 30f));
             _ads.Add(adId, ad);
             return ad;
         }
@@ -150,7 +151,7 @@ namespace EE.Internal {
                 return result.Item1 as IFullScreenAd;
             }
             var raw = creator();
-            var ad = new GuardedFullScreenAd(raw);
+            var ad = new GuardedFullScreenAd(raw, new Capper(15f), new Retrier(3f, 3f, 30f));
             _fullScreenAds.Add(adId, (ad, raw));
             return ad;
         }

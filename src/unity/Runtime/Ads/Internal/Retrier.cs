@@ -6,7 +6,7 @@ using Random = UnityEngine.Random;
 namespace EE.Internal {
     using Processor = Func<Task<bool>>;
 
-    internal class Retrier {
+    internal class Retrier : IRetrier {
         private readonly float _baseDelay;
         private readonly float _multiplier;
         private readonly float _limit;

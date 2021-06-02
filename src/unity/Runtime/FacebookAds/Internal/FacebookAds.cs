@@ -98,7 +98,8 @@ namespace EE.Internal {
             }
             var size = GetBannerAdSize(adSize);
             var ad = new GuardedBannerAd(new DefaultBannerAd("FacebookBannerAd", _bridge, _logger,
-                () => DestroyAd(adId), _network, adId, size));
+                    () => DestroyAd(adId), _network, adId, size),
+                new Capper(15f), new Retrier(3f, 3f, 30f));
             _ads.Add(adId, ad);
             return ad;
         }
@@ -131,7 +132,7 @@ namespace EE.Internal {
                 Assert.IsTrue(false);
                 return null;
             }
-            var ad = new GuardedFullScreenAd(creator());
+            var ad = new GuardedFullScreenAd(creator(), new Capper(30f), new Retrier(3f, 3f, 30f));
             _ads.Add(adId, ad);
             return ad;
         }

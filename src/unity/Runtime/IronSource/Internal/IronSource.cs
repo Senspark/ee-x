@@ -124,7 +124,7 @@ namespace EE.Internal {
             var size = GetBannerAdSize(adSize);
             _bannerAd = new GuardedBannerAd(new DefaultBannerAd("IronSourceBannerAd", _bridge, _logger,
                     () => DestroyBannerAd(adId), _network, adId, size),
-                new Capper(15f), new Retrier(3f, 3f, 30f));
+                new Capper(10f), new Retrier(3f, 3f, 30f));
             return _bannerAd;
         }
 
@@ -148,7 +148,7 @@ namespace EE.Internal {
                 return _sharedInterstitialAd;
             }
             _interstitialAd = new IronSourceInterstitialAd(_displayer, this, _network, adId);
-            _sharedInterstitialAd = new GuardedFullScreenAd(_interstitialAd, new Capper(15f), new Retrier(3f, 3f, 30f));
+            _sharedInterstitialAd = new GuardedFullScreenAd(_interstitialAd, new Capper(10f), new Retrier(3f, 3f, 30f));
             return _sharedInterstitialAd;
         }
 
@@ -167,7 +167,7 @@ namespace EE.Internal {
                 return _sharedRewardedAd;
             }
             _rewardedAd = new IronSourceRewardedAd(_displayer, this, _network, adId);
-            _sharedRewardedAd = new GuardedFullScreenAd(_rewardedAd, new Capper(15f), new Retrier(3f, 3f, 30f));
+            _sharedRewardedAd = new GuardedFullScreenAd(_rewardedAd, new Capper(10f), new Retrier(3f, 3f, 30f));
             return _sharedRewardedAd;
         }
 

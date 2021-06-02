@@ -138,7 +138,7 @@ export class DefaultBannerAd extends ObserverManager<AdObserver> implements IBan
             this._loader.resolve(false);
             this.dispatchEvent(observer => observer.onLoadResult && observer.onLoadResult({
                 network: this._network,
-                result: true,
+                result: false,
                 errorCode: code,
                 errorMessage: message,
             }));

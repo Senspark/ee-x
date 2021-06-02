@@ -123,7 +123,7 @@ namespace EE.Internal {
                 _loader.Resolve(false);
                 DispatchEvent(observer => observer.OnLoadResult?.Invoke(new AdLoadResult {
                     Network = _network,
-                    Result = true,
+                    Result = false,
                     ErrorCode = code,
                     ErrorMessage = message
                 }));

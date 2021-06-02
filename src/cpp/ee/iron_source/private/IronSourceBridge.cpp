@@ -1,10 +1,12 @@
 #include "ee/iron_source/private/IronSourceBridge.hpp"
 
+#include <ee/ads/internal/Capper.hpp>
 #include <ee/ads/internal/DefaultBannerAd.hpp>
 #include <ee/ads/internal/GuardedBannerAd.hpp>
 #include <ee/ads/internal/GuardedFullScreenAd.hpp>
 #include <ee/ads/internal/IAsyncHelper.hpp>
 #include <ee/ads/internal/MediationManager.hpp>
+#include <ee/ads/internal/Retrier.hpp>
 #include <ee/core/ILogger.hpp>
 #include <ee/core/IMessageBridge.hpp>
 #include <ee/core/Task.hpp>
@@ -163,7 +165,9 @@ std::shared_ptr<IBannerAd> Self::createBannerAd(const std::string& adId,
             [this, adId] { //
                 destroyBannerAd(adId);
             },
-            network_, adId, size));
+            network_, adId, size),
+        std::make_shared<ads::Capper>(10),
+        std::make_shared<ads::Retrier>(3, 3, 30));
     return bannerAd_;
 }
 
@@ -192,8 +196,9 @@ Self::createInterstitialAd(const std::string& adId) {
     }
     interstitialAd_ = std::make_shared<InterstitialAd>(logger_, displayer_,
                                                        this, network_, adId);
-    sharedInterstitialAd_ =
-        std::make_shared<ads::GuardedFullScreenAd>(interstitialAd_);
+    sharedInterstitialAd_ = std::make_shared<ads::GuardedFullScreenAd>(
+        interstitialAd_, std::make_shared<ads::Capper>(10),
+        std::make_shared<ads::Retrier>(3, 3, 30));
     return sharedInterstitialAd_;
 }
 
@@ -214,7 +219,9 @@ std::shared_ptr<IFullScreenAd> Self::createRewardedAd(const std::string& adId) {
         return sharedRewardedAd_;
     }
     rewardedAd_ = std::make_shared<RewardedAd>(logger_, displayer_, this, adId);
-    sharedRewardedAd_ = std::make_shared<ads::GuardedFullScreenAd>(rewardedAd_);
+    sharedRewardedAd_ = std::make_shared<ads::GuardedFullScreenAd>(
+        rewardedAd_, std::make_shared<ads::Capper>(10),
+        std::make_shared<ads::Retrier>(3, 3, 30));
     return sharedRewardedAd_;
 }
 

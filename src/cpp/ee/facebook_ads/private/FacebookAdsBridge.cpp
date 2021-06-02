@@ -8,11 +8,13 @@
 
 #include "ee/facebook_ads/private/FacebookAdsBridge.hpp"
 
+#include <ee/ads/internal/Capper.hpp>
 #include <ee/ads/internal/DefaultBannerAd.hpp>
 #include <ee/ads/internal/DefaultFullScreenAd.hpp>
 #include <ee/ads/internal/GuardedBannerAd.hpp>
 #include <ee/ads/internal/GuardedFullScreenAd.hpp>
 #include <ee/ads/internal/MediationManager.hpp>
+#include <ee/ads/internal/Retrier.hpp>
 #include <ee/core/ILogger.hpp>
 #include <ee/core/IMessageBridge.hpp>
 #include <ee/core/Task.hpp>
@@ -121,7 +123,9 @@ std::shared_ptr<IBannerAd> Self::createBannerAd(const std::string& adId,
             [this, adId] { //
                 destroyAd(adId);
             },
-            network_, adId, size));
+            network_, adId, size),
+        std::make_shared<ads::Capper>(30),
+        std::make_shared<ads::Retrier>(3, 3, 30));
     ads_.emplace(adId, ad);
     return ad;
 }
@@ -151,7 +155,9 @@ Self::createNativeAd(const std::string& adId, const std::string& layoutName,
             [this, adId] { //
                 destroyAd(adId);
             },
-            network_, adId, std::pair(0, 0)));
+            network_, adId, std::pair(0, 0)),
+        std::make_shared<ads::Capper>(30),
+        std::make_shared<ads::Retrier>(3, 3, 30));
     ads_.emplace(adId, ad);
     return ad;
 }
@@ -201,7 +207,9 @@ std::shared_ptr<IFullScreenAd> Self::createFullScreenAd(
         assert(false);
         return nullptr;
     }
-    auto ad = std::make_shared<ads::GuardedFullScreenAd>(creator());
+    auto ad = std::make_shared<ads::GuardedFullScreenAd>(
+        creator(), std::make_shared<ads::Capper>(30),
+        std::make_shared<ads::Retrier>(3, 3, 30));
     ads_.emplace(adId, ad);
     return ad;
 }

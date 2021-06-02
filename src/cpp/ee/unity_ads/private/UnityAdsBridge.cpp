@@ -8,11 +8,13 @@
 
 #include "ee/unity_ads/private/UnityAdsBridge.hpp"
 
+#include <ee/ads/internal/Capper.hpp>
 #include <ee/ads/internal/DefaultBannerAd.hpp>
 #include <ee/ads/internal/GuardedBannerAd.hpp>
 #include <ee/ads/internal/GuardedFullScreenAd.hpp>
 #include <ee/ads/internal/IAsyncHelper.hpp>
 #include <ee/ads/internal/MediationManager.hpp>
+#include <ee/ads/internal/Retrier.hpp>
 #include <ee/core/ILogger.hpp>
 #include <ee/core/IMessageBridge.hpp>
 #include <ee/core/Task.hpp>
@@ -133,7 +135,9 @@ std::shared_ptr<IBannerAd> Self::createBannerAd(const std::string& adId,
             [this, adId] { //
                 destroyAd(adId);
             },
-            network_, adId, size));
+            network_, adId, size),
+        std::make_shared<ads::Capper>(10),
+        std::make_shared<ads::Retrier>(3, 3, 30));
     ads_.emplace(adId, ad);
     return ad;
 }
@@ -156,7 +160,9 @@ Self::createFullScreenAd(const std::string& adId) {
         return std::dynamic_pointer_cast<IFullScreenAd>(iter->second.first);
     }
     auto raw = std::make_shared<Ad>(logger_, displayer_, this, adId);
-    auto ad = std::make_shared<ads::GuardedFullScreenAd>(raw);
+    auto ad = std::make_shared<ads::GuardedFullScreenAd>(
+        raw, std::make_shared<ads::Capper>(10),
+        std::make_shared<ads::Retrier>(3, 3, 30));
     fullScreenAds_.try_emplace(adId, ad, raw);
     return ad;
 }

@@ -10,8 +10,10 @@
 
 #include <cassert>
 
+#include <ee/ads/internal/Capper.hpp>
 #include <ee/ads/internal/GuardedFullScreenAd.hpp>
 #include <ee/ads/internal/MediationManager.hpp>
+#include <ee/ads/internal/Retrier.hpp>
 #include <ee/core/ILogger.hpp>
 #include <ee/core/IMessageBridge.hpp>
 #include <ee/core/Task.hpp>
@@ -157,7 +159,9 @@ std::shared_ptr<IFullScreenAd> Self::createRewardedAd() {
     }
     rewardedAd_ = new RewardedAd(logger_, displayer_, this, network_);
     sharedRewardedAd_ = std::make_shared<ads::GuardedFullScreenAd>(
-        std::shared_ptr<RewardedAd>(rewardedAd_));
+        std::shared_ptr<RewardedAd>(rewardedAd_),
+        std::make_shared<ads::Capper>(10),
+        std::make_shared<ads::Retrier>(3, 3, 30));
     return sharedRewardedAd_;
 }
 

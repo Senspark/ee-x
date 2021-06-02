@@ -25,6 +25,9 @@ struct AdObserver;
 class ICapper;
 class Capper;
 
+class IRetrier;
+class Retrier;
+
 class IAd;
 class IBannerAd;
 class IFullScreenAd;
@@ -47,7 +50,6 @@ class IAsyncHelper;
 template <class Result>
 class AsyncHelper;
 
-class Retrier;
 class MediationManager;
 } // namespace ads
 

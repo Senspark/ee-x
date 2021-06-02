@@ -51,7 +51,6 @@ private:
     std::string network_;
     std::string adId_;
     MessageHelper messageHelper_;
-    std::shared_ptr<ICapper> loadCapper_;
     std::unique_ptr<IAsyncHelper<bool>> loader_;
 };
 } // namespace ads

@@ -1,24 +1,18 @@
 #ifndef EE_X_GUARDED_BANNER_AD_HPP
 #define EE_X_GUARDED_BANNER_AD_HPP
 
-#ifdef __cplusplus
-
-#include <ee/core/ObserverManager.hpp>
-
 #include "ee/ads/IBannerAd.hpp"
+#include "ee/ads/internal/GuardedAd.hpp"
 
 namespace ee {
 namespace ads {
-class GuardedBannerAd : public IBannerAd, public ObserverManager<AdObserver> {
+class GuardedBannerAd : public IBannerAd, public GuardedAd {
 public:
-    explicit GuardedBannerAd(const std::shared_ptr<IBannerAd>& ad);
+    explicit GuardedBannerAd(const std::shared_ptr<IBannerAd>& ad,
+                             const std::shared_ptr<ICapper>& capper,
+                             const std::shared_ptr<IRetrier>& retrier);
 
     virtual ~GuardedBannerAd() override;
-
-    virtual void destroy() override;
-
-    virtual bool isLoaded() const override;
-    virtual Task<bool> load() override;
 
     virtual std::pair<float, float> getAnchor() const override;
     virtual void setAnchor(float x, float y) override;
@@ -32,16 +26,13 @@ public:
     virtual bool isVisible() const override;
     virtual void setVisible(bool visible) override;
 
+protected:
+    virtual bool isDisplaying() const override;
+
 private:
     std::shared_ptr<IBannerAd> ad_;
-
-    bool loading_;
-    bool loaded_;
-    std::unique_ptr<ObserverHandle> handle_;
 };
 } // namespace ads
 } // namespace ee
-
-#endif // __cplusplus
 
 #endif // EE_X_GUARDED_BANNER_AD_HPP

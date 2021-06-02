@@ -57,7 +57,7 @@ namespace EE.Internal {
 
         public IRetrier Create() {
             return _value != null
-                ? (IRetrier) new Retrier(_value[0], _value[1], _values[2])
+                ? (IRetrier) new Retrier(_value[0], _value[1], _value[2])
                 : new NullRetrier();
         }
     }

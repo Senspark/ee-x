@@ -47,17 +47,17 @@ namespace EE.Internal {
     }
 
     internal class RetrierConfig {
-        private readonly int[] _values;
+        private readonly int[] _value;
 
         public RetrierConfig(JsonObject node, string key) {
-            _values = node.TryGetValue(key, out var value)
+            _value = node.TryGetValue(key, out var value)
                 ? (int[]) value
                 : null;
         }
 
         public IRetrier Create() {
-            return _values != null
-                ? (IRetrier) new Retrier(_values[0], _values[1], _values[2])
+            return _value != null
+                ? (IRetrier) new Retrier(_value[0], _value[1], _values[2])
                 : new NullRetrier();
         }
     }

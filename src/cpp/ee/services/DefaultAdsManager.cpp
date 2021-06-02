@@ -5,14 +5,12 @@
 #include <ee/ads/AdFormat.hpp>
 #include <ee/ads/AdNetwork.hpp>
 #include <ee/ads/internal/Capper.hpp>
-#include <ee/cocos/CocosBannerAd.hpp>
 #include <ee/core/Delay.hpp>
 #include <ee/core/NoAwait.hpp>
 #include <ee/core/ObserverHandle.hpp>
 #include <ee/core/Task.hpp>
 
 #include "ee/services/internal/AdsConfig.hpp"
-#include "ee/services/internal/GenericAd.hpp"
 #include "ee/services/internal/LazyBannerAd.hpp"
 #include "ee/services/internal/LazyFullScreenAd.hpp"
 

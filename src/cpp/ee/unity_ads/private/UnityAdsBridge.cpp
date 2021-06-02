@@ -135,9 +135,7 @@ std::shared_ptr<IBannerAd> Self::createBannerAd(const std::string& adId,
             [this, adId] { //
                 destroyAd(adId);
             },
-            network_, adId, size),
-        std::make_shared<ads::Capper>(10),
-        std::make_shared<ads::Retrier>(3, 3, 30));
+            network_, adId, size));
     ads_.emplace(adId, ad);
     return ad;
 }
@@ -160,9 +158,7 @@ Self::createFullScreenAd(const std::string& adId) {
         return std::dynamic_pointer_cast<IFullScreenAd>(iter->second.first);
     }
     auto raw = std::make_shared<Ad>(logger_, displayer_, this, adId);
-    auto ad = std::make_shared<ads::GuardedFullScreenAd>(
-        raw, std::make_shared<ads::Capper>(10),
-        std::make_shared<ads::Retrier>(3, 3, 30));
+    auto ad = std::make_shared<ads::GuardedFullScreenAd>(raw);
     fullScreenAds_.try_emplace(adId, ad, raw);
     return ad;
 }

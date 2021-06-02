@@ -5,29 +5,21 @@
 //  Created by eps on 6/18/20.
 //
 
-#ifndef EE_X_COCOS_BANNER_AD_HPP
-#define EE_X_COCOS_BANNER_AD_HPP
-
-#ifdef __cplusplus
+#ifndef EE_X_GENERIC_BANNER_AD_HPP
+#define EE_X_GENERIC_BANNER_AD_HPP
 
 #include <ee/ads/IBannerAd.hpp>
-#include <ee/core/ObserverManager.hpp>
 
-#include "ee/cocos/CocosFwd.hpp"
+#include "ee/services/internal/GenericAd.hpp"
 
 namespace ee {
-namespace cocos {
-class CocosBannerAd : public IBannerAd,
-                      public ObserverManager<AdObserver> {
+namespace services {
+class GenericBannerAd : public IBannerAd, public GenericAd {
 public:
-    explicit CocosBannerAd(const std::shared_ptr<IBannerAd>& ad);
-
-    virtual ~CocosBannerAd() override;
-
-    virtual void destroy() override;
-
-    virtual bool isLoaded() const override;
-    virtual Task<bool> load() override;
+    explicit GenericBannerAd(const std::shared_ptr<IBannerAd>& ad,
+                             const std::shared_ptr<ads::ICapper>& loadCapper,
+                             const std::shared_ptr<ads::IRetrier>& loadRetrier);
+    virtual ~GenericBannerAd() override;
 
     virtual std::pair<float, float> getAnchor() const override;
     virtual void setAnchor(float x, float y) override;
@@ -43,13 +35,10 @@ public:
 
 private:
     std::shared_ptr<IBannerAd> ad_;
-    std::unique_ptr<ObserverHandle> handle_;
     std::unique_ptr<Metrics> metrics_;
     float sceneHeight_;
 };
-} // namespace cocos
+} // namespace services
 } // namespace ee
 
-#endif // __cplusplus
-
-#endif /* EE_X_COCOS_BANNER_AD_HPP */
+#endif /* EE_X_GENERIC_BANNER_AD_HPP */

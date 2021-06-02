@@ -3,14 +3,15 @@
 
 #ifdef __cplusplus
 
-#include <ee/core/CoreFwd.hpp>
+#include <ee/cocos/CocosFwd.hpp>
 
 namespace ee {
 namespace services {
 class AdsConfig;
 class LazyBannerAd;
 class LazyFullScreenAd;
-class GenericAd;
+class GenericBannerAd;
+class GenericFullScreenAd;
 class IAdsManager;
 class DefaultAdsManager;
 } // namespace services

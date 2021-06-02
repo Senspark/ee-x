@@ -7,10 +7,8 @@ namespace ee {
 namespace ads {
 using Self = GuardedBannerAd;
 
-Self::GuardedBannerAd(const std::shared_ptr<IBannerAd>& ad,
-                      const std::shared_ptr<ICapper>& capper,
-                      const std::shared_ptr<IRetrier>& retrier)
-    : GuardedAd(ad, capper, retrier)
+Self::GuardedBannerAd(const std::shared_ptr<IBannerAd>& ad)
+    : GuardedAd(ad)
     , ad_(ad) {}
 
 Self::~GuardedBannerAd() = default;

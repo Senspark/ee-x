@@ -123,9 +123,7 @@ std::shared_ptr<IBannerAd> Self::createBannerAd(const std::string& adId,
             [this, adId] { //
                 destroyAd(adId);
             },
-            network_, adId, size),
-        std::make_shared<ads::Capper>(30),
-        std::make_shared<ads::Retrier>(3, 3, 30));
+            network_, adId, size));
     ads_.emplace(adId, ad);
     return ad;
 }
@@ -155,9 +153,7 @@ Self::createNativeAd(const std::string& adId, const std::string& layoutName,
             [this, adId] { //
                 destroyAd(adId);
             },
-            network_, adId, std::pair(0, 0)),
-        std::make_shared<ads::Capper>(30),
-        std::make_shared<ads::Retrier>(3, 3, 30));
+            network_, adId, std::pair(0, 0)));
     ads_.emplace(adId, ad);
     return ad;
 }
@@ -207,9 +203,7 @@ std::shared_ptr<IFullScreenAd> Self::createFullScreenAd(
         assert(false);
         return nullptr;
     }
-    auto ad = std::make_shared<ads::GuardedFullScreenAd>(
-        creator(), std::make_shared<ads::Capper>(30),
-        std::make_shared<ads::Retrier>(3, 3, 30));
+    auto ad = std::make_shared<ads::GuardedFullScreenAd>(creator());
     ads_.emplace(adId, ad);
     return ad;
 }

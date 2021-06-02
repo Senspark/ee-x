@@ -102,9 +102,7 @@ std::shared_ptr<IFullScreenAd> Self::createRewardedAd(const std::string& adId) {
         return iter->second.ad;
     }
     auto raw = std::make_shared<RewardedAd>(logger_, displayer_, this, adId);
-    auto ad = std::make_shared<ads::GuardedFullScreenAd>(
-        raw, std::make_shared<ads::Capper>(10),
-        std::make_shared<ads::Retrier>(3, 3, 30));
+    auto ad = std::make_shared<ads::GuardedFullScreenAd>(raw);
     rewardedAds_.try_emplace(adId, ad, raw);
     return ad;
 }

@@ -165,9 +165,7 @@ std::shared_ptr<IBannerAd> Self::createBannerAd(const std::string& adId,
             [this, adId] { //
                 destroyBannerAd(adId);
             },
-            network_, adId, size),
-        std::make_shared<ads::Capper>(10),
-        std::make_shared<ads::Retrier>(3, 3, 30));
+            network_, adId, size));
     return bannerAd_;
 }
 
@@ -196,9 +194,8 @@ Self::createInterstitialAd(const std::string& adId) {
     }
     interstitialAd_ = std::make_shared<InterstitialAd>(logger_, displayer_,
                                                        this, network_, adId);
-    sharedInterstitialAd_ = std::make_shared<ads::GuardedFullScreenAd>(
-        interstitialAd_, std::make_shared<ads::Capper>(10),
-        std::make_shared<ads::Retrier>(3, 3, 30));
+    sharedInterstitialAd_ =
+        std::make_shared<ads::GuardedFullScreenAd>(interstitialAd_);
     return sharedInterstitialAd_;
 }
 
@@ -219,9 +216,7 @@ std::shared_ptr<IFullScreenAd> Self::createRewardedAd(const std::string& adId) {
         return sharedRewardedAd_;
     }
     rewardedAd_ = std::make_shared<RewardedAd>(logger_, displayer_, this, adId);
-    sharedRewardedAd_ = std::make_shared<ads::GuardedFullScreenAd>(
-        rewardedAd_, std::make_shared<ads::Capper>(10),
-        std::make_shared<ads::Retrier>(3, 3, 30));
+    sharedRewardedAd_ = std::make_shared<ads::GuardedFullScreenAd>(rewardedAd_);
     return sharedRewardedAd_;
 }
 

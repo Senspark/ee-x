@@ -16,9 +16,7 @@ namespace ee {
 namespace ads {
 class GuardedAd : public virtual IAd, public ObserverManager<AdObserver> {
 public:
-    explicit GuardedAd(const std::shared_ptr<IAd>& ad,
-                       const std::shared_ptr<ICapper>& capper,
-                       const std::shared_ptr<IRetrier>& retrier);
+    explicit GuardedAd(const std::shared_ptr<IAd>& ad);
     virtual ~GuardedAd() override;
 
     virtual void destroy() override final;
@@ -32,14 +30,10 @@ protected:
     bool loaded_;
 
 private:
-    virtual Task<bool> loadInternal();
-
     std::shared_ptr<IAd> ad_;
     bool loading_;
 
     std::unique_ptr<ObserverHandle> handle_;
-    std::shared_ptr<ICapper> capper_;
-    std::shared_ptr<IRetrier> retrier_;
 };
 } // namespace ads
 } // namespace ee

@@ -8,9 +8,7 @@ namespace ee {
 namespace ads {
 class GuardedFullScreenAd : public IFullScreenAd, public GuardedAd {
 public:
-    explicit GuardedFullScreenAd(const std::shared_ptr<IFullScreenAd>& ad,
-                                 const std::shared_ptr<ICapper>& capper,
-                                 const std::shared_ptr<IRetrier>& retrier);
+    explicit GuardedFullScreenAd(const std::shared_ptr<IFullScreenAd>& ad);
     virtual ~GuardedFullScreenAd() override;
     virtual Task<AdResult> show() override;
     

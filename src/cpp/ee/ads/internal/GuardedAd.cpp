@@ -11,19 +11,12 @@
 #include <ee/core/ObserverHandle.hpp>
 #include <ee/core/Task.hpp>
 
-#include "ee/ads/internal/ICapper.hpp"
-#include "ee/ads/internal/IRetrier.hpp"
-
 namespace ee {
 namespace ads {
 using Self = GuardedAd;
 
-Self::GuardedAd(const std::shared_ptr<IAd>& ad,
-                const std::shared_ptr<ICapper>& capper,
-                const std::shared_ptr<IRetrier>& retrier)
-    : ad_(ad)
-    , capper_(capper)
-    , retrier_(retrier) {
+Self::GuardedAd(const std::shared_ptr<IAd>& ad)
+    : ad_(ad) {
     handle_ = std::make_unique<ObserverHandle>();
     handle_->bind(*ad_).addObserver({
         .onLoaded =
@@ -63,7 +56,6 @@ Self::~GuardedAd() = default;
 void Self::destroy() {
     ad_->destroy();
     handle_->clear();
-    retrier_->stop();
 }
 
 bool Self::isLoaded() const {
@@ -85,26 +77,9 @@ Task<bool> Self::load() {
         co_return false;
     }
     loading_ = true;
-    loaded_ = co_await loadInternal();
-    if (isLoaded()) {
-        retrier_->stop();
-    } else {
-        noAwait([this]() -> Task<> {
-            co_await retrier_->process([this]() -> Task<bool> {
-                co_return loaded_ = co_await loadInternal();
-            });
-        });
-    }
+    loaded_ = co_await ad_->load();
     loading_ = false;
     co_return loaded_;
-}
-
-Task<bool> Self::loadInternal() {
-    if (capper_->isCapped()) {
-        co_return false;
-    }
-    capper_->cap();
-    co_return co_await ad_->load();
 }
 } // namespace ads
 } // namespace ee

@@ -8,9 +8,7 @@ namespace ee {
 namespace ads {
 class GuardedBannerAd : public IBannerAd, public GuardedAd {
 public:
-    explicit GuardedBannerAd(const std::shared_ptr<IBannerAd>& ad,
-                             const std::shared_ptr<ICapper>& capper,
-                             const std::shared_ptr<IRetrier>& retrier);
+    explicit GuardedBannerAd(const std::shared_ptr<IBannerAd>& ad);
 
     virtual ~GuardedBannerAd() override;
 

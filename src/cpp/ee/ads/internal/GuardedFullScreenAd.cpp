@@ -6,10 +6,8 @@ namespace ee {
 namespace ads {
 using Self = GuardedFullScreenAd;
 
-Self::GuardedFullScreenAd(const std::shared_ptr<IFullScreenAd>& ad,
-                          const std::shared_ptr<ICapper>& capper,
-                          const std::shared_ptr<IRetrier>& retrier)
-    : GuardedAd(ad, capper, retrier)
+Self::GuardedFullScreenAd(const std::shared_ptr<IFullScreenAd>& ad)
+    : GuardedAd(ad)
     , ad_(ad) {
     displaying_ = false;
 }

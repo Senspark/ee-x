@@ -1,36 +1,39 @@
 //
 //  GenericAd.hpp
-//  ee-x-d542b565
+//  Pods
 //
-//  Created by eps on 1/7/21.
+//  Created by eps on 6/2/21.
 //
 
 #ifndef EE_X_GENERIC_AD_HPP
 #define EE_X_GENERIC_AD_HPP
 
-#include <ee/ads/IFullScreenAd.hpp>
+#include <ee/ads/IAd.hpp>
 #include <ee/core/ObserverManager.hpp>
 
 #include "ee/services/ServicesFwd.hpp"
 
 namespace ee {
 namespace services {
-class GenericAd : public IFullScreenAd, public ObserverManager<AdObserver> {
+class GenericAd : public virtual IAd, public ObserverManager<AdObserver> {
 public:
-    explicit GenericAd(const std::shared_ptr<IFullScreenAd>& ad, int interval);
+    explicit GenericAd(const std::shared_ptr<IAd>& ad,
+                       const std::shared_ptr<ads::ICapper>& loadCapper,
+                       const std::shared_ptr<ads::IRetrier>& loadRetrier);
+
     virtual ~GenericAd() override;
 
-    virtual void destroy() override;
+    virtual void destroy() override final;
 
-    virtual bool isLoaded() const override;
-    virtual Task<bool> load() override;
-    virtual Task<AdResult> show() override;
+    virtual bool isLoaded() const override final;
+    virtual Task<bool> load() override final;
 
 private:
-    static Task<bool> testConnection(float timeOut);
+    virtual Task<bool> loadInternal();
 
-    std::shared_ptr<IFullScreenAd> ad_;
-    std::shared_ptr<ads::ICapper> capper_;
+    std::shared_ptr<IAd> ad_;
+    std::shared_ptr<ads::ICapper> loadCapper_;
+    std::shared_ptr<ads::IRetrier> loadRetrier_;
     std::unique_ptr<ObserverHandle> handle_;
 };
 } // namespace services

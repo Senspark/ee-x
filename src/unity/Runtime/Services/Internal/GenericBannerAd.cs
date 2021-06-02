@@ -1,15 +1,20 @@
 using System.Threading.Tasks;
 
-using UnityEngine;
-
-namespace EE {
-    public class UnityBannerAd : ObserverManager<AdObserver>, IBannerAd {
+namespace EE.Internal {
+    internal class GenericBannerAd : ObserverManager<AdObserver>, IBannerAd {
         private readonly IBannerAd _ad;
+        private readonly ICapper _loadCapper;
+        private readonly IRetrier _loadRetrier;
         private readonly ObserverHandle _handle;
         private readonly int _screenHeight;
 
-        public UnityBannerAd(IBannerAd ad) {
+        public GenericBannerAd(
+            IBannerAd ad,
+            ICapper loadCapper,
+            IRetrier loadRetrier) {
             _ad = ad;
+            _loadCapper = loadCapper;
+            _loadRetrier = loadRetrier;
             _handle = new ObserverHandle();
             _handle.Bind(ad).AddObserver(new AdObserver {
                 OnLoaded = () => DispatchEvent(observer =>
@@ -27,12 +32,29 @@ namespace EE {
         public void Destroy() {
             _ad.Destroy();
             _handle.Clear();
+            _loadRetrier.Stop();
         }
 
         public bool IsLoaded => _ad.IsLoaded;
 
-        public Task<bool> Load() {
-            return _ad.Load();
+        public async Task<bool> Load() {
+            var result = await LoadInternal();
+            if (result) {
+                _loadRetrier.Stop();
+            } else {
+                Utils.NoAwait(async () => { //
+                    await _loadRetrier.Process(async () => await LoadInternal());
+                });
+            }
+            return result;
+        }
+
+        private async Task<bool> LoadInternal() {
+            if (_loadCapper.IsCapped) {
+                return false;
+            }
+            _loadCapper.Cap();
+            return await _ad.Load();
         }
 
         public (float, float) Anchor {

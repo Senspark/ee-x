@@ -4,16 +4,11 @@ namespace EE.Internal {
     internal abstract class GuardedAd : ObserverManager<AdObserver>, IAd {
         private readonly IAd _ad;
         private readonly ObserverHandle _handle;
-        private readonly ICapper _capper;
-        private readonly IRetrier _retrier;
 
         protected bool IsLoading { get; private set; }
         protected abstract bool IsDisplaying { get; }
 
-        protected GuardedAd(
-            IAd ad,
-            ICapper capper,
-            IRetrier retrier) {
+        protected GuardedAd(IAd ad) {
             _ad = ad;
             _handle = new ObserverHandle();
             _handle.Bind(ad).AddObserver(new AdObserver {
@@ -26,14 +21,11 @@ namespace EE.Internal {
                 OnClicked = () => DispatchEvent(observer =>
                     observer.OnClicked?.Invoke())
             });
-            _capper = capper;
-            _retrier = retrier;
         }
 
         public void Destroy() {
             _ad.Destroy();
             _handle.Clear();
-            _retrier.Stop();
         }
 
         public bool IsLoaded { get; protected set; }
@@ -49,26 +41,9 @@ namespace EE.Internal {
                 return false;
             }
             IsLoading = true;
-            IsLoaded = await LoadInternal();
-            if (IsLoaded) {
-                _retrier.Stop();
-            } else {
-                Utils.NoAwait(async () => {
-                    await _retrier.Process(async () => { //
-                        return IsLoaded = await LoadInternal();
-                    });
-                });
-            }
+            IsLoaded = await _ad.Load();
             IsLoading = false;
             return IsLoaded;
-        }
-
-        private async Task<bool> LoadInternal() {
-            if (_capper.IsCapped) {
-                return false;
-            }
-            _capper.Cap();
-            return await _ad.Load();
         }
     }
 }

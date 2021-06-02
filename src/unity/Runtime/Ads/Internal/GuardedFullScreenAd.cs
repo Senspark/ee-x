@@ -7,10 +7,7 @@ namespace EE.Internal {
 
         protected override bool IsDisplaying => _displaying;
 
-        public GuardedFullScreenAd(
-            IFullScreenAd ad,
-            ICapper capper,
-            IRetrier retrier) : base(ad, capper, retrier) {
+        public GuardedFullScreenAd(IFullScreenAd ad) : base(ad) {
             _ad = ad;
         }
 

@@ -4,10 +4,7 @@ namespace EE.Internal {
 
         protected override bool IsDisplaying => false;
 
-        public GuardedBannerAd(
-            IBannerAd ad,
-            ICapper capper,
-            IRetrier retrier) : base(ad, capper, retrier) {
+        public GuardedBannerAd(IBannerAd ad) : base(ad) {
             _ad = ad;
         }
 

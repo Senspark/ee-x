@@ -2,14 +2,22 @@ using System;
 using System.Threading.Tasks;
 
 namespace EE.Internal {
-    internal class GenericAd : ObserverManager<AdObserver>, IFullScreenAd {
+    internal class GenericFullScreenAd : ObserverManager<AdObserver>, IFullScreenAd {
         private readonly IFullScreenAd _ad;
-        private readonly ICapper _capper;
+        private readonly ICapper _displayCapper;
+        private readonly ICapper _loadCapper;
+        private readonly IRetrier _loadRetrier;
         private readonly ObserverHandle _handle;
 
-        public GenericAd(IFullScreenAd ad, int interval) {
+        public GenericFullScreenAd(
+            IFullScreenAd ad,
+            ICapper displayCapper,
+            ICapper loadCapper,
+            IRetrier loadRetrier) {
             _ad = ad;
-            _capper = new Capper(interval);
+            _displayCapper = displayCapper;
+            _loadCapper = loadCapper;
+            _loadRetrier = loadRetrier;
             _handle = new ObserverHandle();
             _handle.Bind(_ad)
                 .AddObserver(new AdObserver {
@@ -27,16 +35,33 @@ namespace EE.Internal {
         public void Destroy() {
             _ad.Destroy();
             _handle.Clear();
+            _loadRetrier.Stop();
         }
 
         public bool IsLoaded => _ad.IsLoaded;
 
         public async Task<bool> Load() {
+            var result = await LoadInternal();
+            if (result) {
+                _loadRetrier.Stop();
+            } else {
+                Utils.NoAwait(async () => { //
+                    await _loadRetrier.Process(async () => await LoadInternal());
+                });
+            }
+            return result;
+        }
+
+        private async Task<bool> LoadInternal() {
+            if (_loadCapper.IsCapped) {
+                return false;
+            }
+            _loadCapper.Cap();
             return await _ad.Load();
         }
 
         public async Task<AdResult> Show() {
-            if (_capper.IsCapped) {
+            if (_displayCapper.IsCapped) {
                 return AdResult.Capped;
             }
             if (_ad.IsLoaded) {
@@ -47,7 +72,7 @@ namespace EE.Internal {
                     return AdResult.NoInternet;
                 }
             } else {
-                Utils.NoAwait(async () => await _ad.Load());
+                Utils.NoAwait(async () => await Load());
                 var hasInternet = false;
                 await Task.WhenAll(Task.Delay(100),
                     ((Func<Task>) (async () => { //
@@ -65,9 +90,9 @@ namespace EE.Internal {
                 return AdResult.NotLoaded;
             }
             var result = await _ad.Show();
-            Utils.NoAwait(async () => await _ad.Load());
+            Utils.NoAwait(async () => await Load());
             if (result == AdResult.Completed) {
-                _capper.Cap();
+                _displayCapper.Cap();
             }
             return result;
         }

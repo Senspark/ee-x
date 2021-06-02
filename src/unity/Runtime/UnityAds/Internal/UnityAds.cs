@@ -132,8 +132,7 @@ namespace EE.Internal {
             }
             var size = GetBannerAdSize(adSize);
             var ad = new GuardedBannerAd(new DefaultBannerAd("UnityBannerAd", _bridge, _logger,
-                    () => DestroyAd(adId), _network, adId, size),
-                new Capper(10f), new Retrier(3f, 3f, 30f));
+                () => DestroyAd(adId), _network, adId, size));
             _ads.Add(adId, ad);
             return ad;
         }
@@ -151,7 +150,7 @@ namespace EE.Internal {
                 return result.Item1 as IFullScreenAd;
             }
             var raw = creator();
-            var ad = new GuardedFullScreenAd(raw, new Capper(10f), new Retrier(3f, 3f, 30f));
+            var ad = new GuardedFullScreenAd(raw);
             _fullScreenAds.Add(adId, (ad, raw));
             return ad;
         }

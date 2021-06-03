@@ -11,6 +11,7 @@ namespace EE.Internal {
             IAd ad,
             ICapper loadCapper,
             IRetrier loadRetrier) {
+            _ad = ad;
             _loadCapper = loadCapper;
             _loadRetrier = loadRetrier;
             _handle = new ObserverHandle();

@@ -31,34 +31,43 @@ namespace EE.Internal {
     }
 
     internal class IntervalConfig {
-        private readonly int? _value;
+        private readonly Func<ICapper> _creator;
 
         public IntervalConfig(JsonObject node, string key) {
-            _value = node.TryGetValue(key, out var value)
-                ? (int?) value
-                : null;
+            _creator = () => new LockCapper();
+            if (!node.TryGetValue(key, out var value)) {
+                return;
+            }
+            _creator = () => new Capper(Convert.ToSingle(value));
         }
 
         public ICapper Create() {
-            return _value.HasValue
-                ? (ICapper) new Capper(_value.Value)
-                : new LockCapper();
+            return _creator();
         }
     }
 
     internal class RetrierConfig {
-        private readonly int[] _value;
+        private readonly Func<IRetrier> _creator;
 
         public RetrierConfig(JsonObject node, string key) {
-            _value = node.TryGetValue(key, out var value)
-                ? (int[]) value
-                : null;
+            _creator = () => new NullRetrier();
+            if (!node.TryGetValue(key, out var value)) {
+                return;
+            }
+            if (!(value is JsonArray array)) {
+                return;
+            }
+            if (array.Count < 3) {
+                return;
+            }
+            _creator = () => new Retrier(
+                Convert.ToSingle(array[0]),
+                Convert.ToSingle(array[1]),
+                Convert.ToSingle(array[2]));
         }
 
         public IRetrier Create() {
-            return _value != null
-                ? (IRetrier) new Retrier(_value[0], _value[1], _value[2])
-                : new NullRetrier();
+            return _creator();
         }
     }
 

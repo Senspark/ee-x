@@ -8,6 +8,7 @@
 #include "ee/core/Thread.hpp"
 
 #include <cassert>
+#include <functional>
 #include <queue>
 #include <unordered_map>
 
@@ -22,6 +23,16 @@
 #include "ee/core/internal/JniString.hpp"
 #include "ee/core/internal/JniUtils.hpp"
 #endif // EE_X_ANDROID
+
+#if defined(EE_X_IOS) || defined(EE_X_OSX)
+using RunOnMainThreadCallback = std::function<void()>;
+using RunOnMainThreadDelayedCallback = std::function<void(int key)>;
+
+extern void
+ee_setRunOnMainThreadCallback(const RunOnMainThreadCallback& callback);
+extern void ee_setRunOnMainThreadDelayedCallback(
+    const RunOnMainThreadDelayedCallback& callback);
+#endif // defined(EE_X_IOS) || defined(EE_X_OSX)
 
 namespace ee {
 namespace core {
@@ -107,14 +118,6 @@ extern "C" {
 bool ee_isMainThread();
 bool ee_runOnMainThread();
 void ee_runOnMainThreadDelayed(int key, float delay);
-
-void ee_runOnMainThreadCallback() {
-    popInstantRunnable()();
-}
-
-void ee_runOnMainThreadDelayedCallback(int key) {
-    popDelayedRunnable(key)();
-}
 } // extern "C"
 #endif // defined(EE_X_IOS) || defined(EE_X_OSX)
 
@@ -128,6 +131,15 @@ void Self::initialize() {
 #else  // EE_X_COCOS_CPP
     impl_ = std::make_shared<ThreadImplJs>();
 #endif // EE_X_COCOS_CPP
+
+#if defined(EE_X_IOS) || defined(EE_X_OSX)
+    ee_setRunOnMainThreadCallback([] { //
+        popInstantRunnable()();
+    });
+    ee_setRunOnMainThreadDelayedCallback([](int key) { //
+        popDelayedRunnable(key)();
+    });
+#endif // defined(EE_X_IOS) || defined(EE_X_OSX)
 }
 
 bool Self::isLibraryThread() {

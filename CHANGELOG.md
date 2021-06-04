@@ -1,3 +1,7 @@
+## 2.8.0 - 2021-06-04
+- [Unity] Fix build iOS.
+- [C++/Unity] Add auto-reload ad mechanism.
+
 ## 2.7.4 - 2021-05-21
 - [Android] Fix crash with kotlin serialization library.
 - [Android/iOS] Update ad and firebase libraries.

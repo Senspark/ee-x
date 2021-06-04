@@ -10,8 +10,10 @@
 
 #include <cassert>
 
+#include <ee/ads/internal/Capper.hpp>
 #include <ee/ads/internal/GuardedFullScreenAd.hpp>
 #include <ee/ads/internal/MediationManager.hpp>
+#include <ee/ads/internal/Retrier.hpp>
 #include <ee/core/ILogger.hpp>
 #include <ee/core/IMessageBridge.hpp>
 #include <ee/core/Task.hpp>

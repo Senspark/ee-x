@@ -79,8 +79,6 @@
 
 #include "ee/cocos/SwitchToCocosThread.hpp"
 
-#include "ee/cocos/CocosBannerAd.hpp"
-
 #endif // __cplusplus
 
 #endif // EE_X_COCOS_HPP

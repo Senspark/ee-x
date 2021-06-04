@@ -1,5 +1,5 @@
 namespace EE.Internal {
-    public interface ICapper {
+    internal interface ICapper {
         bool IsCapped { get; }
         void Cap();
         void Lock();

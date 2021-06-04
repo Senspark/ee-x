@@ -8,65 +8,13 @@ namespace ads {
 using Self = GuardedBannerAd;
 
 Self::GuardedBannerAd(const std::shared_ptr<IBannerAd>& ad)
-    : ad_(ad) {
-    loading_ = false;
-    loaded_ = false;
-
-    handle_ = std::make_unique<ObserverHandle>();
-    handle_->bind(*ad_).addObserver({
-        .onLoaded =
-            [this] {
-                // Propagation.
-                dispatchEvent([](auto&& observer) {
-                    if (observer.onLoaded) {
-                        observer.onLoaded();
-                    }
-                });
-            },
-        .onLoadResult =
-            [this](const AdLoadResult& result) {
-                // Propagation.
-                dispatchEvent([result](auto&& observer) {
-                    if (observer.onLoadResult) {
-                        observer.onLoadResult(result);
-                    }
-                });
-            },
-        .onClicked =
-            [this] {
-                // Propagation.
-                dispatchEvent([](auto&& observer) {
-                    if (observer.onClicked) {
-                        observer.onClicked();
-                    }
-                });
-            },
-    });
-}
+    : GuardedAd(ad)
+    , ad_(ad) {}
 
 Self::~GuardedBannerAd() = default;
 
-void Self::destroy() {
-    ad_->destroy();
-    handle_->clear();
-}
-
-bool Self::isLoaded() const {
-    return loaded_;
-}
-
-Task<bool> Self::load() {
-    if (loaded_) {
-        co_return true;
-    }
-    if (loading_) {
-        // Waiting.
-        co_return co_await ad_->load();
-    }
-    loading_ = true;
-    loaded_ = co_await ad_->load();
-    loading_ = false;
-    co_return loaded_;
+bool Self::isDisplaying() const {
+    return false;
 }
 
 std::pair<float, float> Self::getAnchor() const {

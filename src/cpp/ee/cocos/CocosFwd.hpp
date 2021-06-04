@@ -324,8 +324,6 @@ class IDialogManager;
 class Metrics;
 
 class SwitchToCocosThread;
-
-class CocosBannerAd;
 } // namespace cocos
 
 using cocos::Dialog;
@@ -333,8 +331,6 @@ using cocos::DialogComponent;
 using cocos::Metrics;
 
 using cocos::SwitchToCocosThread;
-
-using cocos::CocosBannerAd;
 } // namespace ee
 
 #endif // __cplusplus

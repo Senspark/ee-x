@@ -30,6 +30,47 @@ namespace EE.Internal {
         }
     }
 
+    internal class IntervalConfig {
+        private readonly Func<ICapper> _creator;
+
+        public IntervalConfig(JsonObject node, string key) {
+            _creator = () => new LockCapper();
+            if (!node.TryGetValue(key, out var value)) {
+                return;
+            }
+            _creator = () => new Capper(Convert.ToSingle(value));
+        }
+
+        public ICapper Create() {
+            return _creator();
+        }
+    }
+
+    internal class RetrierConfig {
+        private readonly Func<IRetrier> _creator;
+
+        public RetrierConfig(JsonObject node, string key) {
+            _creator = () => new NullRetrier();
+            if (!node.TryGetValue(key, out var value)) {
+                return;
+            }
+            if (!(value is JsonArray array)) {
+                return;
+            }
+            if (array.Count < 3) {
+                return;
+            }
+            _creator = () => new Retrier(
+                Convert.ToSingle(array[0]),
+                Convert.ToSingle(array[1]),
+                Convert.ToSingle(array[2]));
+        }
+
+        public IRetrier Create() {
+            return _creator();
+        }
+    }
+
     internal interface INetworkConfigManager {
         Task Initialize();
         void AddTestDevice(string hash);
@@ -344,9 +385,13 @@ namespace EE.Internal {
     }
 
     internal class BannerConfig : IAdConfig {
+        private readonly IntervalConfig _loadConfig;
+        private readonly RetrierConfig _retrierConfig;
         private readonly IAdInstanceConfig<IBannerAd> _instance;
 
         public BannerConfig(JsonObject node) {
+            _loadConfig = new IntervalConfig(node, "load_interval");
+            _retrierConfig = new RetrierConfig(node, "reload_params");
             _instance = AdInstanceConfig<IBannerAd>.Parse<MultiBannerAd>(AdFormat.Banner, node["instance"]);
         }
 
@@ -354,14 +399,18 @@ namespace EE.Internal {
 
         public IAd CreateAd(INetworkConfigManager manager) {
             var ad = _instance.CreateAd(manager);
-            return new UnityBannerAd(ad);
+            return new GenericBannerAd(ad, _loadConfig.Create(), _retrierConfig.Create());
         }
     }
 
     internal class RectangleConfig : IAdConfig {
+        private readonly IntervalConfig _loadConfig;
+        private readonly RetrierConfig _retrierConfig;
         private readonly IAdInstanceConfig<IBannerAd> _instance;
 
         public RectangleConfig(JsonObject node) {
+            _loadConfig = new IntervalConfig(node, "load_interval");
+            _retrierConfig = new RetrierConfig(node, "reload_params");
             _instance = AdInstanceConfig<IBannerAd>.Parse<MultiBannerAd>(AdFormat.Rectangle, node["instance"]);
         }
 
@@ -369,16 +418,20 @@ namespace EE.Internal {
 
         public IAd CreateAd(INetworkConfigManager manager) {
             var ad = _instance.CreateAd(manager);
-            return new UnityBannerAd(ad);
+            return new GenericBannerAd(ad, _loadConfig.Create(), _retrierConfig.Create());
         }
     }
 
     internal class AppOpenConfig : IAdConfig {
-        private readonly int _interval;
+        private readonly IntervalConfig _displayConfig;
+        private readonly IntervalConfig _loadConfig;
+        private readonly RetrierConfig _retrierConfig;
         private readonly IAdInstanceConfig<IFullScreenAd> _instance;
 
         public AppOpenConfig(JsonObject node) {
-            _interval = node.TryGetValue("interval", out var value) ? (int) value : 0;
+            _displayConfig = new IntervalConfig(node, "interval");
+            _loadConfig = new IntervalConfig(node, "load_interval");
+            _retrierConfig = new RetrierConfig(node, "reload_params");
             _instance = AdInstanceConfig<IFullScreenAd>.Parse<MultiFullScreenAd>(AdFormat.AppOpen, node["instance"]);
         }
 
@@ -386,16 +439,20 @@ namespace EE.Internal {
 
         public IAd CreateAd(INetworkConfigManager manager) {
             var ad = _instance.CreateAd(manager);
-            return new GenericAd(ad, _interval);
+            return new GenericFullScreenAd(ad, _displayConfig.Create(), _loadConfig.Create(), _retrierConfig.Create());
         }
     }
 
     internal class InterstitialConfig : IAdConfig {
-        private readonly int _interval;
+        private readonly IntervalConfig _displayConfig;
+        private readonly IntervalConfig _loadConfig;
+        private readonly RetrierConfig _retrierConfig;
         private readonly IAdInstanceConfig<IFullScreenAd> _instance;
 
         public InterstitialConfig(JsonObject node) {
-            _interval = node.TryGetValue("interval", out var value) ? (int) value : 0;
+            _displayConfig = new IntervalConfig(node, "interval");
+            _loadConfig = new IntervalConfig(node, "load_interval");
+            _retrierConfig = new RetrierConfig(node, "reload_params");
             _instance = AdInstanceConfig<IFullScreenAd>.Parse<MultiFullScreenAd>(AdFormat.Interstitial,
                 node["instance"]);
         }
@@ -404,16 +461,18 @@ namespace EE.Internal {
 
         public IAd CreateAd(INetworkConfigManager manager) {
             var ad = _instance.CreateAd(manager);
-            return new GenericAd(ad, _interval);
+            return new GenericFullScreenAd(ad, _displayConfig.Create(), _loadConfig.Create(), _retrierConfig.Create());
         }
     }
 
     internal class RewardedInterstitialConfig : IAdConfig {
-        private readonly int _interval;
+        private readonly IntervalConfig _loadConfig;
+        private readonly RetrierConfig _retrierConfig;
         private readonly IAdInstanceConfig<IFullScreenAd> _instance;
 
         public RewardedInterstitialConfig(JsonObject node) {
-            _interval = node.TryGetValue("interval", out var value) ? (int) value : 0;
+            _loadConfig = new IntervalConfig(node, "load_interval");
+            _retrierConfig = new RetrierConfig(node, "reload_params");
             _instance = AdInstanceConfig<IFullScreenAd>.Parse<MultiFullScreenAd>(AdFormat.RewardedInterstitial,
                 node["instance"]);
         }
@@ -422,14 +481,18 @@ namespace EE.Internal {
 
         public IAd CreateAd(INetworkConfigManager manager) {
             var ad = _instance.CreateAd(manager);
-            return new GenericAd(ad, _interval);
+            return new GenericFullScreenAd(ad, new LockCapper(), _loadConfig.Create(), _retrierConfig.Create());
         }
     }
 
     internal class RewardedConfig : IAdConfig {
+        private readonly IntervalConfig _loadConfig;
+        private readonly RetrierConfig _retrierConfig;
         private readonly IAdInstanceConfig<IFullScreenAd> _instance;
 
         public RewardedConfig(JsonObject node) {
+            _loadConfig = new IntervalConfig(node, "load_interval");
+            _retrierConfig = new RetrierConfig(node, "reload_params");
             _instance = AdInstanceConfig<IFullScreenAd>.Parse<MultiFullScreenAd>(AdFormat.Rewarded, node["instance"]);
         }
 
@@ -437,7 +500,7 @@ namespace EE.Internal {
 
         public IAd CreateAd(INetworkConfigManager manager) {
             var ad = _instance.CreateAd(manager);
-            return new GenericAd(ad, 0);
+            return new GenericFullScreenAd(ad, new LockCapper(), _loadConfig.Create(), _retrierConfig.Create());
         }
     }
 

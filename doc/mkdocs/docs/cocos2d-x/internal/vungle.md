@@ -4,14 +4,14 @@
 Modify `build.gradle`
 ```java
 dependencies {
-    implementation 'com.senspark.ee:vungle:2.7.4'
+    implementation 'com.senspark.ee:vungle:2.8.0'
 }
 ```
 
 ### iOS
 Modify `Podfile`
 ```ruby
-pod 'ee-x/vungle', '2.7.4'
+pod 'ee-x/vungle', '2.8.0'
 ```
 
 ## Basic usage

@@ -1,20 +1,16 @@
-#ifndef EE_X_ERROR_HANDLER_HPP
-#define EE_X_ERROR_HANDLER_HPP
+#ifndef EE_X_RETRIER_HPP
+#define EE_X_RETRIER_HPP
 
-#include <functional>
-
-#include "ee/ads/AdsFwd.hpp"
+#include "ee/ads/internal/IRetrier.hpp"
 
 namespace ee {
 namespace ads {
-class Retrier {
+class Retrier : public IRetrier {
 public:
-    using Processor = std::function<Task<bool>()>;
-
     explicit Retrier(float base, float multipler, float limit);
 
-    Task<> process(const Processor& processor);
-    void stop();
+    virtual Task<> process(const Processor& processor) override;
+    virtual void stop() override;
 
 private:
     float base_;
@@ -26,4 +22,4 @@ private:
 } // namespace ads
 } // namespace ee
 
-#endif // EE_X_ERROR_HANDLER_HPP
+#endif // EE_X_RETRIER_HPP

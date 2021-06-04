@@ -1,3 +1,11 @@
+#ifdef __cplusplus
+extern "C" {
+#endif // __cplusplus
+
 /// Required for Swift.
-extern void ee_runOnMainThreadCallback();
-extern void ee_runOnMainThreadDelayedCallback(int key);
+void ee_runOnMainThreadCallback();
+void ee_runOnMainThreadDelayedCallback(int key);
+
+#ifdef __cplusplus
+} // extern "C"
+#endif // __cplusplus

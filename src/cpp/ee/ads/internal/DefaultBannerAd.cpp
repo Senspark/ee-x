@@ -35,7 +35,6 @@ Self::DefaultBannerAd(const std::string& prefix, IMessageBridge& bridge,
     , helper_(bridge, messageHelper_, size) {
     logger_.debug("%s: prefix = %s id = %s", __PRETTY_FUNCTION__,
                   prefix_.c_str(), adId_.c_str());
-    loadCapper_ = std::make_shared<Capper>(5);
     loader_ = std::make_unique<AsyncHelper<bool>>();
 
     bridge_.registerHandler(
@@ -77,10 +76,6 @@ Task<bool> Self::load() {
     logger_.debug("%s: prefix = %s id = %s loading = %s", __PRETTY_FUNCTION__,
                   prefix_.c_str(), adId_.c_str(),
                   core::toString(loader_->isProcessing()).c_str());
-    if (loadCapper_->isCapped()) {
-        co_return false;
-    }
-    loadCapper_->cap();
     auto result = co_await loader_->process(
         [this] { //
             helper_.load();

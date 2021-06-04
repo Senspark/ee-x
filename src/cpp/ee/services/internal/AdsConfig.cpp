@@ -11,8 +11,11 @@
 #include <ee/ads/NullAd.hpp>
 #include <ee/ads/NullBannerAd.hpp>
 #include <ee/ads/NullFullScreenAd.hpp>
+#include <ee/ads/internal/Capper.hpp>
+#include <ee/ads/internal/LockCapper.hpp>
+#include <ee/ads/internal/NullRetrier.hpp>
+#include <ee/ads/internal/Retrier.hpp>
 #include <ee/app_lovin/IAppLovinBridge.hpp>
-#include <ee/cocos/CocosBannerAd.hpp>
 #include <ee/core/Delay.hpp>
 #include <ee/core/PluginManager.hpp>
 #include <ee/core/Task.hpp>
@@ -26,7 +29,8 @@
 #include <ee/unity_ads/UnityBannerAdSize.hpp>
 #include <ee/vungle/IVungleBridge.hpp>
 
-#include "ee/services/internal/GenericAd.hpp"
+#include "ee/services/internal/GenericBannerAd.hpp"
+#include "ee/services/internal/GenericFullScreenAd.hpp"
 
 namespace ee {
 namespace services {
@@ -72,6 +76,41 @@ AdFormat AdsConfigUtils::parseFormat(const std::string& id) {
         return AdFormat::Rewarded;
     }
     return AdFormat::Null;
+}
+
+IntervalConfig::IntervalConfig(const nlohmann::json& node,
+                               const std::string& key) {
+    auto iter = node.find(key);
+    if (iter == node.end()) {
+        value_ = std::nullopt;
+    } else {
+        value_ = *iter;
+    }
+}
+
+std::shared_ptr<ads::ICapper> IntervalConfig::create() const {
+    if (value_.has_value()) {
+        return std::make_shared<ads::Capper>(value_.value());
+    }
+    return std::make_shared<ads::LockCapper>();
+}
+
+RetrierConfig::RetrierConfig(const nlohmann::json& node,
+                             const std::string& key) {
+    auto iter = node.find(key);
+    if (iter == node.end()) {
+        value_ = std::nullopt;
+    } else {
+        value_ = *iter;
+    }
+}
+
+std::shared_ptr<ads::IRetrier> RetrierConfig::create() const {
+    if (value_.has_value()) {
+        return std::make_shared<ads::Retrier>(
+            value_.value()[0], value_.value()[1], value_.value()[2]);
+    }
+    return std::make_shared<ads::NullRetrier>();
 }
 
 NetworkConfigManager::NetworkConfigManager(const nlohmann::json& node) {
@@ -433,6 +472,8 @@ std::shared_ptr<IAdConfig> IAdConfig::parse(const nlohmann::json& node) {
 }
 
 BannerConfig::BannerConfig(const nlohmann::json& node) {
+    loadConfig_ = std::make_shared<IntervalConfig>(node, "load_interval");
+    retrierConfig_ = std::make_shared<RetrierConfig>(node, "reload_params");
     instance_ = IAdInstanceConfig<IBannerAd>::parse<MultiBannerAd>(
         AdFormat::Banner, node["instance"]);
 }
@@ -444,10 +485,13 @@ AdFormat BannerConfig::format() const {
 std::shared_ptr<IAd> BannerConfig::createAd(
     const std::shared_ptr<INetworkConfigManager>& manager) const {
     auto ad = instance_->createAd(manager);
-    return std::make_shared<CocosBannerAd>(ad);
+    return std::make_shared<GenericBannerAd>(ad, loadConfig_->create(),
+                                             retrierConfig_->create());
 }
 
 RectangleConfig::RectangleConfig(const nlohmann::json& node) {
+    loadConfig_ = std::make_shared<IntervalConfig>(node, "load_interval");
+    retrierConfig_ = std::make_shared<RetrierConfig>(node, "reload_params");
     instance_ = IAdInstanceConfig<IBannerAd>::parse<MultiBannerAd>(
         AdFormat::Rectangle, node["instance"]);
 }
@@ -459,11 +503,14 @@ AdFormat RectangleConfig::format() const {
 std::shared_ptr<IAd> RectangleConfig::createAd(
     const std::shared_ptr<INetworkConfigManager>& manager) const {
     auto ad = instance_->createAd(manager);
-    return std::make_shared<CocosBannerAd>(ad);
+    return std::make_shared<GenericBannerAd>(ad, loadConfig_->create(),
+                                             retrierConfig_->create());
 }
 
 AppOpenConfig::AppOpenConfig(const nlohmann::json& node) {
-    interval_ = node.value("interval", 0);
+    displayConfig_ = std::make_shared<IntervalConfig>(node, "interval");
+    loadConfig_ = std::make_shared<IntervalConfig>(node, "load_interval");
+    retrierConfig_ = std::make_shared<RetrierConfig>(node, "reload_params");
     instance_ = IAdInstanceConfig<IFullScreenAd>::parse<MultiFullScreenAd>(
         AdFormat::AppOpen, node["instance"]);
 }
@@ -475,11 +522,15 @@ AdFormat AppOpenConfig::format() const {
 std::shared_ptr<IAd> AppOpenConfig::createAd(
     const std::shared_ptr<INetworkConfigManager>& manager) const {
     auto ad = instance_->createAd(manager);
-    return std::make_shared<GenericAd>(ad, interval_);
+    return std::make_shared<GenericFullScreenAd>(ad, displayConfig_->create(),
+                                                 loadConfig_->create(),
+                                                 retrierConfig_->create());
 }
 
 InterstitialConfig::InterstitialConfig(const nlohmann::json& node) {
-    interval_ = node.value("interval", 0);
+    displayConfig_ = std::make_shared<IntervalConfig>(node, "interval");
+    loadConfig_ = std::make_shared<IntervalConfig>(node, "load_interval");
+    retrierConfig_ = std::make_shared<RetrierConfig>(node, "reload_params");
     instance_ = IAdInstanceConfig<IFullScreenAd>::parse<MultiFullScreenAd>(
         AdFormat::Interstitial, node["instance"]);
 }
@@ -491,12 +542,15 @@ AdFormat InterstitialConfig::format() const {
 std::shared_ptr<IAd> InterstitialConfig::createAd(
     const std::shared_ptr<INetworkConfigManager>& manager) const {
     auto ad = instance_->createAd(manager);
-    return std::make_shared<GenericAd>(ad, interval_);
+    return std::make_shared<GenericFullScreenAd>(ad, displayConfig_->create(),
+                                                 loadConfig_->create(),
+                                                 retrierConfig_->create());
 }
 
 RewardedInterstitialConfig::RewardedInterstitialConfig(
     const nlohmann::json& node) {
-    interval_ = node.value("interval", 0);
+    loadConfig_ = std::make_shared<IntervalConfig>(node, "load_interval");
+    retrierConfig_ = std::make_shared<RetrierConfig>(node, "reload_params");
     instance_ = IAdInstanceConfig<IFullScreenAd>::parse<MultiFullScreenAd>(
         AdFormat::RewardedInterstitial, node["instance"]);
 }
@@ -508,10 +562,14 @@ AdFormat RewardedInterstitialConfig::format() const {
 std::shared_ptr<IAd> RewardedInterstitialConfig::createAd(
     const std::shared_ptr<INetworkConfigManager>& manager) const {
     auto ad = instance_->createAd(manager);
-    return std::make_shared<GenericAd>(ad, interval_);
+    return std::make_shared<GenericFullScreenAd>(
+        ad, std::make_shared<ads::LockCapper>(), loadConfig_->create(),
+        retrierConfig_->create());
 }
 
 RewardedConfig::RewardedConfig(const nlohmann::json& node) {
+    loadConfig_ = std::make_shared<IntervalConfig>(node, "load_interval");
+    retrierConfig_ = std::make_shared<RetrierConfig>(node, "reload_params");
     instance_ = IAdInstanceConfig<IFullScreenAd>::parse<MultiFullScreenAd>(
         AdFormat::Rewarded, node["instance"]);
 }
@@ -523,7 +581,9 @@ AdFormat RewardedConfig::format() const {
 std::shared_ptr<IAd> RewardedConfig::createAd(
     const std::shared_ptr<INetworkConfigManager>& manager) const {
     auto ad = instance_->createAd(manager);
-    return std::make_shared<GenericAd>(ad, 0);
+    return std::make_shared<GenericFullScreenAd>(
+        ad, std::make_shared<ads::LockCapper>(), loadConfig_->create(),
+        retrierConfig_->create());
 }
 
 AdFormat NullAdConfig::format() const {

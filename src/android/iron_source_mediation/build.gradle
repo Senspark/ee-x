@@ -35,7 +35,7 @@ dependencies {
     api 'com.adcolony:sdk:4.5.0'
 
     // https://developers.ironsrc.com/ironsource-mobile/android/admob-change-log/
-    api 'com.ironsource.adapters:admobadapter:4.3.19'
+    api 'com.ironsource.adapters:admobadapter:4.3.20'
     api 'com.google.android.gms:play-services-ads:20.1.0'
 
     // https://developers.ironsrc.com/ironsource-mobile/android/applovin-change-log/

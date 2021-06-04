@@ -19,6 +19,24 @@ public:
     static AdFormat parseFormat(const std::string& id);
 };
 
+class IntervalConfig {
+public:
+    explicit IntervalConfig(const nlohmann::json& node, const std::string& key);
+    std::shared_ptr<ads::ICapper> create() const;
+
+private:
+    std::optional<int> value_;
+};
+
+class RetrierConfig {
+public:
+    explicit RetrierConfig(const nlohmann::json& node, const std::string& key);
+    std::shared_ptr<ads::IRetrier> create() const;
+
+private:
+    std::optional<std::vector<int>> value_;
+};
+
 class INetworkConfig;
 
 class INetworkConfigManager {
@@ -210,6 +228,8 @@ public:
         const std::shared_ptr<INetworkConfigManager>& manager) const override;
 
 private:
+    std::shared_ptr<IntervalConfig> loadConfig_;
+    std::shared_ptr<RetrierConfig> retrierConfig_;
     std::shared_ptr<IAdInstanceConfig<IBannerAd>> instance_;
 };
 
@@ -223,6 +243,8 @@ public:
         const std::shared_ptr<INetworkConfigManager>& manager) const override;
 
 private:
+    std::shared_ptr<IntervalConfig> loadConfig_;
+    std::shared_ptr<RetrierConfig> retrierConfig_;
     std::shared_ptr<IAdInstanceConfig<IBannerAd>> instance_;
 };
 
@@ -236,7 +258,9 @@ public:
         const std::shared_ptr<INetworkConfigManager>& manager) const override;
 
 private:
-    int interval_;
+    std::shared_ptr<IntervalConfig> displayConfig_;
+    std::shared_ptr<IntervalConfig> loadConfig_;
+    std::shared_ptr<RetrierConfig> retrierConfig_;
     std::shared_ptr<IAdInstanceConfig<IFullScreenAd>> instance_;
 };
 
@@ -250,7 +274,9 @@ public:
         const std::shared_ptr<INetworkConfigManager>& manager) const override;
 
 private:
-    int interval_;
+    std::shared_ptr<IntervalConfig> displayConfig_;
+    std::shared_ptr<IntervalConfig> loadConfig_;
+    std::shared_ptr<RetrierConfig> retrierConfig_;
     std::shared_ptr<IAdInstanceConfig<IFullScreenAd>> instance_;
 };
 
@@ -264,7 +290,8 @@ public:
         const std::shared_ptr<INetworkConfigManager>& manager) const override;
 
 private:
-    int interval_;
+    std::shared_ptr<IntervalConfig> loadConfig_;
+    std::shared_ptr<RetrierConfig> retrierConfig_;
     std::shared_ptr<IAdInstanceConfig<IFullScreenAd>> instance_;
 };
 
@@ -278,6 +305,8 @@ public:
         const std::shared_ptr<INetworkConfigManager>& manager) const override;
 
 private:
+    std::shared_ptr<IntervalConfig> loadConfig_;
+    std::shared_ptr<RetrierConfig> retrierConfig_;
     std::shared_ptr<IAdInstanceConfig<IFullScreenAd>> instance_;
 };
 

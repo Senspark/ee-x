@@ -1,5 +1,7 @@
 #include "ee/core/internal/PluginManagerUtils.hpp"
 
+#include <functional>
+
 #include "ee/core/IMessageBridge.hpp"
 #include "ee/core/PluginManager.hpp"
 #include "ee/core/Thread.hpp"
@@ -11,6 +13,13 @@
 #include "ee/core/internal/JniString.hpp"
 #include "ee/core/internal/JniUtils.hpp"
 #endif // EE_X_ANDROID
+
+#if defined(EE_X_IOS) || defined(EE_X_OSX)
+using CallCppCallback =
+    std::function<void(const std::string& tag, const std::string& message)>;
+
+extern void ee_setCallCppCallback(const CallCppCallback& callback);
+#endif // defined(EE_X_IOS) || defined(EE_X_OSX)
 
 namespace ee {
 namespace core {
@@ -78,14 +87,6 @@ void ee_staticRemovePlugin(const char* name) {
 
 #if defined(EE_X_IOS) || defined(EE_X_OSX)
 extern "C" {
-void ee_callCppInternal(const char* tag, const char* message) {
-    std::string tagStr = tag;
-    std::string messageStr = message;
-    Thread::runOnLibraryThread([tagStr, messageStr] { //
-        PluginManager::getBridge().callCpp(tagStr, messageStr);
-    });
-}
-
 void ee_staticInitializePlugins(const char* version);
 void ee_staticSetLogLevel(int level);
 void* ee_staticGetActivity();
@@ -108,6 +109,15 @@ void Self::initializePlugins(const std::string& version) {
 #endif // defined(EE_X_ANDROID)
 
     ee_staticInitializePlugins(version.c_str());
+
+#if defined(EE_X_IOS) || defined(EE_X_OSX)
+    ee_setCallCppCallback(
+        [](const std::string& tag, const std::string& message) {
+            Thread::runOnLibraryThread([tag, message] { //
+                PluginManager::getBridge().callCpp(tag, message);
+            });
+        });
+#endif // defined(EE_X_IOS) || defined(EE_X_OSX)
 }
 
 void Self::setLogLevel(int level) {

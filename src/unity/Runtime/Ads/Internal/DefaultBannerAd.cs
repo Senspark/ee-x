@@ -16,7 +16,6 @@ namespace EE.Internal {
         private readonly string _adId;
         private readonly MessageHelper _messageHelper;
         private readonly BannerAdHelper _helper;
-        private readonly ICapper _loadCapper;
         private readonly IAsyncHelper<bool> _loader;
 
         public DefaultBannerAd(
@@ -35,7 +34,6 @@ namespace EE.Internal {
             _adId = adId;
             _messageHelper = new MessageHelper(prefix, adId);
             _helper = new BannerAdHelper(_bridge, _messageHelper, size);
-            _loadCapper = new Capper(5);
             _loader = new AsyncHelper<bool>();
 
             _logger.Debug($"{kTag}: constructor: prefix = {_prefix} id = {_adId}");
@@ -59,10 +57,6 @@ namespace EE.Internal {
 
         public async Task<bool> Load() {
             _logger.Debug($"{kTag}: {nameof(Load)}: prefix = {_prefix} id = {_adId} loading = {_loader.IsProcessing}");
-            if (_loadCapper.IsCapped) {
-                return false;
-            }
-            _loadCapper.Cap();
             return await _loader.Process(
                 () => _helper.Load(),
                 result => {
@@ -112,7 +106,7 @@ namespace EE.Internal {
                 _loader.Resolve(false);
                 DispatchEvent(observer => observer.OnLoadResult?.Invoke(new AdLoadResult {
                     Network = _network,
-                    Result = true,
+                    Result = false,
                     ErrorCode = code,
                     ErrorMessage = message
                 }));

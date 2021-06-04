@@ -26,7 +26,7 @@ namespace EE.Internal {
         private readonly IMessageBridge _bridge;
         private readonly ILogger _logger;
         private readonly Destroyer _destroyer;
-        private string _network;
+        private readonly string _network;
         private bool _displaying;
         private string _adId;
         private readonly Dictionary<string, IAd> _ads;

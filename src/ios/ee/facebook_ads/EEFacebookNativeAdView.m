@@ -6,7 +6,12 @@
 //
 //
 
+#if __has_include("ee/EEFacebookNativeAdView.h")
+// Build dynamic framework.
+#import "ee/EEFacebookNativeAdView.h"
+#else
 #import "ee/facebook_ads/EEFacebookNativeAdView.h"
+#endif
 
 @implementation EEFacebookNativeAdView
 

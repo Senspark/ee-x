@@ -1,6 +1,6 @@
 Pod::Spec.new do |spec|
   spec.name           = 'ee-x'
-  spec.version        = '2.8.0'
+  spec.version        = '2.8.1'
   spec.summary        = 'ee-x'
   spec.description    = 'Cross-platform library for cocos2d-x'
   spec.module_name    = 'ee'
@@ -16,7 +16,7 @@ Pod::Spec.new do |spec|
 
   spec.source = {
     :git => 'https://github.com/Senspark/ee-x.git',
-    :tag => 'v2.8.0'
+    :tag => 'v2.8.1'
   }
 
   spec.framework = 'Foundation'
@@ -286,6 +286,7 @@ Pod::Spec.new do |spec|
 
   spec.subspec 'iron-source' do |s|
     s.source_files = 'src/ios/ee/iron_source/**/*'
+    s.public_header_files = 'src/ios/ee/iron_source/private/*.h'
     s.header_mappings_dir = 'src/ios'
     s.dependency 'ee-x/ads'
 

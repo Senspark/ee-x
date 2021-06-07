@@ -32,7 +32,7 @@ ext {
     firebaseVersion = '28.0.1'
     buildPrefab = true
     buildMaven = true
-    pluginVersion = '2.8.0'
+    pluginVersion = '2.8.1'
 }
 
 def applyPrefabSettings(project, String libraryName, headerPaths) {

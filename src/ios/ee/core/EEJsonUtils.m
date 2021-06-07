@@ -6,7 +6,12 @@
 //
 //
 
+#if __has_include("ee/EEJsonUtils.h")
+// Build dynamic framework.
+#import "ee/EEJsonUtils.h"
+#else
 #import "ee/core/EEJsonUtils.h"
+#endif
 
 @implementation EEJsonUtils
 

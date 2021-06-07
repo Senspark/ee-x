@@ -1,8 +1,14 @@
 #include <functional>
 #include <string>
 
+#if __has_include("ee/EEMessageBridge.h")
+// Build dynamic framework.
+#include "ee/EEMessageBridge.h"
+#include "ee/EEThread.h"
+#else
 #include "ee/core/EEMessageBridge.h"
 #include "ee/core/EEThread.h"
+#endif
 
 using CallCppCallback =
     std::function<void(const std::string& tag, const std::string& message)>;

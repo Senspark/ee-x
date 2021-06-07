@@ -286,6 +286,7 @@ Pod::Spec.new do |spec|
 
   spec.subspec 'iron-source' do |s|
     s.source_files = 'src/ios/ee/iron_source/**/*'
+    s.public_header_files = 'src/ios/ee/iron_source/private/*.h'
     s.header_mappings_dir = 'src/ios'
     s.dependency 'ee-x/ads'
 

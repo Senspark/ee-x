@@ -1,3 +1,6 @@
+## 2.8.1 - 2021-06-07
+- [Unity] Fix build iOS with dynamic framework.
+
 ## 2.8.0 - 2021-06-04
 - [Unity] Fix build iOS.
 - [C++/Unity] Add auto-reload ad mechanism.

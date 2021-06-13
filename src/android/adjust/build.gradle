@@ -25,7 +25,7 @@ dependencies {
     api project(':ee-x-core')
 
     // https://github.com/adjust/android_sdk/blob/master/CHANGELOG.md
-    api 'com.adjust.sdk:adjust-android:4.28.0'
+    api 'com.adjust.sdk:adjust-android:4.28.2'
 
     api 'com.android.installreferrer:installreferrer:2.2'
     implementation 'androidx.annotation:annotation:1.2.0'

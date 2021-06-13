@@ -39,12 +39,12 @@ dependencies {
     api 'com.google.android.gms:play-services-ads:20.1.0'
 
     // https://developers.ironsrc.com/ironsource-mobile/android/applovin-change-log/
-    api 'com.ironsource.adapters:applovinadapter:4.3.24'
-    api 'com.applovin:applovin-sdk:10.1.2'
+    api 'com.ironsource.adapters:applovinadapter:4.3.25'
+    api 'com.applovin:applovin-sdk:10.3.0'
 
     // https://developers.ironsrc.com/ironsource-mobile/android/21769-2/
-    api 'com.ironsource.adapters:facebookadapter:4.3.26'
-    api 'com.facebook.android:audience-network-sdk:6.4.0'
+    api 'com.ironsource.adapters:facebookadapter:4.3.27'
+    api 'com.facebook.android:audience-network-sdk:6.5.0'
 
     // https://developers.ironsrc.com/ironsource-mobile/android/inmobi-change-log/
     api 'com.ironsource.adapters:inmobiadapter:4.3.9'

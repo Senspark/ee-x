@@ -50,7 +50,7 @@ dependencies {
     api 'com.google.ads.mediation:tapjoy:12.8.0.1'
 
     // https://developers.google.com/admob/android/mediation/unity#unity-ads-android-mediation-adapter-changelog
-    api 'com.google.ads.mediation:unity:3.6.2.0'
+    api 'com.google.ads.mediation:unity:3.7.1.0'
 
     // https://developers.google.com/admob/android/mediation/vungle#vungle-android-mediation-adapter-changelog
     api 'com.google.ads.mediation:vungle:6.9.1.1'

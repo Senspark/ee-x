@@ -92,7 +92,7 @@ namespace EE.Editor {
 
         public bool OverwriteNSUserTrackingUsageDescription {
             get => _overwriteNSUserTrackingUsageDescription;
-            set => _overwriteNSUserTrackingUsageDescription = false;
+            set => _overwriteNSUserTrackingUsageDescription = value;
         }
 
         public bool IsCoreEnabled {

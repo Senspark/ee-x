@@ -26,7 +26,8 @@ class UnityAdsBridge(
     private val _bridge: IMessageBridge,
     private val _logger: ILogger,
     private val _application: Application,
-    private var _activity: Activity?) : IPlugin, IUnityAdsListener {
+    private var _activity: Activity?
+) : IPlugin, IUnityAdsListener {
     companion object {
         private val kTag = UnityAdsBridge::class.java.name
         private const val kPrefix = "UnityAdsBridge"
@@ -187,35 +188,43 @@ class UnityAdsBridge(
                     return@runOnMainThread
                 }
                 _initializing = true
-                UnityAds.initialize(_application, gameId, testModeEnabled, true, object : IUnityAdsInitializationListener {
-                    override fun onInitializationComplete() {
-                        if (cont.isActive) {
-                            // OK.
-                        } else {
-                            return
+                UnityAds.initialize(
+                    _application,
+                    gameId,
+                    testModeEnabled,
+                    true,
+                    object : IUnityAdsInitializationListener {
+                        override fun onInitializationComplete() {
+                            if (cont.isActive) {
+                                // OK.
+                            } else {
+                                return
+                            }
+                            Thread.runOnMainThread {
+                                _logger.info("$kTag: initialize: done")
+                                _initializing = false
+                                _initialized = true
+                                cont.resume(true)
+                            }
                         }
-                        Thread.runOnMainThread {
-                            _logger.info("$kTag: initialize: done")
-                            _initializing = false
-                            _initialized = true
-                            cont.resume(true)
-                        }
-                    }
 
-                    override fun onInitializationFailed(error: UnityAds.UnityAdsInitializationError?, message: String?) {
-                        if (cont.isActive) {
-                            // OK.
-                        } else {
-                            return
+                        override fun onInitializationFailed(
+                            error: UnityAds.UnityAdsInitializationError?,
+                            message: String?
+                        ) {
+                            if (cont.isActive) {
+                                // OK.
+                            } else {
+                                return
+                            }
+                            Thread.runOnMainThread {
+                                _logger.error("${this::onInitializationFailed.name}: error = ${error ?: ""} message = ${message ?: ""}")
+                                _initializing = false
+                                _initialized = true
+                                cont.resume(true)
+                            }
                         }
-                        Thread.runOnMainThread {
-                            _logger.error("${this::onInitializationFailed.name}: error = ${error ?: ""} message = ${message ?: ""}")
-                            _initializing = false
-                            _initialized = true
-                            cont.resume(true)
-                        }
-                    }
-                })
+                    })
             }
         }
     }
@@ -283,7 +292,11 @@ class UnityAdsBridge(
                         }
                     }
 
-                    override fun onUnityAdsFailedToLoad(placementId: String) {
+                    override fun onUnityAdsFailedToLoad(
+                        placementId: String,
+                        error: UnityAds.UnityAdsLoadError,
+                        message: String
+                    ) {
                         Thread.runOnMainThread {
                             _logger.debug("$kTag: ${this::onUnityAdsFailedToLoad.name}: id = $adId")
                             cont.resume(false)

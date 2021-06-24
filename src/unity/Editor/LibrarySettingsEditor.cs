@@ -32,6 +32,9 @@ namespace EE.Editor {
                 EditorGUILayout.Toggle(new GUIContent("Use MultiDex"), settings.IsMultiDexEnabled);
             settings.IsFixPackageOptionsEnabled =
                 EditorGUILayout.Toggle(new GUIContent("Fix PackageOptions"), settings.IsFixPackageOptionsEnabled);
+            settings.OverwriteNSUserTrackingUsageDescription =
+                EditorGUILayout.Toggle(new GUIContent("Overwrite NSUserTrackingUsageDescription"),
+                    settings.OverwriteNSUserTrackingUsageDescription);
 
             EditorGUILayout.Separator();
             EditorGUILayout.LabelField("Modules", EditorStyles.boldLabel);

@@ -32,6 +32,9 @@ namespace EE.Editor {
         private bool _isFixPackageOptionsEnabled = false;
 
         [SerializeField]
+        private bool _overwriteNSUserTrackingUsageDescription = false;
+
+        [SerializeField]
         private bool _isCoreEnabled = true;
 
         [SerializeField]
@@ -85,6 +88,11 @@ namespace EE.Editor {
         public bool IsFixPackageOptionsEnabled {
             get => _isFixPackageOptionsEnabled;
             set => _isFixPackageOptionsEnabled = value;
+        }
+
+        public bool OverwriteNSUserTrackingUsageDescription {
+            get => _overwriteNSUserTrackingUsageDescription;
+            set => _overwriteNSUserTrackingUsageDescription = false;
         }
 
         public bool IsCoreEnabled {

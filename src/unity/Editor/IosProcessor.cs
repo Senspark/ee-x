@@ -25,6 +25,10 @@ namespace EE.Editor {
                     plist.root.SetString("GADApplicationIdentifier", appId);
                 }
             }
+            if (settings.OverwriteNSUserTrackingUsageDescription) {
+                plist.root.SetString("NSUserTrackingUsageDescription",
+                    "This identifier will be used to deliver personalized ads to you.");
+            }
 
             // SkAdNetwork
             // https://www.skanids.com/

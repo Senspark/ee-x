@@ -24,6 +24,7 @@ namespace EE.Internal {
         private const string kGetSafeInset = kPrefix + "getSafeInset";
         private const string kSendMail = kPrefix + "sendMail";
         private const string kTestConnection = kPrefix + "testConnection";
+        private const string kRequestTrackingAuthorization = kPrefix + "requestTrackingAuthorization";
         private const string kShowInstallPrompt = kPrefix + "showInstallPrompt";
         private const string kGetInstallReferrer = kPrefix + "getInstallReferrer";
 
@@ -161,6 +162,16 @@ namespace EE.Internal {
             };
             var response = await _bridge.CallAsync(kTestConnection, JsonUtility.ToJson(request));
             return Utils.ToBool(response);
+        }
+
+        public async Task<AuthorizationStatus> RequestTrackingAuthorization() {
+#if UNITY_ANDROID
+            return AuthorizationStatus.Other;
+#else // UNITY_ANDROID
+            var response = await _bridge.CallAsync(kRequestTrackingAuthorization);
+            var result = Int32.Parse(response);
+            return (AuthorizationStatus) result;
+#endif // UNITY_ANDROID
         }
 
         public async Task<InstallReferrer> GetInstallReferrer() {

@@ -224,6 +224,7 @@ Pod::Spec.new do |spec|
       # https://forums.swift.org/t/undefined-symbol-swift-getfunctionreplacement/30495
       'DEAD_CODE_STRIPPING' => 'YES'
     }
+    s.framework = 'AppTrackingTransparency'
     s.library = 'swiftCore'
     s.dependency 'ReachabilitySwift'
     s.dependency 'RxSwift', '5.1.1'

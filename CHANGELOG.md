@@ -1,3 +1,7 @@
+## 2.9.0 - 2021-06-24
+- [iOS] Add App Transparency Tracking.
+- [Android/iOS] Update ads libraries.
+
 ## 2.8.1 - 2021-06-07
 - [Unity] Fix build iOS with dynamic framework.
 

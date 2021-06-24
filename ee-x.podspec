@@ -1,6 +1,6 @@
 Pod::Spec.new do |spec|
   spec.name           = 'ee-x'
-  spec.version        = '2.8.1'
+  spec.version        = '2.9.0'
   spec.summary        = 'ee-x'
   spec.description    = 'Cross-platform library for cocos2d-x'
   spec.module_name    = 'ee'
@@ -16,7 +16,7 @@ Pod::Spec.new do |spec|
 
   spec.source = {
     :git => 'https://github.com/Senspark/ee-x.git',
-    :tag => 'v2.8.1'
+    :tag => 'v2.9.0'
   }
 
   spec.framework = 'Foundation'
@@ -122,7 +122,7 @@ Pod::Spec.new do |spec|
     s.dependency 'ee-x/ads'
 
     # https://github.com/AdColony/AdColony-iOS-SDK
-    s.dependency 'AdColony', '4.6.0'
+    s.dependency 'AdColony', '4.6.1'
   end
 
   spec.subspec 'ad-mob' do |s|
@@ -131,7 +131,7 @@ Pod::Spec.new do |spec|
     s.dependency 'ee-x/ads'
 
     # https://developers.google.com/admob/ios/rel-notes
-    s.dependency 'Google-Mobile-Ads-SDK', '8.4.0'
+    s.dependency 'Google-Mobile-Ads-SDK', '8.5.0'
   end
 
   # FIXME: currently not supported SDK 8.x
@@ -151,25 +151,25 @@ Pod::Spec.new do |spec|
 
     # https://developers.google.com/admob/ios/mediation/adcolony#adcolony-ios-mediation-adapter-changelog
     # FIXME: hanging on iPad iOS 13.5.1, need test.
-    s.dependency 'GoogleMobileAdsMediationAdColony', '4.6.0.0'
+    # s.dependency 'GoogleMobileAdsMediationAdColony', '4.6.0.0'
 
     # https://developers.google.com/admob/ios/mediation/applovin#applovin-ios-mediation-adapter-changelog
-    s.dependency 'GoogleMobileAdsMediationAppLovin', '10.1.1.0'
+    s.dependency 'GoogleMobileAdsMediationAppLovin', '10.3.2.0'
 
     # https://developers.google.com/admob/ios/mediation/facebook#facebook-ios-mediation-adapter-changelog
-    s.dependency 'GoogleMobileAdsMediationFacebook', '6.4.1.0'
+    s.dependency 'GoogleMobileAdsMediationFacebook', '6.5.0.0'
 
     # https://developers.google.com/admob/ios/mediation/inmobi#inmobi-ios-mediation-adapter-changelog
-    s.dependency 'GoogleMobileAdsMediationInMobi', '9.1.5.0'
+    s.dependency 'GoogleMobileAdsMediationInMobi', '9.1.7.0'
     
     # https://developers.google.com/admob/ios/mediation/ironsource#ironsource-ios-mediation-adapter-changelog
-    s.dependency 'GoogleMobileAdsMediationIronSource', '7.1.5.0'
+    s.dependency 'GoogleMobileAdsMediationIronSource', '7.1.6.1.0'
 
     # https://developers.google.com/admob/ios/mediation/tapjoy#tapjoy-ios-mediation-adapter-changelog
     s.dependency 'GoogleMobileAdsMediationTapjoy', '12.8.0.1'
 
     # https://developers.google.com/admob/ios/mediation/unity#unity-ads-ios-mediation-adapter-changelog
-    s.dependency 'GoogleMobileAdsMediationUnity', '3.7.1.0'
+    s.dependency 'GoogleMobileAdsMediationUnity', '3.7.2.0'
 
     # https://developers.google.com/admob/ios/mediation/vungle#vungle-ios-mediation-adapter-changelog
     s.dependency 'GoogleMobileAdsMediationVungle', '6.9.2.0'
@@ -187,7 +187,7 @@ Pod::Spec.new do |spec|
     s.dependency 'ee-x/core'
 
     # https://github.com/adjust/ios_sdk
-    s.dependency 'Adjust', '4.29.1'
+    s.dependency 'Adjust', '4.29.3'
   end
 
   spec.subspec 'app-lovin' do |s|
@@ -196,7 +196,7 @@ Pod::Spec.new do |spec|
     s.dependency 'ee-x/core'
 
     # https://github.com/AppLovin/AppLovin-MAX-SDK-iOS/releases
-    s.dependency 'AppLovinSDK', '10.1.1'
+    s.dependency 'AppLovinSDK', '10.3.2'
   end
 
   spec.subspec 'apps-flyer' do |s|
@@ -218,12 +218,13 @@ Pod::Spec.new do |spec|
       ].join(' '),
       'LIBRARY_SEARCH_PATHS' => [
         '$(TOOLCHAIN_DIR)/usr/lib/swift/$(PLATFORM_NAME)',
-        '$(TOOLCHAIN_DIR)/usr/lib/swift-5.0/$(PLATFORM_NAME)',
+        # '$(TOOLCHAIN_DIR)/usr/lib/swift-5.0/$(PLATFORM_NAME)', Must comment to fix Swift._ArrayBuffer._copyContents (XCode 12.5)
         '$(SDKROOT)/usr/lib/swift' # Fix __swift_FORCE_LOAD_$_swiftCoreMIDI (XCode 12).
       ].join(' '),
       # https://forums.swift.org/t/undefined-symbol-swift-getfunctionreplacement/30495
       'DEAD_CODE_STRIPPING' => 'YES'
     }
+    s.framework = 'AppTrackingTransparency'
     s.library = 'swiftCore'
     s.dependency 'ReachabilitySwift'
     s.dependency 'RxSwift', '5.1.1'
@@ -246,7 +247,7 @@ Pod::Spec.new do |spec|
     s.dependency 'ee-x/ads'
 
     # https://developers.facebook.com/docs/audience-network/changelog-ios/
-    s.dependency 'FBAudienceNetwork', '6.4.1'
+    s.dependency 'FBAudienceNetwork', '6.5.0'
   end
 
   spec.subspec 'firebase-core' do |s|
@@ -291,35 +292,35 @@ Pod::Spec.new do |spec|
     s.dependency 'ee-x/ads'
 
     # https://developers.ironsrc.com/ironsource-mobile/ios/sdk-change-log/
-    s.dependency 'IronSourceSDK', '7.1.5.0'
+    s.dependency 'IronSourceSDK', '7.1.6.1'
   end
 
   spec.subspec 'iron-source-mediation' do |s|
     s.dependency 'ee-x/iron-source'
 
     # https://developers.ironsrc.com/ironsource-mobile/ios/adcolony-change-log/
-    s.dependency 'IronSourceAdColonyAdapter', '4.3.9.0'
+    s.dependency 'IronSourceAdColonyAdapter', '4.3.10.3'
 
     # https://developers.ironsrc.com/ironsource-mobile/ios/admob-change-log/
-    s.dependency 'IronSourceAdMobAdapter', '4.3.22.0'
+    s.dependency 'IronSourceAdMobAdapter', '4.3.23.2'
 
     # https://developers.ironsrc.com/ironsource-mobile/ios/applovin-change-log/
-    s.dependency 'IronSourceAppLovinAdapter', '4.3.24.0'
+    s.dependency 'IronSourceAppLovinAdapter', '4.3.26.0'
 
     # https://developers.ironsrc.com/ironsource-mobile/ios/21769-2/
-    s.dependency 'IronSourceFacebookAdapter', '4.3.25.0'
+    s.dependency 'IronSourceFacebookAdapter', '4.3.26.2'
 
     # https://developers.ironsrc.com/ironsource-mobile/ios/inmobi-change-log/
-    s.dependency 'IronSourceInMobiAdapter', '4.3.9.5'
+    s.dependency 'IronSourceInMobiAdapter', '4.3.10.0'
 
     # https://developers.ironsrc.com/ironsource-mobile/ios/tapjoy-change-log/
-    s.dependency 'IronSourceTapjoyAdapter', '4.1.16.1'
+    s.dependency 'IronSourceTapjoyAdapter', '4.1.16.4'
 
     # https://developers.ironsrc.com/ironsource-mobile/ios/unityads-change-log/
-    s.dependency 'IronSourceUnityAdsAdapter', '4.3.9.0'
+    s.dependency 'IronSourceUnityAdsAdapter', '4.3.10.1'
 
     # https://developers.ironsrc.com/ironsource-mobile/ios/vungle-change-log/
-    s.dependency 'IronSourceVungleAdapter', '4.3.10.0'
+    s.dependency 'IronSourceVungleAdapter', '4.3.11.2'
   end
 
   spec.subspec 'notification' do |s|
@@ -353,7 +354,7 @@ Pod::Spec.new do |spec|
     s.dependency 'ee-x/ads'
 
     # https://github.com/Unity-Technologies/unity-ads-ios/releases
-    s.dependency 'UnityAds', '3.7.1'
+    s.dependency 'UnityAds', '3.7.2'
   end
 
   spec.subspec 'vungle' do |s|

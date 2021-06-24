@@ -38,6 +38,8 @@ const auto kGetSafeInset             = kPrefix + "getSafeInset";
 
 const auto kSendMail                 = kPrefix + "sendMail";
 const auto kTestConnection           = kPrefix + "testConnection";
+const auto kRequestTrackingAuthorization = kPrefix + "requestTrackingAuthorization";
+
 const auto kShowInstallPrompt        = kPrefix + "showInstallPrompt";
 const auto kGetInstallReferrer       = kPrefix + "getInstallReferrer";
 // clang-format on
@@ -162,6 +164,16 @@ Task<bool> Self::testConnection(const std::string& hostName, float timeOut) {
     json["time_out"] = timeOut;
     auto response = co_await bridge_->callAsync(kTestConnection, json.dump());
     co_return toBool(response);
+}
+
+Task<AuthorizationStatus> Self::requestTrackingAuthorization() {
+#ifdef EE_X_ANDROID
+    co_return AuthorizationStatus::Other;
+#else // EE_X_ANDROID
+    auto response = co_await bridge_->callAsync(kRequestTrackingAuthorization);
+    auto result = std::stoi(response);
+    co_return static_cast<AuthorizationStatus>(result);
+#endif // EE_X_ANDROID
 }
 
 void Self::showInstallPrompt(const std::string& url,

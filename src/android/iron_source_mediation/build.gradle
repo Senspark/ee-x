@@ -36,15 +36,15 @@ dependencies {
 
     // https://developers.ironsrc.com/ironsource-mobile/android/admob-change-log/
     api 'com.ironsource.adapters:admobadapter:4.3.20'
-    api 'com.google.android.gms:play-services-ads:20.1.0'
+    api 'com.google.android.gms:play-services-ads:20.2.0'
 
     // https://developers.ironsrc.com/ironsource-mobile/android/applovin-change-log/
-    api 'com.ironsource.adapters:applovinadapter:4.3.24'
-    api 'com.applovin:applovin-sdk:10.1.2'
+    api 'com.ironsource.adapters:applovinadapter:4.3.25'
+    api 'com.applovin:applovin-sdk:10.3.0'
 
     // https://developers.ironsrc.com/ironsource-mobile/android/21769-2/
-    api 'com.ironsource.adapters:facebookadapter:4.3.26'
-    api 'com.facebook.android:audience-network-sdk:6.4.0'
+    api 'com.ironsource.adapters:facebookadapter:4.3.27'
+    api 'com.facebook.android:audience-network-sdk:6.5.0'
 
     // https://developers.ironsrc.com/ironsource-mobile/android/inmobi-change-log/
     api 'com.ironsource.adapters:inmobiadapter:4.3.9'
@@ -55,8 +55,8 @@ dependencies {
     api 'com.tapjoy:tapjoy-android-sdk:12.8.0@aar'
 
     // https://developers.ironsrc.com/ironsource-mobile/android/unityads-change-log/
-    api 'com.ironsource.adapters:unityadsadapter:4.3.10'
-    api 'com.unity3d.ads:unity-ads:3.6.2'
+    api 'com.ironsource.adapters:unityadsadapter:4.3.11'
+    api 'com.unity3d.ads:unity-ads:3.7.2'
 
     // https://developers.ironsrc.com/ironsource-mobile/android/vungle-change-log/
     api 'com.ironsource.adapters:vungleadapter:4.3.8'

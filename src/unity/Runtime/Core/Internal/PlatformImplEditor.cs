@@ -67,5 +67,9 @@ namespace EE.Internal {
         public Task<InstallReferrer> GetInstallReferrer() {
             return Task.FromResult(new InstallReferrer());
         }
+
+        public Task<AuthorizationStatus> RequestTrackingAuthorization() {
+            return Task.FromResult(AuthorizationStatus.Other);
+        }
     }
 }

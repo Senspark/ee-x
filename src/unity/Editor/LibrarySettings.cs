@@ -8,7 +8,7 @@ using UnityEngine;
 
 namespace EE.Editor {
     internal class LibrarySettings : ScriptableObject {
-        private const string LibraryVersion = "2.8.1";
+        private const string LibraryVersion = "2.9.0";
 
         private const string LibrarySettingsDir = "Assets/EE";
         private const string LibrarySettingsResDir = "Assets/EE/Resources";
@@ -30,6 +30,9 @@ namespace EE.Editor {
 
         [SerializeField]
         private bool _isFixPackageOptionsEnabled = false;
+
+        [SerializeField]
+        private bool _overwriteNSUserTrackingUsageDescription = false;
 
         [SerializeField]
         private bool _isCoreEnabled = true;
@@ -85,6 +88,11 @@ namespace EE.Editor {
         public bool IsFixPackageOptionsEnabled {
             get => _isFixPackageOptionsEnabled;
             set => _isFixPackageOptionsEnabled = value;
+        }
+
+        public bool OverwriteNSUserTrackingUsageDescription {
+            get => _overwriteNSUserTrackingUsageDescription;
+            set => _overwriteNSUserTrackingUsageDescription = value;
         }
 
         public bool IsCoreEnabled {

@@ -3,6 +3,23 @@ using System.Threading.Tasks;
 using EE.Internal;
 
 namespace EE {
+    public struct InstallReferrer {
+        public string raw;
+        public string utm_source;
+        public string utm_medium;
+        public string utm_term;
+        public string utm_content;
+        public string utm_campaign;
+    }
+
+    public enum AuthorizationStatus {
+        NotDeterminted,
+        Restricted,
+        Denied,
+        Authorized,
+        Other,
+    }
+    
     public static class Platform {
         private static IPlatformImpl _impl;
 
@@ -76,6 +93,10 @@ namespace EE {
 
         public static async Task<InstallReferrer> GetInstallReferrer() {
             return await _impl.GetInstallReferrer();
+        }
+
+        public static async Task<AuthorizationStatus> RequestTrackingAuthorization() {
+            return await _impl.RequestTrackingAuthorization();
         }
     }
 }

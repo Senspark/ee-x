@@ -152,7 +152,7 @@ std::shared_ptr<IPluginManagerImpl> Self::impl_;
 std::shared_ptr<Logger> Self::logger_;
 
 void Self::initializePlugins() {
-    PluginManagerUtils::initializePlugins("2.8.1");
+    PluginManagerUtils::initializePlugins("2.9.0");
     logger_ = std::make_shared<Logger>("ee-x");
 
 #ifdef EE_X_COCOS_CPP

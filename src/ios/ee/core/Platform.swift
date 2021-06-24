@@ -5,9 +5,12 @@
 //  Created by eps on 6/16/20.
 //
 
+import AppTrackingTransparency
 import Foundation
 import Reachability
 import RxSwift
+
+private let AuthorizationStatusOther = 4
 
 public class Platform: NSObject {
     private static let kPrefix = "Platform_"
@@ -25,6 +28,7 @@ public class Platform: NSObject {
     private static let kGetDeviceId = kPrefix + "getDeviceId"
     private static let kSendMail = kPrefix + "sendMail"
     private static let kTestConnection = kPrefix + "testConnection"
+    private static let kRequestTrackingAuthorization = kPrefix + "requestTrackingAuthorization"
 
     public class func registerHandlers(_ bridge: IMessageBridge) {
         bridge.registerHandler(kIsApplicationInstalled) { message in
@@ -85,6 +89,15 @@ public class Platform: NSObject {
                         result in resolver(Utils.toString(result))
                     }, onError: {
                         _ in resolver(Utils.toString(false))
+                    })
+        }
+        bridge.registerAsyncHandler(kRequestTrackingAuthorization) { message, resolver in
+            requestTrackingAuthorization()
+                .subscribe(
+                    onSuccess: {
+                        result in resolver("\(result)")
+                    }, onError: {
+                        _ in resolver("\(AuthorizationStatusOther)")
                     })
         }
     }
@@ -213,5 +226,19 @@ public class Platform: NSObject {
         }
         .subscribeOn(scheduler)
         .timeout(.milliseconds(Int(timeOut * 1000)), scheduler: scheduler)
+    }
+    
+    private class func requestTrackingAuthorization() -> Single<Int> {
+        return Single<Int>.create { single in
+            if #available(iOS 14, *) {
+                ATTrackingManager.requestTrackingAuthorization { status in
+                    single(.success(Int(status.rawValue)))
+                }
+            } else {
+                single(.success(AuthorizationStatusOther))
+            }
+            return Disposables.create()
+        }
+        .subscribeOn(MainScheduler())
     }
 }

@@ -40,6 +40,14 @@ struct InstallReferrer {
     std::string utm_campaign;
 };
 
+enum class AuthorizationStatus {
+    NotDeterminted,
+    Restricted,
+    Denied,
+    Authorized,
+    Other,
+};
+
 class Platform {
 public:
     /// Checks whether an application with the specified package name (Android)
@@ -99,6 +107,8 @@ public:
                                   const std::string& referrer);
 
     [[nodiscard]] static Task<InstallReferrer> getInstallReferrer();
+    
+    [[nodiscard]] static Task<AuthorizationStatus> requestTrackingAuthorization();
 
 private:
     friend PluginManager;
@@ -127,6 +137,7 @@ constexpr auto openApplication = &Platform::openApplication;
 constexpr auto sendMail = &Platform::sendMail;
 constexpr auto testConnection = &Platform::testConnection;
 constexpr auto getInstallReferrer = &Platform::getInstallReferrer;
+constexpr auto requestTrackingAuthorization = &Platform::requestTrackingAuthorization;
 } // namespace ee
 
 #endif // __cplusplus

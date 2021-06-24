@@ -34,7 +34,7 @@ namespace EE {
 
         public static void InitializePlugins() {
             _logger = new Logger("ee-x");
-            _impl.InitializePlugins("2.8.1");
+            _impl.InitializePlugins("2.9.0");
             _bridge = new MessageBridge();
             Thread.Initialize();
             Platform.Initialize(_bridge);

@@ -50,21 +50,25 @@ namespace EE {
         public bool IsLoaded => _items.Any(item => item.IsLoaded);
 
         public async Task<bool> Load() {
-            var result = false;
-            foreach (var item in _items) {
+            var tasks = new HashSet<Task<bool>>(_items.Select(async item => {
                 if (item == _activeItem && _visible) {
                     // Ignore displaying item.
-                    continue;
+                    return false;
                 }
                 if (_loadedItems.Contains(item)) {
                     // Already loaded and not displayed.
-                    continue;
+                    return true;
                 }
-                if (await item.Load()) {
-                    result = true;
+                return await item.Load();
+            }));
+            while (tasks.Any()) {
+                var next = await Task.WhenAny(tasks);
+                if (next.Result) {
+                    return true;
                 }
+                tasks.Remove(next);
             }
-            return result;
+            return false;
         }
 
         public bool IsVisible {

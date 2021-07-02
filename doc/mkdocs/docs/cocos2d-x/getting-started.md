@@ -17,7 +17,7 @@ repositories {
 }
 
 dependencies {
-    implementation 'com.senspark.ee:core:2.9.0'
+    implementation 'com.senspark.ee:core:2.9.1'
 }
 ```
 
@@ -40,7 +40,7 @@ target_link_libraries(${PROJECT_NAME} ee_x)
 ### iOS
 Install CocoaPods and modify `Podfile`
 ```ruby
-pod 'ee-x/cpp', '2.9.0'
+pod 'ee-x/cpp', '2.9.1'
 ```
 
 ## Initialization

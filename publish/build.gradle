@@ -1,5 +1,5 @@
 buildscript {
-    ext.kotlinVersion = '1.5.10'
+    ext.kotlinVersion = '1.5.20'
     ext.kotlinCoroutinesVersion = '1.5.0'
     ext.kotlinSerializationVersion = '1.2.1'
     repositories {
@@ -7,7 +7,7 @@ buildscript {
         maven { url 'https://plugins.gradle.org/m2' }
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:4.2.1'
+        classpath 'com.android.tools.build:gradle:4.2.2'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
         classpath "org.jetbrains.kotlin:kotlin-serialization:$kotlinVersion"
     }
@@ -29,10 +29,10 @@ ext {
     compileSdkVersion = 30
     buildToolsVersion = '30.0.3'
     targetSdkVersion = 30
-    firebaseVersion = '28.1.0'
+    firebaseVersion = '28.2.0'
     buildPrefab = true
     buildMaven = true
-    pluginVersion = '2.9.0'
+    pluginVersion = '2.9.1'
 }
 
 def applyPrefabSettings(project, String libraryName, headerPaths) {
@@ -115,7 +115,7 @@ def configureMaven(String libraryName) {
                                 connection = 'scm:git:github.com/senspark/ee-x.git'
                                 developerConnection = 'scm:git:ssh://github.com/senspark/ee-x.git'
                                 url = 'https://github.com/senspark/ee-x'
-                            }   
+                            }
                             withXml {
                                 def dependenciesNode = asNode().appendNode('dependencies')
                                 project.configurations.implementation.allDependencies.each {

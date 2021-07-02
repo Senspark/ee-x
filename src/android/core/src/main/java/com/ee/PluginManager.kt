@@ -134,7 +134,7 @@ class PluginManager private constructor() {
 
     @AnyThread
     fun initializePlugins(version: String, messageHandler: MessageBridgeHandler) {
-        val expectedVersion = "2.9.0"
+        val expectedVersion = "2.9.1"
         if (version != expectedVersion) {
             throw IllegalStateException("Version mismatched: found $version expected $expectedVersion")
         }

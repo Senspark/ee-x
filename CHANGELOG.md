@@ -1,3 +1,7 @@
+## 2.9.1 - 2021-07-02
+- [Android] Fix crash when load Unity Ads.
+- [Unity] Fix long test connection when show ads.
+
 ## 2.9.0 - 2021-06-24
 - [iOS] Add App Transparency Tracking.
 - [Android/iOS] Update ads libraries.

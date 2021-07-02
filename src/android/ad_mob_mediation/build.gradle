@@ -35,7 +35,7 @@ dependencies {
     api 'com.google.ads.mediation:adcolony:4.5.0.0'
 
     // https://developers.google.com/admob/android/mediation/applovin#applovin-android-mediation-adapter-changelog
-    api 'com.google.ads.mediation:applovin:10.3.0.0'
+    api 'com.google.ads.mediation:applovin:10.3.1.0'
 
     // https://developers.google.com/admob/android/mediation/facebook#facebook-android-mediation-adapter-changelog
     api 'com.google.ads.mediation:facebook:6.5.0.0'

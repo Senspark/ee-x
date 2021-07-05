@@ -16,6 +16,7 @@ MonoBehaviour:
   _libraryPath: ../../
   _isMultiDexEnabled: 1
   _isFixPackageOptionsEnabled: 1
+  _overwriteNSUserTrackingUsageDescription: 0
   _isCoreEnabled: 1
   _isAdjustEnabled: 1
   _isAdColonyEnabled: 1

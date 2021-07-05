@@ -61,7 +61,9 @@ namespace EE.Internal {
         }
 
         public Task<bool> TestConnection(string hostName, float timeOut) {
-            return Task.FromResult(false);
+            return Task.FromResult(
+                Application.internetReachability == NetworkReachability.ReachableViaCarrierDataNetwork ||
+                Application.internetReachability == NetworkReachability.ReachableViaLocalAreaNetwork);
         }
 
         public Task<InstallReferrer> GetInstallReferrer() {

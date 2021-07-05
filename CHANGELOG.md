@@ -1,3 +1,6 @@
+## 2.9.2 - 2021-07-05
+- [Unity] Fix hanging when start ad.
+
 ## 2.9.1 - 2021-07-02
 - [Android] Fix crash when load Unity Ads.
 - [Unity] Fix long test connection when show ads.

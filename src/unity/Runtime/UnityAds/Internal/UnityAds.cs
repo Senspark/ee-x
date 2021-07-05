@@ -8,7 +8,7 @@ using UnityEngine.Assertions;
 namespace EE.Internal {
     using Destroyer = Action;
 
-    public class UnityAds : IUnityAds {
+    internal class UnityAds : IUnityAds {
         private const string kTag = nameof(UnityAds);
         private const string kPrefix = "UnityAdsBridge";
         private const string kInitialize = kPrefix + "Initialize";

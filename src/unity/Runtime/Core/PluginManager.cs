@@ -4,19 +4,29 @@ using System.Collections.Generic;
 using EE.Internal;
 
 namespace EE {
+    using PluginCreator = Func<IMessageBridge, ILogger, Action, IPlugin>;
+
     public static class PluginManager {
-        private static readonly Dictionary<Type, (string, Func<IMessageBridge, ILogger, Action, IPlugin>)> _pluginInfo
-            = new Dictionary<Type, (string, Func<IMessageBridge, ILogger, Action, IPlugin>)> {
+        private static readonly Dictionary<Type, (string, PluginCreator, PluginCreator)> _pluginInfo
+            = new Dictionary<Type, (string, PluginCreator, PluginCreator)> {
                 [typeof(IAdColony)] = ("AdColony",
-                    (bridge, logger, destroyer) => new AdColony(bridge, logger, destroyer)),
-                [typeof(IAdjust)] = ("Adjust", (bridge, logger, destroyer) => new Adjust(bridge, logger, destroyer)),
-                [typeof(IAdMob)] = ("AdMob", (bridge, logger, destroyer) => new AdMob(bridge, logger, destroyer)),
+                    (bridge, logger, destroyer) => new AdColony(bridge, logger, destroyer),
+                    (bridge, logger, destroyer) => new AdColonyImplEditor()),
+                [typeof(IAdjust)] = ("Adjust",
+                    (bridge, logger, destroyer) => new Adjust(bridge, logger, destroyer),
+                    (bridge, logger, destroyer) => new AdjustImplEditor()),
+                [typeof(IAdMob)] = ("AdMob",
+                    (bridge, logger, destroyer) => new AdMob(bridge, logger, destroyer),
+                    (bridge, logger, destroyer) => new AdMobImplEditor()),
                 [typeof(IFacebookAds)] = ("FacebookAds",
-                    (bridge, logger, destroyer) => new FacebookAds(bridge, logger, destroyer)),
+                    (bridge, logger, destroyer) => new FacebookAds(bridge, logger, destroyer),
+                    (bridge, logger, destroyer) => new FacebookAdsImplEditor()),
                 [typeof(IIronSource)] = ("IronSource",
-                    (bridge, logger, destroyer) => new IronSource(bridge, logger, destroyer)),
+                    (bridge, logger, destroyer) => new IronSource(bridge, logger, destroyer),
+                    (bridge, logger, destroyer) => new IronSourceImplEditor()),
                 [typeof(IUnityAds)] = ("UnityAds",
-                    (bridge, logger, destroyer) => new UnityAds(bridge, logger, destroyer))
+                    (bridge, logger, destroyer) => new UnityAds(bridge, logger, destroyer),
+                    (bridge, logger, destroyer) => new UnityAdsImplEditor())
             };
 
         private static readonly IPluginManagerImpl _impl =
@@ -34,7 +44,7 @@ namespace EE {
 
         public static void InitializePlugins() {
             _logger = new Logger("ee-x");
-            _impl.InitializePlugins("2.9.1");
+            _impl.InitializePlugins("2.9.2");
             _bridge = new MessageBridge();
             Thread.Initialize();
             Platform.Initialize(_bridge);
@@ -45,9 +55,14 @@ namespace EE {
             if (_plugins.TryGetValue(type, out var plugin)) {
                 return (T) plugin;
             }
-            var (name, constructor) = _pluginInfo[type];
+            var (name, constructor, editorConstructor) = _pluginInfo[type];
             _impl.AddPlugin(name);
-            var instance = (T) constructor(_bridge, _logger, () => {
+#if UNITY_EDITOR || UNITY_STANDALONE_OSX
+            var currentConstructor = editorConstructor;
+#else
+            var currentConstructor = constructor;
+#endif
+            var instance = (T) currentConstructor(_bridge, _logger, () => {
                 _impl.RemovePlugin(name);
                 _plugins.Remove(type);
             });

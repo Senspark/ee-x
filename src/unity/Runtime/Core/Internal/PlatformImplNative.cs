@@ -156,10 +156,10 @@ namespace EE.Internal {
         }
 
         public async Task<bool> TestConnection(string hostName, float timeOut) {
-            return await Task.WhenAny(((Func<Task<bool>>) (async () => {
+            return (await Task.WhenAny(((Func<Task<bool>>) (async () => {
                 await Task.Delay((int) (timeOut * 1000));
                 return false;
-            }))(), TestConnectionImpl(hostName, timeOut)).Result;
+            }))(), TestConnectionImpl(hostName, timeOut))).Result;
         }
 
         private async Task<bool> TestConnectionImpl(string hostName, float timeOut) {

@@ -16,8 +16,8 @@ var plugin = PluginManager.CreatePlugin<IAdjust>();
 - Login your senspark account to the website <https://dash.adjust.com>
 - Select your app
 
-![](adjust_1.jpeg)
+![](adjust_1.png)
 
 - Copy app token
 
-![](adjust_2.jpeg)
+![](adjust_2.png)

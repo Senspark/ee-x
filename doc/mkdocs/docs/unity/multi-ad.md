@@ -2,6 +2,7 @@
 ## Configuration
 Go to **Assets/Senspark EE-x/Settings** and enable:
 
+- AdColony plugin
 - AdMob plugin with mediation
 - Facebook Ads plugin
 - Iron Source plugin with mediation
@@ -11,16 +12,16 @@ Go to **Assets/Senspark EE-x/Settings** and enable:
 Initializes with JSON config
 ```csharp
 var config = Resources.Load<TextAsset>("config_path").text;
-var manager = new EE.DefaultAdsManager(config);
+var adsManager = new EE.DefaultAdsManager(config);
 EE.Utils.NoAwait(async () => {
-    await manager.Initialize();
+    await adsManager.Initialize();
 });
 ```
 
 Normal banner ad
 ```csharp
 // Show ad.
-manager.BannerAd.IsVisible = true;
+adsManager.BannerAd.IsVisible = true;
 
 // Set ad position and anchor.
 var (viewWidth, viewHeight) = EE.Platform.GetViewSize();
@@ -31,17 +32,22 @@ adsManager.BannerAd.Position = (viewWidth * 0.5f, viewHeight * 0.5f);
 Rectangle banner ad
 ```csharp
 // Show ad.
-manager.RectangleAd.IsVisible = true;
+adsManager.RectangleAd.IsVisible = true;
 
 // Set ad position and anchor.
 var (viewWidth, viewHeight) = EE.Platform.GetViewSize();
 adsManager.RectangleAd.Anchor = (0.5f, 0.5f);
 adsManager.RectangleAd.Position = (viewWidth * 0.5f, viewHeight * 0.5f);
+
+// Set ad size
+var widthAd = Platform.GetDensity() * 300;
+var heightAd = Platform.GetDensity() * 250;
+adsManager.RectangleAd.Size = (widthAd, heightAd);
 ```
 
 App open ad
 ```csharp
-var result = await manager.AppOpenAd.Show();
+var result = await adsManager.AppOpenAd.Show();
 if (result == EE.AdResult.Completed) {
     // Completed.
 } else {
@@ -51,7 +57,7 @@ if (result == EE.AdResult.Completed) {
 
 Interstitial ad
 ```csharp
-var result = await manager.InterstitialAd.Show();
+var result = await adsManager.InterstitialAd.Show();
 if (result == EE.AdResult.Completed) {
     // Completed.
 } else {
@@ -61,7 +67,7 @@ if (result == EE.AdResult.Completed) {
 
 Rewarded interstitial ad
 ```csharp
-var result = await manager.RewardedInterstitialAd.Show();
+var result = await adsManager.RewardedInterstitialAd.Show();
 if (result == EE.AdResult.Completed) {
     // Completed.
 } else {
@@ -71,7 +77,7 @@ if (result == EE.AdResult.Completed) {
 
 Rewarded ad
 ```csharp
-var result = await manager.RewardedAd.Show();
+var result = await adsManager.RewardedAd.Show();
 if (result == EE.AdResult.Completed) {
     // Completed.
 } else {

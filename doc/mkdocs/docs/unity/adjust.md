@@ -5,13 +5,19 @@ Go to **Assets/Senspark EE-x/Settings** and enable Adjust plugin
 ## Basic usage
 Initialization
 ```csharp
-var plugin = EE.PluginManager.CreatePlugin<EE.IAdjust>();
-plugin.Initialize(new EE.AdjustConfig()
-    .SetToken("your_app_token")
-    .SetEnvironment(EE.AdjustEnvironment.Production));
+var appToken = "cmefsp274d1c";
+var plugin = PluginManager.CreatePlugin<IAdjust>();
+	plugin.Initialize(new AdjustConfig()
+		.SetToken(appToken)
+		.SetEnvironment(AdjustEnvironment.Production));
 ```
 
-Set push token
-```csharp
-plugin.SetPushToken("your_push_token");
-```
+## Get app token
+- Login your senspark account to the website <https://dash.adjust.com>
+- Select your app
+
+![](adjust_1.jpeg)
+
+- Copy app token
+
+![](adjust_2.jpeg)

@@ -1,3 +1,6 @@
+## 2.10.0
+- [Android] Update method to get SHA1.
+
 ## 2.9.2 - 2021-07-05
 - [Unity] Fix hanging when start ad.
 

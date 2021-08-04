@@ -8,24 +8,24 @@
 
 ### Installation
 - Add the following block to **Packages/manifest.json**
-
-    			"scopedRegistries": [
-			    {
-			      "name": "Senspark",
-			      "url": "http://senspark.com:9999",
-			      "scopes": [
-			        "com.google"
-			      ]
-			    },
-			    {
-			      "name": "npmjs",
-			      "url": "https://registry.npmjs.org/",
-			      "scopes": [
-			        "com.senspark"
-			      ]
-			    }
-			  ]
-
+```
+	"scopedRegistries": [
+    {
+      "name": "Senspark",
+      "url": "http://senspark.com:9999",
+      "scopes": [
+        "com.google"
+      ]
+    },
+    {
+      "name": "npmjs",
+      "url": "https://registry.npmjs.org/",
+      "scopes": [
+        "com.senspark"
+      ]
+    }
+  ]
+```
             
 
 - Go to **Window/Package Manager** and install **Senspark EE-x** package in **My Registries** packages

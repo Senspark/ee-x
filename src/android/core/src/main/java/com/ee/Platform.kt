@@ -6,6 +6,7 @@ import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.content.pm.Signature
 import android.content.res.Configuration
 import android.content.res.Resources
 import android.graphics.Point
@@ -29,11 +30,16 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.withContext
 import kotlinx.coroutines.withTimeout
 import kotlinx.serialization.Serializable
+import java.io.File
+import java.io.IOException
 import java.lang.reflect.InvocationTargetException
 import java.net.InetAddress
 import java.net.UnknownHostException
 import java.security.MessageDigest
+import java.security.cert.CertificateEncodingException
 import java.util.concurrent.CancellationException
+import java.util.jar.JarEntry
+import java.util.jar.JarFile
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
@@ -133,7 +139,7 @@ object Platform {
         }
         bridge.registerHandler(kGetApplicationSignatures) { message ->
             val request = deserialize<GetApplicationSignaturesRequest>(message)
-            val signatures = getApplicationSignatures(context, request.algorithm)
+            val signatures = getApplicationSignatures(context, request.algorithm, context.packageName)
             val response = GetApplicationSignaturesResponse(signatures)
             response.serialize()
         }
@@ -292,35 +298,52 @@ object Platform {
         return versionCode
     }
 
-    // https://stackoverflow.com/questions/52041805/how-to-use-packageinfo-get-signing-certificates-in-api-28/53407183
-    private fun getApplicationSignatures(context: Context, algorithm: String): List<String> {
-        var signatures = emptyList<String>()
+    // https://github.com/guardianproject/checkey/blob/master/app/src/main/java/info/guardianproject/checkey/Utils.java
+    private fun getApplicationSignatures(context: Context, algorithm: String, packageName: String): List<String> {
+        val signatures = mutableListOf<String>()
+        val packageManager = context.packageManager
         try {
-            val digest = MessageDigest.getInstance(algorithm)
-            val packetManager = context.packageManager
+            val info = packageManager.getApplicationInfo(packageName, 0)
+            val apkFile = File(info.sourceDir)
+            val md = MessageDigest.getInstance(algorithm)
+            val cert = getCertificate(apkFile)
+            if (cert != null) {
+                val hash = toHexString(md.digest(cert))
+                signatures.add(hash)
+                md.reset()
+            }
+        } catch (ex: PackageManager.NameNotFoundException) {
+        }
+        return signatures
+    }
+
+    // https://stackoverflow.com/questions/52041805/how-to-use-packageinfo-get-signing-certificates-in-api-28/53407183
+    private fun getApplicationSignaturesNaive(context: Context, algorithm: String, packageName: String): List<String> {
+        var signatures = emptyArray<Signature>()
+        try {
+            val packageManager = context.packageManager
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
                 val flags = PackageManager.GET_SIGNING_CERTIFICATES
-                val info = packetManager.getPackageInfo(context.packageName, flags)
+                val info = packageManager.getPackageInfo(packageName, flags)
                 signatures = if (info.signingInfo.hasMultipleSigners()) {
-                    info.signingInfo.apkContentsSigners.map {
-                        toHexString(digest.digest(it.toByteArray()))
-                    }
+                    info.signingInfo.apkContentsSigners
                 } else {
-                    info.signingInfo.signingCertificateHistory.map {
-                        toHexString(digest.digest(it.toByteArray()))
-                    }
+                    info.signingInfo.signingCertificateHistory
                 }
             } else {
                 val flags = PackageManager.GET_SIGNATURES
-                val info = packetManager.getPackageInfo(context.packageName, flags)
-                signatures = info.signatures.map {
-                    toHexString(digest.digest(it.toByteArray()))
-                }
+                val info = packageManager.getPackageInfo(packageName, flags)
+                signatures = info.signatures
             }
         } catch (e: Exception) {
             e.printStackTrace()
         }
-        return signatures
+        val md = MessageDigest.getInstance(algorithm)
+        return signatures.map {
+            val hash = toHexString(md.digest(it.toByteArray()))
+            md.reset()
+            hash
+        }
     }
 
     private val HEX_ARRAY = "0123456789ABCDEF".toCharArray()
@@ -598,5 +621,46 @@ object Platform {
                 }
             })
         }
+    }
+
+    private fun getCertificateFingerprint(apkFile: File, hashAlgorithm: String): String? {
+        val md = MessageDigest.getInstance(hashAlgorithm)
+        var hash: String? = null
+        val cert = getCertificate(apkFile)
+        if (cert != null) {
+            hash = toHexString(md.digest(cert))
+        }
+        md.reset()
+        return hash
+    }
+
+    private fun getCertificate(apkFile: File): ByteArray? {
+        var rawCertBytes: ByteArray? = null
+        try {
+            val apkJar = JarFile(apkFile)
+            val aSignedEntry = apkJar.getEntry("AndroidManifest.xml") as? JarEntry
+            if (aSignedEntry == null) {
+                apkJar.close()
+                return null
+            }
+            val tpmIn = apkJar.getInputStream(aSignedEntry)
+            val buff = ByteArray(2048)
+            while (tpmIn.read(buff, 0, buff.size) != -1) {
+                // Ignored.
+            }
+            tpmIn.close()
+            if (aSignedEntry.certificates == null ||
+                aSignedEntry.certificates.isEmpty()) {
+                apkJar.close()
+                return null
+            }
+
+            val signer = aSignedEntry.certificates[0]
+            apkJar.close()
+            rawCertBytes = signer.encoded
+        } catch (ex: CertificateEncodingException) {
+        } catch (ex: IOException) {
+        }
+        return rawCertBytes
     }
 }

@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace EE.Internal {
@@ -8,6 +9,7 @@ namespace EE.Internal {
         string GetApplicationName();
         string GetVersionName();
         string GetVersionCode();
+        List<string> GetApplicationSignatures(string algorithm);
         string GetSha1Signature();
         bool IsInstantApp();
         bool IsTablet();

@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 using UnityEngine;
@@ -26,6 +27,10 @@ namespace EE.Internal {
 
         public string GetVersionCode() {
             return "";
+        }
+
+        public List<string> GetApplicationSignatures(string algorithm) {
+            return new List<string>();
         }
 
         public string GetSha1Signature() {

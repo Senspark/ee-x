@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 using EE.Internal;
@@ -19,7 +20,7 @@ namespace EE {
         Authorized,
         Other,
     }
-    
+
     public static class Platform {
         private static IPlatformImpl _impl;
 
@@ -53,6 +54,10 @@ namespace EE {
 
         public static string GetVersionCode() {
             return _impl.GetVersionCode();
+        }
+
+        public static List<string> GetApplicationSignatures(string algorithm) {
+            return _impl.GetApplicationSignatures(algorithm);
         }
 
         public static string GetSha1Signature() {

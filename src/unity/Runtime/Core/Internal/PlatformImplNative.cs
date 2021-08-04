@@ -70,14 +70,23 @@ namespace EE.Internal {
             public List<string> signatures;
         }
 
-        public string GetSha1Signature() {
+        public List<string> GetApplicationSignatures(string algorithm) {
 #if UNITY_ANDROID
             var request = new GetSha1SignatureRequest {
-                algorithm = "SHA1",
+                algorithm = algorithm
             };
             var response = _bridge.Call(kGetApplicationSignatures, JsonUtility.ToJson(request));
             var json = JsonUtility.FromJson<GetSha1SignatureResponse>(response);
             var signatures = json.signatures;
+            return signatures;
+#else // UNITY_ANDROID
+            return new List<string>();
+#endif // UNITY_ANDROID
+        }
+
+        public string GetSha1Signature() {
+#if UNITY_ANDROID
+            var signatures = GetApplicationSignatures("SHA1");
             return signatures.Count == 0 ? "" : signatures[0];
 #else // UNITY_ANDROID
             return "";

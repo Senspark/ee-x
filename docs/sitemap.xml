@@ -166,7 +166,22 @@
          <changefreq>daily</changefreq>
     </url>
     <url>
+         <loc>https://senspark.com/unity/adjust/</loc>
+         <lastmod>2021-08-04</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
          <loc>https://senspark.com/unity/design-patterns/</loc>
+         <lastmod>2021-08-04</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://senspark.com/unity/firebase/</loc>
+         <lastmod>2021-08-04</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://senspark.com/unity/getting-started/</loc>
          <lastmod>2021-08-04</lastmod>
          <changefreq>daily</changefreq>
     </url>
@@ -177,21 +192,6 @@
     </url>
     <url>
          <loc>https://senspark.com/unity/utils/</loc>
-         <lastmod>2021-08-04</lastmod>
-         <changefreq>daily</changefreq>
-    </url>
-    <url>
-         <loc>https://senspark.com/unity/adjust/adjust/</loc>
-         <lastmod>2021-08-04</lastmod>
-         <changefreq>daily</changefreq>
-    </url>
-    <url>
-         <loc>https://senspark.com/unity/firebase/firebase/</loc>
-         <lastmod>2021-08-04</lastmod>
-         <changefreq>daily</changefreq>
-    </url>
-    <url>
-         <loc>https://senspark.com/unity/getting-started/getting-started/</loc>
          <lastmod>2021-08-04</lastmod>
          <changefreq>daily</changefreq>
     </url>

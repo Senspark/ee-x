@@ -28,14 +28,14 @@ if (rootProject.ext.has('buildMaven') && rootProject.buildMaven) {
 dependencies {
     api project(':ee-x-iron-source')
     
-    // https://bintray.com/ironsource-mobile/android-adapters
+    // https://github.com/ironsource-mobile/android-adapters/releases
     // https://developers.ironsrc.com/ironsource-mobile/android/adcolony-change-log/
     // Use "api" to inherit manifest elements.
     api 'com.ironsource.adapters:adcolonyadapter:4.3.8'
     api 'com.adcolony:sdk:4.5.0'
 
     // https://developers.ironsrc.com/ironsource-mobile/android/admob-change-log/
-    api 'com.ironsource.adapters:admobadapter:4.3.20'
+    api 'com.ironsource.adapters:admobadapter:4.3.21'
     api 'com.google.android.gms:play-services-ads:20.2.0'
 
     // https://developers.ironsrc.com/ironsource-mobile/android/applovin-change-log/
@@ -43,20 +43,20 @@ dependencies {
     api 'com.applovin:applovin-sdk:10.3.1'
 
     // https://developers.ironsrc.com/ironsource-mobile/android/21769-2/
-    api 'com.ironsource.adapters:facebookadapter:4.3.27'
-    api 'com.facebook.android:audience-network-sdk:6.5.0'
+    api 'com.ironsource.adapters:facebookadapter:4.3.28'
+    api 'com.facebook.android:audience-network-sdk:6.5.1'
 
     // https://developers.ironsrc.com/ironsource-mobile/android/inmobi-change-log/
     api 'com.ironsource.adapters:inmobiadapter:4.3.10'
     api 'com.inmobi.monetization:inmobi-ads:9.1.9'
 
     // https://developers.ironsrc.com/ironsource-mobile/android/tapjoy-change-log/
-    api 'com.ironsource.adapters:tapjoyadapter:4.1.16'
-    api 'com.tapjoy:tapjoy-android-sdk:12.8.0@aar'
+    api 'com.ironsource.adapters:tapjoyadapter:4.1.17'
+    api 'com.tapjoy:tapjoy-android-sdk:12.8.1@aar'
 
     // https://developers.ironsrc.com/ironsource-mobile/android/unityads-change-log/
-    api 'com.ironsource.adapters:unityadsadapter:4.3.11'
-    api 'com.unity3d.ads:unity-ads:3.7.2'
+    api 'com.ironsource.adapters:unityadsadapter:4.3.12'
+    api 'com.unity3d.ads:unity-ads:3.7.5'
 
     // https://developers.ironsrc.com/ironsource-mobile/android/vungle-change-log/
     api 'com.ironsource.adapters:vungleadapter:4.3.8'

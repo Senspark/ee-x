@@ -28,10 +28,10 @@ if (rootProject.ext.has('buildMaven') && rootProject.buildMaven) {
 dependencies {
     api project(':ee-x-ads')
 
-    // https://bintray.com/ironsource-mobile/android-sdk
+    // https://github.com/ironsource-mobile/android-sdk/releases
     // https://developers.ironsrc.com/ironsource-mobile/android/sdk-change-log/
     // Use "api" to inherit manifest elements.
-    api 'com.ironsource.sdk:mediationsdk:7.1.6.1'
+    api 'com.ironsource.sdk:mediationsdk:7.1.7'
 
     implementation 'androidx.annotation:annotation:1.2.0'
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"

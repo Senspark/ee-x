@@ -25,7 +25,7 @@ dependencies {
     api project(':ee-x-firebase-core')    
     // api platform("com.google.firebase:firebase-bom:$firebaseVersion")
     api 'com.google.firebase:firebase-analytics-ktx:19.0.0'
-    api 'com.google.firebase:firebase-crashlytics-ndk:18.1.0'
+    api 'com.google.firebase:firebase-crashlytics-ndk:18.2.0'
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
     implementation "org.jetbrains.kotlinx:kotlinx-serialization-json:$kotlinSerializationVersion"
 }

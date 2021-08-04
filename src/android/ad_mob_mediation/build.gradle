@@ -46,7 +46,7 @@ dependencies {
     api 'com.google.ads.mediation:ironsource:7.1.7.0'
 
     // https://developers.google.com/admob/android/mediation/tapjoy#tapjoy-android-mediation-adapter-changelog
-    api 'com.google.ads.mediation:tapjoy:12.8.1.0'
+    api 'com.google.ads.mediation:tapjoy:12.8.0.1'
 
     // https://developers.google.com/admob/android/mediation/unity#unity-ads-android-mediation-adapter-changelog
     api 'com.google.ads.mediation:unity:3.7.5.0'

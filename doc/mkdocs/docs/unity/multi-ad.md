@@ -45,16 +45,6 @@ var heightAd = Platform.GetDensity() * 250;
 adsManager.RectangleAd.Size = (widthAd, heightAd);
 ```
 
-App open ad
-```csharp
-var result = await adsManager.AppOpenAd.Show();
-if (result == EE.AdResult.Completed) {
-    // Completed.
-} else {
-    // Failed.
-}
-```
-
 Interstitial ad
 ```csharp
 var result = await adsManager.InterstitialAd.Show();
@@ -65,9 +55,9 @@ if (result == EE.AdResult.Completed) {
 }
 ```
 
-Rewarded interstitial ad
+Rewarded ad
 ```csharp
-var result = await adsManager.RewardedInterstitialAd.Show();
+var result = await adsManager.RewardedAd.Show();
 if (result == EE.AdResult.Completed) {
     // Completed.
 } else {
@@ -75,9 +65,19 @@ if (result == EE.AdResult.Completed) {
 }
 ```
 
-Rewarded ad
+App open ad
 ```csharp
-var result = await adsManager.RewardedAd.Show();
+var result = await adsManager.AppOpenAd.Show();
+if (result == EE.AdResult.Completed) {
+    // Completed.
+} else {
+    // Failed.
+}
+```
+
+Rewarded interstitial ad
+```csharp
+var result = await adsManager.RewardedInterstitialAd.Show();
 if (result == EE.AdResult.Completed) {
     // Completed.
 } else {

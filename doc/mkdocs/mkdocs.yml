@@ -59,11 +59,11 @@ nav:
     - cocos-creator/adjust.md
     - cocos-creator/facebook.md
   - Unity:
-    - unity/getting-started/getting-started.md
-    - unity/adjust/adjust.md
+    - unity/getting-started.md
+    - unity/adjust.md
     - unity/multi-ad.md
     # - unity/design-patterns.md
-    - unity/firebase/firebase.md
+    - unity/firebase.md
     - unity/utils.md
     # - unity/ad-mob.md
   - Contributions:

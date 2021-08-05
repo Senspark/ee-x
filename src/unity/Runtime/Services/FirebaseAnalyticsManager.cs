@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -7,12 +8,15 @@ using EE.Internal;
 namespace EE {
     public class FirebaseAnalyticsManager : IAnalyticsManager {
         private readonly IFirebaseAnalyticsImpl _impl;
-        private readonly Stack<string> _screens = new Stack<string>();
+        private readonly Stack<string> _screens;
+        private readonly Queue<Action> _pendingActions;
         private Task<bool> _initializer;
         private bool _initialized;
 
         public FirebaseAnalyticsManager() {
             _impl = new FirebaseAnalyticsImpl();
+            _screens = new Stack<string>();
+            _pendingActions = new Queue<Action>();
         }
 
         public Task<bool> Initialize() => _initializer = _initializer ?? (_initializer = InitializeImpl(1f));
@@ -34,11 +38,16 @@ namespace EE {
                 return false;
             }
             _initialized = true;
+            while (_pendingActions.Count > 0) {
+                var action = _pendingActions.Dequeue();
+                action();
+            }
             return true;
         }
 
         public void PushScreen(string screenName) {
             if (!_initialized) {
+                _pendingActions.Enqueue(() => PushScreen(screenName));
                 return;
             }
             _screens.Push(screenName);
@@ -47,6 +56,7 @@ namespace EE {
 
         public void PopScreen() {
             if (!_initialized) {
+                _pendingActions.Enqueue(PopScreen);
                 return;
             }
             if (_screens.Count == 0) {
@@ -63,6 +73,7 @@ namespace EE {
 
         public void PopAllScreens() {
             if (!_initialized) {
+                _pendingActions.Enqueue(PopAllScreens);
                 return;
             }
             _screens.Clear();
@@ -71,6 +82,7 @@ namespace EE {
 
         public void LogEvent(string name) {
             if (!_initialized) {
+                _pendingActions.Enqueue(() => LogEvent(name));
                 return;
             }
             _impl.LogEvent(name);
@@ -78,6 +90,7 @@ namespace EE {
 
         public void LogEvent(IAnalyticsEvent analyticsEvent) {
             if (!_initialized) {
+                _pendingActions.Enqueue(() => LogEvent(analyticsEvent));
                 return;
             }
             var parameters = analyticsEvent.Parameters

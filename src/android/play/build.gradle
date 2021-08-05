@@ -24,7 +24,7 @@ if (rootProject.ext.has('buildMaven') && rootProject.buildMaven) {
 dependencies {
     api project(':ee-x-core')    
     api 'com.google.android.gms:play-services-games:21.0.0'
-    api 'com.google.android.gms:play-services-auth:19.0.0'
+    api 'com.google.android.gms:play-services-auth:19.2.0'
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$kotlinCoroutinesVersion"
     implementation "org.jetbrains.kotlinx:kotlinx-serialization-json:$kotlinSerializationVersion"

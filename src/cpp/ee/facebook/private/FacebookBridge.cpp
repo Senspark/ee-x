@@ -55,7 +55,8 @@ void Self::destroy() {
 }
 
 void Self::registerNotifications() {
-    bridge_.call(kRegisterNotifications);
+    // FIXME.
+    // bridge_.call(kRegisterNotifications);
 }
 
 void Self::onProfileChanged(const std::string& profile) {

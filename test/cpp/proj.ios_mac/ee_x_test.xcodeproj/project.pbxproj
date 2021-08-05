@@ -576,7 +576,7 @@
 			inputPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-common-ee_x_test_mobile/Pods-common-ee_x_test_mobile-resources.sh",
 				"${PODS_ROOT}/AppLovinSDK/applovin-ios-sdk-10.3.2/AppLovinSDKResources.bundle",
-				"${PODS_ROOT}/FBSDKCoreKit/FacebookSDKStrings.bundle",
+				"${PODS_CONFIGURATION_BUILD_DIR}/FBSDKCoreKit/FacebookSDKStrings.bundle",
 				"${PODS_ROOT}/TPInAppReceipt/Sources/AppleIncRootCertificate.cer",
 				"${PODS_ROOT}/TPInAppReceipt/Sources/StoreKitTestCertificate.cer",
 				"${PODS_ROOT}/../../../../res/stars_3_5.png",

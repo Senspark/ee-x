@@ -75,11 +75,11 @@ class FacebookBridge(
                 _logger.debug("$kTag: ${this::onCurrentProfileChanged.name}")
                 val dict: MutableMap<String, Any> = HashMap()
                 if (currentProfile != null) {
-                    dict["userId"] = currentProfile.id
-                    dict["firstName"] = currentProfile.firstName
-                    dict["middleName"] = if (currentProfile.middleName == null) "" else currentProfile.middleName
-                    dict["lastName"] = currentProfile.lastName
-                    dict["name"] = currentProfile.name
+                    dict["userId"] = currentProfile.id ?: ""
+                    dict["firstName"] = currentProfile.firstName ?: ""
+                    dict["middleName"] = currentProfile.middleName ?: ""
+                    dict["lastName"] = currentProfile.lastName ?: ""
+                    dict["name"] = currentProfile.name ?: ""
                     dict["picture"] = currentProfile.getProfilePictureUri(128, 128).toString()
                 }
                 // FIXME: may cause java.lang.UnsatisfiedLinkError if C++ library has not loaded yet.
@@ -195,8 +195,12 @@ class FacebookBridge(
                     }
 
                     override fun onError(error: FacebookException) {
-                        cont.resume(LogInResponse(successful = false, canceled = false,
-                            error.localizedMessage ?: ""))
+                        cont.resume(
+                            LogInResponse(
+                                successful = false, canceled = false,
+                                error.localizedMessage ?: ""
+                            )
+                        )
                     }
                 })
             }
@@ -211,7 +215,8 @@ class FacebookBridge(
             val response = GetAccessTokenResponse(
                 token.token,
                 token.applicationId,
-                token.userId)
+                token.userId
+            )
             response.serialize()
         }
         _bridge.registerAsyncHandler(kGraphRequest) { message ->
@@ -223,9 +228,15 @@ class FacebookBridge(
             val response = suspendCoroutine<GraphRequestResponse> { cont ->
                 graphRequest(request.path, parameters) { result ->
                     if (result.error != null) {
-                        cont.resume(GraphRequestResponse(false, "", result.error.errorMessage))
+                        cont.resume(
+                            GraphRequestResponse(
+                                false,
+                                "",
+                                result.error?.errorMessage ?: ""
+                            )
+                        )
                     } else {
-                        cont.resume(GraphRequestResponse(true, result.rawResponse, ""))
+                        cont.resume(GraphRequestResponse(true, result.rawResponse ?: "", ""))
                     }
                 }
             }
@@ -249,8 +260,12 @@ class FacebookBridge(
                     }
 
                     override fun onError(error: FacebookException) {
-                        cont.resume(ShareContentResponse(successful = false, canceled = false,
-                            error.localizedMessage ?: ""))
+                        cont.resume(
+                            ShareContentResponse(
+                                successful = false, canceled = false,
+                                error.localizedMessage ?: ""
+                            )
+                        )
                     }
                 }
                 when (request.type) {

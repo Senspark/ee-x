@@ -14,6 +14,18 @@
       ]
     }
   ]
+</code></pre></div> <ul> <li>Add the following packages to <a href=https://docs.unity3d.com/Manual/ManagedCodeStripping.html#LinkXML>link.xml</a></li> </ul> <div class=codehilite><pre><span></span><code><span class=nt>&lt;linker&gt;</span>
+    <span class=nt>&lt;assembly</span> <span class=na>fullname=</span><span class=s>&quot;Firebase.Analytics&quot;</span><span class=nt>&gt;</span>
+    <span class=nt>&lt;/assembly&gt;</span>
+    <span class=nt>&lt;assembly</span> <span class=na>fullname=</span><span class=s>&quot;Firebase.App&quot;</span><span class=nt>&gt;</span>
+    <span class=nt>&lt;/assembly&gt;</span>
+    <span class=nt>&lt;assembly</span> <span class=na>fullname=</span><span class=s>&quot;Firebase.Crashlytics&quot;</span><span class=nt>&gt;</span>
+    <span class=nt>&lt;/assembly&gt;</span>
+    <span class=nt>&lt;assembly</span> <span class=na>fullname=</span><span class=s>&quot;Firebase.RemoteConfig&quot;</span><span class=nt>&gt;</span>
+    <span class=nt>&lt;/assembly&gt;</span>
+    <span class=nt>&lt;assembly</span> <span class=na>fullname=</span><span class=s>&quot;Newtonsoft.Json&quot;</span><span class=nt>&gt;</span>
+    <span class=nt>&lt;/assembly&gt;</span>
+<span class=nt>&lt;/linker&gt;</span>
 </code></pre></div> <ul> <li> <p>Go to <strong>Window/Package Manager</strong> and install <strong>Senspark EE-x</strong> package in <strong>My Registries</strong> packages <img alt src=../getting-started-1.png></p> </li> <li> <p>Go to <strong>Assets/Senspark EE-x/Settings</strong> to customize plugin settings: <img alt src=../getting-started-2.png></p> </li> </ul> <h2 id=initialization>Initialization<a class=headerlink href=#initialization title="Permanent link">&para;</a></h2> <div class=codehilite><pre><span></span><code><span class=k>public</span> <span class=k>class</span> <span class=nc>TestScene</span> <span class=p>:</span> <span class=n>MonoBehavior</span> <span class=p>{</span>
     <span class=k>private</span> <span class=k>void</span> <span class=nf>Awake</span><span class=p>()</span> <span class=p>{</span>
         <span class=c1>// Call this method only once.</span>

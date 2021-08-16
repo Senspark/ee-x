@@ -6,14 +6,18 @@ import androidx.annotation.AnyThread
 import com.appsflyer.AppsFlyerConversionListener
 import com.appsflyer.AppsFlyerLib
 import com.ee.internal.deserialize
-import kotlinx.serialization.Contextual
+import com.google.common.truth.Truth.assertThat
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.json.JsonPrimitive
+import kotlinx.serialization.json.doubleOrNull
+import kotlinx.serialization.json.longOrNull
 
 class AppsFlyerBridge(
     private val _bridge: IMessageBridge,
     private val _logger: ILogger,
     private val _application: Application,
-    private var _activity: Activity?) : IPlugin {
+    private var _activity: Activity?
+) : IPlugin {
     companion object {
         private val kTag = AppsFlyerBridge::class.java.name
         private const val kPrefix = "AppsFlyerBridge"
@@ -53,7 +57,7 @@ class AppsFlyerBridge(
     @Serializable
     private class TrackEventRequest(
         val name: String,
-        val values: Map<String, @Contextual Any>
+        val values: Map<String, JsonPrimitive>
     )
 
     @AnyThread
@@ -119,7 +123,7 @@ class AppsFlyerBridge(
                 }
             }
             _tracker.init(devKey, listener, _application)
-            _tracker.setDeviceTrackingDisabled(true)
+            _tracker.anonymizeUser(false)
             _tracker.enableLocationCollection(true)
         }
     }
@@ -127,7 +131,7 @@ class AppsFlyerBridge(
     @AnyThread
     fun startTracking() {
         Thread.runOnMainThread {
-            _tracker.startTracking(_application)
+            _tracker.start(_application)
         }
     }
 
@@ -144,14 +148,32 @@ class AppsFlyerBridge(
     @AnyThread
     fun setStopTracking(enabled: Boolean) {
         Thread.runOnMainThread {
-            _tracker.stopTracking(enabled, _application)
+            _tracker.stop(enabled, _application)
         }
     }
 
     @AnyThread
-    fun trackEvent(name: String, values: Map<String, Any>) {
+    fun trackEvent(name: String, values: Map<String, JsonPrimitive>) {
         Thread.runOnMainThread {
-            _tracker.trackEvent(_application, name, values)
+            val parsedValues = HashMap<String, Any>()
+            for ((key, value) in values) {
+                if (value.isString) {
+                    parsedValues[key] = value.content
+                    continue
+                }
+                val long = value.longOrNull
+                if (long != null) {
+                    parsedValues[key] = long
+                    continue
+                }
+                val double = value.doubleOrNull
+                if (double != null) {
+                    parsedValues[key] = double
+                    continue
+                }
+                assertThat(false).isTrue()
+            }
+            _tracker.logEvent(_application, name, values)
         }
     }
 }

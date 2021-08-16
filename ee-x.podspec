@@ -201,7 +201,7 @@ Pod::Spec.new do |spec|
     s.source_files = 'src/ios/ee/apps_flyer/**/*'
     s.header_mappings_dir = 'src/ios'
     s.dependency 'ee-x/core'
-    s.dependency 'AppsFlyerFramework', '6.1.1'
+    s.dependency 'AppsFlyerFramework', '6.3.4'
   end
 
   spec.subspec 'core' do |s|

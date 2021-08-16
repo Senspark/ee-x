@@ -131,7 +131,7 @@ Pod::Spec.new do |spec|
     s.dependency 'ee-x/ads'
 
     # https://developers.google.com/admob/ios/rel-notes
-    s.dependency 'Google-Mobile-Ads-SDK', '8.7.0'
+    s.dependency 'Google-Mobile-Ads-SDK', '8.8.0'
   end
 
   # FIXME: currently not supported SDK 8.x
@@ -161,7 +161,7 @@ Pod::Spec.new do |spec|
     s.dependency 'GoogleMobileAdsMediationInMobi', '9.2.0.0'
     
     # https://developers.google.com/admob/ios/mediation/ironsource#ironsource-ios-mediation-adapter-changelog
-    s.dependency 'GoogleMobileAdsMediationIronSource', '7.1.7'
+    s.dependency 'GoogleMobileAdsMediationIronSource', '7.1.8'
 
     # https://developers.google.com/admob/ios/mediation/tapjoy#tapjoy-ios-mediation-adapter-changelog
     s.dependency 'GoogleMobileAdsMediationTapjoy', '12.8.1.0'
@@ -185,7 +185,7 @@ Pod::Spec.new do |spec|
     s.dependency 'ee-x/core'
 
     # https://github.com/adjust/ios_sdk
-    s.dependency 'Adjust', '4.29.3'
+    s.dependency 'Adjust', '4.29.4'
   end
 
   spec.subspec 'app-lovin' do |s|
@@ -290,35 +290,35 @@ Pod::Spec.new do |spec|
     s.dependency 'ee-x/ads'
 
     # https://developers.ironsrc.com/ironsource-mobile/ios/sdk-change-log/
-    s.dependency 'IronSourceSDK', '7.1.7'
+    s.dependency 'IronSourceSDK', '7.1.8'
   end
 
   spec.subspec 'iron-source-mediation' do |s|
     s.dependency 'ee-x/iron-source'
 
     # https://developers.ironsrc.com/ironsource-mobile/ios/adcolony-change-log/
-    s.dependency 'IronSourceAdColonyAdapter', '4.3.10.4'
+    s.dependency 'IronSourceAdColonyAdapter', '4.3.10.5'
 
     # https://developers.ironsrc.com/ironsource-mobile/ios/admob-change-log/
-    s.dependency 'IronSourceAdMobAdapter', '4.3.24'
+    s.dependency 'IronSourceAdMobAdapter', '4.3.25'
 
     # https://developers.ironsrc.com/ironsource-mobile/ios/applovin-change-log/
-    s.dependency 'IronSourceAppLovinAdapter', '4.3.26.1'
+    s.dependency 'IronSourceAppLovinAdapter', '4.3.26.2'
 
     # https://developers.ironsrc.com/ironsource-mobile/ios/21769-2/
-    s.dependency 'IronSourceFacebookAdapter', '4.3.27'
+    s.dependency 'IronSourceFacebookAdapter', '4.3.27.1'
 
     # https://developers.ironsrc.com/ironsource-mobile/ios/inmobi-change-log/
-    s.dependency 'IronSourceInMobiAdapter', '4.3.11'
+    s.dependency 'IronSourceInMobiAdapter', '4.3.11.1'
 
     # https://developers.ironsrc.com/ironsource-mobile/ios/tapjoy-change-log/
-    s.dependency 'IronSourceTapjoyAdapter', '4.1.17.1'
+    s.dependency 'IronSourceTapjoyAdapter', '4.1.17.2'
 
     # https://developers.ironsrc.com/ironsource-mobile/ios/unityads-change-log/
-    s.dependency 'IronSourceUnityAdsAdapter', '4.3.11'
+    s.dependency 'IronSourceUnityAdsAdapter', '4.3.11.1'
 
     # https://developers.ironsrc.com/ironsource-mobile/ios/vungle-change-log/
-    s.dependency 'IronSourceVungleAdapter', '4.3.11.3'
+    s.dependency 'IronSourceVungleAdapter', '4.3.11.4'
   end
 
   spec.subspec 'notification' do |s|

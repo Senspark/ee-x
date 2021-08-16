@@ -147,7 +147,7 @@ class AppLovinBridge(
                     return@runOnMainThread
                 }
                 _initializing = true
-                val settings = AppLovinSdkSettings()
+                val settings = AppLovinSdkSettings(_application)
                 val sdk = AppLovinSdk.getInstance(key, settings, _application)
                 sdk.initializeSdk {
                     if (cont.isActive) {

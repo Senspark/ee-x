@@ -48,6 +48,10 @@ namespace EE.Editor {
             // Adjust plugin.
             settings.IsAdjustEnabled = EditorGUILayout.Toggle(new GUIContent("Adjust"), settings.IsAdjustEnabled);
 
+            // AppsFlyer plugin.
+            settings.IsAppsFlyerEnabled =
+                EditorGUILayout.Toggle(new GUIContent("AppsFlyer"), settings.IsAppsFlyerEnabled);
+
             // AdColony plugin.
             settings.IsAdColonyEnabled = EditorGUILayout.Toggle(new GUIContent("AdColony"), settings.IsAdColonyEnabled);
 

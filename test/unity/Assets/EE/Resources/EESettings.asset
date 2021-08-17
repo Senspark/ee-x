@@ -19,6 +19,7 @@ MonoBehaviour:
   _overwriteNSUserTrackingUsageDescription: 0
   _isCoreEnabled: 1
   _isAdjustEnabled: 1
+  _isAppsFlyerEnabled: 1
   _isAdColonyEnabled: 1
   _isAdMobEnabled: 1
   _isAdMobMediationEnabled: 1

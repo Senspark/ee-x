@@ -8,7 +8,7 @@ using UnityEngine;
 
 namespace EE.Editor {
     internal class LibrarySettings : ScriptableObject {
-        private const string LibraryVersion = "2.10.1";
+        private const string LibraryVersion = "2.10.2";
 
         private const string LibrarySettingsDir = "Assets/EE";
         private const string LibrarySettingsResDir = "Assets/EE/Resources";
@@ -39,6 +39,9 @@ namespace EE.Editor {
 
         [SerializeField]
         private bool _isAdjustEnabled = false;
+
+        [SerializeField]
+        private bool _isAppsFlyerEnabled = false;
 
         [SerializeField]
         private bool _isAdColonyEnabled = false;
@@ -100,6 +103,16 @@ namespace EE.Editor {
             set => _isCoreEnabled = value;
         }
 
+        public bool IsAdjustEnabled {
+            get => _isAdjustEnabled;
+            set => _isAdjustEnabled = value;
+        }
+
+        public bool IsAppsFlyerEnabled {
+            get => _isAppsFlyerEnabled;
+            set => _isAppsFlyerEnabled = value;
+        }
+
         public bool IsAdColonyEnabled {
             get => _isAdColonyEnabled;
             set => _isAdColonyEnabled = value;
@@ -128,11 +141,6 @@ namespace EE.Editor {
         public string AdMobIosAppId {
             get => _adMobIosAppId;
             set => _adMobIosAppId = value;
-        }
-
-        public bool IsAdjustEnabled {
-            get => _isAdjustEnabled;
-            set => _isAdjustEnabled = value;
         }
 
         public bool IsFacebookAdsEnabled {
@@ -220,6 +228,10 @@ namespace EE.Editor {
                     iosLibraries.Add("ee-x/adjust");
                     iosPods.Add(new XElement("iosPod", new XAttribute("name", "Adjust"),
                         new XAttribute("modular_headers", true)));
+                }
+                if (IsAppsFlyerEnabled) {
+                    androidLibraries.Add($"com.senspark.ee:apps-flyer:[{LibraryVersion}]");
+                    iosLibraries.Add("ee-x/apps-flyer");
                 }
                 if (IsAdColonyEnabled) {
                     androidRepositories.Add("https://adcolony.bintray.com/AdColony");

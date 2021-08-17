@@ -1,3 +1,6 @@
+## 2.10.2 - 2021-08-17
+- [Unity] Add option to activate AppsFlyer.
+
 ## 2.10.1 - 2021-08-17
 - [Android/iOS] Update AppsFlyer and Ads Libraries.
 - [Unity] Add AppsFlyer.

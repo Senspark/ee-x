@@ -18,6 +18,9 @@ namespace EE {
                 [typeof(IAdMob)] = ("AdMob",
                     (bridge, logger, destroyer) => new AdMob(bridge, logger, destroyer),
                     (bridge, logger, destroyer) => new AdMobImplEditor()),
+                [typeof(AppsFlyer)] = ("AppsFlyer",
+                    (bridge, logger, destroyer) => new AppsFlyer(bridge, logger, destroyer),
+                    (bridge, logger, destroyer) => new AppsFlyerImplEditor()),
                 [typeof(IFacebookAds)] = ("FacebookAds",
                     (bridge, logger, destroyer) => new FacebookAds(bridge, logger, destroyer),
                     (bridge, logger, destroyer) => new FacebookAdsImplEditor()),
@@ -44,7 +47,7 @@ namespace EE {
 
         public static void InitializePlugins() {
             _logger = new Logger("ee-x");
-            _impl.InitializePlugins("2.10.0");
+            _impl.InitializePlugins("2.10.1");
             _bridge = new MessageBridge();
             Thread.Initialize();
             Platform.Initialize(_bridge);

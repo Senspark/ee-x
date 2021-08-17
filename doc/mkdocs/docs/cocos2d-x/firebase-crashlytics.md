@@ -4,14 +4,14 @@
 Modify `build.gradle`
 ```java
 dependencies {
-    implementation 'com.senspark.ee:firebase-crashlytics:2.10.0'
+    implementation 'com.senspark.ee:firebase-crashlytics:2.10.1'
 }
 ```
 
 ### iOS
 Modify `Podfile`
 ```ruby
-pod 'ee-x/firebase-crashlytics', '2.10.0'
+pod 'ee-x/firebase-crashlytics', '2.10.1'
 ```
 
 ## Basic usage

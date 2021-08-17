@@ -23,7 +23,7 @@ public:
     virtual void destroy() override;
 
     virtual void initialize(const std::string& devKey,
-                            const std::string& appId) override;
+                            const std::string& iosAppId) override;
     virtual void startTracking() override;
     virtual std::string getDeviceId() const override;
     virtual void setDebugEnabled(bool enabled) override;

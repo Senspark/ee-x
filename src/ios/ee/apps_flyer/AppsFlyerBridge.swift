@@ -41,12 +41,12 @@ class AppsFlyerBridge: NSObject, IPlugin, AppsFlyerLibDelegate {
             let dict = EEJsonUtils.convertString(toDictionary: message)
             guard
                 let devKey = dict["devKey"] as? String,
-                let appId = dict["appId"] as? String
+                let iosAppId = dict["iosAppId"] as? String
             else {
                 assert(false, "Invalid argument")
                 return ""
             }
-            self.intialize(devKey, appId)
+            self.intialize(devKey, iosAppId)
             return ""
         }
         _bridge.registerHandler(kStartTracking) { _ in
@@ -87,10 +87,10 @@ class AppsFlyerBridge: NSObject, IPlugin, AppsFlyerLibDelegate {
         _bridge.deregisterHandler(kTrackEvent)
     }
 
-    func intialize(_ devKey: String, _ appId: String) {
+    func intialize(_ devKey: String, _ iosAppId: String) {
         Thread.runOnMainThread {
             self._tracker.appsFlyerDevKey = devKey
-            self._tracker.appleAppID = appId
+            self._tracker.appleAppID = iosAppId
             self._tracker.delegate = self
             self._tracker.shouldCollectDeviceName = true
             self._tracker.anonymizeUser = false

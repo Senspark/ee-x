@@ -40,15 +40,11 @@ void Self::destroy() {
     destroyer_();
 }
 
-void Self::initialize(const std::string& devKey, const std::string& appId) {
-#ifdef EE_X_ANDROID
-    bridge_.call(kInitialize, devKey);
-#else  // EE_X_ANDROID
+void Self::initialize(const std::string& devKey, const std::string& iosAppId) {
     nlohmann::json json;
     json["devKey"] = devKey;
-    json["appId"] = appId;
+    json["iosAppId"] = iosAppId;
     bridge_.call(kInitialize, json.dump());
-#endif // EE_X_ANDROID
 }
 
 void Self::startTracking() {

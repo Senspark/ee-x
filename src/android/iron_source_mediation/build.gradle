@@ -47,8 +47,8 @@ dependencies {
     api 'com.facebook.android:audience-network-sdk:6.5.1'
 
     // https://developers.ironsrc.com/ironsource-mobile/android/inmobi-change-log/
-    api 'com.ironsource.adapters:inmobiadapter:4.3.10'
-    api 'com.inmobi.monetization:inmobi-ads:9.1.9'
+    api 'com.ironsource.adapters:inmobiadapter:4.3.11'
+    api 'com.inmobi.monetization:inmobi-ads:9.2.0'
 
     // https://developers.ironsrc.com/ironsource-mobile/android/tapjoy-change-log/
     api 'com.ironsource.adapters:tapjoyadapter:4.1.16'

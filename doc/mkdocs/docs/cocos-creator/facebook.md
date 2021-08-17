@@ -4,14 +4,14 @@
 Modify `build.gradle`
 ```java
 dependencies {
-    implementation 'com.senspark.ee:facebook:2.10.0'
+    implementation 'com.senspark.ee:facebook:2.10.1'
 }
 ```
 
 ### iOS
 Modify `Podfile`
 ```ruby
-pod 'ee-x/facebook', '2.10.0'
+pod 'ee-x/facebook', '2.10.1'
 ```
 
 ## Basic usage

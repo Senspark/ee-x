@@ -1,4 +1,8 @@
-## 2.10.0
+## 2.10.1 - 2021-08-17
+- [Android/iOS] Update AppsFlyer and Ads Libraries.
+- [Unity] Add AppsFlyer.
+
+## 2.10.0 - 2021-08-05
 - [Android] Update method to get SHA1.
 - [Android/iOS] Update ads libraries and Facebook SDK.
 

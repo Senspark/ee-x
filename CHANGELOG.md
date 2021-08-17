@@ -1,5 +1,6 @@
 ## 2.10.1
 - [Android/iOS] Update AppsFlyer and Ads Libraries.
+- [Unity] Add AppsFlyer.
 
 ## 2.10.0
 - [Android] Update method to get SHA1.

@@ -25,10 +25,10 @@ public:
 
     /// Initializes the AppsFlyer SDK.
     /// @param[in] devKey Your AppsFlyer's dev key.
-    /// @param[in] appId Your app's Apple ID (taken from the app's page on
+    /// @param[in] iosAppId Your app's Apple ID (taken from the app's page on
     /// iTunes Connect), without the "id" prefix.
     virtual void initialize(const std::string& devKey,
-                            const std::string& appId) = 0;
+                            const std::string& iosAppId) = 0;
 
     virtual void startTracking() = 0;
 

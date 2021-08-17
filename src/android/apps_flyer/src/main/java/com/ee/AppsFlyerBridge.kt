@@ -55,6 +55,12 @@ class AppsFlyerBridge(
     }
 
     @Serializable
+    private class InitializeRequest(
+        val devKey: String,
+        val iosAppId: String
+    )
+
+    @Serializable
     private class TrackEventRequest(
         val name: String,
         val values: Map<String, JsonPrimitive>
@@ -63,7 +69,8 @@ class AppsFlyerBridge(
     @AnyThread
     private fun registerHandlers() {
         _bridge.registerHandler(kInitialize) { message ->
-            initialize(message)
+            val request = deserialize<InitializeRequest>(message)
+            initialize(request.devKey)
             ""
         }
         _bridge.registerHandler(kStartTracking) {

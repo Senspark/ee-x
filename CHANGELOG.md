@@ -1,3 +1,6 @@
+## 2.10.1
+- [Android/iOS] Update AppsFlyer and Ads Libraries.
+
 ## 2.10.0
 - [Android] Update method to get SHA1.
 - [Android/iOS] Update ads libraries and Facebook SDK.

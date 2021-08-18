@@ -60,6 +60,7 @@ nav:
     - cocos-creator/facebook.md
   - Unity:
     - unity/getting-started.md
+    - unity/appsflyer.md
     - unity/adjust.md
     - unity/multi-ad.md
     # - unity/design-patterns.md

@@ -1,3 +1,6 @@
+## 2.10.3 - 2021-08-19
+- [Unity] Fix creating AppsFlyer plugin.
+
 ## 2.10.2 - 2021-08-17
 - [Unity] Add option to activate AppsFlyer.
 

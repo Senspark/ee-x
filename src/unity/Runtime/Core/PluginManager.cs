@@ -18,7 +18,7 @@ namespace EE {
                 [typeof(IAdMob)] = ("AdMob",
                     (bridge, logger, destroyer) => new AdMob(bridge, logger, destroyer),
                     (bridge, logger, destroyer) => new AdMobImplEditor()),
-                [typeof(AppsFlyer)] = ("AppsFlyer",
+                [typeof(IAppsFlyer)] = ("AppsFlyer",
                     (bridge, logger, destroyer) => new AppsFlyer(bridge, logger, destroyer),
                     (bridge, logger, destroyer) => new AppsFlyerImplEditor()),
                 [typeof(IFacebookAds)] = ("FacebookAds",

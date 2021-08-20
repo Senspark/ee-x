@@ -4,6 +4,7 @@ namespace EE {
         FacebookAds,
         IronSource,
         UnityAds,
+        AdSenspark,
         Null
     }
 }

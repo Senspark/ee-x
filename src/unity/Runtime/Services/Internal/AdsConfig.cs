@@ -9,6 +9,7 @@ namespace EE.Internal {
     internal static class AdsConfigUtils {
         public static AdNetwork ParseNetwork(string id) {
             switch (id) {
+                case "ad_senspark": return AdNetwork.AdSenspark;
                 case "ad_mob": return AdNetwork.AdMob;
                 case "facebook_ads": return AdNetwork.FacebookAds;
                 case "iron_source": return AdNetwork.IronSource;
@@ -131,6 +132,7 @@ namespace EE.Internal {
         public static INetworkConfig Parse(JsonObject node) {
             var network = AdsConfigUtils.ParseNetwork((string) node["network"]);
             switch (network) {
+                case AdNetwork.AdSenspark: return new AdSensparkConfig(node);
                 case AdNetwork.AdMob: return new AdMobConfig(node);
                 case AdNetwork.FacebookAds: return new FacebookAdsConfig(node);
                 case AdNetwork.IronSource: return new IronSourceConfig(node);
@@ -168,6 +170,48 @@ namespace EE.Internal {
                     return _plugin.CreateBannerAd(id, AdMobBannerAdSize.Normal);
                 case AdFormat.Rectangle:
                     return _plugin.CreateBannerAd(id, AdMobBannerAdSize.MediumRectangle);
+                case AdFormat.AppOpen:
+                    return _plugin.CreateAppOpenAd(id);
+                case AdFormat.Interstitial:
+                    return _plugin.CreateInterstitialAd(id);
+                case AdFormat.RewardedInterstitial:
+                    return _plugin.CreateRewardedInterstitialAd(id);
+                case AdFormat.Rewarded:
+                    return _plugin.CreateRewardedAd(id);
+                case AdFormat.Null:
+                    return new NullAd();
+            }
+            throw new ArgumentException();
+        }
+    }
+    
+    internal class AdSensparkConfig : INetworkConfig {
+        private IAdSenspark _plugin;
+
+        public AdSensparkConfig(JsonObject node) {
+        }
+
+        public async Task Initialize() {
+            _plugin = PluginManager.CreatePlugin<IAdSenspark>();
+            await _plugin.Initialize();
+        }
+
+        public AdNetwork Network => AdNetwork.AdSenspark;
+
+        public void AddTestDevice(string hash) {
+            
+        }
+
+        public void OpenTestSuite() {
+            
+        }
+
+        public IAd CreateAd(AdFormat format, string id) {
+            switch (format) {
+                case AdFormat.Banner:
+                    return _plugin.CreateBannerAd(id, AdSensparkBannerAdSize.Normal);
+                case AdFormat.Rectangle:
+                    return _plugin.CreateBannerAd(id, AdSensparkBannerAdSize.MediumRectangle);
                 case AdFormat.AppOpen:
                     return _plugin.CreateAppOpenAd(id);
                 case AdFormat.Interstitial:

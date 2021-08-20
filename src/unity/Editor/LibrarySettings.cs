@@ -44,6 +44,9 @@ namespace EE.Editor {
         private bool _isAppsFlyerEnabled = false;
 
         [SerializeField]
+        private bool _isAdSensparkEnabled = false;
+
+        [SerializeField]
         private bool _isAdColonyEnabled = false;
 
         [SerializeField]
@@ -111,6 +114,11 @@ namespace EE.Editor {
         public bool IsAppsFlyerEnabled {
             get => _isAppsFlyerEnabled;
             set => _isAppsFlyerEnabled = value;
+        }
+        
+        public bool IsAdSensparkEnabled {
+            get => _isAdSensparkEnabled;
+            set => _isAdSensparkEnabled = value;
         }
 
         public bool IsAdColonyEnabled {

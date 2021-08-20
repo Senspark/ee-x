@@ -12,6 +12,9 @@
             "network": "facebook_ads"
         },
         {
+          "network": "ad_senspark"
+        },
+        {
             "network": "unity_ads",
             "app_id": "2004287",
             "time_out": 5

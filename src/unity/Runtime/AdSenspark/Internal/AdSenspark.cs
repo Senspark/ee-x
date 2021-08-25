@@ -73,10 +73,10 @@ namespace EE.Internal {
             public int height;
         }
 
-        private (int, int) GetBannerAdSize(AdSensparkBannerAdSize adSize) {
-            var response = _bridge.Call(kGetBannerAdSize, ((int) adSize).ToString());
-            var json = JsonUtility.FromJson<GetBannerAdSizeResponse>(response);
-            return (json.width, json.height);
+        private (int, int) GetBannerAdSize() {
+            var widthAd = Platform.GetDensity() * 300; // pixel = ratio * 300; // Chuyển đổi từ DP sang Pixel.
+            var heightAd = Platform.GetDensity() * 50;
+            return ((int) widthAd, (int) heightAd);
         }
 
         [Serializable]
@@ -90,17 +90,21 @@ namespace EE.Internal {
             if (_ads.TryGetValue(adId, out var result)) {
                 return result as IBannerAd;
             }
-            var request = new CreateBannerAdRequest {
-                adId = adId,
-                adSize = (int) adSize
-            };
-            var response = _bridge.Call(kCreateBannerAd, JsonUtility.ToJson(request));
-            if (!Utils.ToBool(response)) {
-                Assert.IsTrue(false);
-                return null;
-            }
-            var size = GetBannerAdSize(adSize);
-            var ad = new GuardedBannerAd(new DefaultBannerAd("AdMobBannerAd", _bridge, _logger,
+            // var request = new CreateBannerAdRequest {
+            //     adId = adId,
+            //     adSize = (int) adSize
+            // };
+            // var response = _bridge.Call(kCreateBannerAd, JsonUtility.ToJson(request));
+            // if (!Utils.ToBool(response)) {
+            //     Assert.IsTrue(false);
+            //     return null;
+            // }
+            // var size = GetBannerAdSize(adSize);
+            // var ad = new GuardedBannerAd(new DefaultBannerAd("AdMobBannerAd", _bridge, _logger,
+            //     () => DestroyAd(adId), _network, adId, size));
+            
+            var size = GetBannerAdSize();
+            var ad = new GuardedBannerAd(new AdSensparkDefaultBanner("SensparkBannerAd", _bridge, _logger,
                 () => DestroyAd(adId), _network, adId, size));
             _ads.Add(adId, ad);
             return ad;
@@ -108,7 +112,7 @@ namespace EE.Internal {
 
         public IFullScreenAd CreateAppOpenAd(string adId) {
             return CreateFullScreenAd(kCreateAppOpenAd, adId,
-                () => new DefaultFullScreenAd("AdMobAppOpenAd", _bridge, _logger, _displayer,
+                () => new DefaultFullScreenAd("SensparkAppOpenAd", _bridge, _logger, _displayer,
                     () => DestroyAd(adId),
                     _ => AdResult.Completed,
                     _network, adId));
@@ -116,7 +120,7 @@ namespace EE.Internal {
 
         public IFullScreenAd CreateInterstitialAd(string adId) {
             return CreateFullScreenAd(kCreateInterstitialAd, adId,
-                () => new DefaultFullScreenAd("AdMobInterstitialAd", _bridge, _logger, _displayer,
+                () => new DefaultFullScreenAd("SensparkInterstitialAd", _bridge, _logger, _displayer,
                     () => DestroyAd(adId),
                     _ => AdResult.Completed,
                     _network, adId));
@@ -124,7 +128,7 @@ namespace EE.Internal {
 
         public IFullScreenAd CreateRewardedInterstitialAd(string adId) {
             return CreateFullScreenAd(kCreateRewardedInterstitialAd, adId,
-                () => new DefaultFullScreenAd("AdMobRewardedInterstitialAd", _bridge, _logger, _displayer,
+                () => new DefaultFullScreenAd("SensparkRewardedInterstitialAd", _bridge, _logger, _displayer,
                     () => DestroyAd(adId),
                     message => Utils.ToBool(message)
                         ? AdResult.Completed
@@ -134,7 +138,7 @@ namespace EE.Internal {
 
         public IFullScreenAd CreateRewardedAd(string adId) {
             return CreateFullScreenAd(kCreateRewardedAd, adId,
-                () => new DefaultFullScreenAd("AdMobRewardedAd", _bridge, _logger, _displayer,
+                () => new DefaultFullScreenAd("SensparkRewardedAd", _bridge, _logger, _displayer,
                     () => DestroyAd(adId),
                     message => Utils.ToBool(message)
                         ? AdResult.Completed

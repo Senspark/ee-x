@@ -1,9 +1,10 @@
 using System;
 using System.Threading.Tasks;
+using UnityEngine;
 
 using Jsonite;
 
-using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace EE.Internal {
     using Destroyer = Action;
@@ -45,17 +46,19 @@ namespace EE.Internal {
                 OnFailedToLoad((int) json["code"], (string) json["message"]);
             }, _messageHelper.OnFailedToLoad);
             _bridge.RegisterHandler(_ => OnClicked(), _messageHelper.OnClicked);
+            LoadPrefab();
         }
 
-        private bool LoadPrefab() {
-            var banner = Resources.Load<AdSensparkBannerCanvas>("AdSenspark/AdSensparkBanner");
-            if (banner == null) {
+        private void LoadPrefab() {
+            var obj = Resources.Load<AdSensparkBannerCanvas>("AdSenspark/AdSensparkBanner");
+            if (obj == null) {
                 _logger.Debug($"{kTag}: fail to load prefab: prefix = {_prefix} id = {_adId}");
-                return false;
+                return;
             }
+            var banner = Object.Instantiate(obj);
             _banner = banner;
             _banner.Initialize(OnClicked, IsVisible);
-            return true;
+            _logger.Debug($"{kTag}: load complete: prefix = {_prefix} id = {_adId}");
         }
 
         public void Destroy() {
@@ -71,8 +74,7 @@ namespace EE.Internal {
         }
 
         public Task<bool> Load() {
-            var result = LoadPrefab();
-            return Task.FromResult(result);
+            return Task.FromResult(true);
         }
 
         public bool IsVisible {

@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-using UnityEngine;
 using UnityEngine.Assertions;
 
 namespace EE.Internal {
@@ -51,8 +50,7 @@ namespace EE.Internal {
         }
 
         public async Task<bool> Initialize() {
-            var response = await _bridge.CallAsync(kInitialize);
-            return Utils.ToBool(response);
+            return true;
         }
 
         public string GetEmulatorTestDeviceHash() {
@@ -73,9 +71,24 @@ namespace EE.Internal {
             public int height;
         }
 
-        private (int, int) GetBannerAdSize() {
-            var widthAd = Platform.GetDensity() * 300; // pixel = ratio * 300; // Chuyển đổi từ DP sang Pixel.
-            var heightAd = Platform.GetDensity() * 50;
+        private (int, int) GetBannerAdSize(AdSensparkBannerAdSize adSize) {
+            float widthAd, heightAd;
+            switch (adSize) {
+                case AdSensparkBannerAdSize.Normal:
+                    widthAd = 300;
+                    heightAd = 50;
+                    break;
+                case AdSensparkBannerAdSize.MediumRectangle:
+                    widthAd = 300;
+                    heightAd = 250;
+                    break;
+                default:
+                    widthAd = 300;
+                    heightAd = 50;
+                    break;
+            }
+            widthAd = Platform.GetDensity() * widthAd; // pixel = ratio * 300; // Chuyển đổi từ DP sang Pixel.
+            heightAd = Platform.GetDensity() * heightAd;
             return ((int) widthAd, (int) heightAd);
         }
 
@@ -90,20 +103,8 @@ namespace EE.Internal {
             if (_ads.TryGetValue(adId, out var result)) {
                 return result as IBannerAd;
             }
-            // var request = new CreateBannerAdRequest {
-            //     adId = adId,
-            //     adSize = (int) adSize
-            // };
-            // var response = _bridge.Call(kCreateBannerAd, JsonUtility.ToJson(request));
-            // if (!Utils.ToBool(response)) {
-            //     Assert.IsTrue(false);
-            //     return null;
-            // }
-            // var size = GetBannerAdSize(adSize);
-            // var ad = new GuardedBannerAd(new DefaultBannerAd("AdMobBannerAd", _bridge, _logger,
-            //     () => DestroyAd(adId), _network, adId, size));
             
-            var size = GetBannerAdSize();
+            var size = GetBannerAdSize(adSize);
             var ad = new GuardedBannerAd(new AdSensparkDefaultBanner("SensparkBannerAd", _bridge, _logger,
                 () => DestroyAd(adId), _network, adId, size));
             _ads.Add(adId, ad);

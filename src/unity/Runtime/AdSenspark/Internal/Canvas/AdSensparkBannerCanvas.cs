@@ -11,7 +11,7 @@ namespace EE.Internal {
         private RectTransform rectImage;
         private Action _onClick;
         
-        private void Start() {
+        private void Awake() {
             DontDestroyOnLoad(gameObject);
         }
 

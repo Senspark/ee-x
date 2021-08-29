@@ -40,12 +40,12 @@ namespace EE.Internal {
 
         public void OnPromotionPressed() {
             _onClick?.Invoke();
-            _onClose?.Invoke(AdResult.Completed);
             Application.OpenURL("https://play.google.com/store/apps/dev?id=7830868662152106484");
         }
 
         public void OnClosePressed() {
             _onClose?.Invoke(AdResult.Completed);
+            gameObject.SetActive(false);
         }
     }
 }

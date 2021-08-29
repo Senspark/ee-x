@@ -64,7 +64,7 @@ namespace EE.Internal {
         }
 
         private void LoadPrefab() {
-            var obj = Resources.Load<AdSensparkInterstitialCanvas>("AdSenspark/AdSensparkBanner");
+            var obj = Resources.Load<AdSensparkInterstitialCanvas>("AdSenspark/AdSensparkInterstitial");
             if (obj == null) {
                 _logger.Debug($"{kTag}: fail to load prefab: prefix = {_prefix} id = {_adId}");
                 return;
@@ -98,24 +98,55 @@ namespace EE.Internal {
             _adCanvas.gameObject.SetActive(true);
             _logger.Debug(
                 $"{kTag}: {nameof(Show)}: prefix = {_prefix} id = {_adId} displaying = {_displayer.IsProcessing}");
-            if(IsLoaded)
-                return Task.FromResult(AdResult.Completed);
-            return Task.FromResult(AdResult.NotLoaded);
+            return _displayer.Process(
+                () => _bridge.Call(_messageHelper.Show),
+                result => {
+                    // OK.
+                });
+            // if(IsLoaded)
+            //     return Task.FromResult(AdResult.Completed);
+            // return Task.FromResult(AdResult.NotLoaded);
         }
 
         private void OnLoaded() {
             _logger.Debug(
                 $"{kTag}: {nameof(OnLoaded)}: prefix = {_prefix} id = {_adId}.");
+            if (_loader.IsProcessing) {
+                _loader.Resolve(true);
+                DispatchEvent(observer => observer.OnLoadResult?.Invoke(new AdLoadResult {
+                    Network = _network,
+                    Result = true
+                }));
+            } else {
+                Assert.IsTrue(false);
+            }
+            DispatchEvent(observer => observer.OnLoaded?.Invoke());
         }
 
         private void OnFailedToLoad(int code, string message) {
             _logger.Debug(
                 $"{kTag}: {nameof(OnFailedToLoad)}: prefix = {_prefix} id = {_adId}.");
+            if (_loader.IsProcessing) {
+                _loader.Resolve(false);
+                DispatchEvent(observer => observer.OnLoadResult?.Invoke(new AdLoadResult {
+                    Network = _network,
+                    Result = false,
+                    ErrorCode = code,
+                    ErrorMessage = message
+                }));
+            } else {
+                Assert.IsTrue(false);
+            }
         }
 
         private void OnFailedToShow(int code, string message) {
             _logger.Debug(
                 $"{kTag}: {nameof(OnFailedToLoad)}: prefix = {_prefix} id = {_adId}");
+            if (_displayer.IsProcessing) {
+                _displayer.Resolve(AdResult.Failed);
+            } else {
+                Assert.IsTrue(false);
+            }
         }
 
         private void OnClicked() {
@@ -126,7 +157,11 @@ namespace EE.Internal {
         private void OnClosed(AdResult result) {
             _logger.Debug(
                 $"{kTag}: {nameof(OnClosed)}: prefix = {_prefix} id = {_adId}");
-            _displayer.Resolve(result);
+            if (_displayer.IsProcessing) {
+                _displayer.Resolve(result);
+            } else {
+                Assert.IsTrue(false);
+            }
         }
     }
 }

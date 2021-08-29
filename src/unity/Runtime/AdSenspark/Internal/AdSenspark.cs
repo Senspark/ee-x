@@ -113,7 +113,7 @@ namespace EE.Internal {
 
         public IFullScreenAd CreateAppOpenAd(string adId) {
             return CreateFullScreenAd(kCreateAppOpenAd, adId,
-                () => new DefaultFullScreenAd("SensparkAppOpenAd", _bridge, _logger, _displayer,
+                () => new AdSensparkDefaultFullScreenAd("SensparkAppOpenAd", _bridge, _logger, _displayer,
                     () => DestroyAd(adId),
                     _ => AdResult.Completed,
                     _network, adId));
@@ -121,7 +121,7 @@ namespace EE.Internal {
 
         public IFullScreenAd CreateInterstitialAd(string adId) {
             return CreateFullScreenAd(kCreateInterstitialAd, adId,
-                () => new DefaultFullScreenAd("SensparkInterstitialAd", _bridge, _logger, _displayer,
+                () => new AdSensparkDefaultFullScreenAd("SensparkInterstitialAd", _bridge, _logger, _displayer,
                     () => DestroyAd(adId),
                     _ => AdResult.Completed,
                     _network, adId));
@@ -151,11 +151,6 @@ namespace EE.Internal {
             _logger.Debug($"{kTag}: {nameof(CreateFullScreenAd)}: id = {adId}");
             if (_ads.TryGetValue(adId, out var result)) {
                 return result as IFullScreenAd;
-            }
-            var response = _bridge.Call(handlerId, adId);
-            if (!Utils.ToBool(response)) {
-                Assert.IsTrue(false);
-                return null;
             }
             var ad = new GuardedFullScreenAd(creator());
             _ads.Add(adId, ad);

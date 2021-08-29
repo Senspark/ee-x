@@ -20,7 +20,7 @@ namespace EE.Internal {
         private readonly BannerAdHelper _helper;
         private readonly IAsyncHelper<bool> _loader;
         private readonly MessageHelper _messageHelper;
-        private AdSensparkBannerCanvas _banner;
+        private AdSensparkBannerCanvas _adCanvas;
 
         public AdSensparkDefaultBanner(
             string prefix,
@@ -56,8 +56,8 @@ namespace EE.Internal {
                 return;
             }
             var banner = Object.Instantiate(obj);
-            _banner = banner;
-            _banner.Initialize(OnClicked, IsVisible);
+            _adCanvas = banner;
+            _adCanvas.Initialize(OnClicked, IsVisible);
             _logger.Debug($"{kTag}: load complete: prefix = {_prefix} id = {_adId}");
         }
 
@@ -70,7 +70,7 @@ namespace EE.Internal {
         }
 
         public bool IsLoaded {
-            get => _banner != null;
+            get => _adCanvas != null;
         }
 
         public Task<bool> Load() {
@@ -81,7 +81,7 @@ namespace EE.Internal {
             get => _helper.IsVisible;
             set {
                 _helper.IsVisible = value;
-                _banner.SetVisible(value);
+                _adCanvas.SetVisible(value);
             }
         }
 
@@ -89,7 +89,7 @@ namespace EE.Internal {
             get => _helper.Anchor;
             set {
                 _helper.Anchor = value;
-                _banner.SetAnchor(value);
+                _adCanvas.SetAnchor(value);
             }
         }
 
@@ -97,7 +97,7 @@ namespace EE.Internal {
             get => _helper.Position;
             set {
                 _helper.Position = value;
-                _banner.SetPosition(value);
+                _adCanvas.SetPosition(value);
             }
         }
 
@@ -105,7 +105,7 @@ namespace EE.Internal {
             get => _helper.Size;
             set {
                 _helper.Size = value;
-                _banner.SetSize(value);
+                _adCanvas.SetSize(value);
             }
         }
 

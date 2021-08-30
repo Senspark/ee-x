@@ -20,7 +20,7 @@ namespace EE.Internal {
         private readonly BannerAdHelper _helper;
         private readonly IAsyncHelper<bool> _loader;
         private readonly MessageHelper _messageHelper;
-        private AdSensparkBannerCanvas _adCanvas;
+        private AdSensparkCanvas _adCanvas;
 
         public AdSensparkDefaultBanner(
             string prefix,
@@ -29,6 +29,7 @@ namespace EE.Internal {
             Destroyer destroyer,
             string network,
             string adId,
+            AdFormat adFormat,
             (int, int) size) {
             _prefix = prefix;
             _bridge = bridge;
@@ -46,18 +47,33 @@ namespace EE.Internal {
                 OnFailedToLoad((int) json["code"], (string) json["message"]);
             }, _messageHelper.OnFailedToLoad);
             _bridge.RegisterHandler(_ => OnClicked(), _messageHelper.OnClicked);
-            LoadPrefab();
+            LoadPrefab(adFormat);
         }
 
-        private void LoadPrefab() {
-            var obj = Resources.Load<AdSensparkBannerCanvas>("AdSenspark/AdSensparkBanner");
-            if (obj == null) {
-                _logger.Debug($"{kTag}: fail to load prefab: prefix = {_prefix} id = {_adId}");
-                return;
+        private void LoadPrefab(AdFormat adFormat) {
+            var hadCanvas = ServiceLocatorSimple.ServiceAvailable<AdSensparkCanvas>();
+            if (hadCanvas) {
+                _adCanvas = ServiceLocatorSimple.GetService<AdSensparkCanvas>();
+            } else {
+                _logger.Debug($"{kTag}: loading prefab: prefix = {_prefix} id = {_adId}");
+                var obj = Resources.Load<AdSensparkCanvas>("AdSenspark/AdSensparkCanvas");
+                if (obj == null) {
+                    _logger.Debug($"{kTag}: fail to load prefab: prefix = {_prefix} id = {_adId}");
+                    return;
+                }
+                _adCanvas = Object.Instantiate(obj);
             }
-            var banner = Object.Instantiate(obj);
-            _adCanvas = banner;
-            _adCanvas.Initialize(OnClicked, IsVisible);
+            switch (adFormat) {
+                case AdFormat.Banner:
+                    _adCanvas.InitializeBanner(OnClicked, IsVisible);
+                    break;
+
+                case AdFormat.Rectangle:
+                    break;
+                
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(adFormat), adFormat, null);
+            }
             _logger.Debug($"{kTag}: load complete: prefix = {_prefix} id = {_adId}");
         }
 
@@ -81,7 +97,7 @@ namespace EE.Internal {
             get => _helper.IsVisible;
             set {
                 _helper.IsVisible = value;
-                _adCanvas.SetVisible(value);
+                _adCanvas.SetVisibleBanner(value);
             }
         }
 
@@ -89,7 +105,7 @@ namespace EE.Internal {
             get => _helper.Anchor;
             set {
                 _helper.Anchor = value;
-                _adCanvas.SetAnchor(value);
+                _adCanvas.SetAnchorBanner(value);
             }
         }
 
@@ -97,7 +113,7 @@ namespace EE.Internal {
             get => _helper.Position;
             set {
                 _helper.Position = value;
-                _adCanvas.SetPosition(value);
+                _adCanvas.SetPositionBanner(value);
             }
         }
 
@@ -105,7 +121,7 @@ namespace EE.Internal {
             get => _helper.Size;
             set {
                 _helper.Size = value;
-                _adCanvas.SetSize(value);
+                _adCanvas.SetSizeBanner(value);
             }
         }
 

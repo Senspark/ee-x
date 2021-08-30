@@ -23,7 +23,7 @@ namespace EE.Internal {
         private readonly string _adId;
         private readonly MessageHelper _messageHelper;
         private readonly IAsyncHelper<bool> _loader;
-        private AdSensparkInterstitialCanvas _adCanvas;
+        private AdSensparkCanvas _adCanvas;
 
         public AdSensparkDefaultFullScreenAd(
             string prefix,
@@ -33,7 +33,8 @@ namespace EE.Internal {
             Destroyer destroyer,
             ResultParser resultParser,
             string network,
-            string adId) {
+            string adId,
+            AdFormat adFormat) {
             _prefix = prefix;
             _bridge = bridge;
             _logger = logger;
@@ -60,18 +61,42 @@ namespace EE.Internal {
                 var result = _resultParser(message);
                 OnClosed(result);
             }, _messageHelper.OnClosed);
-            LoadPrefab();
+            LoadPrefab(adFormat);
         }
 
-        private void LoadPrefab() {
-            var obj = Resources.Load<AdSensparkInterstitialCanvas>("AdSenspark/AdSensparkInterstitial");
-            if (obj == null) {
-                _logger.Debug($"{kTag}: fail to load prefab: prefix = {_prefix} id = {_adId}");
-                return;
+        private void LoadPrefab(AdFormat adFormat) {
+            var hadCanvas = ServiceLocatorSimple.ServiceAvailable<AdSensparkCanvas>();
+            if (hadCanvas) {
+                _adCanvas = ServiceLocatorSimple.GetService<AdSensparkCanvas>();
+            } else {
+                _logger.Debug($"{kTag}: loading prefab: prefix = {_prefix} id = {_adId}");
+                var obj = Resources.Load<AdSensparkCanvas>("AdSenspark/AdSensparkCanvas");
+                if (obj == null) {
+                    _logger.Debug($"{kTag}: fail to load prefab: prefix = {_prefix} id = {_adId}");
+                    return;
+                }
+                _adCanvas = Object.Instantiate(obj);
             }
-            var adCanvas = Object.Instantiate(obj);
-            _adCanvas = adCanvas;
-            _adCanvas.Initialize(OnClicked, OnClosed);
+            switch (adFormat) {
+                case AdFormat.AppOpen:
+                    break;
+
+                case AdFormat.Interstitial:
+                    _adCanvas.InitializeInterstitial(OnClicked, OnClosed);
+                    break;
+
+                case AdFormat.RewardedInterstitial:
+                    break;
+
+                case AdFormat.Rewarded:
+                    break;
+
+                case AdFormat.Null:
+                    break;
+
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(adFormat), adFormat, null);
+            }
             _logger.Debug($"{kTag}: load complete: prefix = {_prefix} id = {_adId}");
         }
 

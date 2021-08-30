@@ -91,6 +91,7 @@ namespace EE.Internal {
                     break;
 
                 case AdFormat.Rewarded:
+                    _adCanvas.InitializeRewarded(OnClicked, OnClosed);
                     break;
 
                 case AdFormat.Null:

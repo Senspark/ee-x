@@ -16,7 +16,7 @@ namespace EE.Internal {
         private RectTransform rectImageBanner, rectImageRectBanner;
 
         private Action _onClickBanner, _onClickInterstitial, _onClickRewarded, _onClickRectBanner;
-        private Action<AdResult> _onCloseInterstitial;
+        private Action<AdResult> _onCloseInterstitial, _onCloseRewarded;
         
         private void Awake() {
             ServiceLocatorSimple.AddService(this);
@@ -112,13 +112,24 @@ namespace EE.Internal {
         }
 
         #endregion
+        
+        #region Rewarded
 
-        public Task<bool> Initialize() {
-            return Task.FromResult(true);
+        public void InitializeRewarded(Action onClick, Action<AdResult> onClose) {
+            _onClickRewarded = onClick;
+            _onCloseRewarded = onClose;
         }
 
-        public void Destroy() {
-            
+        public void OnPromotionPressedRewarded() {
+            _onClickRewarded?.Invoke();
+            Application.OpenURL("https://play.google.com/store/apps/dev?id=7830868662152106484");
         }
+
+        public void OnClosePressedRewarded() {
+            _onCloseRewarded?.Invoke(AdResult.Completed);
+            SetAdVisible(AdFormat.Rewarded, false);
+        }
+
+        #endregion
     }
 }

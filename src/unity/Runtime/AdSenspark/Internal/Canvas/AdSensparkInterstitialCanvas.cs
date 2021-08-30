@@ -4,7 +4,6 @@ using UnityEngine;
 using UnityEngine.UI;
 namespace EE.Internal {
     internal class AdSensparkInterstitialCanvas : MonoBehaviour {
-        
         [SerializeField]
         private Image image;
         [SerializeField]
@@ -24,18 +23,6 @@ namespace EE.Internal {
 
         public void SetVisible(bool value) {
             gameObject.SetActive(value);
-        }
-
-        public void SetAnchor((float, float) valueTuple) {
-            rectImage.pivot = new Vector2(valueTuple.Item1, valueTuple.Item2);
-        }
-
-        public void SetPosition((float, float) valueTuple) {
-            rectImage.position = new Vector2(valueTuple.Item1, valueTuple.Item2);
-        }
-
-        public void SetSize((float, float) valueTuple) {
-            rectImage.sizeDelta = new Vector2(valueTuple.Item1, valueTuple.Item2);
         }
 
         public void OnPromotionPressed() {

@@ -20,6 +20,7 @@ namespace EE.Internal {
         private readonly BannerAdHelper _helper;
         private readonly IAsyncHelper<bool> _loader;
         private readonly MessageHelper _messageHelper;
+        private AdFormat _adFormat;
         private AdSensparkCanvas _adCanvas;
 
         public AdSensparkDefaultBanner(
@@ -37,6 +38,7 @@ namespace EE.Internal {
             _destroyer = destroyer;
             _network = network;
             _adId = adId;
+            _adFormat = adFormat;
             _messageHelper = new MessageHelper(prefix, adId);
             _helper = new BannerAdHelper(_bridge, _messageHelper, size);
             _loader = new AsyncHelper<bool>();
@@ -97,7 +99,7 @@ namespace EE.Internal {
             get => _helper.IsVisible;
             set {
                 _helper.IsVisible = value;
-                _adCanvas.SetVisibleBanner(value);
+                _adCanvas.SetAdVisible(_adFormat, value);
             }
         }
 

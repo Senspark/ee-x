@@ -9,7 +9,7 @@ namespace EE.Internal {
     internal class AdSensparkCanvas : MonoBehaviour {
         [SerializeField]
         private GameObject containerBanner, containerInterstitial, containerRewarded,
-            containerRectBanner;
+            containerRectBanner, containerAppOpen, containerRewardedInterstitial;
         [SerializeField]
         private Image imageBanner, imageInterstitial, imageRewarded, imageRectBanner;
         [SerializeField]
@@ -21,21 +21,58 @@ namespace EE.Internal {
         private void Awake() {
             ServiceLocatorSimple.AddService(this);
             DontDestroyOnLoad(gameObject);
+
+            containerBanner.SetActive(false);
+            containerInterstitial.SetActive(false);
+            containerRewarded.SetActive(false);
+            containerRectBanner.SetActive(false);
+            containerAppOpen.SetActive(false);
+            containerRewardedInterstitial.SetActive(false);
         }
 
         private void OnDestroy() {
             ServiceLocatorSimple.RemoveService(this);
         }
 
-        #region Banner
+        public void SetAdVisible(AdFormat adFormat, bool display) {
+            switch (adFormat) {
+                case AdFormat.Banner:
+                    containerBanner.SetActive(display);
+                    break;
 
-        public void InitializeBanner(Action onClick, bool visible) {
-            _onClickBanner = onClick;
-            SetVisibleBanner(visible);
+                case AdFormat.Rectangle:
+                    containerRectBanner.SetActive(display);
+                    break;
+
+                case AdFormat.AppOpen:
+                    containerAppOpen.SetActive(display);
+                    break;
+
+                case AdFormat.Interstitial:
+                    containerInterstitial.SetActive(display);
+                    break;
+
+                case AdFormat.RewardedInterstitial:
+                    containerRewardedInterstitial.SetActive(display);
+                    break;
+
+                case AdFormat.Rewarded:
+                    containerRewarded.SetActive(display);
+                    break;
+
+                case AdFormat.Null:
+                    break;
+
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(adFormat), adFormat, null);
+            }
         }
 
-        public void SetVisibleBanner(bool value) {
-            gameObject.SetActive(value);
+        #region Banner
+
+        public void InitializeBanner(Action onClick, bool display) {
+            _onClickBanner = onClick;
+            SetAdVisible(AdFormat.Banner, display);
         }
 
         public void SetAnchorBanner((float, float) valueTuple) {
@@ -62,11 +99,6 @@ namespace EE.Internal {
         public void InitializeInterstitial(Action onClick, Action<AdResult> onClose) {
             _onClickInterstitial = onClick;
             _onCloseInterstitial = onClose;
-            SetVisibleInterstitial(false);
-        }
-
-        public void SetVisibleInterstitial(bool value) {
-            gameObject.SetActive(value);
         }
 
         public void OnPromotionPressedInterstitial() {
@@ -76,7 +108,7 @@ namespace EE.Internal {
 
         public void OnClosePressedInterstitial() {
             _onCloseInterstitial?.Invoke(AdResult.Completed);
-            gameObject.SetActive(false);
+            SetAdVisible(AdFormat.Interstitial, false);
         }
 
         #endregion

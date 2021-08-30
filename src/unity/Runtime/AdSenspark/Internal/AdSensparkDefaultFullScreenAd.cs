@@ -23,6 +23,7 @@ namespace EE.Internal {
         private readonly string _adId;
         private readonly MessageHelper _messageHelper;
         private readonly IAsyncHelper<bool> _loader;
+        private readonly AdFormat _adFormat;
         private AdSensparkCanvas _adCanvas;
 
         public AdSensparkDefaultFullScreenAd(
@@ -43,6 +44,7 @@ namespace EE.Internal {
             _resultParser = resultParser;
             _network = network;
             _adId = adId;
+            _adFormat = adFormat;
             _messageHelper = new MessageHelper(_prefix, adId);
             _loader = new AsyncHelper<bool>();
 
@@ -120,7 +122,7 @@ namespace EE.Internal {
         }
 
         public Task<AdResult> Show() {
-            _adCanvas.gameObject.SetActive(true);
+            _adCanvas.SetAdVisible(_adFormat, true);
             _logger.Debug(
                 $"{kTag}: {nameof(Show)}: prefix = {_prefix} id = {_adId} displaying = {_displayer.IsProcessing}");
             return _displayer.Process(

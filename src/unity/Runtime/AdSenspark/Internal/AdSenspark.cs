@@ -112,11 +112,12 @@ namespace EE.Internal {
         }
 
         public IFullScreenAd CreateAppOpenAd(string adId) {
-            return CreateFullScreenAd(kCreateAppOpenAd, adId,
-                () => new AdSensparkDefaultFullScreenAd("SensparkAppOpenAd", _bridge, _logger, _displayer,
-                    () => DestroyAd(adId),
-                    _ => AdResult.Completed,
-                    _network, adId, AdFormat.AppOpen));
+            // return CreateFullScreenAd(kCreateAppOpenAd, adId,
+            //     () => new AdSensparkDefaultFullScreenAd("SensparkAppOpenAd", _bridge, _logger, _displayer,
+            //         () => DestroyAd(adId),
+            //         _ => AdResult.Completed,
+            //         _network, adId, AdFormat.AppOpen));
+            return new NullFullScreenAd();
         }
 
         public IFullScreenAd CreateInterstitialAd(string adId) {
@@ -128,13 +129,14 @@ namespace EE.Internal {
         }
 
         public IFullScreenAd CreateRewardedInterstitialAd(string adId) {
-            return CreateFullScreenAd(kCreateRewardedInterstitialAd, adId,
-                () => new AdSensparkDefaultFullScreenAd("SensparkRewardedInterstitialAd", _bridge, _logger, _displayer,
-                    () => DestroyAd(adId),
-                    message => Utils.ToBool(message)
-                        ? AdResult.Completed
-                        : AdResult.Canceled,
-                    _network, adId, AdFormat.RewardedInterstitial));
+            // return CreateFullScreenAd(kCreateRewardedInterstitialAd, adId,
+            //     () => new AdSensparkDefaultFullScreenAd("SensparkRewardedInterstitialAd", _bridge, _logger, _displayer,
+            //         () => DestroyAd(adId),
+            //         message => Utils.ToBool(message)
+            //             ? AdResult.Completed
+            //             : AdResult.Canceled,
+            //         _network, adId, AdFormat.RewardedInterstitial));
+            return new NullFullScreenAd();
         }
 
         public IFullScreenAd CreateRewardedAd(string adId) {

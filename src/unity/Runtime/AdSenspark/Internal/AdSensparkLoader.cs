@@ -1,4 +1,5 @@
 using UnityEngine;
+
 using System.Threading.Tasks;
 
 using UnityEngine.Networking;
@@ -8,7 +9,7 @@ namespace EE.Internal {
         private string ParseToLocalPath(string fileName) {
             return Application.persistentDataPath + "/" + fileName;
         }
-        
+
         /// <summary>
         ///  Tải file .
         /// </summary>
@@ -31,59 +32,56 @@ namespace EE.Internal {
             unityWebRequest.timeout = 10;
             await unityWebRequest.SendWebRequest();
 
-            if (unityWebRequest.result == UnityWebRequest.Result.ConnectionError || 
-                unityWebRequest.result == UnityWebRequest.Result.ProtocolError || 
+            if (unityWebRequest.result == UnityWebRequest.Result.ConnectionError ||
+                unityWebRequest.result == UnityWebRequest.Result.ProtocolError ||
                 unityWebRequest.result == UnityWebRequest.Result.DataProcessingError) {
                 Debug.Log(unityWebRequest.error);
                 return null;
             }
 
             var dlHandler = unityWebRequest.downloadHandler;
-                
+
             if (dlHandler.isDone) {
                 if (dlHandler.data.Length > 0) {
-                    Debug.Log("Success");
+                    Debug.Log("Load thanh cong file luu tren may.");
                     return dlHandler.data;
                 }
-                
-                Debug.LogError("Couldn't find a valid texture :(");
+
+                Debug.LogError("Load file loi");
+            } else {
+                Debug.LogError("Load file loi");
             }
-            
-            else {
-                Debug.LogError("The download process is not completely finished.");
-            }
-            
+
             return null;
         }
 
         private async Task<byte[]> LoadFileOnline(string localPath, string link) {
             Debug.Log($"Khong tim thay file tren may \"{localPath}\". Load texture tu link : " + link);
-                
+
             using var unityWebRequest = UnityWebRequest.Get(link);
             unityWebRequest.timeout = 10;
             await unityWebRequest.SendWebRequest();
-                
-            if (unityWebRequest.result == UnityWebRequest.Result.ConnectionError || 
-                unityWebRequest.result == UnityWebRequest.Result.ProtocolError || 
+
+            if (unityWebRequest.result == UnityWebRequest.Result.ConnectionError ||
+                unityWebRequest.result == UnityWebRequest.Result.ProtocolError ||
                 unityWebRequest.result == UnityWebRequest.Result.DataProcessingError) {
                 Debug.LogError(unityWebRequest.error);
                 return null;
             }
-                
+
             var dlHandler = unityWebRequest.downloadHandler;
-                
+
             if (dlHandler.isDone) {
                 if (dlHandler.data.Length > 0) {
                     System.IO.File.WriteAllBytes(localPath, dlHandler.data);
                     Debug.Log($"Tai thanh cong, luu file tai: {localPath}");
                     return dlHandler.data;
                 }
-                Debug.LogError("Couldn't find a valid file :(");
+                Debug.LogError("File da tai khong phu hop :(");
+            } else {
+                Debug.LogError("Tai file khong thanh cong.");
             }
-            else {
-                Debug.LogError("The download process is not completely finished.");
-            }
-            
+
             return null;
         }
     }

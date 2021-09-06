@@ -5,16 +5,18 @@ using System.Threading.Tasks;
 using UnityEngine.Networking;
 
 namespace EE.Internal {
-    public class AdSensparkLoader {
-        private string ParseToLocalPath(string fileName) {
+    internal class Downloader {
+        private static string ParseToLocalPath(string fileName) {
             return Application.persistentDataPath + "/" + fileName;
         }
 
         /// <summary>
-        ///  Tải file .
+        /// Tải dữ liệu.
         /// </summary>
-        /// <returns></returns>
-        public async Task<byte[]> Load(string fileName, string link) {
+        /// <param name="fileName">Tên file.</param>
+        /// <param name="link">Link tải file</param>
+        /// <returns>Bytes</returns>
+        public static async Task<byte[]> Load(string fileName, string link) {
             var localPath = ParseToLocalPath(fileName);
             if (System.IO.File.Exists(localPath)) {
                 var texture = await LoadFileOffline(localPath);
@@ -26,7 +28,12 @@ namespace EE.Internal {
             return res;
         }
 
-        private async Task<byte[]> LoadFileOffline(string localPath) {
+        /// <summary>
+        /// Lấy dữ liệu offline.
+        /// </summary>
+        /// <param name="localPath"></param>
+        /// <returns></returns>
+        private static async Task<byte[]> LoadFileOffline(string localPath) {
             Debug.Log("Load file da luu tren may. " + localPath);
             using var unityWebRequest = UnityWebRequest.Get("file://" + localPath);
             unityWebRequest.timeout = 10;
@@ -35,7 +42,7 @@ namespace EE.Internal {
             if (unityWebRequest.result == UnityWebRequest.Result.ConnectionError ||
                 unityWebRequest.result == UnityWebRequest.Result.ProtocolError ||
                 unityWebRequest.result == UnityWebRequest.Result.DataProcessingError) {
-                Debug.Log(unityWebRequest.error);
+                Debug.LogError(unityWebRequest.error);
                 return null;
             }
 
@@ -55,7 +62,13 @@ namespace EE.Internal {
             return null;
         }
 
-        private async Task<byte[]> LoadFileOnline(string localPath, string link) {
+        /// <summary>
+        /// Tải file và lưu trữ file.
+        /// </summary>
+        /// <param name="localPath"></param>
+        /// <param name="link"></param>
+        /// <returns></returns>
+        private static async Task<byte[]> LoadFileOnline(string localPath, string link) {
             Debug.Log($"Khong tim thay file tren may \"{localPath}\". Load texture tu link : " + link);
 
             using var unityWebRequest = UnityWebRequest.Get(link);

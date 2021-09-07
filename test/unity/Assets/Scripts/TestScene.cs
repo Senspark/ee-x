@@ -10,6 +10,13 @@ namespace EETest {
             TestCore();
             // TestAdMob();
             TestAdSen();
+            Test();
+        }
+
+        private void Test() {
+            
+            Destroy(null);
+            Debug.Log("------- hello ----- ");
         }
 
         private void TestCore() {
@@ -69,6 +76,7 @@ namespace EETest {
                 await plugin.Initialize();
                 // TestAdSenBanner(plugin);
                 TestAdSenInterstitial(plugin);
+                // TestAdSenRewarded(plugin);
             });
         }
 
@@ -84,6 +92,18 @@ namespace EETest {
             });
          }
 
+        private void TestAdSenRewarded(EE.IAdSenspark plugin) {
+            EE.Utils.NoAwait(async () => {
+                var ad = plugin.CreateRewardedAd("ad_senspark_interstitialId");
+                Debug.Log($"Load begin");
+                var loadResult = await ad.Load();
+                Debug.Log($"Load end: {loadResult}");
+                var showResult = await ad.Show();
+                Debug.Log($"Show end: {showResult}");
+                await Task.Delay(5000);
+            });
+        }
+
         private void TestAdSenBanner(EE.IAdSenspark plugin) {
             EE.Utils.NoAwait(async () => {
                 var ad = plugin.CreateBannerAd(
@@ -98,7 +118,7 @@ namespace EETest {
                         var result = await ad.Load();
                         Debug.Log($"Load end: {result}");
                         if (result) {
-                            // ad.IsVisible = true;
+                            ad.IsVisible = true;
                             break;
                         }
                         await Task.Delay(5000);
@@ -143,6 +163,7 @@ namespace EETest {
                 await plugin.Initialize();
                 TestAdMobBannerAd(plugin);
                 TestAdMobInterstitialAd(plugin);
+                
             });
         }
 

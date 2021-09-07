@@ -56,7 +56,7 @@ namespace EE.Internal {
             _adSensparkResourceManager = adSensparkResourceManager;
             _adSensparkResourcePack = new AdSensparkResourcePack();
             LoadPrefab(adFormat);
-            Utils.NoAwait(RefreshAd);
+            var t = RefreshAd();
         }
 
         private void LoadPrefab(AdFormat adFormat) {

@@ -9,7 +9,6 @@ namespace EE.Internal {
         public string promotionUrl = "";
         public string dataUrl = "";
         public string fileName = "";
-        public int index = 0;
 
         public bool IsNull() {
             return data.Length == 0;
@@ -53,7 +52,9 @@ namespace EE.Internal {
                 return adSensparkResourcePack;
             }
             string dataUrl = _adSensparkJsonData.GetDataUrl(adFormat, index);
-            string fileName = adFormat.ToString() + index.ToString();
+            var adAmount = _adSensparkJsonData.GetAdAmount(adFormat);
+            var rollIndex = index % adAmount;
+            string fileName = adFormat.ToString() + rollIndex;
             switch (adFormat) {
                 case AdFormat.Banner:
                 case AdFormat.Interstitial:
@@ -63,7 +64,6 @@ namespace EE.Internal {
                     adSensparkResourcePack.promotionUrl = promotionUrl;
                     adSensparkResourcePack.data = data;
                     adSensparkResourcePack.dataUrl = dataUrl;
-                    adSensparkResourcePack.index = index;
                     adSensparkResourcePack.fileName = fileName;
                     return adSensparkResourcePack;
                 }

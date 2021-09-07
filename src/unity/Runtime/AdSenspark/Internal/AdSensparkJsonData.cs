@@ -68,5 +68,28 @@ namespace EE.Internal {
             var rollIndex = index % strArray.Length;
             return strArray[rollIndex];
         }
+
+        /// <summary>
+        /// Lấy số lượng ad hiện có.
+        /// </summary>
+        /// <param name="adFormat"></param>
+        /// <returns></returns>
+        public int GetAdAmount(AdFormat adFormat) {
+            switch (adFormat) {
+                case AdFormat.Banner:
+                    return bannerImageUrl.Length;
+                
+                case AdFormat.Interstitial:
+                    return interstitialImageUrl.Length;
+
+                case AdFormat.Rewarded:
+                    return rewardedVideoUrl.Length;
+
+                default:{
+                    Debug.LogWarning("Ad senspark json data: chưa hỗ trợ ad loại này.");
+                    return 0;
+                }
+            }
+        }
     }
 }

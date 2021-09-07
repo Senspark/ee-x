@@ -5,11 +5,14 @@ namespace EE.Internal {
     [Serializable]
     internal class AdSensparkJsonData {
         public string[] bannerImageUrl;
-        public string[] bannerPromotionUrl;
+        public string[] bannerPromotionUrlAndroid;
+        public string[] bannerPromotionUrliOS;
         public string[] interstitialImageUrl;
-        public string[] interstitialPromotionUrl;
+        public string[] interstitialPromotionUrlAndroid;
+        public string[] interstitialPromotionUrliOS;
         public string[] rewardedVideoUrl;
-        public string[] rewardedPromotionUrl;
+        public string[] rewardedPromotionUrlAndroid;
+        public string[] rewardedPromotionUrliOS;
 
         public string GetDataUrl(AdFormat adFormat, int index) {
             switch (adFormat) {
@@ -36,20 +39,24 @@ namespace EE.Internal {
         }
 
         public string GetPromotionUrl(AdFormat adFormat, int index) {
+            string[] strArray;
             switch (adFormat) {
                 case AdFormat.Banner: {
-                    var rollIndex = index % bannerPromotionUrl.Length;
-                    return bannerPromotionUrl[rollIndex];
+                    strArray = Application.platform == RuntimePlatform.Android ? 
+                        bannerPromotionUrlAndroid : bannerPromotionUrliOS;
+                    break;
                 }
                 
                 case AdFormat.Interstitial: {
-                    var rollIndex = index % interstitialPromotionUrl.Length;
-                    return interstitialPromotionUrl[rollIndex];
+                    strArray = Application.platform == RuntimePlatform.Android?
+                        interstitialPromotionUrlAndroid : interstitialPromotionUrliOS;
+                    break;
                 }
 
                 case AdFormat.Rewarded: {
-                    var rollIndex = index % rewardedPromotionUrl.Length;
-                    return rewardedPromotionUrl[rollIndex];
+                    strArray = Application.platform == RuntimePlatform.Android?
+                        rewardedPromotionUrlAndroid : rewardedPromotionUrliOS;
+                    break;
                 }
 
                 default:{
@@ -57,6 +64,9 @@ namespace EE.Internal {
                     return "";
                 }
             }
+
+            var rollIndex = index % strArray.Length;
+            return strArray[rollIndex];
         }
     }
 }

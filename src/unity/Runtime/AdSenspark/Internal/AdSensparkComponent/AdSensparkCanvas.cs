@@ -34,23 +34,24 @@ namespace EE.Internal {
             containerRewardedInterstitial.SetActive(false);
         }
 
-        // private void Start() {
-        //     Utils.NoAwait(TestLoad);
-        // }
-        //
-        // private async Task TestLoad() {
-        //     // var link = "https://drive.google.com/uc?export=download&id=1nItU1hDk8NGCve4p8vpzrRDyulBiNqHy"; // interstitial
-        //     var link = "https://drive.google.com/uc?export=download&id=1MsFwDtHORm2ARL5-F5xE7OB--ARwKp1R"; // video.
-        //     var fileName = "rewarded.mov";
-        //     var data = await Downloader.Load(fileName, link);
-        //     // SetImageTexture(AdFormat.Rewarded, data);
-        //     if (data.Length > 0) {
-        //         SetVideoClip(AdFormat.Rewarded, fileName);
-        //     }
-        // }
-
         private void OnDestroy() {
             ServiceLocatorSimple.RemoveService(this);
+        }
+
+        public void SetAdData(AdFormat adFormat, AdSensparkResourcePack dataPack) {
+            if (dataPack.IsNull())
+                return;
+            
+            switch (adFormat) {
+                case AdFormat.Banner:
+                case AdFormat.Interstitial:
+                    SetImageTexture(adFormat, dataPack.data);
+                    break;
+
+                case AdFormat.Rewarded:
+                    SetVideoClip(adFormat, dataPack.fileName);
+                    break;
+            }
         }
 
         /// <summary>
@@ -151,7 +152,6 @@ namespace EE.Internal {
 
         public void OnPromotionPressedBanner() {
             _onClickBanner?.Invoke();
-            Application.OpenURL("https://play.google.com/store/apps/dev?id=7830868662152106484");
         }
 
         #endregion
@@ -165,7 +165,6 @@ namespace EE.Internal {
 
         public void OnPromotionPressedInterstitial() {
             _onClickInterstitial?.Invoke();
-            Application.OpenURL("https://play.google.com/store/apps/dev?id=7830868662152106484");
         }
 
         public void OnClosePressedInterstitial() {
@@ -184,7 +183,6 @@ namespace EE.Internal {
 
         public void OnPromotionPressedRewarded() {
             _onClickRewarded?.Invoke();
-            Application.OpenURL("https://play.google.com/store/apps/dev?id=7830868662152106484");
         }
 
         public void OnClosePressedRewarded() {

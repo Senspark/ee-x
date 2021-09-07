@@ -8,6 +8,7 @@ namespace EE.Internal {
         public Byte[] data = new byte[0];
         public string promotionUrl = "";
         public string dataUrl = "";
+        public string fileName = "";
         public int index = 0;
 
         public bool IsNull() {
@@ -28,7 +29,7 @@ namespace EE.Internal {
                 Debug.LogWarning("Ad senspark: Gọi khởi tạo resource manager một lần thôi.");
                 return false;
             }
-            var jsonData = await Downloader.Load("ad_senspark_file_config", url);
+            var jsonData = await Downloader.Load("ad_senspark_file_config", url, false);
             if (jsonData.Length <= 0) {
                 Debug.LogWarning("Ad senspark: resource manager không load được file json ");
                 return false;
@@ -63,6 +64,7 @@ namespace EE.Internal {
                     adSensparkResourcePack.data = data;
                     adSensparkResourcePack.dataUrl = dataUrl;
                     adSensparkResourcePack.index = index;
+                    adSensparkResourcePack.fileName = fileName;
                     return adSensparkResourcePack;
                 }
 

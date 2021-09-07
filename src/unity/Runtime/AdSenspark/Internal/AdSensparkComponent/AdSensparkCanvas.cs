@@ -54,29 +54,6 @@ namespace EE.Internal {
         }
 
         /// <summary>
-        /// Set video cho rewarded.
-        /// https://forum.unity.com/threads/byte-to-audioclip.911723/
-        /// </summary>
-        /// <param name="adFormat"></param>
-        /// <param name="data"></param>
-        public void SetVideoClip(AdFormat adFormat, string fileName) {
-            switch (adFormat) {
-                case AdFormat.RewardedInterstitial:
-                    break;
-
-                case AdFormat.Rewarded: {
-                    rewardedVideoPlayer.url = Application.persistentDataPath + "/" + fileName;
-                    if(!rewardedVideoPlayer.isPlaying)
-                        rewardedVideoPlayer.Play();
-                }
-                    break;
-
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(adFormat), adFormat, null);
-            }
-        }
-
-        /// <summary>
         /// Set hình cho banner, interstitial.
         /// </summary>
         /// <param name="adFormat"></param>
@@ -213,6 +190,29 @@ namespace EE.Internal {
         public void OnClosePressedRewarded() {
             _onCloseRewarded?.Invoke(AdResult.Completed);
             SetAdVisible(AdFormat.Rewarded, false);
+        }
+
+        /// <summary>
+        /// Set video cho rewarded.
+        /// https://forum.unity.com/threads/byte-to-audioclip.911723/
+        /// </summary>
+        /// <param name="adFormat"></param>
+        /// <param name="data"></param>
+        public void SetVideoClip(AdFormat adFormat, string fileName) {
+            switch (adFormat) {
+                case AdFormat.RewardedInterstitial:
+                    break;
+
+                case AdFormat.Rewarded: {
+                    rewardedVideoPlayer.url = Application.persistentDataPath + "/" + fileName;
+                    if(!rewardedVideoPlayer.isPlaying)
+                        rewardedVideoPlayer.Play();
+                }
+                    break;
+
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(adFormat), adFormat, null);
+            }
         }
 
         #endregion

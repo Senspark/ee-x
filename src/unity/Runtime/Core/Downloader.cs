@@ -15,10 +15,11 @@ namespace EE.Internal {
         /// </summary>
         /// <param name="fileName">Tên file.</param>
         /// <param name="url">Link tải file</param>
+        /// <param name="fromCache">Lấy file lưu offline không ? Nếu false thì sẽ chỉ lấy file online.</param>
         /// <returns>Bytes</returns>
-        public static async Task<byte[]> Load(string fileName, string url) {
+        public static async Task<byte[]> Load(string fileName, string url, bool fromCache = true) {
             var localPath = ParseToLocalPath(fileName);
-            if (System.IO.File.Exists(localPath)) {
+            if (fromCache && System.IO.File.Exists(localPath)) {
                 var texture = await LoadFileOffline(localPath);
                 if (texture != null)
                     return texture;

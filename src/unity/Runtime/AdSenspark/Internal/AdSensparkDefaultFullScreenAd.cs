@@ -24,7 +24,10 @@ namespace EE.Internal {
         private readonly MessageHelper _messageHelper;
         private readonly IAsyncHelper<bool> _loader;
         private readonly AdFormat _adFormat;
+        private readonly AdSensparkResourceManager _adSensparkResourceManager;
+        private int _adIndex;
         private AdSensparkCanvas _adCanvas;
+        private AdSensparkResourcePack _adSensparkResourcePack;
 
         public AdSensparkDefaultFullScreenAd(
             string prefix,
@@ -35,7 +38,8 @@ namespace EE.Internal {
             ResultParser resultParser,
             string network,
             string adId,
-            AdFormat adFormat) {
+            AdFormat adFormat, 
+            AdSensparkResourceManager adSensparkResourceManager) {
             _prefix = prefix;
             _bridge = bridge;
             _logger = logger;
@@ -47,7 +51,9 @@ namespace EE.Internal {
             _adFormat = adFormat;
             _messageHelper = new MessageHelper(_prefix, adId);
             _loader = new AsyncHelper<bool>();
-
+            _adSensparkResourceManager = adSensparkResourceManager;
+            _adSensparkResourcePack = new AdSensparkResourcePack();
+            
             _logger.Debug($"{kTag}: constructor: prefix = {_prefix} id = {_adId}");
             _bridge.RegisterHandler(_ => OnLoaded(), _messageHelper.OnLoaded);
             _bridge.RegisterHandler(message => {
@@ -117,9 +123,11 @@ namespace EE.Internal {
             get => _adCanvas != null;
         }
 
-        public Task<bool> Load() {
+        public async Task<bool> Load() {
+            _adSensparkResourcePack = await _adSensparkResourceManager.GetResource(_adFormat, _adIndex);
+
             _logger.Debug($"{kTag}: {nameof(Load)}: prefix = {_prefix} id = {_adId} loading = {_loader.IsProcessing}");
-            return Task.FromResult(true);
+            return true; // Vẫn báo true vì có default ad rồi.
         }
 
         public Task<AdResult> Show() {

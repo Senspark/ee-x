@@ -20,8 +20,11 @@ namespace EE.Internal {
         private readonly BannerAdHelper _helper;
         private readonly IAsyncHelper<bool> _loader;
         private readonly MessageHelper _messageHelper;
+        private readonly AdSensparkResourceManager _adSensparkResourceManager;
+        private int _adIndex;
         private AdFormat _adFormat;
         private AdSensparkCanvas _adCanvas;
+        private AdSensparkResourcePack _adSensparkResourcePack;
 
         public AdSensparkDefaultBanner(
             string prefix,
@@ -31,7 +34,8 @@ namespace EE.Internal {
             string network,
             string adId,
             AdFormat adFormat,
-            (int, int) size) {
+            (int, int) size,
+            AdSensparkResourceManager adSensparkResourceManager) {
             _prefix = prefix;
             _bridge = bridge;
             _logger = logger;
@@ -49,6 +53,8 @@ namespace EE.Internal {
                 OnFailedToLoad((int) json["code"], (string) json["message"]);
             }, _messageHelper.OnFailedToLoad);
             _bridge.RegisterHandler(_ => OnClicked(), _messageHelper.OnClicked);
+            _adSensparkResourceManager = adSensparkResourceManager;
+            _adSensparkResourcePack = new AdSensparkResourcePack();
             LoadPrefab(adFormat);
         }
 
@@ -91,8 +97,9 @@ namespace EE.Internal {
             get => _adCanvas != null;
         }
 
-        public Task<bool> Load() {
-            return Task.FromResult(true);
+        public async Task<bool> Load() {
+            _adSensparkResourcePack = await _adSensparkResourceManager.GetResource(_adFormat, _adIndex);
+            return true; // Vẫn báo true vì có default ad rồi.
         }
 
         public bool IsVisible {

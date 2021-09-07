@@ -108,17 +108,12 @@ namespace EE.Internal {
             
             var size = GetBannerAdSize(adSize);
             var ad = new GuardedBannerAd(new AdSensparkDefaultBanner("SensparkBannerAd", _bridge, _logger,
-                () => DestroyAd(adId), _network, adId, AdFormat.Banner, size));
+                () => DestroyAd(adId), _network, adId, AdFormat.Banner, size, _mgResourceManager));
             _ads.Add(adId, ad);
             return ad;
         }
 
         public IFullScreenAd CreateAppOpenAd(string adId) {
-            // return CreateFullScreenAd(kCreateAppOpenAd, adId,
-            //     () => new AdSensparkDefaultFullScreenAd("SensparkAppOpenAd", _bridge, _logger, _displayer,
-            //         () => DestroyAd(adId),
-            //         _ => AdResult.Completed,
-            //         _network, adId, AdFormat.AppOpen));
             return new NullFullScreenAd();
         }
 
@@ -127,17 +122,10 @@ namespace EE.Internal {
                 () => new AdSensparkDefaultFullScreenAd("SensparkInterstitialAd", _bridge, _logger, _displayer,
                     () => DestroyAd(adId),
                     _ => AdResult.Completed,
-                    _network, adId, AdFormat.Interstitial));
+                    _network, adId, AdFormat.Interstitial, _mgResourceManager));
         }
 
         public IFullScreenAd CreateRewardedInterstitialAd(string adId) {
-            // return CreateFullScreenAd(kCreateRewardedInterstitialAd, adId,
-            //     () => new AdSensparkDefaultFullScreenAd("SensparkRewardedInterstitialAd", _bridge, _logger, _displayer,
-            //         () => DestroyAd(adId),
-            //         message => Utils.ToBool(message)
-            //             ? AdResult.Completed
-            //             : AdResult.Canceled,
-            //         _network, adId, AdFormat.RewardedInterstitial));
             return new NullFullScreenAd();
         }
 
@@ -148,7 +136,7 @@ namespace EE.Internal {
                     message => Utils.ToBool(message)
                         ? AdResult.Completed
                         : AdResult.Canceled,
-                    _network, adId, AdFormat.Rewarded));
+                    _network, adId, AdFormat.Rewarded, _mgResourceManager));
         }
 
         private IFullScreenAd CreateFullScreenAd(string handlerId, string adId, Func<IFullScreenAd> creator) {

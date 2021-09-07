@@ -29,6 +29,7 @@ namespace EE.Internal {
         private readonly string _network;
         private readonly Dictionary<string, IAd> _ads;
         private readonly IAsyncHelper<AdResult> _displayer;
+        private readonly AdSensparkResourceManager _mgResourceManager;
 
         public AdSenspark(IMessageBridge bridge, ILogger logger, Destroyer destroyer) {
             _bridge = bridge;
@@ -38,6 +39,7 @@ namespace EE.Internal {
             _network = "ad_senspark";
             _ads = new Dictionary<string, IAd>();
             _displayer = MediationManager.Instance.AdDisplayer;
+            _mgResourceManager = new AdSensparkResourceManager();
         }
 
         public void Destroy() {
@@ -49,8 +51,8 @@ namespace EE.Internal {
             _destroyer();
         }
 
-        public async Task<bool> Initialize() {
-            return true;
+        public async Task<bool> Initialize(string url) {
+            return await _mgResourceManager.Initialize(url);
         }
 
         public string GetEmulatorTestDeviceHash() {

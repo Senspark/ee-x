@@ -2,7 +2,7 @@ using System.Threading.Tasks;
 
 namespace EE {
     public interface IAdSenspark : IPlugin {
-        Task<bool> Initialize();
+        Task<bool> Initialize(string url);
         IBannerAd CreateBannerAd(string adId, AdSensparkBannerAdSize adSize);
         IFullScreenAd CreateAppOpenAd(string adId);
         IFullScreenAd CreateInterstitialAd(string adId);

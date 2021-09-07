@@ -187,13 +187,15 @@ namespace EE.Internal {
     
     internal class AdSensparkConfig : INetworkConfig {
         private IAdSenspark _plugin;
+        private string _appId;
 
         public AdSensparkConfig(JsonObject node) {
+            _appId = (string) node["app_id"];
         }
 
         public async Task Initialize() {
             _plugin = PluginManager.CreatePlugin<IAdSenspark>();
-            await _plugin.Initialize();
+            await _plugin.Initialize(_appId);
         }
 
         public AdNetwork Network => AdNetwork.AdSenspark;

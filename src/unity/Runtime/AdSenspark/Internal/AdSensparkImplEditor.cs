@@ -7,7 +7,7 @@ namespace EE.Internal {
         public void Destroy() {
         }
 
-        public Task<bool> Initialize() {
+        public Task<bool> Initialize(string url) {
             Debug.Log("AdSensparkImplEditor Initialize ");
             return Task.FromResult(true);
         }

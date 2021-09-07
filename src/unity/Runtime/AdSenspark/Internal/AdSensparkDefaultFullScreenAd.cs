@@ -197,7 +197,7 @@ namespace EE.Internal {
             if (_adSensparkResourcePack.IsNull()) {
                 url = Application.platform == RuntimePlatform.Android
                     ? "https://play.google.com/store/apps/dev?id=7830868662152106484"
-                    : "https://play.google.com/store/apps/dev?id=7830868662152106484";
+                    : "https://apps.apple.com/vn/developer/senspark-co-ltd/id560842775";
             } else {
                 url = _adSensparkResourcePack.promotionUrl;
             }

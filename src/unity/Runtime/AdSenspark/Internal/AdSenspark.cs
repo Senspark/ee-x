@@ -48,6 +48,7 @@ namespace EE.Internal {
                 ad.Destroy();
             }
             _ads.Clear();
+            _mgResourceManager.OnDestroy();
             _destroyer();
         }
 

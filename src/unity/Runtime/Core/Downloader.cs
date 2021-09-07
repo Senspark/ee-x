@@ -14,9 +14,9 @@ namespace EE.Internal {
         /// Tải dữ liệu.
         /// </summary>
         /// <param name="fileName">Tên file.</param>
-        /// <param name="link">Link tải file</param>
+        /// <param name="url">Link tải file</param>
         /// <returns>Bytes</returns>
-        public static async Task<byte[]> Load(string fileName, string link) {
+        public static async Task<byte[]> Load(string fileName, string url) {
             var localPath = ParseToLocalPath(fileName);
             if (System.IO.File.Exists(localPath)) {
                 var texture = await LoadFileOffline(localPath);
@@ -24,7 +24,7 @@ namespace EE.Internal {
                     return texture;
             }
 
-            var res = await LoadFileOnline(localPath, link);
+            var res = await LoadFileOnline(localPath, url);
             return res;
         }
 
@@ -42,7 +42,7 @@ namespace EE.Internal {
             if (unityWebRequest.result == UnityWebRequest.Result.ConnectionError ||
                 unityWebRequest.result == UnityWebRequest.Result.ProtocolError ||
                 unityWebRequest.result == UnityWebRequest.Result.DataProcessingError) {
-                Debug.LogError(unityWebRequest.error);
+                Debug.LogWarning(unityWebRequest.error);
                 return null;
             }
 
@@ -54,9 +54,9 @@ namespace EE.Internal {
                     return dlHandler.data;
                 }
 
-                Debug.LogError("Load file loi");
+                Debug.LogWarning("Load file loi");
             } else {
-                Debug.LogError("Load file loi");
+                Debug.LogWarning("Load file loi");
             }
 
             return null;
@@ -66,19 +66,19 @@ namespace EE.Internal {
         /// Tải file và lưu trữ file.
         /// </summary>
         /// <param name="localPath"></param>
-        /// <param name="link"></param>
+        /// <param name="url"></param>
         /// <returns></returns>
-        private static async Task<byte[]> LoadFileOnline(string localPath, string link) {
-            Debug.Log($"Khong tim thay file tren may \"{localPath}\". Load texture tu link : " + link);
+        private static async Task<byte[]> LoadFileOnline(string localPath, string url) {
+            Debug.Log($"Khong tim thay file tren may \"{localPath}\". Load texture tu link : " + url);
 
-            using var unityWebRequest = UnityWebRequest.Get(link);
+            using var unityWebRequest = UnityWebRequest.Get(url);
             unityWebRequest.timeout = 10;
             await unityWebRequest.SendWebRequest();
 
             if (unityWebRequest.result == UnityWebRequest.Result.ConnectionError ||
                 unityWebRequest.result == UnityWebRequest.Result.ProtocolError ||
                 unityWebRequest.result == UnityWebRequest.Result.DataProcessingError) {
-                Debug.LogError(unityWebRequest.error);
+                Debug.LogWarning(unityWebRequest.error);
                 return null;
             }
 
@@ -90,9 +90,9 @@ namespace EE.Internal {
                     Debug.Log($"Tai thanh cong, luu file tai: {localPath}");
                     return dlHandler.data;
                 }
-                Debug.LogError("File da tai khong phu hop :(");
+                Debug.LogWarning("File da tai khong phu hop :(");
             } else {
-                Debug.LogError("Tai file khong thanh cong.");
+                Debug.LogWarning("Tai file khong thanh cong.");
             }
 
             return null;

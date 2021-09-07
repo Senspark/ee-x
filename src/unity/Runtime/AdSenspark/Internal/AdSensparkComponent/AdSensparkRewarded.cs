@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Video;
 
 namespace EE.Internal {
     public class AdSensparkRewarded : MonoBehaviour {
@@ -12,6 +13,8 @@ namespace EE.Internal {
         private Text txtCountDown;
         [SerializeField]
         private Image imgLoading;
+        [SerializeField]
+        private VideoPlayer videoPlayer;
 
         private int _duration;
 
@@ -19,6 +22,7 @@ namespace EE.Internal {
             _duration = 30;
             btnClose.SetActive(false);
             imgLoading.gameObject.SetActive(true);
+            videoPlayer.Play();
             InvokeRepeating(nameof(CountDown), 1f, 1f);
             UpdateUI();
         }

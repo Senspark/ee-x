@@ -638,6 +638,7 @@ MonoBehaviour:
   btnClose: {fileID: 111566874631556816}
   txtCountDown: {fileID: 2408096102474154266}
   imgLoading: {fileID: 420994652969163340}
+  videoPlayer: {fileID: 5670155314137974826}
 --- !u!1 &4539807360563422353
 GameObject:
   m_ObjectHideFlags: 0

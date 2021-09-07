@@ -6,7 +6,7 @@ using UnityEngine.Networking;
 
 namespace EE.Internal {
     internal class Downloader {
-        private static string ParseToLocalPath(string fileName) {
+        public static string ParseToLocalPath(string fileName) {
             return Application.persistentDataPath + "/" + fileName;
         }
 
@@ -25,7 +25,7 @@ namespace EE.Internal {
                     return texture;
             }
 
-            var res = await LoadFileOnline(localPath, url);
+            var res = await LoadFileOnline(localPath, url, fromCache);
             return res;
         }
 
@@ -69,7 +69,7 @@ namespace EE.Internal {
         /// <param name="localPath"></param>
         /// <param name="url"></param>
         /// <returns></returns>
-        private static async Task<byte[]> LoadFileOnline(string localPath, string url) {
+        private static async Task<byte[]> LoadFileOnline(string localPath, string url, bool cache = true) {
             Debug.Log($"Downloader: Khong tim thay file tren may \"{localPath}\". Load texture tu link : " + url);
 
             using var unityWebRequest = UnityWebRequest.Get(url);
@@ -87,7 +87,8 @@ namespace EE.Internal {
 
             if (dlHandler.isDone) {
                 if (dlHandler.data.Length > 0) {
-                    System.IO.File.WriteAllBytes(localPath, dlHandler.data);
+                    if(cache)
+                        System.IO.File.WriteAllBytes(localPath, dlHandler.data);
                     Debug.Log($"Downloader: Tai thanh cong, luu file tai: {localPath}");
                     return dlHandler.data;
                 }

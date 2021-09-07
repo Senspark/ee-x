@@ -73,10 +73,10 @@ namespace EETest {
         private void TestAdSen() {
             var plugin = EE.PluginManager.CreatePlugin<EE.IAdSenspark>();
             EE.Utils.NoAwait(async () => {
-                await plugin.Initialize();
+                await plugin.Initialize("https://drive.google.com/uc?export=download&id=17K1dAL2QWBjbtrCeSMpivZ5shfz6ZxN6");
                 // TestAdSenBanner(plugin);
-                TestAdSenInterstitial(plugin);
-                // TestAdSenRewarded(plugin);
+                // TestAdSenInterstitial(plugin);
+                TestAdSenRewarded(plugin);
             });
         }
 

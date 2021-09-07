@@ -577,7 +577,7 @@ VideoPlayer:
   m_EnabledAudioTracks: 01
   m_DirectAudioMutes: 00
   m_ControlledAudioTrackCount: 1
-  m_PlayOnAwake: 1
+  m_PlayOnAwake: 0
   m_SkipOnDrop: 1
   m_Looping: 0
   m_WaitForFirstFrame: 1
@@ -1209,10 +1209,8 @@ MonoBehaviour:
   containerRewardedInterstitial: {fileID: 7487981059007898802}
   imageBanner: {fileID: 1082918983851737525}
   imageInterstitial: {fileID: 1490477322732620535}
-  imageRewarded: {fileID: 0}
-  imageRectBanner: {fileID: 0}
+  rewardedVideoPlayer: {fileID: 5670155314137974826}
   rectImageBanner: {fileID: 1082918983851737524}
-  rectImageRectBanner: {fileID: 0}
 --- !u!1 &9053813809183029556
 GameObject:
   m_ObjectHideFlags: 0

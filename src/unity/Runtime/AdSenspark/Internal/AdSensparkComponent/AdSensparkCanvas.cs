@@ -34,20 +34,20 @@ namespace EE.Internal {
             containerRewardedInterstitial.SetActive(false);
         }
 
-        private void Start() {
-            Utils.NoAwait(TestLoad);
-        }
-
-        private async Task TestLoad() {
-            // var link = "https://drive.google.com/uc?export=download&id=1nItU1hDk8NGCve4p8vpzrRDyulBiNqHy"; // interstitial
-            var link = "https://drive.google.com/uc?export=download&id=1MsFwDtHORm2ARL5-F5xE7OB--ARwKp1R"; // video.
-            var fileName = "rewarded.mov";
-            var data = await Downloader.Load(fileName, link);
-            // SetImageTexture(AdFormat.Rewarded, data);
-            if (data.Length > 0) {
-                SetVideoClip(AdFormat.Rewarded, fileName);
-            }
-        }
+        // private void Start() {
+        //     Utils.NoAwait(TestLoad);
+        // }
+        //
+        // private async Task TestLoad() {
+        //     // var link = "https://drive.google.com/uc?export=download&id=1nItU1hDk8NGCve4p8vpzrRDyulBiNqHy"; // interstitial
+        //     var link = "https://drive.google.com/uc?export=download&id=1MsFwDtHORm2ARL5-F5xE7OB--ARwKp1R"; // video.
+        //     var fileName = "rewarded.mov";
+        //     var data = await Downloader.Load(fileName, link);
+        //     // SetImageTexture(AdFormat.Rewarded, data);
+        //     if (data.Length > 0) {
+        //         SetVideoClip(AdFormat.Rewarded, fileName);
+        //     }
+        // }
 
         private void OnDestroy() {
             ServiceLocatorSimple.RemoveService(this);

@@ -96,7 +96,7 @@ namespace EE.Internal {
 
         private async Task RefreshAd() {
             while (true) {
-                await Task.Delay(60000);
+                await Task.Delay(30000);
                 if(!IsVisible)
                     continue;
                 _adIndex++;
@@ -111,6 +111,7 @@ namespace EE.Internal {
 
         public async Task<bool> Load() {
             _adSensparkResourcePack = await _adSensparkResourceManager.GetResource(_adFormat, _adIndex);
+            SetAdData();
             return true; // Vẫn báo true vì có default ad rồi.
         }
 

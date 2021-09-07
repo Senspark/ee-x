@@ -56,6 +56,7 @@ namespace EE.Internal {
             _adSensparkResourceManager = adSensparkResourceManager;
             _adSensparkResourcePack = new AdSensparkResourcePack();
             LoadPrefab(adFormat);
+            Utils.NoAwait(RefreshAd);
         }
 
         private void LoadPrefab(AdFormat adFormat) {
@@ -91,6 +92,17 @@ namespace EE.Internal {
             _bridge.DeregisterHandler(_messageHelper.OnFailedToLoad);
             _bridge.DeregisterHandler(_messageHelper.OnClicked);
             _destroyer();
+        }
+
+        private async Task RefreshAd() {
+            while (true) {
+                await Task.Delay(60000);
+                if(!IsVisible)
+                    continue;
+                _adIndex++;
+                await Load();
+                SetAdData();
+            }
         }
 
         public bool IsLoaded {
@@ -134,6 +146,10 @@ namespace EE.Internal {
             }
         }
 
+        private void SetAdData() {
+            _adCanvas.SetAdData(_adFormat, _adSensparkResourcePack);
+        }
+
         private void OnLoaded() {
             _logger.Debug(
                 $"{kTag}: {nameof(OnLoaded)}: prefix = {_prefix} id = {_adId} loading = {_loader.IsProcessing}");
@@ -146,6 +162,7 @@ namespace EE.Internal {
             } else {
                 // Ignored.
             }
+            SetAdData();
             DispatchEvent(observer => observer.OnLoaded?.Invoke());
         }
 
@@ -167,6 +184,15 @@ namespace EE.Internal {
 
         private void OnClicked() {
             _logger.Debug($"{kTag}: {nameof(OnClicked)}: prefix = {_prefix} id = {_adId}");
+            string url = "https://senspark.com/";
+            if (_adSensparkResourcePack.IsNull()) {
+                url = Application.platform == RuntimePlatform.Android
+                    ? "https://play.google.com/store/apps/dev?id=7830868662152106484"
+                    : "https://apps.apple.com/vn/developer/senspark-co-ltd/id560842775";
+            } else {
+                url = _adSensparkResourcePack.promotionUrl;
+            }
+            Application.OpenURL(url);
             DispatchEvent(observer => observer.OnClicked?.Invoke());
         }
     }

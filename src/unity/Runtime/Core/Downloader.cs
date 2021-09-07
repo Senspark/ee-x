@@ -34,7 +34,7 @@ namespace EE.Internal {
         /// <param name="localPath"></param>
         /// <returns></returns>
         private static async Task<byte[]> LoadFileOffline(string localPath) {
-            Debug.Log("Load file da luu tren may. " + localPath);
+            Debug.Log("Downloader: Load file da luu tren may. " + localPath);
             using var unityWebRequest = UnityWebRequest.Get("file://" + localPath);
             unityWebRequest.timeout = 10;
             await unityWebRequest.SendWebRequest();
@@ -50,13 +50,13 @@ namespace EE.Internal {
 
             if (dlHandler.isDone) {
                 if (dlHandler.data.Length > 0) {
-                    Debug.Log("Load thanh cong file luu tren may.");
+                    Debug.Log("Downloader: Load thanh cong file luu tren may.");
                     return dlHandler.data;
                 }
 
-                Debug.LogWarning("Load file loi");
+                Debug.LogWarning("Downloader: Load file loi");
             } else {
-                Debug.LogWarning("Load file loi");
+                Debug.LogWarning("Downloader: Load file loi");
             }
 
             return null;
@@ -69,7 +69,7 @@ namespace EE.Internal {
         /// <param name="url"></param>
         /// <returns></returns>
         private static async Task<byte[]> LoadFileOnline(string localPath, string url) {
-            Debug.Log($"Khong tim thay file tren may \"{localPath}\". Load texture tu link : " + url);
+            Debug.Log($"Downloader: Khong tim thay file tren may \"{localPath}\". Load texture tu link : " + url);
 
             using var unityWebRequest = UnityWebRequest.Get(url);
             unityWebRequest.timeout = 10;
@@ -87,12 +87,12 @@ namespace EE.Internal {
             if (dlHandler.isDone) {
                 if (dlHandler.data.Length > 0) {
                     System.IO.File.WriteAllBytes(localPath, dlHandler.data);
-                    Debug.Log($"Tai thanh cong, luu file tai: {localPath}");
+                    Debug.Log($"Downloader: Tai thanh cong, luu file tai: {localPath}");
                     return dlHandler.data;
                 }
-                Debug.LogWarning("File da tai khong phu hop :(");
+                Debug.LogWarning("Downloader: File da tai khong phu hop :(");
             } else {
-                Debug.LogWarning("Tai file khong thanh cong.");
+                Debug.LogWarning("Downloader: Tai file khong thanh cong.");
             }
 
             return null;

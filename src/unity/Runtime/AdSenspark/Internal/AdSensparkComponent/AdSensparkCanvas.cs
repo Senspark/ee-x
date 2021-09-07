@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Scripting;
 using UnityEngine.UI;
+using UnityEngine.Video;
 
 namespace EE.Internal {
     internal class AdSensparkCanvas : MonoBehaviour {
@@ -11,9 +12,12 @@ namespace EE.Internal {
         private GameObject containerBanner, containerInterstitial, containerRewarded,
             containerRectBanner, containerAppOpen, containerRewardedInterstitial;
         [SerializeField]
-        private Image imageBanner, imageInterstitial, imageRewarded, imageRectBanner;
+        private Image imageBanner, imageInterstitial;
         [SerializeField]
-        private RectTransform rectImageBanner, rectImageRectBanner;
+        private VideoPlayer rewardedVideoPlayer;
+        [SerializeField]
+        private RectTransform rectImageBanner;
+        
 
         private Action _onClickBanner, _onClickInterstitial, _onClickRewarded, _onClickRectBanner;
         private Action<AdResult> _onCloseInterstitial, _onCloseRewarded;
@@ -30,8 +34,89 @@ namespace EE.Internal {
             containerRewardedInterstitial.SetActive(false);
         }
 
+        private void Start() {
+            Utils.NoAwait(TestLoad);
+        }
+
+        private async Task TestLoad() {
+            // var link = "https://drive.google.com/uc?export=download&id=1nItU1hDk8NGCve4p8vpzrRDyulBiNqHy"; // interstitial
+            var link = "https://drive.google.com/uc?export=download&id=1MsFwDtHORm2ARL5-F5xE7OB--ARwKp1R"; // video.
+            var fileName = "rewarded.mov";
+            var data = await Downloader.Load(fileName, link);
+            // SetImageTexture(AdFormat.Rewarded, data);
+            if (data.Length > 0) {
+                SetVideoClip(AdFormat.Rewarded, fileName);
+            }
+        }
+
         private void OnDestroy() {
             ServiceLocatorSimple.RemoveService(this);
+        }
+
+        /// <summary>
+        /// Set video cho rewarded.
+        /// https://forum.unity.com/threads/byte-to-audioclip.911723/
+        /// </summary>
+        /// <param name="adFormat"></param>
+        /// <param name="data"></param>
+        public void SetVideoClip(AdFormat adFormat, string fileName) {
+            switch (adFormat) {
+                case AdFormat.RewardedInterstitial:
+                    break;
+
+                case AdFormat.Rewarded: {
+                    rewardedVideoPlayer.url = Application.persistentDataPath + "/" + fileName;
+                    if(!rewardedVideoPlayer.isPlaying)
+                        rewardedVideoPlayer.Play();
+                }
+                    break;
+
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(adFormat), adFormat, null);
+            }
+        }
+
+        /// <summary>
+        /// Set hình cho banner, interstitial.
+        /// </summary>
+        /// <param name="adFormat"></param>
+        /// <param name="data"></param>
+        public void SetImageTexture(AdFormat adFormat, Byte[] data) {
+            Texture2D texture2D = new Texture2D(2, 2);
+            texture2D.LoadImage(data);
+            SetImageTexture(adFormat, texture2D);
+        }
+
+        /// <summary>
+        /// Set hình cho banner, interstitial.
+        /// </summary>
+        /// <param name="adFormat"></param>
+        /// <param name="data"></param>
+        public void SetImageTexture(AdFormat adFormat, Texture2D texture2D) {
+            switch (adFormat) {
+                case AdFormat.Banner: {
+                    var rect = new Rect(0, 0, texture2D.width, texture2D.height);
+                    var sprite = Sprite.Create(texture2D, rect, imageBanner.rectTransform.pivot);
+                    imageBanner.sprite = sprite;
+                }
+                    break;
+
+                case AdFormat.Rectangle:
+                    break;
+
+                case AdFormat.AppOpen:
+                    break;
+
+                case AdFormat.Interstitial: {
+                    var rect = new Rect(0, 0, texture2D.width, texture2D.height);
+                    var sprite = Sprite.Create(texture2D, rect, imageInterstitial.rectTransform.pivot);
+                    imageInterstitial.sprite = sprite;
+                }
+                    break;
+
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(adFormat), adFormat, null);
+            }
         }
 
         public void SetAdVisible(AdFormat adFormat, bool display) {

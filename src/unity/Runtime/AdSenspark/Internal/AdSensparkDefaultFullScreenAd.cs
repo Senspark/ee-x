@@ -122,7 +122,11 @@ namespace EE.Internal {
         public bool IsLoaded {
             get => _adCanvas != null;
         }
-
+        
+        private void SetAdData() {
+            _adCanvas.SetAdData(_adFormat, _adSensparkResourcePack);
+        }
+        
         public async Task<bool> Load() {
             _adSensparkResourcePack = await _adSensparkResourceManager.GetResource(_adFormat, _adIndex);
 
@@ -131,6 +135,7 @@ namespace EE.Internal {
         }
 
         public Task<AdResult> Show() {
+            _adIndex++;
             _adCanvas.SetAdVisible(_adFormat, true);
             _logger.Debug(
                 $"{kTag}: {nameof(Show)}: prefix = {_prefix} id = {_adId} displaying = {_displayer.IsProcessing}");
@@ -156,6 +161,7 @@ namespace EE.Internal {
             } else {
                 Assert.IsTrue(false);
             }
+            SetAdData();
             DispatchEvent(observer => observer.OnLoaded?.Invoke());
         }
 
@@ -187,6 +193,15 @@ namespace EE.Internal {
 
         private void OnClicked() {
             _logger.Debug($"{kTag}: {nameof(OnClicked)}: prefix = {_prefix} id = {_adId}");
+            string url = "https://senspark.com/";
+            if (_adSensparkResourcePack.IsNull()) {
+                url = Application.platform == RuntimePlatform.Android
+                    ? "https://play.google.com/store/apps/dev?id=7830868662152106484"
+                    : "https://play.google.com/store/apps/dev?id=7830868662152106484";
+            } else {
+                url = _adSensparkResourcePack.promotionUrl;
+            }
+            Application.OpenURL(url);
             DispatchEvent(observer => observer.OnClicked?.Invoke());
         }
 

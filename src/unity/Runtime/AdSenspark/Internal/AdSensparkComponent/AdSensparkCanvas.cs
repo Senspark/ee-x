@@ -9,6 +9,8 @@ using UnityEngine.Video;
 namespace EE.Internal {
     internal class AdSensparkCanvas : MonoBehaviour {
         [SerializeField]
+        private CanvasScaler canvasScaler;
+        [SerializeField]
         private GameObject containerBanner, containerInterstitial, containerRewarded,
             containerRectBanner, containerAppOpen, containerRewardedInterstitial;
         [SerializeField]
@@ -32,6 +34,8 @@ namespace EE.Internal {
             containerRectBanner.SetActive(false);
             containerAppOpen.SetActive(false);
             containerRewardedInterstitial.SetActive(false);
+            
+            ConfigScaler();
         }
 
         private void OnDestroy() {
@@ -52,6 +56,11 @@ namespace EE.Internal {
                     SetVideoClip(adFormat, dataPack.fileName);
                     break;
             }
+        }
+
+        private void ConfigScaler() {
+            var isHorizontal = Screen.width > Screen.height;
+            canvasScaler.matchWidthOrHeight = isHorizontal ? 1 : 0;
         }
 
         /// <summary>
@@ -136,6 +145,16 @@ namespace EE.Internal {
         public void InitializeBanner(Action onClick, bool display) {
             _onClickBanner = onClick;
             SetAdVisible(AdFormat.Banner, display);
+            ConfigBannerSize();
+        }
+
+        /// <summary>
+        /// Chỉnh sửa banner size thành 300x50 dpi
+        /// </summary>
+        private void ConfigBannerSize() {
+            var heightPixel = Screen.dpi * 50 / 160;
+            var widthPixel = Screen.dpi * 300 / 160;
+            imageBanner.rectTransform.sizeDelta = new Vector2(widthPixel, heightPixel);
         }
 
         public void SetAnchorBanner((float, float) valueTuple) {

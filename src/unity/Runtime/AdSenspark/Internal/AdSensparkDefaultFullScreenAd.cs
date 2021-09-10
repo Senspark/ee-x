@@ -39,7 +39,8 @@ namespace EE.Internal {
             string network,
             string adId,
             AdFormat adFormat, 
-            AdSensparkResourceManager adSensparkResourceManager) {
+            AdSensparkResourceManager adSensparkResourceManager, 
+            JsonObject node) {
             _prefix = prefix;
             _bridge = bridge;
             _logger = logger;
@@ -52,7 +53,6 @@ namespace EE.Internal {
             _messageHelper = new MessageHelper(_prefix, adId);
             _loader = new AsyncHelper<bool>();
             _adSensparkResourceManager = adSensparkResourceManager;
-            _adSensparkResourcePack = new AdSensparkResourcePack();
             
             _logger.Debug($"{kTag}: constructor: prefix = {_prefix} id = {_adId}");
             _bridge.RegisterHandler(_ => OnLoaded(), _messageHelper.OnLoaded);
@@ -69,7 +69,27 @@ namespace EE.Internal {
                 var result = _resultParser(message);
                 OnClosed(result);
             }, _messageHelper.OnClosed);
+            LoadDefaultResource(node);
             LoadPrefab(adFormat);
+        }
+
+        private void LoadDefaultResource(JsonObject node) {
+            var getPath = node.TryGetValue("image_local_path", out var path);
+            var getUrl = node.TryGetValue(Application.platform == RuntimePlatform.Android ? 
+                "promotion_url_android" : "promotion_url_ios", out var url);
+            if (!getPath) {
+                Debug.LogWarning($"Ad senspark: chưa cấu hình image_local_path trong file json cho {_adFormat}");
+                return;
+            }
+            if (!getUrl) {
+                Debug.LogWarning($"Ad senspark: chưa cấu hình promotion_url trong file json cho {_adFormat}");
+                return;
+            }
+            _adSensparkResourcePack = new AdSensparkResourcePack();
+            _adSensparkResourcePack.promotionUrl = (string) url;
+            
+            // var res = Resources.Load<Sprite>((string) path);
+            // Code phần canvas ở đây luôn.
         }
 
         private void LoadPrefab(AdFormat adFormat) {
@@ -193,15 +213,7 @@ namespace EE.Internal {
 
         private void OnClicked() {
             _logger.Debug($"{kTag}: {nameof(OnClicked)}: prefix = {_prefix} id = {_adId}");
-            string url = "https://senspark.com/";
-            if (_adSensparkResourcePack.IsNull()) {
-                url = Application.platform == RuntimePlatform.Android
-                    ? "https://play.google.com/store/apps/dev?id=7830868662152106484"
-                    : "https://apps.apple.com/vn/developer/senspark-co-ltd/id560842775";
-            } else {
-                url = _adSensparkResourcePack.promotionUrl;
-            }
-            Application.OpenURL(url);
+            Application.OpenURL(_adSensparkResourcePack.promotionUrl);
             DispatchEvent(observer => observer.OnClicked?.Invoke());
         }
 

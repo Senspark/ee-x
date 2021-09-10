@@ -2,6 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
+using Jsonite;
+
+using UnityEngine;
 using UnityEngine.Assertions;
 
 namespace EE.Internal {
@@ -90,8 +93,8 @@ namespace EE.Internal {
                     heightAd = 50;
                     break;
             }
-            widthAd = Platform.GetDensity() * widthAd; // pixel = ratio * 300; // Chuyển đổi từ DP sang Pixel.
-            heightAd = Platform.GetDensity() * heightAd;
+            widthAd = Screen.dpi / 160 * widthAd; // Chuyển đổi từ DP sang Pixel.
+            heightAd = Screen.dpi / 160 * heightAd;
             return ((int) widthAd, (int) heightAd);
         }
 
@@ -101,7 +104,7 @@ namespace EE.Internal {
             public int adSize;
         }
 
-        public IBannerAd CreateBannerAd(string adId, AdSensparkBannerAdSize adSize) {
+        public IBannerAd CreateBannerAd(string adId, AdSensparkBannerAdSize adSize, JsonObject node) {
             _logger.Debug($"{kTag}: {nameof(CreateBannerAd)}: id = {adId} size = {adSize}");
             if (_ads.TryGetValue(adId, out var result)) {
                 return result as IBannerAd;
@@ -109,35 +112,35 @@ namespace EE.Internal {
             
             var size = GetBannerAdSize(adSize);
             var ad = new GuardedBannerAd(new AdSensparkDefaultBanner("SensparkBannerAd", _bridge, _logger,
-                () => DestroyAd(adId), _network, adId, AdFormat.Banner, size, _mgResourceManager));
+                () => DestroyAd(adId), _network, adId, AdFormat.Banner, size, _mgResourceManager, node));
             _ads.Add(adId, ad);
             return ad;
         }
 
-        public IFullScreenAd CreateAppOpenAd(string adId) {
+        public IFullScreenAd CreateAppOpenAd(string adId, JsonObject node) {
             return new NullFullScreenAd();
         }
 
-        public IFullScreenAd CreateInterstitialAd(string adId) {
+        public IFullScreenAd CreateInterstitialAd(string adId, JsonObject node) {
             return CreateFullScreenAd(kCreateInterstitialAd, adId,
                 () => new AdSensparkDefaultFullScreenAd("SensparkInterstitialAd", _bridge, _logger, _displayer,
                     () => DestroyAd(adId),
                     _ => AdResult.Completed,
-                    _network, adId, AdFormat.Interstitial, _mgResourceManager));
+                    _network, adId, AdFormat.Interstitial, _mgResourceManager, node));
         }
 
-        public IFullScreenAd CreateRewardedInterstitialAd(string adId) {
+        public IFullScreenAd CreateRewardedInterstitialAd(string adId, JsonObject node) {
             return new NullFullScreenAd();
         }
 
-        public IFullScreenAd CreateRewardedAd(string adId) {
+        public IFullScreenAd CreateRewardedAd(string adId, JsonObject node) {
             return CreateFullScreenAd(kCreateRewardedAd, adId,
                 () => new AdSensparkDefaultFullScreenAd("SensparkRewardedAd", _bridge, _logger, _displayer,
                     () => DestroyAd(adId),
                     message => Utils.ToBool(message)
                         ? AdResult.Completed
                         : AdResult.Canceled,
-                    _network, adId, AdFormat.Rewarded, _mgResourceManager));
+                    _network, adId, AdFormat.Rewarded, _mgResourceManager, node));
         }
 
         private IFullScreenAd CreateFullScreenAd(string handlerId, string adId, Func<IFullScreenAd> creator) {

@@ -35,7 +35,8 @@ namespace EE.Internal {
             string adId,
             AdFormat adFormat,
             (int, int) size,
-            AdSensparkResourceManager adSensparkResourceManager) {
+            AdSensparkResourceManager adSensparkResourceManager,
+            JsonObject node) {
             _prefix = prefix;
             _bridge = bridge;
             _logger = logger;
@@ -54,9 +55,28 @@ namespace EE.Internal {
             }, _messageHelper.OnFailedToLoad);
             _bridge.RegisterHandler(_ => OnClicked(), _messageHelper.OnClicked);
             _adSensparkResourceManager = adSensparkResourceManager;
-            _adSensparkResourcePack = new AdSensparkResourcePack();
+            LoadDefaultResource(node);
             LoadPrefab(adFormat);
             var t = RefreshAd();
+        }
+
+        private void LoadDefaultResource(JsonObject node) {
+            var getPath = node.TryGetValue("image_local_path", out var path);
+            var getUrl = node.TryGetValue(Application.platform == RuntimePlatform.Android ? 
+                "promotion_url_android" : "promotion_url_ios", out var url);
+            if (!getPath) {
+                Debug.LogWarning($"Ad senspark: chưa cấu hình image_local_path trong file json cho {_adFormat}");
+                return;
+            }
+            if (!getUrl) {
+                Debug.LogWarning($"Ad senspark: chưa cấu hình promotion_url trong file json cho {_adFormat}");
+                return;
+            }
+            _adSensparkResourcePack = new AdSensparkResourcePack();
+            _adSensparkResourcePack.promotionUrl = (string) url;
+            
+            // var res = Resources.Load<Sprite>((string) path);
+            // Code phần canvas ở đây luôn.
         }
 
         private void LoadPrefab(AdFormat adFormat) {
@@ -185,15 +205,7 @@ namespace EE.Internal {
 
         private void OnClicked() {
             _logger.Debug($"{kTag}: {nameof(OnClicked)}: prefix = {_prefix} id = {_adId}");
-            string url = "https://senspark.com/";
-            if (_adSensparkResourcePack.IsNull()) {
-                url = Application.platform == RuntimePlatform.Android
-                    ? "https://play.google.com/store/apps/dev?id=7830868662152106484"
-                    : "https://apps.apple.com/vn/developer/senspark-co-ltd/id560842775";
-            } else {
-                url = _adSensparkResourcePack.promotionUrl;
-            }
-            Application.OpenURL(url);
+            Application.OpenURL(_adSensparkResourcePack.promotionUrl);
             DispatchEvent(observer => observer.OnClicked?.Invoke());
         }
     }

@@ -1,41 +1,59 @@
 using System;
-using System.Threading.Tasks;
 
 using UnityEngine;
-using UnityEngine.Scripting;
 using UnityEngine.UI;
-using UnityEngine.Video;
 
 namespace EE.Internal {
     internal class AdSensparkCanvas : MonoBehaviour {
-        [SerializeField]
-        private CanvasScaler canvasScaler;
-        [SerializeField]
-        private GameObject containerBanner, containerInterstitial, containerRewarded,
-            containerRectBanner, containerAppOpen, containerRewardedInterstitial;
-        [SerializeField]
-        private Image imageBanner, imageInterstitial;
-        [SerializeField]
-        private VideoPlayer rewardedVideoPlayer;
-        [SerializeField]
-        private RectTransform rectImageBanner;
-        
+        private AdSensparkBannerCanvas _adSensparkBannerCanvas;
+        private AdSensparkInterstitialCanvas _adSensparkInterstitialCanvas;
+        private AdSensparkRewardedCanvas _adSensparkRewardedCanvas;
 
-        private Action _onClickBanner, _onClickInterstitial, _onClickRewarded, _onClickRectBanner;
-        private Action<AdResult> _onCloseInterstitial, _onCloseRewarded;
+        private Action _onClickBanner, 
+            _onClickInterstitial, 
+            _onClickRewarded;
+        private Action<AdResult> _onCloseInterstitial, 
+            _onCloseRewarded;
+
+        private RectTransform _rectTransform;
         
         private void Awake() {
-            ServiceLocatorSimple.AddService(this);
-            DontDestroyOnLoad(gameObject);
-
-            containerBanner.SetActive(false);
-            containerInterstitial.SetActive(false);
-            containerRewarded.SetActive(false);
-            containerRectBanner.SetActive(false);
-            containerAppOpen.SetActive(false);
-            containerRewardedInterstitial.SetActive(false);
+            gameObject.AddComponent<GraphicRaycaster>();
+            _rectTransform = GetComponent<RectTransform>();
             
-            ConfigScaler();
+            var canvas = gameObject.GetComponent<Canvas>();
+            canvas.renderMode = RenderMode.ScreenSpaceOverlay;
+            canvas.sortingOrder = 500;
+            
+            var canvasScaler = gameObject.AddComponent<CanvasScaler>();
+            var isHorizontal = Screen.width > Screen.height;
+            canvasScaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
+            canvasScaler.screenMatchMode = CanvasScaler.ScreenMatchMode.MatchWidthOrHeight;
+            canvasScaler.matchWidthOrHeight = isHorizontal ? 1 : 0;
+            canvasScaler.referenceResolution = new Vector2(768, 768);
+        }
+
+        #region CommonFunc
+
+        /// <summary>
+        /// Set video cho rewarded.
+        /// https://forum.unity.com/threads/byte-to-audioclip.911723/
+        /// </summary>
+        /// <param name="adFormat"></param>
+        /// <param name="data"></param>
+        private void SetVideoClip(AdFormat adFormat, string fileName) {
+            switch (adFormat) {
+                case AdFormat.RewardedInterstitial:
+                    break;
+
+                case AdFormat.Rewarded: {
+                    _adSensparkRewardedCanvas.SetVideoClip(fileName);
+                }
+                    break;
+
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(adFormat), adFormat, null);
+            }
         }
 
         private void OnDestroy() {
@@ -58,17 +76,12 @@ namespace EE.Internal {
             }
         }
 
-        private void ConfigScaler() {
-            var isHorizontal = Screen.width > Screen.height;
-            canvasScaler.matchWidthOrHeight = isHorizontal ? 1 : 0;
-        }
-
         /// <summary>
         /// Set hình cho banner, interstitial.
         /// </summary>
         /// <param name="adFormat"></param>
         /// <param name="data"></param>
-        public void SetImageTexture(AdFormat adFormat, Byte[] data) {
+        private void SetImageTexture(AdFormat adFormat, Byte[] data) {
             Texture2D texture2D = new Texture2D(2, 2);
             texture2D.LoadImage(data);
             SetImageTexture(adFormat, texture2D);
@@ -78,26 +91,16 @@ namespace EE.Internal {
         /// Set hình cho banner, interstitial.
         /// </summary>
         /// <param name="adFormat"></param>
-        /// <param name="data"></param>
-        public void SetImageTexture(AdFormat adFormat, Texture2D texture2D) {
+        /// <param name="texture2D"></param>
+        private void SetImageTexture(AdFormat adFormat, Texture2D texture2D) {
             switch (adFormat) {
                 case AdFormat.Banner: {
-                    var rect = new Rect(0, 0, texture2D.width, texture2D.height);
-                    var sprite = Sprite.Create(texture2D, rect, imageBanner.rectTransform.pivot);
-                    imageBanner.sprite = sprite;
+                    _adSensparkBannerCanvas.SetTexture(texture2D);
                 }
                     break;
 
-                case AdFormat.Rectangle:
-                    break;
-
-                case AdFormat.AppOpen:
-                    break;
-
                 case AdFormat.Interstitial: {
-                    var rect = new Rect(0, 0, texture2D.width, texture2D.height);
-                    var sprite = Sprite.Create(texture2D, rect, imageInterstitial.rectTransform.pivot);
-                    imageInterstitial.sprite = sprite;
+                    _adSensparkInterstitialCanvas.SetTexture(texture2D);
                 }
                     break;
 
@@ -109,27 +112,15 @@ namespace EE.Internal {
         public void SetAdVisible(AdFormat adFormat, bool display) {
             switch (adFormat) {
                 case AdFormat.Banner:
-                    containerBanner.SetActive(display);
-                    break;
-
-                case AdFormat.Rectangle:
-                    containerRectBanner.SetActive(display);
-                    break;
-
-                case AdFormat.AppOpen:
-                    containerAppOpen.SetActive(display);
+                    _adSensparkBannerCanvas.SetVisible(display);
                     break;
 
                 case AdFormat.Interstitial:
-                    containerInterstitial.SetActive(display);
-                    break;
-
-                case AdFormat.RewardedInterstitial:
-                    containerRewardedInterstitial.SetActive(display);
+                    _adSensparkInterstitialCanvas.SetVisible(display);
                     break;
 
                 case AdFormat.Rewarded:
-                    containerRewarded.SetActive(display);
+                    _adSensparkRewardedCanvas.SetVisible(display);
                     break;
 
                 case AdFormat.Null:
@@ -140,33 +131,39 @@ namespace EE.Internal {
             }
         }
 
+        #endregion CommonFuc
+
         #region Banner
 
-        public void InitializeBanner(Action onClick, bool display) {
+        public void InitializeBanner(Action onClick, bool display, string resourceLocalPath) {
             _onClickBanner = onClick;
+            CreateBanner(resourceLocalPath);
             SetAdVisible(AdFormat.Banner, display);
-            ConfigBannerSize();
         }
 
-        /// <summary>
-        /// Chỉnh sửa banner size thành 300x50 dpi
-        /// </summary>
-        private void ConfigBannerSize() {
-            var heightPixel = Screen.dpi * 50 / 160;
-            var widthPixel = Screen.dpi * 300 / 160;
-            imageBanner.rectTransform.sizeDelta = new Vector2(widthPixel, heightPixel);
+        private void CreateBanner(string spriteLocalPath) {
+            if (_adSensparkBannerCanvas) {
+                _adSensparkBannerCanvas.SafeDestroy();
+            }
+            
+            var newObject = new GameObject {name = "ContainerBanner"};
+            _adSensparkBannerCanvas = newObject.AddComponent<AdSensparkBannerCanvas>();
+            newObject.transform.SetParent(_rectTransform);
+            newObject.transform.localScale = Vector3.one;
+            newObject.SetActive(false);
+            _adSensparkBannerCanvas.Initialize(OnPromotionPressedBanner, spriteLocalPath);
         }
 
         public void SetAnchorBanner((float, float) valueTuple) {
-            rectImageBanner.pivot = new Vector2(valueTuple.Item1, valueTuple.Item2);
+            _adSensparkBannerCanvas.SetAnchorBanner(valueTuple);
         }
 
         public void SetPositionBanner((float, float) valueTuple) {
-            rectImageBanner.position = new Vector2(valueTuple.Item1, valueTuple.Item2);
+            _adSensparkBannerCanvas.SetPositionBanner(valueTuple);
         }
 
         public void SetSizeBanner((float, float) valueTuple) {
-            rectImageBanner.sizeDelta = new Vector2(valueTuple.Item1, valueTuple.Item2);
+            _adSensparkBannerCanvas.SetSizeBanner(valueTuple);
         }
 
         public void OnPromotionPressedBanner() {
@@ -177,9 +174,22 @@ namespace EE.Internal {
 
         #region Interstitial
 
-        public void InitializeInterstitial(Action onClick, Action<AdResult> onClose) {
+        public void InitializeInterstitial(Action onClick, Action<AdResult> onClose, string resourceLocalPath) {
             _onClickInterstitial = onClick;
             _onCloseInterstitial = onClose;
+            CreateInterstitial(resourceLocalPath);
+        }
+
+        private void CreateInterstitial(string spriteLocalPath) {
+            if (_adSensparkInterstitialCanvas) {
+                _adSensparkInterstitialCanvas.SafeDestroy();
+            }
+            var newObject = new GameObject {name = "ContainerInterstitial"};
+            _adSensparkInterstitialCanvas = newObject.AddComponent<AdSensparkInterstitialCanvas>();
+            newObject.transform.SetParent(_rectTransform);
+            newObject.transform.localScale = Vector3.one;
+            newObject.SetActive(false);
+            _adSensparkInterstitialCanvas.Initialize(OnPromotionPressedInterstitial, OnClosePressedInterstitial, spriteLocalPath);
         }
 
         public void OnPromotionPressedInterstitial() {
@@ -195,9 +205,23 @@ namespace EE.Internal {
         
         #region Rewarded
 
-        public void InitializeRewarded(Action onClick, Action<AdResult> onClose) {
+        public void InitializeRewarded(Action onClick, Action<AdResult> onClose, string resourceLocalPath) {
             _onClickRewarded = onClick;
             _onCloseRewarded = onClose;
+            
+            CreateRewarded(resourceLocalPath);
+        }
+
+        private void CreateRewarded(string videoLocalPath) {
+            if(_adSensparkRewardedCanvas) {
+                _adSensparkRewardedCanvas.SafeDestroy();
+            }
+            var newObject = new GameObject {name = "ContainerRewarded"};
+            _adSensparkRewardedCanvas = newObject.AddComponent<AdSensparkRewardedCanvas>();         
+            newObject.transform.SetParent(transform);
+            newObject.transform.localScale = Vector3.one;
+            newObject.SetActive(false);
+            _adSensparkRewardedCanvas.Initialize(OnPromotionPressedRewarded, OnClosePressedRewarded, videoLocalPath);
         }
 
         public void OnPromotionPressedRewarded() {
@@ -207,29 +231,6 @@ namespace EE.Internal {
         public void OnClosePressedRewarded() {
             _onCloseRewarded?.Invoke(AdResult.Completed);
             SetAdVisible(AdFormat.Rewarded, false);
-        }
-
-        /// <summary>
-        /// Set video cho rewarded.
-        /// https://forum.unity.com/threads/byte-to-audioclip.911723/
-        /// </summary>
-        /// <param name="adFormat"></param>
-        /// <param name="data"></param>
-        public void SetVideoClip(AdFormat adFormat, string fileName) {
-            switch (adFormat) {
-                case AdFormat.RewardedInterstitial:
-                    break;
-
-                case AdFormat.Rewarded: {
-                    rewardedVideoPlayer.url = Application.persistentDataPath + "/" + fileName;
-                    if(!rewardedVideoPlayer.isPlaying)
-                        rewardedVideoPlayer.Play();
-                }
-                    break;
-
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(adFormat), adFormat, null);
-            }
         }
 
         #endregion

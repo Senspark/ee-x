@@ -9,7 +9,7 @@ namespace EETest {
           Application.SetStackTraceLogType(LogType.Log, StackTraceLogType.None);
             TestCore();
             // TestAdMob();
-            TestAdSen();
+            // TestAdSen();
             Test();
         }
 
@@ -70,92 +70,94 @@ namespace EETest {
             adjust.Initialize(config);
         }
 
-        private void TestAdSen() {
-            var plugin = EE.PluginManager.CreatePlugin<EE.IAdSenspark>();
-            EE.Utils.NoAwait(async () => {
-                await plugin.Initialize("https://drive.google.com/uc?export=download&id=1O_2vlj5qz2sD6minL0K1xZLgO_1K0fQB");
-                TestAdSenBanner(plugin);
-                // TestAdSenInterstitial(plugin);
-                // TestAdSenRewarded(plugin);
-            });
-        }
-
-        private void TestAdSenInterstitial(EE.IAdSenspark plugin) {
-            EE.Utils.NoAwait(async () => {
-                var ad = plugin.CreateInterstitialAd("ad_senspark_interstitialId");
-                Debug.Log($"Load begin");
-                var loadResult = await ad.Load();
-                Debug.Log($"Load end: {loadResult}");
-                var showResult = await ad.Show();
-                Debug.Log($"Show end: {showResult}");
-                await Task.Delay(5000);
-            });
-         }
-
-        private void TestAdSenRewarded(EE.IAdSenspark plugin) {
-            EE.Utils.NoAwait(async () => {
-                var ad = plugin.CreateRewardedAd("ad_senspark_interstitialId");
-                Debug.Log($"Load begin");
-                var loadResult = await ad.Load();
-                Debug.Log($"Load end: {loadResult}");
-                var showResult = await ad.Show();
-                Debug.Log($"Show end: {showResult}");
-                await Task.Delay(5000);
-            });
-        }
-
-        private void TestAdSenBanner(EE.IAdSenspark plugin) {
-            EE.Utils.NoAwait(async () => {
-                var ad = plugin.CreateBannerAd(
-                    "ca-app-pub-2101587572072038/6118633101",
-                    EE.AdSensparkBannerAdSize.Normal);
-                var (width, height) = ad.Size;
-                Debug.Log($"Ad size = {width} x {height}");
-                ad.IsVisible = false;
-                EE.Utils.NoAwait(async () => {
-                    while (true) {
-                        Debug.Log($"Load begin");
-                        var result = await ad.Load();
-                        Debug.Log($"Load end: {result}");
-                        if (result) {
-                            ad.IsVisible = true;
-                            break;
-                        }
-                        await Task.Delay(5000);
-                    }
-                });
-                while (true) {
-                    ad.Anchor = (0, 0);
-                    ad.Position = (0, 0);
-                    await Task.Delay(2000);
-                    
-                    ad.Anchor = (0.5f, 0);
-                    ad.Position = (Screen.width / 2f, 0);
-                    await Task.Delay(2000);
-                    
-                    ad.Anchor = (1, 0);
-                    ad.Position = (Screen.width, 0);
-                    await Task.Delay(2000);
-                    
-                    ad.Anchor = (0.5f, 0.5f);
-                    ad.Position = (Screen.width / 2f, Screen.height / 2f);
-                    await Task.Delay(2000);
-                    
-                    ad.Anchor = (0, 1);
-                    ad.Position = (0, Screen.height);
-                    await Task.Delay(2000);
-                    
-                    
-                    ad.Anchor = (0.5f, 1);
-                    ad.Position = (Screen.width / 2f, Screen.height);
-                    await Task.Delay(2000);
-                    
-                    ad.Anchor = (1, 1);
-                    ad.Position = (Screen.width, Screen.height);
-                    await Task.Delay(2000);
-                }
-            });
-        }
+        // private void TestAdSen() {
+        //     var plugin = EE.PluginManager.CreatePlugin<EE.IAdSenspark>();
+        //     EE.Utils.NoAwait(async () => {
+        //         await plugin.Initialize("https://drive.google.com/uc?export=download&id=1O_2vlj5qz2sD6minL0K1xZLgO_1K0fQB");
+        //         // TestAdSenBanner(plugin);
+        //         // TestAdSenInterstitial(plugin);
+        //         // TestAdSenRewarded(plugin);
+        //     });
+        // }
+        //
+        // private void TestAdSenInterstitial(EE.IAdSenspark plugin) {
+        //     EE.Utils.NoAwait(async () => {
+        //         var ad = plugin.CreateInterstitialAd("ad_senspark_interstitialId");
+        //         Debug.Log($"Load begin");
+        //         var loadResult = await ad.Load();
+        //         Debug.Log($"Load end: {loadResult}");
+        //         // var showResult = await ad.Show();
+        //         // Debug.Log($"Show end: {showResult}");
+        //         await Task.Delay(5000);
+        //     });
+        //  }
+        //
+        // private void TestAdSenRewarded(EE.IAdSenspark plugin) {
+        //     EE.Utils.NoAwait(async () => {
+        //         var ad = plugin.CreateRewardedAd("ad_senspark_interstitialId");
+        //         Debug.Log($"Load begin");
+        //         var loadResult = await ad.Load();
+        //         Debug.Log($"Load end: {loadResult}");
+        //         // var showResult = await ad.Show();
+        //         // Debug.Log($"Show end: {showResult}");
+        //         await Task.Delay(5000);
+        //     });
+        // }
+        //
+        // private void TestAdSenBanner(EE.IAdSenspark plugin) {
+        //     EE.Utils.NoAwait(async () => {
+        //         var ad = plugin.CreateBannerAd(
+        //             "ca-app-pub-2101587572072038/6118633101",
+        //             EE.AdSensparkBannerAdSize.Normal, "", "");
+        //         var (width, height) = ad.Size;
+        //         Debug.Log($"Ad size = {width} x {height}");
+        //         ad.IsVisible = false;
+        //         EE.Utils.NoAwait(async () => {
+        //             while (true) {
+        //                 Debug.Log($"Load begin");
+        //                 var result = await ad.Load();
+        //                 Debug.Log($"Load end: {result}");
+        //                 if (result) {
+        //                     // ad.IsVisible = true;
+        //                     break;
+        //                 }
+        //                 await Task.Delay(5000);
+        //             }
+        //         });
+        //         ad.Anchor = (0.5f, 0);
+        //         ad.Position = (Screen.width / 2f, 0);
+        //         // while (true) {
+        //         //     ad.Anchor = (0, 0);
+        //         //     ad.Position = (0, 0);
+        //         //     await Task.Delay(2000);
+        //         //     
+        //         //     ad.Anchor = (0.5f, 0);
+        //         //     ad.Position = (Screen.width / 2f, 0);
+        //         //     await Task.Delay(2000);
+        //         //     
+        //         //     ad.Anchor = (1, 0);
+        //         //     ad.Position = (Screen.width, 0);
+        //         //     await Task.Delay(2000);
+        //         //     
+        //         //     ad.Anchor = (0.5f, 0.5f);
+        //         //     ad.Position = (Screen.width / 2f, Screen.height / 2f);
+        //         //     await Task.Delay(2000);
+        //         //     
+        //         //     ad.Anchor = (0, 1);
+        //         //     ad.Position = (0, Screen.height);
+        //         //     await Task.Delay(2000);
+        //         //     
+        //         //     
+        //         //     ad.Anchor = (0.5f, 1);
+        //         //     ad.Position = (Screen.width / 2f, Screen.height);
+        //         //     await Task.Delay(2000);
+        //         //     
+        //         //     ad.Anchor = (1, 1);
+        //         //     ad.Position = (Screen.width, Screen.height);
+        //         //     await Task.Delay(2000);
+        //         // }
+        //     });
+        // }
 
         private void TestAdMob() {
             var plugin = EE.PluginManager.CreatePlugin<EE.IAdMob>();

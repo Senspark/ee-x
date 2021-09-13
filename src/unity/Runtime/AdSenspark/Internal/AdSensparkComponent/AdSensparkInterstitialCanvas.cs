@@ -2,7 +2,6 @@ using System;
 
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.Video;
 
 namespace EE.Internal {
     [RequireComponent(typeof(RectTransform))]

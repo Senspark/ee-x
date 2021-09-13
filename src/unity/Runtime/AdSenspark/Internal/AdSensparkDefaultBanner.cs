@@ -4,8 +4,6 @@ using UnityEngine;
 
 using Jsonite;
 
-using Object = UnityEngine.Object;
-
 namespace EE.Internal {
     using Destroyer = Action;
 

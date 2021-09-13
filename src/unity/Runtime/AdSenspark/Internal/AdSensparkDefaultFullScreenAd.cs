@@ -5,8 +5,6 @@ using Jsonite;
 
 using UnityEngine.Assertions;
 
-using Object = UnityEngine.Object;
-
 namespace EE.Internal {
     using Destroyer = Action;
     using ResultParser = Func<string, AdResult>;
@@ -143,9 +141,6 @@ namespace EE.Internal {
                 result => {
                     // OK.
                 });
-            // if(IsLoaded)
-            //     return Task.FromResult(AdResult.Completed);
-            // return Task.FromResult(AdResult.NotLoaded);
         }
 
         private void OnLoaded() {

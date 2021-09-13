@@ -21,8 +21,8 @@ namespace EE.Internal {
         private readonly IAsyncHelper<bool> _loader;
         private readonly MessageHelper _messageHelper;
         private readonly AdSensparkResourceManager _adSensparkResourceManager;
+        private readonly AdFormat _adFormat;
         private int _adIndex;
-        private AdFormat _adFormat;
         private AdSensparkCanvas _adCanvas;
         private AdSensparkResourcePack _adSensparkResourcePack;
 
@@ -56,7 +56,7 @@ namespace EE.Internal {
             _bridge.RegisterHandler(_ => OnClicked(), _messageHelper.OnClicked);
             _adSensparkResourceManager = adSensparkResourceManager;
             LoadDefaultResource(node);
-            LoadPrefab(adFormat);
+            CreateAdSensparkPrefab(adFormat);
             var t = RefreshAd();
         }
 
@@ -72,38 +72,23 @@ namespace EE.Internal {
                 Debug.LogWarning($"Ad senspark: chưa cấu hình promotion_url trong file json cho {_adFormat}");
                 return;
             }
-            _adSensparkResourcePack = new AdSensparkResourcePack();
-            _adSensparkResourcePack.promotionUrl = (string) url;
-            
-            // var res = Resources.Load<Sprite>((string) path);
-            // Code phần canvas ở đây luôn.
+            _adSensparkResourcePack = new AdSensparkResourcePack {
+                promotionUrl = (string) url,
+                dataLocalPath = (string) path
+            };
         }
 
-        private void LoadPrefab(AdFormat adFormat) {
-            var hadCanvas = ServiceLocatorSimple.ServiceAvailable<AdSensparkCanvas>();
-            if (hadCanvas) {
-                _adCanvas = ServiceLocatorSimple.GetService<AdSensparkCanvas>();
-            } else {
-                _logger.Debug($"{kTag}: loading prefab: prefix = {_prefix} id = {_adId}");
-                var obj = Resources.Load<AdSensparkCanvas>("AdSenspark/AdSensparkCanvas");
-                if (obj == null) {
-                    _logger.Debug($"{kTag}: fail to load prefab: prefix = {_prefix} id = {_adId}");
-                    return;
-                }
-                _adCanvas = Object.Instantiate(obj);
-            }
+        private void CreateAdSensparkPrefab(AdFormat adFormat) {
+            _adCanvas = ServiceLocatorSimple.GetService<AdSensparkCanvas>();
             switch (adFormat) {
                 case AdFormat.Banner:
-                    _adCanvas.InitializeBanner(OnClicked, IsVisible);
+                    _adCanvas.InitializeBanner(OnClicked, IsVisible, _adSensparkResourcePack.dataLocalPath);
                     break;
 
-                case AdFormat.Rectangle:
-                    break;
-                
                 default:
-                    throw new ArgumentOutOfRangeException(nameof(adFormat), adFormat, null);
+                    Debug.LogWarning($"Ad senspark: chưa hỗ trợ {adFormat}.");
+                    break;
             }
-            _logger.Debug($"{kTag}: load complete: prefix = {_prefix} id = {_adId}");
         }
 
         public void Destroy() {

@@ -6,9 +6,21 @@ using UnityEngine;
 
 namespace EE.Internal {
     internal class AdSensparkResourcePack {
+        /// <summary>
+        /// Tài nguyên load từ server.
+        /// </summary>
         public Byte[] data = new byte[0];
+        /// <summary>
+        /// Tài nguyên để trong thư mục resource của Unity.
+        /// </summary>
+        public string dataLocalPath = "";
+        /// <summary>
+        /// Đường dẫn khi user click ad.
+        /// </summary>
         public string promotionUrl = "";
-        public string dataUrl = "";
+        /// <summary>
+        /// Tài nguyên được lưu vào máy sau khi load từ server.
+        /// </summary>
         public string fileName = "";
 
         public bool IsNull() {
@@ -78,7 +90,6 @@ namespace EE.Internal {
                     string promotionUrl = _adSensparkJsonData.GetPromotionUrl(adFormat, index);
                     adSensparkResourcePack.promotionUrl = promotionUrl;
                     adSensparkResourcePack.data = data;
-                    adSensparkResourcePack.dataUrl = dataUrl;
                     adSensparkResourcePack.fileName = fileName;
                     string path = Downloader.ParseToLocalPath(fileName);
 

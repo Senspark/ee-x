@@ -70,7 +70,7 @@ namespace EE.Internal {
                 OnClosed(result);
             }, _messageHelper.OnClosed);
             LoadDefaultResource(node);
-            LoadPrefab(adFormat);
+            CreateAdSensparkPrefab(adFormat);
         }
 
         private void LoadDefaultResource(JsonObject node) {
@@ -85,48 +85,27 @@ namespace EE.Internal {
                 Debug.LogWarning($"Ad senspark: chưa cấu hình promotion_url trong file json cho {_adFormat}");
                 return;
             }
-            _adSensparkResourcePack = new AdSensparkResourcePack();
-            _adSensparkResourcePack.promotionUrl = (string) url;
-            
-            // var res = Resources.Load<Sprite>((string) path);
-            // Code phần canvas ở đây luôn.
+            _adSensparkResourcePack = new AdSensparkResourcePack {
+                promotionUrl = (string) url, 
+                dataLocalPath = (string) path
+            };
         }
 
-        private void LoadPrefab(AdFormat adFormat) {
-            var hadCanvas = ServiceLocatorSimple.ServiceAvailable<AdSensparkCanvas>();
-            if (hadCanvas) {
-                _adCanvas = ServiceLocatorSimple.GetService<AdSensparkCanvas>();
-            } else {
-                _logger.Debug($"{kTag}: loading prefab: prefix = {_prefix} id = {_adId}");
-                var obj = Resources.Load<AdSensparkCanvas>("AdSenspark/AdSensparkCanvas");
-                if (obj == null) {
-                    _logger.Debug($"{kTag}: fail to load prefab: prefix = {_prefix} id = {_adId}");
-                    return;
-                }
-                _adCanvas = Object.Instantiate(obj);
-            }
+        private void CreateAdSensparkPrefab(AdFormat adFormat) {
+            _adCanvas = ServiceLocatorSimple.GetService<AdSensparkCanvas>();
             switch (adFormat) {
-                case AdFormat.AppOpen:
-                    break;
-
                 case AdFormat.Interstitial:
-                    _adCanvas.InitializeInterstitial(OnClicked, OnClosed);
-                    break;
-
-                case AdFormat.RewardedInterstitial:
+                    _adCanvas.InitializeInterstitial(OnClicked, OnClosed, _adSensparkResourcePack.dataLocalPath);
                     break;
 
                 case AdFormat.Rewarded:
-                    _adCanvas.InitializeRewarded(OnClicked, OnClosed);
-                    break;
-
-                case AdFormat.Null:
+                    _adCanvas.InitializeRewarded(OnClicked, OnClosed, _adSensparkResourcePack.dataLocalPath);
                     break;
 
                 default:
-                    throw new ArgumentOutOfRangeException(nameof(adFormat), adFormat, null);
+                    Debug.LogWarning($"Ad senspark: chưa hỗ trợ {adFormat}.");
+                    break;
             }
-            _logger.Debug($"{kTag}: load complete: prefix = {_prefix} id = {_adId}");
         }
 
         public void Destroy() {

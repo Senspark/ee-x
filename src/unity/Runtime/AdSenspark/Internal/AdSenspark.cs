@@ -56,6 +56,7 @@ namespace EE.Internal {
         }
 
         public async Task<bool> Initialize(string url) {
+            AdSensparkPrefab.Initialize();
             return await _mgResourceManager.Initialize(url);
         }
 

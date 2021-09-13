@@ -76,7 +76,7 @@ namespace EE.Internal {
         Task Initialize();
         void AddTestDevice(string hash);
         void OpenTestSuite(AdNetwork network);
-        IAd CreateAd(AdNetwork network, AdFormat format, string id);
+        IAd CreateAd(AdNetwork network, AdFormat format, string id, JsonObject node);
     }
 
     internal class NetworkConfigManager : INetworkConfigManager {
@@ -110,10 +110,10 @@ namespace EE.Internal {
             }
         }
 
-        public IAd CreateAd(AdNetwork network, AdFormat format, string id) {
+        public IAd CreateAd(AdNetwork network, AdFormat format, string id, JsonObject node) {
             foreach (var item in _networks) {
                 if (item.Network == network) {
-                    return item.CreateAd(format, id);
+                    return item.CreateAd(format, id, node);
                 }
             }
             return new NullAd();
@@ -125,7 +125,7 @@ namespace EE.Internal {
         AdNetwork Network { get; }
         void AddTestDevice(string hash);
         void OpenTestSuite();
-        IAd CreateAd(AdFormat format, string id);
+        IAd CreateAd(AdFormat format, string id, JsonObject node);
     }
 
     internal static class NetworkConfig {
@@ -164,7 +164,7 @@ namespace EE.Internal {
             _plugin.OpenTestSuite();
         }
 
-        public IAd CreateAd(AdFormat format, string id) {
+        public IAd CreateAd(AdFormat format, string id, JsonObject node) {
             switch (format) {
                 case AdFormat.Banner:
                     return _plugin.CreateBannerAd(id, AdMobBannerAdSize.Normal);
@@ -208,20 +208,20 @@ namespace EE.Internal {
             
         }
 
-        public IAd CreateAd(AdFormat format, string id) {
+        public IAd CreateAd(AdFormat format, string id, JsonObject node) {
             switch (format) {
                 case AdFormat.Banner:
-                    return _plugin.CreateBannerAd(id, AdSensparkBannerAdSize.Normal);
+                    return _plugin.CreateBannerAd(id, AdSensparkBannerAdSize.Normal, node);
                 case AdFormat.Rectangle:
-                    return _plugin.CreateBannerAd(id, AdSensparkBannerAdSize.MediumRectangle);
+                    return _plugin.CreateBannerAd(id, AdSensparkBannerAdSize.MediumRectangle,node);
                 case AdFormat.AppOpen:
-                    return _plugin.CreateAppOpenAd(id);
+                    return _plugin.CreateAppOpenAd(id, node);
                 case AdFormat.Interstitial:
-                    return _plugin.CreateInterstitialAd(id);
+                    return _plugin.CreateInterstitialAd(id, node);
                 case AdFormat.RewardedInterstitial:
-                    return _plugin.CreateRewardedInterstitialAd(id);
+                    return _plugin.CreateRewardedInterstitialAd(id, node);
                 case AdFormat.Rewarded:
-                    return _plugin.CreateRewardedAd(id);
+                    return _plugin.CreateRewardedAd(id, node);
                 case AdFormat.Null:
                     return new NullAd();
             }
@@ -249,7 +249,7 @@ namespace EE.Internal {
         public void OpenTestSuite() {
         }
 
-        public IAd CreateAd(AdFormat format, string id) {
+        public IAd CreateAd(AdFormat format, string id, JsonObject node) {
             switch (format) {
                 case AdFormat.Banner:
                     return _plugin.CreateBannerAd(id, FacebookBannerAdSize.BannerHeight50);
@@ -290,7 +290,7 @@ namespace EE.Internal {
         public void OpenTestSuite() {
         }
 
-        public IAd CreateAd(AdFormat format, string id) {
+        public IAd CreateAd(AdFormat format, string id, JsonObject node) {
             switch (format) {
                 case AdFormat.Banner:
                     return _plugin.CreateBannerAd(id, IronSourceBannerAdSize.Banner);
@@ -333,7 +333,7 @@ namespace EE.Internal {
         public void OpenTestSuite() {
         }
 
-        public IAd CreateAd(AdFormat format, string id) {
+        public IAd CreateAd(AdFormat format, string id, JsonObject node) {
             switch (format) {
                 case AdFormat.Banner:
                     return _plugin.CreateBannerAd(id, UnityBannerAdSize.Normal);
@@ -366,7 +366,7 @@ namespace EE.Internal {
         public void OpenTestSuite() {
         }
 
-        public IAd CreateAd(AdFormat format, string id) {
+        public IAd CreateAd(AdFormat format, string id, JsonObject node) {
             switch (format) {
                 case AdFormat.Banner:
                 case AdFormat.Rectangle:
@@ -576,16 +576,18 @@ namespace EE.Internal {
         private readonly AdFormat _format;
         private readonly AdNetwork _network;
         private readonly string _id;
+        private readonly JsonObject _node;
 
         public SingleInstanceConfig(AdFormat format, JsonObject node) {
             _format = format;
             var network = (string) node["network"];
             _network = AdsConfigUtils.ParseNetwork(network);
             _id = node.TryGetValue("id", out var value) ? (string) value : "";
+            _node = node;
         }
 
         public Ad CreateAd(INetworkConfigManager manager) {
-            var ad = manager.CreateAd(_network, _format, _id);
+            var ad = manager.CreateAd(_network, _format, _id, _node);
             return ad as Ad;
         }
     }

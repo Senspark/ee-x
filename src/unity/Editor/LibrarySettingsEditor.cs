@@ -51,9 +51,6 @@ namespace EE.Editor {
             // AppsFlyer plugin.
             settings.IsAppsFlyerEnabled =
                 EditorGUILayout.Toggle(new GUIContent("AppsFlyer"), settings.IsAppsFlyerEnabled);
-            
-            // AdSenspark plugin.
-            settings.IsAdSensparkEnabled = EditorGUILayout.Toggle(new GUIContent("AdSenspark"), settings.IsAdSensparkEnabled);
 
             // AdColony plugin.
             settings.IsAdColonyEnabled = EditorGUILayout.Toggle(new GUIContent("AdColony"), settings.IsAdColonyEnabled);

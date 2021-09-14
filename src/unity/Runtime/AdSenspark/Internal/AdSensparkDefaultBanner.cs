@@ -114,7 +114,7 @@ namespace EE.Internal {
 
         public async Task<bool> Load() {
             _adSensparkResourcePack = await _adSensparkResourceManager.GetResource(_adFormat, _adIndex);
-            OnLoaded(); // Không được điều hướng từ EE nên phải tự gọi.
+            // OnLoaded(); // Không được điều hướng từ EE nên phải tự gọi.
             return true; // Vẫn báo true vì có default ad rồi.
         }
 

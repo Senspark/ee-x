@@ -126,7 +126,7 @@ namespace EE.Internal {
         
         public async Task<bool> Load() {
             _adSensparkResourcePack = await _adSensparkResourceManager.GetResource(_adFormat, _adIndex);
-
+            // OnLoaded();
             _logger.Debug($"{kTag}: {nameof(Load)}: prefix = {_prefix} id = {_adId} loading = {_loader.IsProcessing}");
             return true; // Vẫn báo true vì có default ad rồi.
         }

@@ -1,115 +1,137 @@
 {
-    "networks": [
+  "networks": [
+    {
+      "network": "iron_source",
+      "app_id": "dbeab5e1"
+    },
+    {
+      "network": "ad_mob",
+      "app_id": "ca-app-pub-2101587572072038~3967214308"
+    },
+    {
+      "network": "ad_senspark",
+      "app_id": "https://drive.google.com/uc?export=download&id=1O_2vlj5qz2sD6minL0K1xZLgO_1K0fQB"
+    },
+    {
+      "network": "facebook_ads"
+    },
+    {
+      "network": "unity_ads",
+      "app_id": "119422",
+      "time_out": 5
+    }
+  ],
+  "ads": [
+    {
+      "format": "banner",
+      "instance": [
         {
-            "network": "iron_source",
-            "app_id": "dbeab5e1"
+          "network": "iron_source",
+          "id": "DefaultBanner"
         },
         {
-            "network": "ad_mob",
-            "app_id": "ca-app-pub-2101587572072038~3967214308"
+          "network": "ad_mob",
+          "id": "ca-app-pub-2101587572072038/8418506306"
         },
         {
-          "network": "ad_senspark"
+          "network": "facebook_ads",
+          "id": "1816167371950267_2839727819594212"
         },
         {
-            "network": "facebook_ads"
-        },
-        {
-            "network": "unity_ads",
-            "app_id": "119422",
-            "time_out": 5
+          "network": "ad_senspark",
+          "id": "default_banner",
+          "image_local_path": "AdSenspark/Sprites/banner",
+          "promotion_url_android": "google.com",
+          "promotion_url_ios": "google.com"
         }
-    ],
-    "ads": [
+      ]
+    },
+    {
+      "format": "rect",
+      "instance": [
         {
-            "format": "banner",
-            "instance": [
-                {
-                    "network": "iron_source",
-                    "id": "DefaultBanner"
-                },
-                {
-                    "network": "ad_mob",
-                    "id": "ca-app-pub-2101587572072038/8418506306"
-                },
-                {
-                    "network": "facebook_ads",
-                    "id": "1816167371950267_2839727819594212"
-                }
-            ]
+          "network": "ad_mob",
+          "id": "ca-app-pub-2101587572072038/9740352592"
         },
         {
-            "format": "rect",
-            "instance": [
-                {
-                    "network": "ad_mob",
-                    "id": "ca-app-pub-2101587572072038/9740352592"
-                },
-                {
-                    "network": "facebook_ads",
-                    "id": "1816167371950267_2839728806260780"
-                }
-            ]
-        },
-        {
-            "format": "app_open",
-            "instance": [
-                {
-                    "network": "ad_mob",
-                    "id": "ca-app-pub-2101587572072038/1348562889"
-                }
-            ]
-        },
-        {
-            "format": "interstitial",
-            "instance": [
-                {
-                    "network": "ad_mob",
-                    "id": "ca-app-pub-2101587572072038/5443947505"
-                },
-                {
-                    "network": "facebook_ads",
-                    "id": "1816167371950267_2839728526260808"
-                },
-                {
-                    "network": "iron_source",
-                    "id": "DefaultInterstitial"
-                },
-                {
-                    "network": "unity_ads",
-                    "id": "video"
-                }
-            ]
-        },
-        {
-            "format": "rewarded_interstitial",
-            "instance": [
-                {
-                    "network": "ad_mob",
-                    "id": "ca-app-pub-2101587572072038/3571401542"
-                }
-            ]
-        },
-        {
-            "format": "rewarded",
-            "instance": [
-                {
-                    "network": "ad_mob",
-                    "id": "ca-app-pub-2101587572072038/2375323304"
-                },
-                {
-                    "network": "facebook_ads",
-                    "id": "1816167371950267_2839728926260768"
-                },
-                {
-                    "network": "iron_source",
-                    "id": "DefaultRewardedVideo"
-                },
-                {
-                    "network": "unity_ads",
-                    "id": "rewardedVideo"
-                }
-            ]
+          "network": "facebook_ads",
+          "id": "1816167371950267_2839728806260780"
         }
-    ]
+      ]
+    },
+    {
+      "format": "app_open",
+      "instance": [
+        {
+          "network": "ad_mob",
+          "id": "ca-app-pub-2101587572072038/1348562889"
+        }
+      ]
+    },
+    {
+      "format": "interstitial",
+      "instance": [
+        {
+          "network": "ad_mob",
+          "id": "ca-app-pub-2101587572072038/5443947505"
+        },
+        {
+          "network": "facebook_ads",
+          "id": "1816167371950267_2839728526260808"
+        },
+        {
+          "network": "iron_source",
+          "id": "DefaultInterstitial"
+        },
+        {
+          "network": "unity_ads",
+          "id": "video"
+        },
+        {
+          "network": "ad_senspark",
+          "id": "default_interstitial",
+          "image_local_path": "AdSenspark/Sprites/vertical",
+          "promotion_url_android": "google.com",
+          "promotion_url_ios": "google.com"
+        }
+      ]
+    },
+    {
+      "format": "rewarded_interstitial",
+      "instance": [
+        {
+          "network": "ad_mob",
+          "id": "ca-app-pub-2101587572072038/3571401542"
+        }
+      ]
+    },
+    {
+      "format": "rewarded",
+      "instance": [
+        {
+          "network": "ad_mob",
+          "id": "ca-app-pub-2101587572072038/2375323304"
+        },
+        {
+          "network": "facebook_ads",
+          "id": "1816167371950267_2839728926260768"
+        },
+        {
+          "network": "iron_source",
+          "id": "DefaultRewardedVideo"
+        },
+        {
+          "network": "unity_ads",
+          "id": "rewardedVideo"
+        },
+        {
+          "network": "ad_senspark",
+          "id": "default_rewarded",
+          "image_local_path": "AdSenspark/Sprites/rewarded_ad",
+          "promotion_url_android": "google.com",
+          "promotion_url_ios": "google.com"
+        }
+      ]
+    }
+  ]
 }

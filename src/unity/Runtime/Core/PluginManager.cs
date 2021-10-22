@@ -33,7 +33,7 @@ namespace EE {
             };
 
         private static readonly IPluginManagerImpl _impl =
-#if UNITY_EDITOR || UNITY_STANDALONE_OSX
+#if UNITY_EDITOR || UNITY_STANDALONE_OSX || UNITY_WEBGL
             new PluginManagerImplEditor();
 #elif UNITY_ANDROID
             new PluginManagerImplAndroid();
@@ -60,7 +60,7 @@ namespace EE {
             }
             var (name, constructor, editorConstructor) = _pluginInfo[type];
             _impl.AddPlugin(name);
-#if UNITY_EDITOR || UNITY_STANDALONE_OSX
+#if UNITY_EDITOR || UNITY_STANDALONE_OSX || UNITY_WEBGL
             var currentConstructor = editorConstructor;
 #else
             var currentConstructor = constructor;

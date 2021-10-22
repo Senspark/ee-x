@@ -25,7 +25,7 @@ namespace EE {
         private static IPlatformImpl _impl;
 
         internal static void Initialize(IMessageBridge bridge) {
-#if UNITY_EDITOR
+#if UNITY_EDITOR || UNITY_WEBGL
             _impl = new PlatformImplEditor();
 #else // UNITY_EDITOR
             _impl = new PlatformImplNative(bridge);

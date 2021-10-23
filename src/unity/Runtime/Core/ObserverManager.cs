@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace EE {
     public class ObserverManager<Observer> : IObserverManager<Observer> {
@@ -22,8 +23,8 @@ namespace EE {
         }
 
         public void DispatchEvent(Action<Observer> dispatcher) {
-            foreach (var entry in _observers) {
-                dispatcher(entry.Value);
+            foreach (var observer in _observers.Values.ToArray()) {
+                dispatcher(observer);
             }
         }
     }

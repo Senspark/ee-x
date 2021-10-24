@@ -1,6 +1,8 @@
 using System;
 using System.Threading.Tasks;
 
+using UnityEngine;
+
 namespace EE {
     public static class Utils {
         public static string ToString(bool value) {
@@ -11,9 +13,17 @@ namespace EE {
             return value == "true";
         }
 
-        public static void NoAwait(Func<Task> callable) {
-            var task = callable();
-            task.Forget();
+        public static async void NoAwait(Func<Task> callable) {
+            try {
+                var task = callable();
+                await task;
+            } catch (Exception ex) {
+                Debug.LogException(ex);
+            }
+
+            // Old implementation.
+            // var task = callable();
+            // task.Forget();
         }
     }
 }

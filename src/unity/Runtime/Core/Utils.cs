@@ -25,5 +25,20 @@ namespace EE {
             // var task = callable();
             // task.Forget();
         }
+
+        public static async void NoAwait(Func<Task> callable, CancellationToken cancelToken) {
+            try {
+                var taskCompletionSource = new TaskCompletionSource<bool>();
+                cancelToken.Register(() => taskCompletionSource.TrySetCanceled());
+                
+                var mainTask = callable();
+                var completedTask = await Task.WhenAny(mainTask, taskCompletionSource.Task);
+                if (completedTask == mainTask) {
+                    taskCompletionSource.TrySetResult(true);
+                }
+            } catch (Exception ex) {
+                Debug.LogException(ex);
+            }
+        }
     }
 }

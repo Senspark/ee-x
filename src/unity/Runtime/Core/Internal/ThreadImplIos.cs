@@ -1,3 +1,4 @@
+#if UNITY_IOS
 using System;
 using System.Runtime.InteropServices;
 
@@ -56,3 +57,4 @@ namespace EE.Internal {
         }
     }
 }
+#endif // UNITY_IOS

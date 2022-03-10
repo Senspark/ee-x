@@ -211,6 +211,10 @@ class VungleBridge(
             }
             _rewarded = false
             Vungle.playAd(adId, AdConfig(), object : PlayAdCallback {
+                override fun creativeId(creativeId: String?) {
+                    // TODO.
+                }
+
                 override fun onError(adId: String, exception: VungleException) {
                     Thread.runOnMainThread {
                         _logger.debug("$kTag: ${VungleBridge::showRewardedAd.name}: ${this::onError.name}: id = $adId message = ${exception.localizedMessage}")

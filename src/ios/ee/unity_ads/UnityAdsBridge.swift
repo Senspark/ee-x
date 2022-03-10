@@ -60,8 +60,39 @@ private class LoadDelegate: NSObject, UnityAdsLoadDelegate {
     }
 }
 
+private class ShowDelegate: NSObject, UnityAdsShowDelegate {
+    private let _onFailedToShow: (String) -> Void
+    private let _onClosed: (Bool) -> Void
+    
+    public init(_ onFailedToShow: @escaping (String) -> Void,
+                _ onClosed: @escaping (Bool) -> Void) {
+        _onFailedToShow = onFailedToShow
+        _onClosed = onClosed
+    }
+    
+    func unityAdsShowComplete(_ placementId: String, withFinish state: UnityAdsShowCompletionState) {
+        if (state == UnityAdsShowCompletionState.showCompletionStateCompleted) {
+            _onClosed(true)
+        } else {
+            _onClosed(false)
+        }
+    }
+    
+    func unityAdsShowFailed(_ placementId: String, withError error: UnityAdsShowError, withMessage message: String) {
+        _onFailedToShow(message)
+    }
+    
+    func unityAdsShowStart(_ placementId: String) {
+        // TODO.
+    }
+    
+    func unityAdsShowClick(_ placementId: String) {
+        // TODO.
+    }
+}
+
 @objc(EEUnityAdsBridge)
-class UnityAdsBridge: NSObject, IPlugin, UnityAdsDelegate {
+class UnityAdsBridge: NSObject, IPlugin {
     private let _bridge: IMessageBridge
     private let _logger: ILogger
     private var _initializing = false
@@ -82,9 +113,6 @@ class UnityAdsBridge: NSObject, IPlugin, UnityAdsDelegate {
         deregisterHandlers()
         _ads.values.forEach { $0.destroy() }
         _ads.removeAll()
-        Thread.runOnMainThread {
-            UnityAds.remove(self)
-        }
     }
 
     func registerHandlers() {
@@ -186,7 +214,7 @@ class UnityAdsBridge: NSObject, IPlugin, UnityAdsDelegate {
                     return
                 }
                 self._initializing = true
-                UnityAds.initialize(gameId, testMode: testModeEnabled, enablePerPlacementLoad: true, initializationDelegate: InitializeDelegate {
+                UnityAds.initialize(gameId, testMode: testModeEnabled, initializationDelegate: InitializeDelegate {
                     Thread.runOnMainThread {
                         self._logger.debug("\(kTag): initializationComplete")
                         self._initializing = false
@@ -287,8 +315,23 @@ class UnityAdsBridge: NSObject, IPlugin, UnityAdsDelegate {
                 assert(false, "Root view is null")
                 return
             }
-            UnityAds.add(self)
-            UnityAds.show(rootView, placementId: adId)
+            UnityAds.show(rootView, placementId: adId, showDelegate: ShowDelegate { message in
+                Thread.runOnMainThread {
+                    self._logger.debug("\(kTag): unityAdsOnFailedToShow: \(adId)")
+                    self._bridge.callCpp(kOnFailedToShow, EEJsonUtils.convertDictionary(toString: [
+                        "ad_id": adId,
+                        "message": message
+                    ]))
+                }
+            } _: { rewarded in
+                Thread.runOnMainThread {
+                    self._logger.debug("\(kTag): unityAdsOnClosed: \(adId) rewarded = \(rewarded)")
+                    self._bridge.callCpp(kOnClosed, EEJsonUtils.convertDictionary(toString: [
+                        "ad_id": adId,
+                        "rewarded": rewarded
+                    ]))
+                }
+            })
         }
     }
 
@@ -303,43 +346,6 @@ class UnityAdsBridge: NSObject, IPlugin, UnityAdsDelegate {
     func unityAdsDidStart(_ adId: String) {
         Thread.runOnMainThread {
             self._logger.debug("\(kTag): \(#function): id = \(adId)")
-        }
-    }
-
-    func unityAdsDidFinish(_ adId: String, with state: UnityAdsFinishState) {
-        Thread.runOnMainThread {
-            self._logger.debug("\(kTag): \(#function): id = \(adId) state = \(state)")
-            UnityAds.remove(self)
-            self._loadedAdIds.remove(adId)
-            if state == UnityAdsFinishState.error {
-                self._bridge.callCpp(kOnFailedToShow, EEJsonUtils.convertDictionary(toString: [
-                    "ad_id": adId,
-                    "message": ""
-                ]))
-                return
-            }
-            if state == UnityAdsFinishState.skipped {
-                self._bridge.callCpp(kOnClosed, EEJsonUtils.convertDictionary(toString: [
-                    "ad_id": adId,
-                    "rewarded": false
-                ]))
-                return
-            }
-            if state == UnityAdsFinishState.completed {
-                self._bridge.callCpp(kOnClosed, EEJsonUtils.convertDictionary(toString: [
-                    "ad_id": adId,
-                    "rewarded": true
-                ]))
-                return
-            }
-            assert(false)
-        }
-    }
-
-    func unityAdsDidError(_ error: UnityAdsError, withMessage message: String) {
-        Thread.runOnMainThread {
-            self._logger.debug("\(kTag): \(#function): error = \(error) message = \(message)")
-            UnityAds.remove(self)
         }
     }
 }

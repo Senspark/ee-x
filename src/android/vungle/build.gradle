@@ -27,7 +27,7 @@ dependencies {
     // https://support.vungle.com/hc/en-us/articles/360002922871#requirements-0-1
     // https://github.com/Vungle/Android-SDK/blob/master/CHANGELOG.md
     // Use "api" to inherit manifest elements.
-    api 'com.vungle:publisher-sdk-android:6.9.1'
+    api 'com.vungle:publisher-sdk-android:6.10.4'
 
     implementation 'androidx.localbroadcastmanager:localbroadcastmanager:1.0.0'
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"

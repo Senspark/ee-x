@@ -54,12 +54,6 @@ internal class AppLovinRewardedAdListener(
         }
     }
 
-    override fun userDeclinedToViewAd(ad: AppLovinAd) {
-        Thread.runOnMainThread {
-            _logger.debug("$kTag: ${this::userDeclinedToViewAd.name}")
-        }
-    }
-
     override fun adDisplayed(ad: AppLovinAd) {
         Thread.runOnMainThread {
             _logger.debug("$kTag: ${this::adDisplayed.name}")

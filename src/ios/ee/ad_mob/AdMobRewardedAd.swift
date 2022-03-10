@@ -100,12 +100,6 @@ internal class AdMobRewardedAd: NSObject, IFullScreenAd, GADFullScreenContentDel
         }
     }
     
-    func adDidPresentFullScreenContent(_ ad: GADFullScreenPresentingAd) {
-        Thread.runOnMainThread {
-            self._logger.debug("\(kTag): \(#function): id = \(self._adId)")
-        }
-    }
-    
     func ad(_ ad: GADFullScreenPresentingAd, didFailToPresentFullScreenContentWithError error: Error) {
         Thread.runOnMainThread {
             self._logger.debug("\(kTag): \(#function): id = \(self._adId) message = \(error.localizedDescription)")
@@ -115,6 +109,12 @@ internal class AdMobRewardedAd: NSObject, IFullScreenAd, GADFullScreenContentDel
                 "code": (error as NSError).code,
                 "message": error.localizedDescription
             ]))
+        }
+    }
+    
+    func adWillPresentFullScreenContent(_ ad: GADFullScreenPresentingAd) {
+        Thread.runOnMainThread {
+            self._logger.debug("\(kTag): \(#function): id = \(self._adId)")
         }
     }
     

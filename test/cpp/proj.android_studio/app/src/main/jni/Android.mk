@@ -7,7 +7,7 @@ include $(CLEAR_VARS)
 $(call import-add-path, $(PROJECT_DIR))
 
 LOCAL_MODULE := ee_x_test
-LOCAL_CPPFLAGS := -std=c++2a
+LOCAL_CPPFLAGS := -std=c++20
 
 LOCAL_SRC_FILES := cpp/main.cpp
 LOCAL_SRC_FILES += ${shell find $(PROJECT_DIR)/Classes -name "*.cpp" -print}

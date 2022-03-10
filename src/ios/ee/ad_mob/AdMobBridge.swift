@@ -166,7 +166,7 @@ class AdMobBridge: NSObject, IPlugin {
     }
 
     var emulatorTestDeviceHash: String {
-        return kGADSimulatorID as? String ?? ""
+        return GADSimulatorID
     }
 
     func addTestDevice(_ hash: String) {

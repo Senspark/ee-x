@@ -31,8 +31,6 @@ class FacebookBridge: NSObject, IPlugin {
         _loginManager = LoginManager()
         super.init()
         Profile.enableUpdatesOnAccessTokenChange(true)
-        Settings.isAutoLogAppEventsEnabled = true
-        Settings.isAdvertiserIDCollectionEnabled = true
         registerHandlers()
     }
 
@@ -201,13 +199,13 @@ class FacebookBridge: NSObject, IPlugin {
     private func graphRequest(
         _ path: String,
         _ parameters: [String: Any],
-        _ callback: @escaping GraphRequestBlock) {
+        _ callback: @escaping GraphRequestCompletion) {
         Thread.runOnMainThread {
             GraphRequest(
                 graphPath: path,
                 parameters: parameters,
                 httpMethod: HTTPMethod.get)
-                .start(completionHandler: callback)
+                .start(completion: callback)
         }
     }
 
@@ -222,7 +220,7 @@ class FacebookBridge: NSObject, IPlugin {
 
     private func sharePhotoContent(_ url: URL, _ callback: SharingDelegate) {
         Thread.runOnMainThread {
-            let photo = SharePhoto(imageURL: url, userGenerated: true)
+            let photo = SharePhoto(imageURL: url, isUserGenerated: true)
             let content = SharePhotoContent()
             content.photos = [photo]
             self.shareContent(content, callback)
@@ -242,7 +240,7 @@ class FacebookBridge: NSObject, IPlugin {
         Thread.runOnMainThread {
             let rootView = Utils.getCurrentRootViewController()
             ShareDialog(
-                fromViewController: rootView,
+                viewController: rootView,
                 content: content,
                 delegate: callback).show()
         }

@@ -422,7 +422,7 @@ object Platform {
                 if (info.isLimitAdTrackingEnabled) {
                     ""
                 } else {
-                    info.id
+                    info.id ?: ""
                 }
             } catch (ex: Exception) {
                 // java.io.IOException: java.util.concurrent.TimeoutException: Timed out waiting for the service connection

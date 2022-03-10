@@ -11,7 +11,7 @@ def CPP_FLAGS = [
     '-DCC_ENABLE_BULLET_INTEGRATION=0',
     '-DCC_ENABLE_BOX2D_INTEGRATION=0',
     '-DCC_ENABLE_CHIPMUNK_INTEGRATION=0',
-    '-std=c++2a',
+    '-std=c++20',
     '-U__SSE__',
     '-frtti',
     '-fexceptions',
@@ -27,13 +27,13 @@ def CPP_FLAGS = [
 /// Modify this variable to build the desired architectures.
 String[] ARCHITECTURES = [
     'armeabi-v7a',
-    // 'arm64-v8a'
+    'arm64-v8a'
 ]
 
 android {
     buildToolsVersion rootProject.ext.buildToolsVersion
     compileSdkVersion rootProject.ext.compileSdkVersion
-    ndkVersion '22.0.7026061'
+    ndkVersion '23.1.7779620'
 
     buildTypes {
         debug {
@@ -132,7 +132,6 @@ android {
         exclude 'META-INF/LGPL2.1'
         exclude 'lib/x86/*.so'
         exclude 'lib/x86_64/*.so*'
-        exclude 'lib/arm64-v8a/*.so'
     }
 
     sourceSets {

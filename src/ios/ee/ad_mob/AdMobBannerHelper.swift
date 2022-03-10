@@ -26,36 +26,45 @@ internal class AdMobBannerHelper {
 
     func getAdSize(_ index: Int) -> GADAdSize {
         if index == 0 {
-            return kGADAdSizeBanner
+            return GADAdSizeBanner
         }
         if index == 1 {
-            return kGADAdSizeLargeBanner
+            return GADAdSizeLargeBanner
         }
         if index == 2 {
+            /*
+             FIXME
+             Not supported.
             if Utils.isLandscape() {
                 return kGADAdSizeSmartBannerLandscape
             }
             return kGADAdSizeSmartBannerPortrait
+             */
+            return GADAdSizeInvalid
         }
         if index == 3 {
-            return kGADAdSizeMediumRectangle
+            return GADAdSizeMediumRectangle
         }
         assert(false, "Invalid ad index")
-        return kGADAdSizeInvalid
+        return GADAdSizeInvalid
     }
 
     private func getIndex(_ adSize: GADAdSize) -> Int {
-        if GADAdSizeEqualToSize(adSize, kGADAdSizeBanner) {
+        if GADAdSizeEqualToSize(adSize, GADAdSizeBanner) {
             return 0
         }
-        if GADAdSizeEqualToSize(adSize, kGADAdSizeLargeBanner) {
+        if GADAdSizeEqualToSize(adSize, GADAdSizeLargeBanner) {
             return 1
         }
+        /*
+         FIXME
+         Not supported.
         if GADAdSizeEqualToSize(adSize, kGADAdSizeSmartBannerLandscape) ||
             GADAdSizeEqualToSize(adSize, kGADAdSizeSmartBannerPortrait) {
             return 2
         }
-        if GADAdSizeEqualToSize(adSize, kGADAdSizeMediumRectangle) {
+         */
+        if GADAdSizeEqualToSize(adSize, GADAdSizeMediumRectangle) {
             return 3
         }
         assert(false, "Invalid ad size")

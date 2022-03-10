@@ -186,7 +186,6 @@ class UnityAdsBridge(
                     _application,
                     gameId,
                     testModeEnabled,
-                    true,
                     object : IUnityAdsInitializationListener {
                         override fun onInitializationComplete() {
                             if (cont.isActive) {

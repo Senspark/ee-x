@@ -234,7 +234,6 @@ namespace EE.Editor {
                     iosLibraries.Add("ee-x/apps-flyer");
                 }
                 if (IsAdColonyEnabled) {
-                    androidRepositories.Add("https://adcolony.bintray.com/AdColony");
                     androidLibraries.Add($"com.senspark.ee:ad-colony:[{LibraryVersion}]");
                     iosLibraries.Add("ee-x/ad-colony");
                 }
@@ -242,7 +241,6 @@ namespace EE.Editor {
                     androidLibraries.Add($"com.senspark.ee:ad-mob:[{LibraryVersion}]");
                     iosLibraries.Add("ee-x/ad-mob");
                     if (IsAdMobMediationEnabled) {
-                        androidRepositories.Add("https://adcolony.bintray.com/AdColony");
                         androidRepositories.Add("https://sdk.tapjoy.com");
                         androidLibraries.Add($"com.senspark.ee:ad-mob-mediation:[{LibraryVersion}]");
                         iosLibraries.Add("ee-x/ad-mob-mediation");
@@ -261,7 +259,6 @@ namespace EE.Editor {
                 if (IsIronSourceEnabled) {
                     androidRepositories.Add("https://android-sdk.is.com");
                     if (IsIronSourceMediationEnabled) {
-                        androidRepositories.Add("https://adcolony.bintray.com/AdColony");
                         androidRepositories.Add("https://sdk.tapjoy.com");
                         androidLibraries.Add($"com.senspark.ee:iron-source-mediation:[{LibraryVersion}]");
                         iosLibraries.Add("ee-x/iron-source-mediation");

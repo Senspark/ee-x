@@ -23,7 +23,8 @@ namespace EE.Editor {
             var android = config.Root.TryGetNode("android");
             var defaultConfig = android.TryGetNode("defaultConfig");
             defaultConfig.RemoveContentNode("multiDexEnabled false");
-            defaultConfig.AppendContentNode("multiDexEnabled true");
+            defaultConfig.RemoveContentNode("multiDexEnabled true");
+            defaultConfig.AppendContentNode($"multiDexEnabled ${(enabled ? "true" : "false")}");
         }
 
         private static void SetFixPackageOptionsEnabled(GradleConfig config, bool enabled) {
@@ -33,7 +34,12 @@ namespace EE.Editor {
                 packagingOptions = new GradleNode("packagingOptions");
                 android.AppendChildNode(packagingOptions);
             }
-            packagingOptions.AppendContentNode("exclude 'META-INF/kotlinx-serialization-json.kotlin_module'");
+            const string content = "exclude 'META-INF/kotlinx-serialization-json.kotlin_module'";
+            if (enabled) {
+                packagingOptions.AppendContentNode(content);
+            } else {
+                packagingOptions.RemoveContentNode(content);
+            }
         }
     }
 }

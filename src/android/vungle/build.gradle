@@ -12,7 +12,7 @@ android {
     }
 
     defaultConfig {
-        minSdkVersion 14
+        minSdkVersion 17
         targetSdkVersion rootProject.targetSdkVersion
     }
 }
@@ -29,7 +29,7 @@ dependencies {
     // Use "api" to inherit manifest elements.
     api 'com.vungle:publisher-sdk-android:6.10.4'
 
-    implementation 'androidx.localbroadcastmanager:localbroadcastmanager:1.0.0'
+    implementation 'androidx.localbroadcastmanager:localbroadcastmanager:1.1.0'
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$kotlinCoroutinesVersion"
     implementation "org.jetbrains.kotlinx:kotlinx-serialization-json:$kotlinSerializationVersion"

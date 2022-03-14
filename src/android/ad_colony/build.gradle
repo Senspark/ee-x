@@ -2,10 +2,6 @@ apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlinx-serialization'
 
-repositories {
-    maven { url 'https://adcolony.bintray.com/AdColony' }
-}
-
 android {
     buildToolsVersion rootProject.buildToolsVersion
     compileSdkVersion rootProject.compileSdkVersion
@@ -16,7 +12,7 @@ android {
     }
 
     defaultConfig {
-        minSdkVersion 16
+        minSdkVersion 17
         targetSdkVersion rootProject.targetSdkVersion
     }
 }

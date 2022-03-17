@@ -24,7 +24,7 @@ namespace EE.Editor {
             var defaultConfig = android.TryGetNode("defaultConfig");
             defaultConfig.RemoveContentNode("multiDexEnabled false");
             defaultConfig.RemoveContentNode("multiDexEnabled true");
-            defaultConfig.AppendContentNode($"multiDexEnabled ${(enabled ? "true" : "false")}");
+            defaultConfig.AppendContentNode($"multiDexEnabled {(enabled ? "true" : "false")}");
         }
 
         private static void SetFixPackageOptionsEnabled(GradleConfig config, bool enabled) {

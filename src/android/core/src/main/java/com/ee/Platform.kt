@@ -298,8 +298,16 @@ object Platform {
         return versionCode
     }
 
-    // https://github.com/guardianproject/checkey/blob/master/app/src/main/java/info/guardianproject/checkey/Utils.java
     private fun getApplicationSignatures(context: Context, algorithm: String, packageName: String): List<String> {
+        val signatures = getApplicationSignaturesApk(context, algorithm, packageName)
+        if (signatures.isNotEmpty()) {
+            return signatures
+        }
+        return getApplicationSignaturesNaive(context, algorithm, packageName)
+    }
+
+    // https://github.com/guardianproject/checkey/blob/master/app/src/main/java/info/guardianproject/checkey/Utils.java
+    private fun getApplicationSignaturesApk(context: Context, algorithm: String, packageName: String): List<String> {
         val signatures = mutableListOf<String>()
         val packageManager = context.packageManager
         try {
@@ -313,6 +321,7 @@ object Platform {
                 md.reset()
             }
         } catch (ex: PackageManager.NameNotFoundException) {
+            ex.printStackTrace()
         }
         return signatures
     }

@@ -83,6 +83,7 @@ bool AppDelegate::applicationDidFinishLaunching() {
     auto [screenWidth, screenHeight] = ee::getScreenSize();
     getLogger().info("View size = %d %d", viewWidth, viewHeight);
     getLogger().info("Screen size = %d %d", screenWidth, screenHeight);
+    getLogger().info("SHA1 = %s", ee::getSHA1CertificateFingerprint().c_str());
 
     ee::Logger::setSystemLogger(getLogger());
 

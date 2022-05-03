@@ -24,8 +24,8 @@ if (rootProject.ext.has('buildMaven') && rootProject.buildMaven) {
 dependencies {
     api project(':ee-x-firebase-core')
     // api platform("com.google.firebase:firebase-bom:$firebaseVersion")
-    api 'com.google.firebase:firebase-analytics-ktx:20.1.0'
-    api 'com.google.firebase:firebase-config-ktx:21.0.1'
+    api 'com.google.firebase:firebase-analytics-ktx:20.1.2'
+    api 'com.google.firebase:firebase-config-ktx:21.0.2'
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
     implementation "org.jetbrains.kotlinx:kotlinx-serialization-json:$kotlinSerializationVersion"
 }

@@ -25,5 +25,5 @@ if (rootProject.ext.has('buildMaven') && rootProject.buildMaven) {
 
 dependencies {
     // api platform("com.google.firebase:firebase-bom:$firebaseVersion")
-    api 'com.google.firebase:firebase-messaging-ktx:23.0.0'
+    api 'com.google.firebase:firebase-messaging-ktx:23.0.3'
 }

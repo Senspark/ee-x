@@ -51,7 +51,7 @@ namespace EE {
                 return;
             }
             _screens.Push(screenName);
-            _impl.SetCurrentScreen(screenName, null);
+            _impl.SetCurrentScreen(screenName);
         }
 
         public void PopScreen() {
@@ -64,10 +64,10 @@ namespace EE {
             }
             _screens.Pop();
             if (_screens.Count == 0) {
-                _impl.SetCurrentScreen(null, null);
+                _impl.SetCurrentScreen(null);
             } else {
                 var screenName = _screens.Peek();
-                _impl.SetCurrentScreen(screenName, null);
+                _impl.SetCurrentScreen(screenName);
             }
         }
 
@@ -77,7 +77,7 @@ namespace EE {
                 return;
             }
             _screens.Clear();
-            _impl.SetCurrentScreen(null, null);
+            _impl.SetCurrentScreen(null);
         }
 
         public void LogEvent(string name) {

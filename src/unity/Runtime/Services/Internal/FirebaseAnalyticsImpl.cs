@@ -1,17 +1,19 @@
 using System;
+using System.Linq;
 using System.Reflection;
 
 using UnityEngine.Assertions;
 
 namespace EE.Internal {
     internal class FirebaseAnalyticsImpl : IFirebaseAnalyticsImpl {
-        private readonly MethodInfo _methodSetCurrentScreen;
         private readonly MethodInfo _methodLogEvent;
         private readonly MethodInfo _methodLogEventParameters;
         private readonly Type _typeParameter;
         private readonly ConstructorInfo _constructorLong;
         private readonly ConstructorInfo _constructorDouble;
         private readonly ConstructorInfo _constructorString;
+        private readonly string _parameterScreenName;
+        private string _screenName;
 
         public FirebaseAnalyticsImpl() {
             var type = Type.GetType("Firebase.Analytics.FirebaseAnalytics, Firebase.Analytics");
@@ -20,13 +22,14 @@ namespace EE.Internal {
             _typeParameter = Type.GetType("Firebase.Analytics.Parameter, Firebase.Analytics");
             Assert.IsNotNull(_typeParameter);
 
-            _methodSetCurrentScreen = type.GetMethod("SetCurrentScreen", new[] {typeof(string), typeof(string)});
             _methodLogEvent = type.GetMethod("LogEvent", new[] {typeof(string)});
             _methodLogEventParameters =
                 type.GetMethod("LogEvent", new[] {typeof(string), _typeParameter.MakeArrayType()});
-            Assert.IsNotNull(_methodSetCurrentScreen);
             Assert.IsNotNull(_methodLogEvent);
             Assert.IsNotNull(_methodLogEventParameters);
+
+            _parameterScreenName = (string) type.GetProperty("ParameterScreenName")?.GetValue(null);
+            Assert.IsNotNull(_parameterScreenName);
 
             _constructorLong = _typeParameter.GetConstructor(new[] {typeof(string), typeof(long)});
             _constructorDouble = _typeParameter.GetConstructor(new[] {typeof(string), typeof(double)});
@@ -36,15 +39,35 @@ namespace EE.Internal {
             Assert.IsNotNull(_constructorString);
         }
 
-        public void SetCurrentScreen(string screenName, string screenClass) {
-            _methodSetCurrentScreen.Invoke(null, new object[] {screenName, screenClass});
+        public void SetCurrentScreen(string screenName) {
+            _screenName = screenName;
         }
 
         public void LogEvent(string name) {
-            _methodLogEvent.Invoke(null, new object[] {name});
+            if (_screenName == null) {
+                LogEventInternal(name);
+            } else {
+                LogEventInternal(name, new[] {
+                    (_parameterScreenName, (object) _screenName)
+                });
+            }
         }
 
         public void LogEvent(string name, (string, object)[] parameters) {
+            if (_screenName == null) {
+                LogEventInternal(name, parameters);
+            } else {
+                LogEventInternal(name, parameters.Concat(new[] {
+                    (_parameterScreenName, (object) _screenName)
+                }).ToArray());
+            }
+        }
+
+        private void LogEventInternal(string name) {
+            _methodLogEvent.Invoke(null, new object[] {name});
+        }
+
+        private void LogEventInternal(string name, (string, object)[] parameters) {
             var firebaseParameters = Array.CreateInstance(_typeParameter, parameters.Length);
             for (var i = 0; i < parameters.Length; ++i) {
                 object param = null;

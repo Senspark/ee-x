@@ -122,7 +122,7 @@ Pod::Spec.new do |spec|
     s.dependency 'ee-x/ads'
 
     # https://github.com/AdColony/AdColony-iOS-SDK
-    s.dependency 'AdColony', '4.7.2'
+    s.dependency 'AdColony', '4.8.0'
   end
 
   spec.subspec 'ad-mob' do |s|
@@ -153,25 +153,25 @@ Pod::Spec.new do |spec|
 
     # https://cocoapods.org/pods/GoogleMobileAdsMediationAppLovin
     # https://developers.google.com/admob/ios/mediation/applovin#applovin-ios-mediation-adapter-changelog
-    s.dependency 'GoogleMobileAdsMediationAppLovin', '11.2.1.0'
+    s.dependency 'GoogleMobileAdsMediationAppLovin', '11.3.3.0'
 
     # https://cocoapods.org/pods/GoogleMobileAdsMediationFacebook
     # https://developers.google.com/admob/ios/mediation/facebook#facebook-ios-mediation-adapter-changelog
     s.dependency 'GoogleMobileAdsMediationFacebook', '6.9.0.1'
 
     # https://developers.google.com/admob/ios/mediation/inmobi#inmobi-ios-mediation-adapter-changelog
-    s.dependency 'GoogleMobileAdsMediationInMobi', '10.0.2.1'
+    s.dependency 'GoogleMobileAdsMediationInMobi', '10.0.5.0'
     
     # https://developers.google.com/admob/ios/mediation/ironsource#ironsource-ios-mediation-adapter-changelog
-    s.dependency 'GoogleMobileAdsMediationIronSource', '7.2.1.0'
+    s.dependency 'GoogleMobileAdsMediationIronSource', '7.2.1.2.0'
 
     # https://cocoapods.org/pods/GoogleMobileAdsMediationTapjoy
     # https://developers.google.com/admob/ios/mediation/tapjoy#tapjoy-ios-mediation-adapter-changelog
-    s.dependency 'GoogleMobileAdsMediationTapjoy', '12.9.0.1'
+    s.dependency 'GoogleMobileAdsMediationTapjoy', '12.9.1.0'
 
     # https://cocoapods.org/pods/GoogleMobileAdsMediationUnity
     # https://developers.google.com/admob/ios/mediation/unity#unity-ads-ios-mediation-adapter-changelog
-    s.dependency 'GoogleMobileAdsMediationUnity', '4.0.1.0'
+    s.dependency 'GoogleMobileAdsMediationUnity', '4.1.0.0'
 
     # https://cocoapods.org/pods/GoogleMobileAdsMediationVungle
     # https://developers.google.com/admob/ios/mediation/vungle#vungle-ios-mediation-adapter-changelog
@@ -199,7 +199,7 @@ Pod::Spec.new do |spec|
     s.dependency 'ee-x/core'
 
     # https://github.com/AppLovin/AppLovin-MAX-SDK-iOS/releases
-    s.dependency 'AppLovinSDK', '11.2.1'
+    s.dependency 'AppLovinSDK', '11.3.3'
   end
 
   spec.subspec 'apps-flyer' do |s|
@@ -301,7 +301,7 @@ Pod::Spec.new do |spec|
     s.dependency 'ee-x/ads'
 
     # https://developers.ironsrc.com/ironsource-mobile/ios/sdk-change-log/
-    s.dependency 'IronSourceSDK', '7.2.1'
+    s.dependency 'IronSourceSDK', '7.2.1.2'
   end
 
   spec.subspec 'iron-source-mediation' do |s|
@@ -309,37 +309,36 @@ Pod::Spec.new do |spec|
 
     # https://cocoapods.org/pods/IronSourceAdColonyAdapter
     # https://developers.is.com/ironsource-mobile/ios/adcolony-change-log/
-    s.dependency 'IronSourceAdColonyAdapter', '4.3.12.4'
+    s.dependency 'IronSourceAdColonyAdapter', '4.3.13.1'
 
     # https://cocoapods.org/pods/IronSourceAdMobAdapter
     # https://developers.is.com/ironsource-mobile/ios/admob-change-log/
-    s.dependency 'IronSourceAdMobAdapter', '4.3.31.0'
+    # Wait for support higher admob version.
+    # s.dependency 'IronSourceAdMobAdapter', '4.3.31.2'
 
     # https://cocoapods.org/pods/IronSourceAppLovinAdapter
     # https://developers.is.com/ironsource-mobile/ios/applovin-change-log/
-    s.dependency 'IronSourceAppLovinAdapter', '4.3.30.0'
+    s.dependency 'IronSourceAppLovinAdapter', '4.3.31.0'
 
     # https://cocoapods.org/pods/IronSourceFacebookAdapter
     # https://developers.is.com/ironsource-mobile/ios/meta-audience-network-change-log/
-    s.dependency 'IronSourceFacebookAdapter', '4.3.33.4'
+    s.dependency 'IronSourceFacebookAdapter', '4.3.33.6'
 
     # https://cocoapods.org/pods/IronSourceInMobiAdapter
     # https://developers.is.com/ironsource-mobile/ios/inmobi-change-log/
-    # FIXME: wait for support inmobi 10.0.2
-    # s.dependency 'IronSourceInMobiAdapter', '4.3.13.4'
+    s.dependency 'IronSourceInMobiAdapter', '4.3.14.0'
 
     # https://cocoapods.org/pods/IronSourceTapjoyAdapter
     # https://developers.is.com/ironsource-mobile/ios/tapjoy-change-log/
-    # FIXME: wait for support tapjoy 12.9.0
-    # s.dependency 'IronSourceTapjoyAdapter', '4.1.18.7'
+    s.dependency 'IronSourceTapjoyAdapter', '4.1.19.0'
 
     # https://cocoapods.org/pods/IronSourceUnityAdsAdapter
     # https://developers.is.com/ironsource-mobile/ios/unityads-change-log/
-    s.dependency 'IronSourceUnityAdsAdapter', '4.3.20.0'
+    s.dependency 'IronSourceUnityAdsAdapter', '4.3.21.0'
 
     # https://cocoapods.org/pods/IronSourceVungleAdapter
     # https://developers.is.com/ironsource-mobile/ios/vungle-change-log/
-    s.dependency 'IronSourceVungleAdapter', '4.3.19.1'
+    s.dependency 'IronSourceVungleAdapter', '4.3.19.3'
   end
 
   spec.subspec 'notification' do |s|
@@ -373,7 +372,7 @@ Pod::Spec.new do |spec|
     s.dependency 'ee-x/ads'
 
     # https://github.com/Unity-Technologies/unity-ads-ios/releases
-    s.dependency 'UnityAds', '4.0.1'
+    s.dependency 'UnityAds', '4.1.0'
   end
 
   spec.subspec 'vungle' do |s|

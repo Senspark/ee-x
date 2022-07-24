@@ -26,9 +26,9 @@ dependencies {
 
     // https://github.com/AdColony/AdColony-Android-SDK
     // Use "api" to inherit manifest elements.
-    api 'com.adcolony:sdk:4.7.1'
+    api 'com.adcolony:sdk:4.8.0'
 
-    implementation 'androidx.appcompat:appcompat:1.4.1'
+    implementation 'androidx.appcompat:appcompat:1.4.2'
     implementation 'com.google.android.gms:play-services-ads-identifier:18.0.1'
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$kotlinCoroutinesVersion"

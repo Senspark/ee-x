@@ -96,7 +96,7 @@ internal class AdMobBannerAd(
             val activity = _activity ?: return@runOnMainThread
             _isLoaded.set(false)
             val ad = AdView(activity)
-            ad.adSize = _adSize
+            ad.setAdSize(_adSize)
             ad.adUnitId = _adId
             ad.adListener = this
             val params = FrameLayout.LayoutParams(

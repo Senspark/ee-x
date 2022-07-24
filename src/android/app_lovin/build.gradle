@@ -27,7 +27,7 @@ dependencies {
     // https://dash.applovin.com/docs/integration#androidIntegration
     // https://github.com/AppLovin/AppLovin-MAX-SDK-Android/releases
     // Use "api" to inherit manifest elements.
-    api 'com.applovin:applovin-sdk:11.3.3'
+    api 'com.applovin:applovin-sdk:11.4.4'
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$kotlinCoroutinesVersion"

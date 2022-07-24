@@ -33,7 +33,7 @@ String[] ARCHITECTURES = [
 android {
     buildToolsVersion rootProject.ext.buildToolsVersion
     compileSdkVersion rootProject.ext.compileSdkVersion
-    ndkVersion '23.1.7779620'
+    ndkVersion '25.0.8775105'
 
     buildTypes {
         debug {

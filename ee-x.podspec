@@ -131,7 +131,7 @@ Pod::Spec.new do |spec|
     s.dependency 'ee-x/ads'
 
     # https://developers.google.com/admob/ios/rel-notes
-    s.dependency 'Google-Mobile-Ads-SDK', '9.1.0'
+    s.dependency 'Google-Mobile-Ads-SDK', '9.7.0'
   end
 
   # FIXME: currently not supported SDK 8.x
@@ -153,17 +153,17 @@ Pod::Spec.new do |spec|
 
     # https://cocoapods.org/pods/GoogleMobileAdsMediationAppLovin
     # https://developers.google.com/admob/ios/mediation/applovin#applovin-ios-mediation-adapter-changelog
-    s.dependency 'GoogleMobileAdsMediationAppLovin', '11.3.3.0'
+    s.dependency 'GoogleMobileAdsMediationAppLovin', '11.4.3.0'
 
     # https://cocoapods.org/pods/GoogleMobileAdsMediationFacebook
     # https://developers.google.com/admob/ios/mediation/facebook#facebook-ios-mediation-adapter-changelog
-    s.dependency 'GoogleMobileAdsMediationFacebook', '6.9.0.1'
+    s.dependency 'GoogleMobileAdsMediationFacebook', '6.11.1.0'
 
     # https://developers.google.com/admob/ios/mediation/inmobi#inmobi-ios-mediation-adapter-changelog
     s.dependency 'GoogleMobileAdsMediationInMobi', '10.0.5.0'
     
     # https://developers.google.com/admob/ios/mediation/ironsource#ironsource-ios-mediation-adapter-changelog
-    s.dependency 'GoogleMobileAdsMediationIronSource', '7.2.1.2.0'
+    s.dependency 'GoogleMobileAdsMediationIronSource', '7.2.3.1.0'
 
     # https://cocoapods.org/pods/GoogleMobileAdsMediationTapjoy
     # https://developers.google.com/admob/ios/mediation/tapjoy#tapjoy-ios-mediation-adapter-changelog
@@ -171,11 +171,11 @@ Pod::Spec.new do |spec|
 
     # https://cocoapods.org/pods/GoogleMobileAdsMediationUnity
     # https://developers.google.com/admob/ios/mediation/unity#unity-ads-ios-mediation-adapter-changelog
-    s.dependency 'GoogleMobileAdsMediationUnity', '4.1.0.0'
+    s.dependency 'GoogleMobileAdsMediationUnity', '4.2.1.0'
 
     # https://cocoapods.org/pods/GoogleMobileAdsMediationVungle
     # https://developers.google.com/admob/ios/mediation/vungle#vungle-ios-mediation-adapter-changelog
-    s.dependency 'GoogleMobileAdsMediationVungle', '6.10.6.1'
+    s.dependency 'GoogleMobileAdsMediationVungle', '6.11.0.1'
   end
 
   spec.subspec 'ads' do |s|
@@ -190,7 +190,7 @@ Pod::Spec.new do |spec|
     s.dependency 'ee-x/core'
 
     # https://github.com/adjust/ios_sdk
-    s.dependency 'Adjust', '4.29.4'
+    s.dependency 'Adjust', '4.31.0'
   end
 
   spec.subspec 'app-lovin' do |s|
@@ -199,7 +199,7 @@ Pod::Spec.new do |spec|
     s.dependency 'ee-x/core'
 
     # https://github.com/AppLovin/AppLovin-MAX-SDK-iOS/releases
-    s.dependency 'AppLovinSDK', '11.3.3'
+    s.dependency 'AppLovinSDK', '11.4.3'
   end
 
   spec.subspec 'apps-flyer' do |s|
@@ -245,9 +245,9 @@ Pod::Spec.new do |spec|
     s.dependency 'ee-x/core'
 
     # https://github.com/facebook/facebook-ios-sdk/releases
-    s.dependency 'FBSDKCoreKit', '13.0.0'
-    s.dependency 'FBSDKLoginKit', '13.0.0'
-    s.dependency 'FBSDKShareKit', '13.0.0'
+    s.dependency 'FBSDKCoreKit', '13.2.0'
+    s.dependency 'FBSDKLoginKit', '13.2.0'
+    s.dependency 'FBSDKShareKit', '13.2.0'
   end
 
   spec.subspec 'facebook-ads' do |s|
@@ -256,42 +256,44 @@ Pod::Spec.new do |spec|
     s.dependency 'ee-x/ads'
 
     # https://developers.facebook.com/docs/audience-network/changelog-ios/
-    s.dependency 'FBAudienceNetwork', '6.9.0'
+    s.dependency 'FBAudienceNetwork', '6.11.1'
   end
 
   spec.subspec 'firebase-core' do |s|
     s.source_files = 'src/ios/ee/firebase_core/**/*'
     s.header_mappings_dir = 'src/ios'
     s.dependency 'ee-x/core'
-    s.dependency 'Firebase/Core', '8.13.0'
+
+    # https://cocoapods.org/pods/FirebaseCore
+    s.dependency 'Firebase/Core', '9.3.0'
   end
 
   spec.subspec 'firebase-analytics' do |s|
     s.source_files = 'src/ios/ee/firebase_analytics/**/*'
     s.header_mappings_dir = 'src/ios'
     s.dependency 'ee-x/firebase-core'
-    s.dependency 'Firebase/Analytics', '8.13.0'
+    s.dependency 'Firebase/Analytics', '9.3.0'
   end
 
   spec.subspec 'firebase-crashlytics' do |s|
     s.source_files = 'src/ios/ee/firebase_crashlytics/**/*'
     s.header_mappings_dir = 'src/ios'
     s.dependency 'ee-x/firebase-core'
-    s.dependency 'Firebase/Crashlytics', '8.13.0'
+    s.dependency 'Firebase/Crashlytics', '9.3.0'
   end
 
   spec.subspec 'firebase-performance' do |s|
     s.source_files = 'src/ios/ee/firebase_performance/**/*'
     s.header_mappings_dir = 'src/ios'
     s.dependency 'ee-x/firebase-core'
-    s.dependency 'Firebase/Performance', '8.13.0'
+    s.dependency 'Firebase/Performance', '9.3.0'
   end
 
   spec.subspec 'firebase-remote-config' do |s|
     s.source_files = 'src/ios/ee/firebase_remote_config/*'
     s.header_mappings_dir = 'src/ios'
     s.dependency 'ee-x/firebase-core'
-    s.dependency 'Firebase/RemoteConfig', '8.13.0'
+    s.dependency 'Firebase/RemoteConfig', '9.3.0'
   end
 
   spec.subspec 'iron-source' do |s|
@@ -301,7 +303,7 @@ Pod::Spec.new do |spec|
     s.dependency 'ee-x/ads'
 
     # https://developers.ironsrc.com/ironsource-mobile/ios/sdk-change-log/
-    s.dependency 'IronSourceSDK', '7.2.1.2'
+    s.dependency 'IronSourceSDK', '7.2.3.1'
   end
 
   spec.subspec 'iron-source-mediation' do |s|
@@ -309,36 +311,35 @@ Pod::Spec.new do |spec|
 
     # https://cocoapods.org/pods/IronSourceAdColonyAdapter
     # https://developers.is.com/ironsource-mobile/ios/adcolony-change-log/
-    s.dependency 'IronSourceAdColonyAdapter', '4.3.13.1'
+    s.dependency 'IronSourceAdColonyAdapter', '4.3.14.2'
 
     # https://cocoapods.org/pods/IronSourceAdMobAdapter
     # https://developers.is.com/ironsource-mobile/ios/admob-change-log/
-    # Wait for support higher admob version.
-    # s.dependency 'IronSourceAdMobAdapter', '4.3.31.2'
+    s.dependency 'IronSourceAdMobAdapter', '4.3.34.0'
 
     # https://cocoapods.org/pods/IronSourceAppLovinAdapter
     # https://developers.is.com/ironsource-mobile/ios/applovin-change-log/
-    s.dependency 'IronSourceAppLovinAdapter', '4.3.31.0'
+    s.dependency 'IronSourceAppLovinAdapter', '4.3.33.0'
 
     # https://cocoapods.org/pods/IronSourceFacebookAdapter
     # https://developers.is.com/ironsource-mobile/ios/meta-audience-network-change-log/
-    s.dependency 'IronSourceFacebookAdapter', '4.3.33.6'
+    s.dependency 'IronSourceFacebookAdapter', '4.3.36.2'
 
     # https://cocoapods.org/pods/IronSourceInMobiAdapter
     # https://developers.is.com/ironsource-mobile/ios/inmobi-change-log/
-    s.dependency 'IronSourceInMobiAdapter', '4.3.14.0'
+    s.dependency 'IronSourceInMobiAdapter', '4.3.14.4'
 
     # https://cocoapods.org/pods/IronSourceTapjoyAdapter
     # https://developers.is.com/ironsource-mobile/ios/tapjoy-change-log/
-    s.dependency 'IronSourceTapjoyAdapter', '4.1.19.0'
+    s.dependency 'IronSourceTapjoyAdapter', '4.1.19.4'
 
     # https://cocoapods.org/pods/IronSourceUnityAdsAdapter
     # https://developers.is.com/ironsource-mobile/ios/unityads-change-log/
-    s.dependency 'IronSourceUnityAdsAdapter', '4.3.21.0'
+    s.dependency 'IronSourceUnityAdsAdapter', '4.3.22.3'
 
     # https://cocoapods.org/pods/IronSourceVungleAdapter
     # https://developers.is.com/ironsource-mobile/ios/vungle-change-log/
-    s.dependency 'IronSourceVungleAdapter', '4.3.19.3'
+    s.dependency 'IronSourceVungleAdapter', '4.3.20.3'
   end
 
   spec.subspec 'notification' do |s|
@@ -363,7 +364,9 @@ Pod::Spec.new do |spec|
     s.source_files = 'src/ios/ee/store/**/*'
     s.header_mappings_dir = 'src/ios'
     s.dependency 'ee-x/core'
-    s.dependency 'TPInAppReceipt', '3.1.1'
+
+    # https://cocoapods.org/pods/TPInAppReceipt
+    s.dependency 'TPInAppReceipt', '3.3.2'
   end
 
   spec.subspec 'unity-ads' do |s|
@@ -372,7 +375,7 @@ Pod::Spec.new do |spec|
     s.dependency 'ee-x/ads'
 
     # https://github.com/Unity-Technologies/unity-ads-ios/releases
-    s.dependency 'UnityAds', '4.1.0'
+    s.dependency 'UnityAds', '4.2.1'
   end
 
   spec.subspec 'vungle' do |s|
@@ -381,7 +384,7 @@ Pod::Spec.new do |spec|
     s.dependency 'ee-x/ads'
 
     # https://github.com/Vungle/iOS-SDK/blob/master/CHANGELOG.md
-    s.dependency 'VungleSDK-iOS', '6.10.6'
+    s.dependency 'VungleSDK-iOS', '6.11.0'
   end
 
 =begin

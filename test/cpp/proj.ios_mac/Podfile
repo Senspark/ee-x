@@ -36,6 +36,7 @@ abstract_target 'common' do
         # pod_ee_x('firebase-storage')
         
         pod 'Adjust', :modular_headers => true
+        pod 'GoogleUtilities', :modular_headers => true
     end
 
     target 'ee_x_test_desktop' do

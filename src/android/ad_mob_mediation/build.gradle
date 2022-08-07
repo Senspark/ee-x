@@ -52,5 +52,5 @@ dependencies {
     api 'com.google.ads.mediation:unity:4.2.1.1'
 
     // https://developers.google.com/admob/android/mediation/vungle#vungle-android-mediation-adapter-changelog
-    api 'com.google.ads.mediation:vungle:6.11.0.2'
+    api 'com.google.ads.mediation:vungle:6.11.0.3'
 }

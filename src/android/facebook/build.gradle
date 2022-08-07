@@ -25,8 +25,8 @@ dependencies {
     api project(':ee-x-core')
 
     // https://github.com/facebook/facebook-android-sdk/blob/master/CHANGELOG.md
-    api 'com.facebook.android:facebook-share:13.2.0'
-    api 'com.facebook.android:facebook-login:13.2.0'
+    api 'com.facebook.android:facebook-share:14.1.0'
+    api 'com.facebook.android:facebook-login:14.1.0'
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
     implementation "org.jetbrains.kotlinx:kotlinx-serialization-json:$kotlinSerializationVersion"

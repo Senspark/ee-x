@@ -30,24 +30,24 @@ dependencies {
     // https://github.com/ironsource-mobile/android-adapters/releases
     // https://developers.is.com/ironsource-mobile/android/adcolony-change-log/
     // Use "api" to inherit manifest elements.
-    api 'com.ironsource.adapters:adcolonyadapter:4.3.12'
+    api 'com.ironsource.adapters:adcolonyadapter:4.3.13'
     api 'com.adcolony:sdk:4.8.0'
 
     // https://developers.is.com/ironsource-mobile/android/admob-change-log/
-    api 'com.ironsource.adapters:admobadapter:4.3.29'
-    api 'com.google.android.gms:play-services-ads:21.1.0'
+    api 'com.ironsource.adapters:admobadapter:4.3.31'
+    api 'com.google.android.gms:play-services-ads:21.2.0'
 
     // https://developers.is.com/ironsource-mobile/android/applovin-change-log/
-    api 'com.ironsource.adapters:applovinadapter:4.3.33'
-    api 'com.applovin:applovin-sdk:11.4.4'
+    api 'com.ironsource.adapters:applovinadapter:4.3.34'
+    api 'com.applovin:applovin-sdk:11.5.2'
 
     // https://developers.is.com/ironsource-mobile/android/meta-audience-network-change-log/
-    api 'com.ironsource.adapters:facebookadapter:4.3.36'
+    api 'com.ironsource.adapters:facebookadapter:4.3.37'
     api 'com.facebook.android:audience-network-sdk:6.11.0'
 
     // https://developers.is.com/ironsource-mobile/android/inmobi-change-log/
-    api 'com.ironsource.adapters:inmobiadapter:4.3.14'
-    api 'com.inmobi.monetization:inmobi-ads:10.0.7'
+    api 'com.ironsource.adapters:inmobiadapter:4.3.15'
+    api 'com.inmobi.monetization:inmobi-ads:10.0.8'
 
     // // FIXME: Dependency failing com.google.android.gms:play-services-ads-identifier
     // https://developers.is.com/ironsource-mobile/android/tapjoy-change-log/
@@ -55,10 +55,10 @@ dependencies {
      api 'com.tapjoy:tapjoy-android-sdk:12.10.0'
 
     // https://developers.is.com/ironsource-mobile/android/unityads-change-log/
-    api 'com.ironsource.adapters:unityadsadapter:4.3.21'
-    api 'com.unity3d.ads:unity-ads:4.2.1'
+    api 'com.ironsource.adapters:unityadsadapter:4.3.23'
+    api 'com.unity3d.ads:unity-ads:4.4.1'
 
     // https://developers.is.com/ironsource-mobile/android/vungle-change-log/
-    api 'com.ironsource.adapters:vungleadapter:4.3.17'
-    api 'com.vungle:publisher-sdk-android:6.11.0'
+    api 'com.ironsource.adapters:vungleadapter:4.3.18'
+    api 'com.vungle:publisher-sdk-android:6.12.0'
 }

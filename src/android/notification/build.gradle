@@ -23,8 +23,8 @@ if (rootProject.ext.has('buildMaven') && rootProject.buildMaven) {
 
 dependencies {
     api project(':ee-x-core')
-    implementation 'androidx.annotation:annotation:1.4.0'
-    implementation 'androidx.core:core-ktx:1.8.0'
+    implementation 'androidx.annotation:annotation:1.5.0'
+    implementation 'androidx.core:core-ktx:1.9.0'
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
     implementation "org.jetbrains.kotlinx:kotlinx-serialization-json:$kotlinSerializationVersion"
 }

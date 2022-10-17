@@ -24,7 +24,7 @@ if (rootProject.ext.has('buildMaven') && rootProject.buildMaven) {
 dependencies {
     api project(':ee-x-core')
     api 'com.android.billingclient:billing-ktx:3.0.3'    
-    implementation 'androidx.annotation:annotation:1.4.0'
+    implementation 'androidx.annotation:annotation:1.5.0'
     implementation 'io.reactivex.rxjava3:rxandroid:3.0.0'
     implementation 'io.reactivex.rxjava3:rxjava:3.0.2'
     implementation 'io.reactivex.rxjava3:rxkotlin:3.0.0'

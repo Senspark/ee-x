@@ -215,7 +215,7 @@ namespace EE.Editor {
             iosPods.RemoveAll();
             androidPackages.RemoveAll();
             var androidLibraries = new List<string>();
-            var androidRepositories = new List<string>();
+            var androidRepositories = new HashSet<string>();
             var iosLibraries = new List<string>();
             if (IsMultiDexEnabled) {
                 androidLibraries.Add("androidx.multidex:multidex:[2.0.1]");
@@ -238,12 +238,13 @@ namespace EE.Editor {
                     iosLibraries.Add("ee-x/ad-colony");
                 }
                 if (IsAdMobEnabled) {
-                    androidLibraries.Add($"com.senspark.ee:ad-mob:[{LibraryVersion}]");
-                    iosLibraries.Add("ee-x/ad-mob");
                     if (IsAdMobMediationEnabled) {
                         androidRepositories.Add("https://sdk.tapjoy.com");
                         androidLibraries.Add($"com.senspark.ee:ad-mob-mediation:[{LibraryVersion}]");
                         iosLibraries.Add("ee-x/ad-mob-mediation");
+                    } else {
+                        androidLibraries.Add($"com.senspark.ee:ad-mob:[{LibraryVersion}]");
+                        iosLibraries.Add("ee-x/ad-mob");
                     }
                     if (IsAdMobTestSuiteEnabled) {
                         androidLibraries.Add($"com.senspark.ee:ad-mob-test-suite:[{LibraryVersion}]");

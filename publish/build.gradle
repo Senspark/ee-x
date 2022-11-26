@@ -19,14 +19,13 @@ allprojects {
         mavenCentral()
         maven { url 'https://android-sdk.is.com' }
         maven { url 'https://sdk.tapjoy.com' }
-        jcenter()
         mavenLocal()
     }
 }
 
 ext {
     compileSdkVersion = 33
-    buildToolsVersion = '33.0.0'
+    buildToolsVersion = '33.0.1'
     targetSdkVersion = 33
     firebaseVersion = '29.3.1'
     buildPrefab = true

@@ -25,10 +25,10 @@ dependencies {
     api project(':ee-x-core')
 
     // https://github.com/adjust/android_sdk/blob/master/CHANGELOG.md
-    api 'com.adjust.sdk:adjust-android:4.31.0'
+    api 'com.adjust.sdk:adjust-android:4.33.1'
 
     api 'com.android.installreferrer:installreferrer:2.2'
-    implementation 'androidx.annotation:annotation:1.4.0'
+    implementation 'androidx.annotation:annotation:1.5.0'
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
     implementation "org.jetbrains.kotlinx:kotlinx-serialization-json:$kotlinSerializationVersion"
 }

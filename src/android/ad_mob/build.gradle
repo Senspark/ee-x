@@ -27,8 +27,10 @@ dependencies {
     // https://developers.google.com/admob/android/rel-notes
     api 'com.google.android.gms:play-services-ads:21.3.0'
 
+    // https://developers.google.com/admob/android/mediation-test-suite
+    // In maintenance mode.
     compileOnly 'com.google.android.ads:mediation-test-suite:3.0.0'
-    implementation 'androidx.appcompat:appcompat:1.5.1'
+
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$kotlinCoroutinesVersion"
     implementation "org.jetbrains.kotlinx:kotlinx-serialization-json:$kotlinSerializationVersion"

@@ -215,6 +215,7 @@ namespace EE.Editor {
             iosPods.RemoveAll();
             androidPackages.RemoveAll();
             var androidLibraries = new HashSet<string>();
+            var fastAndroidLibraries = new HashSet<string>();
             var androidRepositories = new HashSet<string>();
             var iosLibraries = new HashSet<string>();
             if (IsMultiDexEnabled) {
@@ -223,6 +224,20 @@ namespace EE.Editor {
             if (IsCoreEnabled) {
                 androidLibraries.Add($"com.senspark.ee:core:[{LibraryVersion}]");
                 iosLibraries.Add("ee-x/core");
+                fastAndroidLibraries.Add("androidx.core:core:[1.9.0]");
+                fastAndroidLibraries.Add("androidx.core:core-ktx:[1.9.0]");
+                fastAndroidLibraries.Add("androidx.lifecycle:lifecycle-runtime:[2.5.1]");
+                if (IsAdMobEnabled || IsIronSourceMediationEnabled) {
+                    fastAndroidLibraries.Add("com.google.android.gms:play-services-ads:[21.3.0]");
+                    fastAndroidLibraries.Add("com.google.android.gms:play-services-base:[18.1.0]");
+                    fastAndroidLibraries.Add("com.google.android.gms:play-services-basement:[18.1.0]");
+                }
+                if (IsAdMobMediationEnabled || IsIronSourceEnabled) {
+                    androidRepositories.Add("https://android-sdk.is.com");
+                }
+                if (IsAdMobMediationEnabled || IsIronSourceMediationEnabled) {
+                    androidRepositories.Add("https://sdk.tapjoy.com");
+                }
                 if (IsAdjustEnabled) {
                     androidLibraries.Add($"com.senspark.ee:adjust:[{LibraryVersion}]");
                     iosLibraries.Add("ee-x/adjust");
@@ -239,8 +254,6 @@ namespace EE.Editor {
                 }
                 if (IsAdMobEnabled) {
                     if (IsAdMobMediationEnabled) {
-                        androidRepositories.Add("https://android-sdk.is.com");
-                        androidRepositories.Add("https://sdk.tapjoy.com");
                         androidLibraries.Add($"com.senspark.ee:ad-mob-mediation:[{LibraryVersion}]");
                         iosLibraries.Add("ee-x/ad-mob-mediation");
                     } else {
@@ -259,9 +272,7 @@ namespace EE.Editor {
                     iosLibraries.Add("ee-x/facebook-ads");
                 }
                 if (IsIronSourceEnabled) {
-                    androidRepositories.Add("https://android-sdk.is.com");
                     if (IsIronSourceMediationEnabled) {
-                        androidRepositories.Add("https://sdk.tapjoy.com");
                         androidLibraries.Add($"com.senspark.ee:iron-source-mediation:[{LibraryVersion}]");
                         iosLibraries.Add("ee-x/iron-source-mediation");
                     } else {
@@ -280,6 +291,9 @@ namespace EE.Editor {
             }
             androidPackages.Add(repositories);
             foreach (var library in androidLibraries) {
+                androidPackages.Add(new XElement("androidPackage", new XAttribute("spec", library)));
+            }
+            foreach (var library in fastAndroidLibraries) {
                 androidPackages.Add(new XElement("androidPackage", new XAttribute("spec", library)));
             }
             foreach (var library in iosLibraries) {

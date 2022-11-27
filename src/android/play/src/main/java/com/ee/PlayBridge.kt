@@ -13,7 +13,6 @@ import com.google.android.gms.games.AchievementsClient
 import com.google.android.gms.games.Games
 import com.google.android.gms.games.LeaderboardsClient
 import com.google.android.gms.games.achievement.Achievement
-import com.google.common.truth.Truth.assertThat
 import kotlinx.serialization.Serializable
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
@@ -197,7 +196,7 @@ class PlayBridge(
                         innerActivity.startActivityForResult(client.signInIntent, code)
                     }
                     .onFinish { requestCode, resultCode, _ ->
-                        assertThat(requestCode == code)
+                        assert(requestCode == code)
                         val successful = resultCode == Activity.RESULT_OK
                         callback(successful)
                     }
@@ -233,7 +232,7 @@ class PlayBridge(
                         innerActivity.startActivityForResult(intent, code)
                     }
                     .onFinish { requestCode, _, _ ->
-                        assertThat(requestCode == code)
+                        assert(requestCode == code)
                         // OK.
                     }
                     .process()
@@ -303,7 +302,7 @@ class PlayBridge(
                         innerActivity.startActivityForResult(intent, code)
                     }
                     .onFinish { requestCode, _, _ ->
-                        assertThat(requestCode).isEqualTo(code)
+                        assert(requestCode == code)
                         // OK.
                     }
                     .process()
@@ -327,7 +326,7 @@ class PlayBridge(
                         innerActivity.startActivityForResult(intent, code)
                     }
                     .onFinish { requestCode, _, _ ->
-                        assertThat(requestCode).isEqualTo(code)
+                        assert(requestCode == code)
                         // OK.
                     }
                     .process()

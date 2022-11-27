@@ -7,7 +7,6 @@ import android.view.View
 import android.widget.FrameLayout
 import androidx.annotation.AnyThread
 import androidx.annotation.UiThread
-import com.google.common.truth.Truth.assertThat
 
 /**
  * Created by Zinge on 10/9/17.
@@ -60,7 +59,7 @@ object Utils {
     @AnyThread
     @JvmStatic
     fun toBoolean(value: String): Boolean {
-        assertThat(value).isAnyOf("true", "false")
+        assert(value == "true" || value == "false")
         return "true" == value
     }
 

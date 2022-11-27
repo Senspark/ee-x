@@ -5,7 +5,6 @@ import android.app.Application
 import android.os.Bundle
 import androidx.annotation.AnyThread
 import com.ee.internal.deserialize
-import com.google.common.truth.Truth.assertThat
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.ktx.analytics
 import com.google.firebase.analytics.ktx.logEvent
@@ -142,7 +141,7 @@ class FirebaseAnalyticsBridge(
                     bundle.putDouble(key, double)
                     continue
                 }
-                assertThat(false).isTrue()
+                assert(false)
             }
             plugin.logEvent(name, bundle)
         }

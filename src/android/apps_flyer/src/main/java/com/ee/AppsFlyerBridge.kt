@@ -6,7 +6,6 @@ import androidx.annotation.AnyThread
 import com.appsflyer.AppsFlyerConversionListener
 import com.appsflyer.AppsFlyerLib
 import com.ee.internal.deserialize
-import com.google.common.truth.Truth.assertThat
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.JsonPrimitive
 import kotlinx.serialization.json.doubleOrNull
@@ -178,7 +177,7 @@ class AppsFlyerBridge(
                     parsedValues[key] = double
                     continue
                 }
-                assertThat(false).isTrue()
+                assert(false)
             }
             _tracker.logEvent(_application, name, values)
         }

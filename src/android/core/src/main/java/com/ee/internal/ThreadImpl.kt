@@ -4,7 +4,6 @@ import android.os.Handler
 import android.os.Looper
 import androidx.annotation.AnyThread
 import com.ee.ILogger
-import com.google.common.truth.Truth
 
 class ThreadImpl(private val _logger: ILogger)
     : IThreadImpl {
@@ -22,7 +21,7 @@ class ThreadImpl(private val _logger: ILogger)
             for (e in currentStackTrace) {
                 _logger.warn(e.toString())
             }
-            Truth.assertThat(false).isTrue()
+            assert(false)
         }
     }
 

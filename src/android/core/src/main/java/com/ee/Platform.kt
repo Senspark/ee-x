@@ -23,7 +23,6 @@ import com.ee.internal.deserialize
 import com.ee.internal.serialize
 import com.google.android.gms.ads.identifier.AdvertisingIdClient
 import com.google.android.gms.common.wrappers.InstantApps
-import com.google.common.truth.Truth.assertThat
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
@@ -155,7 +154,7 @@ object Platform {
         bridge.registerHandler(kGetViewSize) {
             val activity = PluginManager.instance.activity
             if (activity == null) {
-                assertThat(false).isTrue()
+                assert(false)
                 return@registerHandler ""
             }
             val size = getViewSize(activity)
@@ -173,7 +172,7 @@ object Platform {
         bridge.registerHandler(kGetSafeInset) {
             val activity = PluginManager.instance.activity
             if (activity == null) {
-                assertThat(false).isTrue()
+                assert(false)
                 return@registerHandler ""
             }
             val inset = getSafeInset(activity)
@@ -197,7 +196,7 @@ object Platform {
         bridge.registerAsyncHandler(kGetInstallReferrer) {
             val activity = PluginManager.instance.activity
             if (activity == null) {
-                assertThat(false).isTrue()
+                assert(false)
                 return@registerAsyncHandler ""
             }
             getInstallReferrer(activity)
@@ -206,10 +205,9 @@ object Platform {
             val request = deserialize<ShowInstallPromptRequest>(message)
             val activity = PluginManager.instance.activity
             if (activity == null) {
-                assertThat(false).isTrue()
+                assert(false)
                 return@registerHandler ""
             }
-            assertThat(activity).isNotNull()
             showInstantPrompt(request.url, request.referrer, activity)
             ""
         }

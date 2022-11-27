@@ -25,7 +25,6 @@ import com.facebook.ads.MediaView
 import com.facebook.ads.NativeAd
 import com.facebook.ads.NativeAdBase
 import com.facebook.ads.NativeAdListener
-import com.google.common.truth.Truth.assertThat
 import kotlinx.serialization.Serializable
 import java.util.concurrent.atomic.AtomicBoolean
 
@@ -261,7 +260,7 @@ internal class FacebookNativeAd(
     override fun onAdLoaded(nativeAd: Ad) {
         Thread.runOnMainThread {
             _logger.debug("$kTag: ${this::onAdLoaded.name}")
-            assertThat(_ad === nativeAd)
+            assert(_ad === nativeAd)
             val ad = _ad ?: throw IllegalArgumentException("Ad is not initialized")
             val view = _view ?: throw IllegalArgumentException("Ad is not initialized")
             ad.unregisterView()

@@ -20,7 +20,6 @@ if (rootProject.ext.has('buildMaven') && rootProject.buildMaven) {
 }
 
 dependencies {
-    api project(':ee-x-core')    
-    implementation 'androidx.annotation:annotation:1.5.0'
+    api project(':ee-x-core')
     implementation 'androidx.core:core-ktx:1.9.0'
 }

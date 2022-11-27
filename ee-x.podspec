@@ -167,7 +167,8 @@ Pod::Spec.new do |spec|
 
     # https://cocoapods.org/pods/GoogleMobileAdsMediationTapjoy
     # https://developers.google.com/admob/ios/mediation/tapjoy#tapjoy-ios-mediation-adapter-changelog
-    s.dependency 'GoogleMobileAdsMediationTapjoy', '12.11.0.0'
+    # Low priority.
+    # s.dependency 'GoogleMobileAdsMediationTapjoy', '12.11.0.0'
 
     # https://cocoapods.org/pods/GoogleMobileAdsMediationUnity
     # https://developers.google.com/admob/ios/mediation/unity#unity-ads-ios-mediation-adapter-changelog
@@ -175,7 +176,8 @@ Pod::Spec.new do |spec|
 
     # https://cocoapods.org/pods/GoogleMobileAdsMediationVungle
     # https://developers.google.com/admob/ios/mediation/vungle#vungle-ios-mediation-adapter-changelog
-    s.dependency 'GoogleMobileAdsMediationVungle', '6.12.0.0'
+    # Low priority.# Low priority.
+    # s.dependency 'GoogleMobileAdsMediationVungle', '6.12.0.0'
   end
 
   spec.subspec 'ads' do |s|
@@ -340,7 +342,8 @@ Pod::Spec.new do |spec|
 
     # https://cocoapods.org/pods/IronSourceTapjoyAdapter
     # https://developers.is.com/ironsource-mobile/ios/tapjoy-change-log/
-    s.dependency 'IronSourceTapjoyAdapter', '4.1.22.0'
+    # Low priority.
+    # s.dependency 'IronSourceTapjoyAdapter', '4.1.22.0'
 
     # https://cocoapods.org/pods/IronSourceUnityAdsAdapter
     # https://developers.is.com/ironsource-mobile/ios/unityads-change-log/
@@ -348,7 +351,8 @@ Pod::Spec.new do |spec|
 
     # https://cocoapods.org/pods/IronSourceVungleAdapter
     # https://developers.is.com/ironsource-mobile/ios/vungle-change-log/
-    s.dependency 'IronSourceVungleAdapter', '4.3.22.3'
+    # Low priority.
+    # s.dependency 'IronSourceVungleAdapter', '4.3.22.3'
   end
 
   spec.subspec 'notification' do |s|

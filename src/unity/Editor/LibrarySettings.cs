@@ -214,9 +214,9 @@ namespace EE.Editor {
             }
             iosPods.RemoveAll();
             androidPackages.RemoveAll();
-            var androidLibraries = new List<string>();
+            var androidLibraries = new HashSet<string>();
             var androidRepositories = new HashSet<string>();
-            var iosLibraries = new List<string>();
+            var iosLibraries = new HashSet<string>();
             if (IsMultiDexEnabled) {
                 androidLibraries.Add("androidx.multidex:multidex:[2.0.1]");
             }

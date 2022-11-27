@@ -239,6 +239,7 @@ namespace EE.Editor {
                 }
                 if (IsAdMobEnabled) {
                     if (IsAdMobMediationEnabled) {
+                        androidRepositories.Add("https://android-sdk.is.com");
                         androidRepositories.Add("https://sdk.tapjoy.com");
                         androidLibraries.Add($"com.senspark.ee:ad-mob-mediation:[{LibraryVersion}]");
                         iosLibraries.Add("ee-x/ad-mob-mediation");

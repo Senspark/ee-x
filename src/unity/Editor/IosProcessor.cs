@@ -14,6 +14,34 @@ namespace EE.Editor {
         public int callbackOrder { get; }
 
         public void OnPostprocessBuild(BuildReport report) {
+            UpdateXcodeProject(report);
+            UpdateInfoPlist(report);
+        }
+
+        private void UpdateXcodeProject(BuildReport report) {
+            // https://support.unity.com/hc/en-us/articles/207942813-How-can-I-disable-Bitcode-support-
+            var projectPath = report.summary.outputPath + "/Unity-iPhone.xcodeproj/project.pbxproj";
+
+            var pbxProject = new PBXProject();
+            pbxProject.ReadFromFile(projectPath);
+
+            // Disabling Bitcode on all targets.
+            // Main.
+            var target = pbxProject.GetUnityMainTargetGuid();
+            pbxProject.SetBuildProperty(target, "ENABLE_BITCODE", "NO");
+
+            // Unity Tests.
+            target = pbxProject.TargetGuidByName(PBXProject.GetUnityTestTargetName());
+            pbxProject.SetBuildProperty(target, "ENABLE_BITCODE", "NO");
+
+            // Unity Framework.
+            target = pbxProject.GetUnityFrameworkTargetGuid();
+            pbxProject.SetBuildProperty(target, "ENABLE_BITCODE", "NO");
+
+            pbxProject.WriteToFile(projectPath);
+        }
+
+        private void UpdateInfoPlist(BuildReport report) {
             var plistPath = Path.Combine(report.summary.outputPath, "Info.plist");
             var plist = new PlistDocument();
             plist.ReadFromFile(plistPath);

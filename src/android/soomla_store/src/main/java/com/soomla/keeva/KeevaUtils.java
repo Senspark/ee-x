@@ -84,8 +84,8 @@ public class KeevaUtils {
         SharedPreferences sharedPrefs = context.getSharedPreferences("store.kv.db", Context.MODE_PRIVATE);
 		String generatedId = sharedPrefs.getString(DB_KEY_SOOMLA_GENERATED_ID, null);
 		if (TextUtils.isEmpty(generatedId)) {
-			generatedId = UUID.randomUUID().toString();
-            sharedPrefs.edit().putString(DB_KEY_SOOMLA_GENERATED_ID, generatedId).commit();
+			String id = UUID.randomUUID().toString();
+            sharedPrefs.edit().putString(DB_KEY_SOOMLA_GENERATED_ID, id).commit();
 		}
 		return generatedId;
 	}

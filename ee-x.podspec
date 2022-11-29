@@ -215,7 +215,7 @@ Pod::Spec.new do |spec|
 
   spec.subspec 'core' do |s|
     s.source_files = 'src/ios/ee/core/**/*'
-    s.header_mappings_dir = 'src/ios'
+    s.header_mappings_dir = 'src/ios/ee/core' # Must be non-path headers to fix umbrella.h
     s.user_target_xcconfig = {
       'LD_RUNPATH_SEARCH_PATHS' => [
         '/usr/lib/swift',
@@ -254,7 +254,7 @@ Pod::Spec.new do |spec|
 
   spec.subspec 'facebook-ads' do |s|
     s.source_files = 'src/ios/ee/facebook_ads/**/*'
-    s.header_mappings_dir = 'src/ios'
+    s.header_mappings_dir = 'src/ios/ee/facebook_ads' # Must be non-path headers to fix umbrella.h
     s.dependency 'ee-x/ads'
 
     # https://developers.facebook.com/docs/audience-network/changelog-ios/
@@ -306,11 +306,17 @@ Pod::Spec.new do |spec|
     s.dependency 'Firebase/RemoteConfig', '9.6.0'
   end
 
+  spec.subspec 'iron-source-private' do |s|
+    s.source_files = 'src/ios/ee/iron_source/private/*'
+    s.header_mappings_dir = 'src/ios/ee/iron_source/private' # Must be non-path headers to fix umbrella.h
+  end
+
   spec.subspec 'iron-source' do |s|
-    s.source_files = 'src/ios/ee/iron_source/**/*'
-    s.public_header_files = 'src/ios/ee/iron_source/private/*.h'
+    s.source_files = 'src/ios/ee/iron_source/**'
+    s.private_header_files = 'src/ios/ee/iron_source/*.h' # Don't include in umbrella.h
     s.header_mappings_dir = 'src/ios'
     s.dependency 'ee-x/ads'
+    s.dependency 'ee-x/iron-source-private'
 
     # https://developers.ironsrc.com/ironsource-mobile/ios/sdk-change-log/
     s.dependency 'IronSourceSDK', '7.2.5.1'

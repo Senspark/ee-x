@@ -225,6 +225,9 @@ namespace EE.Editor {
                 "z4gj7hsk7h",
                 "x2jnk7ly8j",
                 "ln5gz23vtd",
+
+                // Missing skadnetworks from Unity dashboard.
+                "4w7y6s5ca2",
             }.Select(item => $"{item}.skadnetwork");
             SetSkAdNetwork(plist, networks.ToArray());
             plist.WriteToFile(plistPath);

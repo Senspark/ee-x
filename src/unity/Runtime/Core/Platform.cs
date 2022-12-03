@@ -14,7 +14,7 @@ namespace EE {
     }
 
     public enum AuthorizationStatus {
-        NotDeterminted,
+        NotDetermined,
         Restricted,
         Denied,
         Authorized,

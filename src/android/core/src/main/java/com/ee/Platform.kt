@@ -520,9 +520,19 @@ object Platform {
                 _logger.error("getSafeInset", ex)
             }
         } else {
-            val decorView = activity.window.decorView
-            val insets = decorView.rootWindowInsets
-            val cutout = insets.displayCutout
+            val cutout: DisplayCutout?
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
+                // FIXME: not work in Unity but work in cocos2d.
+                val decorView = activity.window.decorView
+                val insets = decorView.rootWindowInsets
+                cutout = insets.displayCutout
+            } else if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R) {
+                // https://stackoverflow.com/questions/72592745/displaycutout-is-null-when-rotated-to-the-right
+                @Suppress("DEPRECATION")
+                cutout = activity.windowManager.defaultDisplay.cutout
+            } else {
+                cutout = activity.display?.cutout
+            }
             if (cutout == null) {
                 // Doesn't have cutout.
             } else {

@@ -2,6 +2,9 @@ using UnityEngine;
 
 namespace EE {
     public class SafeAreaLayer : MonoBehaviour {
+        [SerializeField]
+        private bool _mirrorEnabled = false;
+
         /// <summary>
         /// Conform to screen safe area on X-axis (default true, disable to ignore).
         /// </summary>
@@ -51,6 +54,9 @@ namespace EE {
             _screenWidth = screenWidth;
             _screenHeight = screenHeight;
             var inset = Platform.GetSafeInset();
+            if (_mirrorEnabled) {
+                inset.left = inset.right = Mathf.Max(inset.left, inset.right);
+            }
             var rect = new Rect(
                 inset.left,
                 inset.bottom,

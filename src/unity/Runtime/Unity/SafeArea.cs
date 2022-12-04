@@ -15,7 +15,7 @@ namespace EE {
         private bool _conformY = true;
 
         [SerializeField]
-        private bool _logging = false;
+        private bool _logEnabled = false;
 
         private RectTransform _panel;
         private ScreenOrientation? _orientation;
@@ -93,7 +93,7 @@ namespace EE {
                 }
             }
 
-            if (_logging) {
+            if (_logEnabled) {
                 Debug.Log(
                     $"New safe area applied to {name}: x={rect.x}, y={rect.y}, w={rect.width}, h={rect.height} on full extents w={_screenWidth}, h={_screenHeight}");
             }

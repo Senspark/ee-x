@@ -17,6 +17,7 @@ namespace EE.Internal {
         (int, int) GetViewSize();
         (int, int) GetScreenSize();
         Task<string> GetDeviceId();
+        SafeInset GetSafeInset();
         bool SendMail(string recipient, string subject, string body);
         Task<bool> TestConnection(string hostName, float timeOut);
         Task<InstallReferrer> GetInstallReferrer();

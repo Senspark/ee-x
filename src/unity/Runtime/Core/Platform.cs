@@ -13,6 +13,13 @@ namespace EE {
         public string utm_campaign;
     }
 
+    public struct SafeInset {
+        public int left;
+        public int right;
+        public int top;
+        public int bottom;
+    }
+
     public enum AuthorizationStatus {
         NotDetermined,
         Restricted,
@@ -86,6 +93,10 @@ namespace EE {
 
         public static async Task<string> GetDeviceId() {
             return await _impl.GetDeviceId();
+        }
+
+        public static SafeInset GetSafeInset() {
+            return _impl.GetSafeInset();
         }
 
         public static bool SendMail(string recipient, string subject, string body) {

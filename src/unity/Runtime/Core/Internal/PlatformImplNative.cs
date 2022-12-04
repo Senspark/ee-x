@@ -142,6 +142,25 @@ namespace EE.Internal {
         }
 
         [Serializable]
+        private struct SafeInsetResponse {
+            public int left;
+            public int right;
+            public int top;
+            public int bottom;
+        }
+
+        public SafeInset GetSafeInset() {
+            var response = _bridge.Call(kGetSafeInset);
+            var json = JsonUtility.FromJson<SafeInsetResponse>(response);
+            return new SafeInset {
+                left = json.left,
+                right = json.right,
+                top = json.top,
+                bottom = json.bottom,
+            };
+        }
+
+        [Serializable]
         private struct SendMailRequest {
             public string recipient;
             public string subject;

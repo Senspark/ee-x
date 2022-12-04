@@ -26,6 +26,7 @@ public class Platform: NSObject {
     private static let kGetViewSize = kPrefix + "getViewSize"
     private static let kGetScreenSize = kPrefix + "getScreenSize"
     private static let kGetDeviceId = kPrefix + "getDeviceId"
+    private static let kGetSafeInset = kPrefix + "getSafeInset"
     private static let kSendMail = kPrefix + "sendMail"
     private static let kTestConnection = kPrefix + "testConnection"
     private static let kRequestTrackingAuthorization = kPrefix + "requestTrackingAuthorization"
@@ -61,6 +62,15 @@ public class Platform: NSObject {
         }
         bridge.registerAsyncHandler(kGetDeviceId) { _, resolver in
             resolver(getDeviceId())
+        }
+        bridge.registerHandler(kGetSafeInset) { _ in
+            let inset = self.getSafeInset()
+            return EEJsonUtils.convertDictionary(toString: [
+                "left": inset.left,
+                "right": inset.right,
+                "top": inset.top,
+                "bottom": inset.bottom
+            ])
         }
         bridge.registerHandler(kSendMail) { message in
             let dict = EEJsonUtils.convertString(toDictionary: message)
@@ -195,6 +205,26 @@ public class Platform: NSObject {
         // and pass it back as a String or, if it fails, an empty string
         return (serialNumberAsCFString?.takeUnretainedValue() as? String) ?? ""
         #endif
+    }
+    
+    struct SafeInset {
+        var left: Int
+        var right: Int
+        var top: Int
+        var bottom: Int
+    }
+    
+    private class func getSafeInset() -> SafeInset {
+        let scale = getDensity()
+        let rootView = Utils.getCurrentRootViewController()
+        guard let insets = rootView?.view?.safeAreaInsets else {
+            return SafeInset(left: 0, right: 0, top: 0, bottom: 0)
+        }
+        return SafeInset(
+            left: Int(insets.left * CGFloat(scale)),
+            right: Int(insets.right * CGFloat(scale)),
+            top: Int(insets.top * CGFloat(scale)),
+            bottom: Int(insets.bottom * CGFloat(scale)))
     }
 
     private class func sendMail(_ recipient: String, _ subject: String, _ body: String) -> Bool {

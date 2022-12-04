@@ -1,7 +1,7 @@
 using UnityEngine;
 
 namespace EE {
-    public class SafeArea : MonoBehaviour {
+    public class SafeAreaLayer : MonoBehaviour {
         /// <summary>
         /// Conform to screen safe area on X-axis (default true, disable to ignore).
         /// </summary>

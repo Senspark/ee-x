@@ -164,7 +164,7 @@ class AppLovinBridge: NSObject, IPlugin {
         Thread.runOnMainThread {
             self.checkInitialized()
             guard let sdk = self._sdk else { return }
-            sdk.settings.isVerboseLogging = enabled
+            sdk.settings.isVerboseLoggingEnabled = enabled
         }
     }
     
@@ -172,7 +172,7 @@ class AppLovinBridge: NSObject, IPlugin {
         Thread.runOnMainThread {
             self.checkInitialized()
             guard let sdk = self._sdk else { return }
-            sdk.settings.muted = enabled
+            sdk.settings.isMuted = enabled
         }
     }
     

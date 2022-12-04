@@ -1,10 +1,10 @@
 #include <functional>
 #include <string>
 
-#if __has_include("ee/EEMessageBridge.h")
+#if __has_include("EEMessageBridge.h")
 // Build dynamic framework.
-#include "ee/EEMessageBridge.h"
-#include "ee/EEThread.h"
+#include "EEMessageBridge.h"
+#include "EEThread.h"
 #else
 #include "ee/core/EEMessageBridge.h"
 #include "ee/core/EEThread.h"

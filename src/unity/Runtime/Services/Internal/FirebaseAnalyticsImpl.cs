@@ -1,5 +1,4 @@
 using System;
-using System.Linq;
 using System.Reflection;
 
 using UnityEngine.Assertions;
@@ -14,7 +13,6 @@ namespace EE.Internal {
         private readonly ConstructorInfo _constructorString;
         private readonly string _parameterScreenName;
         private readonly string _eventScreenView;
-        private string _screenName;
 
         public FirebaseAnalyticsImpl() {
             var type = Type.GetType("Firebase.Analytics.FirebaseAnalytics, Firebase.Analytics");
@@ -43,35 +41,16 @@ namespace EE.Internal {
         }
 
         public void SetCurrentScreen(string screenName) {
-            _screenName = screenName;
-            LogEvent(_eventScreenView);
+            LogEvent(_eventScreenView, new[] {
+                (_parameterScreenName, (object) screenName),
+            });
         }
 
         public void LogEvent(string name) {
-            if (_screenName == null) {
-                LogEventInternal(name);
-            } else {
-                LogEventInternal(name, new[] {
-                    (_parameterScreenName, (object) _screenName)
-                });
-            }
-        }
-
-        public void LogEvent(string name, (string, object)[] parameters) {
-            if (_screenName == null) {
-                LogEventInternal(name, parameters);
-            } else {
-                LogEventInternal(name, parameters.Concat(new[] {
-                    (_parameterScreenName, (object) _screenName)
-                }).ToArray());
-            }
-        }
-
-        private void LogEventInternal(string name) {
             _methodLogEvent.Invoke(null, new object[] { name });
         }
 
-        private void LogEventInternal(string name, (string, object)[] parameters) {
+        public void LogEvent(string name, (string, object)[] parameters) {
             var firebaseParameters = Array.CreateInstance(_typeParameter, parameters.Length);
             for (var i = 0; i < parameters.Length; ++i) {
                 object param = null;

@@ -13,6 +13,7 @@ namespace EE.Internal {
         private readonly ConstructorInfo _constructorDouble;
         private readonly ConstructorInfo _constructorString;
         private readonly string _parameterScreenName;
+        private readonly string _eventScreenView;
         private string _screenName;
 
         public FirebaseAnalyticsImpl() {
@@ -29,7 +30,9 @@ namespace EE.Internal {
             Assert.IsNotNull(_methodLogEventParameters);
 
             _parameterScreenName = (string) type.GetProperty("ParameterScreenName")?.GetValue(null);
+            _eventScreenView = (string) type.GetProperty("EventScreenView")?.GetValue(null);
             Assert.IsNotNull(_parameterScreenName);
+            Assert.IsNotNull(_eventScreenView);
 
             _constructorLong = _typeParameter.GetConstructor(new[] { typeof(string), typeof(long) });
             _constructorDouble = _typeParameter.GetConstructor(new[] { typeof(string), typeof(double) });
@@ -41,6 +44,7 @@ namespace EE.Internal {
 
         public void SetCurrentScreen(string screenName) {
             _screenName = screenName;
+            LogEvent(_eventScreenView);
         }
 
         public void LogEvent(string name) {

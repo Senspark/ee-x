@@ -105,6 +105,30 @@ internal class IronSourceBannerAd: NSObject, IBannerAd, ISBannerDelegate {
     func bannerDidLoad(_ bannerView: ISBannerView) {
         Thread.runOnMainThread {
             self._logger.debug("\(kTag): \(#function): id = \(self._adId)")
+            // Fix issue where ad sub view does not fit its parent.
+            let view = bannerView.subviews[0]
+            view.translatesAutoresizingMaskIntoConstraints = false
+            view.autoresizingMask = [.flexibleTopMargin, .flexibleLeftMargin, .flexibleRightMargin, .flexibleBottomMargin]
+            // https://stackoverflow.com/questions/27837553/auto-layout-fit-to-parent-via-code-in-swift
+            /* Alternative.
+            view.translatesAutoresizingMaskIntoConstraints = false
+            bannerView.addConstraint(NSLayoutConstraint(
+                item: view, attribute: .top, relatedBy: .equal,
+                toItem: bannerView, attribute: .top,
+                multiplier: 1.0, constant: 0.0))
+            bannerView.addConstraint(NSLayoutConstraint(
+                item: view, attribute: .leading, relatedBy: .equal,
+                toItem: bannerView, attribute: .leading,
+                multiplier: 1.0, constant: 0.0))
+            bannerView.addConstraint(NSLayoutConstraint(
+                item: bannerView, attribute: .bottom, relatedBy: .equal,
+                toItem: view, attribute: .bottom,
+                multiplier: 1.0, constant: 0.0))
+            bannerView.addConstraint(NSLayoutConstraint(
+                item: bannerView, attribute: .trailing, relatedBy: .equal,
+                toItem: view, attribute: .trailing,
+                multiplier: 1.0, constant: 0.0))
+             */
             self._ad = bannerView
             self._viewHelper.view = bannerView
             let rootView = Utils.getCurrentRootViewController()

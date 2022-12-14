@@ -41,9 +41,13 @@ namespace EE.Internal {
         }
 
         public void SetCurrentScreen(string screenName) {
-            LogEvent(_eventScreenView, new[] {
-                (_parameterScreenName, (object) screenName),
-            });
+            if (screenName == null) {
+                LogEvent(_eventScreenView);
+            } else {
+                LogEvent(_eventScreenView, new[] {
+                    (_parameterScreenName, (object) screenName),
+                });
+            }
         }
 
         public void LogEvent(string name) {

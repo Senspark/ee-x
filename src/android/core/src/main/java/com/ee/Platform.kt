@@ -15,6 +15,7 @@ import android.net.Uri
 import android.os.Build
 import android.os.RemoteException
 import android.util.DisplayMetrics
+import android.view.DisplayCutout
 import android.view.Surface
 import android.view.WindowManager
 import com.android.installreferrer.api.InstallReferrerClient

@@ -151,8 +151,9 @@ def configureMaven(String libraryName) {
                 }
             }
         }
-        signing {
-            sign publishing.publications
-        }
+        // Use local build.
+        // signing {
+        //     sign publishing.publications
+        // }
     }
 }

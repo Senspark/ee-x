@@ -139,16 +139,17 @@ def configureMaven(String libraryName) {
                         }
                     }
                 }
-                repositories {
-                    maven {
-                        name = 'sonatype'
-                        url = 'https://oss.sonatype.org/service/local/staging/deploy/maven2/'
-                        credentials {
-                            username ossrhUsername
-                            password ossrhPassword
-                        }
-                    }
-                }
+                // Use local build.
+                // repositories {
+                //     maven {
+                //         name = 'sonatype'
+                //         url = 'https://oss.sonatype.org/service/local/staging/deploy/maven2/'
+                //         credentials {
+                //             username ossrhUsername
+                //             password ossrhPassword
+                //         }
+                //     }
+                // }
             }
         }
         // Use local build.

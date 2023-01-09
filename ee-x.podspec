@@ -160,15 +160,14 @@ Pod::Spec.new do |spec|
     s.dependency 'GoogleMobileAdsMediationFacebook', '6.12.0.0'
 
     # https://developers.google.com/admob/ios/mediation/inmobi#inmobi-ios-mediation-adapter-changelog
-    s.dependency 'GoogleMobileAdsMediationInMobi', '10.1.1.0'
+    s.dependency 'GoogleMobileAdsMediationInMobi', '10.1.2.0'
     
     # https://developers.google.com/admob/ios/mediation/ironsource#ironsource-ios-mediation-adapter-changelog
-    s.dependency 'GoogleMobileAdsMediationIronSource', '7.2.5.1.0'
+    s.dependency 'GoogleMobileAdsMediationIronSource', '7.2.6.0.0'
 
     # https://cocoapods.org/pods/GoogleMobileAdsMediationTapjoy
     # https://developers.google.com/admob/ios/mediation/tapjoy#tapjoy-ios-mediation-adapter-changelog
-    # Low priority.
-    # s.dependency 'GoogleMobileAdsMediationTapjoy', '12.11.0.0'
+    s.dependency 'GoogleMobileAdsMediationTapjoy', '12.11.0.0'
 
     # https://cocoapods.org/pods/GoogleMobileAdsMediationUnity
     # https://developers.google.com/admob/ios/mediation/unity#unity-ads-ios-mediation-adapter-changelog
@@ -176,8 +175,7 @@ Pod::Spec.new do |spec|
 
     # https://cocoapods.org/pods/GoogleMobileAdsMediationVungle
     # https://developers.google.com/admob/ios/mediation/vungle#vungle-ios-mediation-adapter-changelog
-    # Low priority.# Low priority.
-    # s.dependency 'GoogleMobileAdsMediationVungle', '6.12.0.0'
+    s.dependency 'GoogleMobileAdsMediationVungle', '6.12.1.0'
   end
 
   spec.subspec 'ads' do |s|
@@ -319,7 +317,7 @@ Pod::Spec.new do |spec|
     s.dependency 'ee-x/iron-source-private'
 
     # https://developers.ironsrc.com/ironsource-mobile/ios/sdk-change-log/
-    s.dependency 'IronSourceSDK', '7.2.5.1'
+    s.dependency 'IronSourceSDK', '7.2.6.0'
   end
 
   spec.subspec 'iron-source-mediation' do |s|
@@ -327,38 +325,37 @@ Pod::Spec.new do |spec|
 
     # https://cocoapods.org/pods/IronSourceAdColonyAdapter
     # https://developers.is.com/ironsource-mobile/ios/adcolony-change-log/
-    s.dependency 'IronSourceAdColonyAdapter', '4.3.15.2'
+    s.dependency 'IronSourceAdColonyAdapter', '4.3.15.3'
 
     # https://cocoapods.org/pods/IronSourceAdMobAdapter
     # https://developers.is.com/ironsource-mobile/ios/admob-change-log/
-    s.dependency 'IronSourceAdMobAdapter', '4.3.37.0'
+    s.dependency 'IronSourceAdMobAdapter', '4.3.39.0'
 
     # https://cocoapods.org/pods/IronSourceAppLovinAdapter
     # https://developers.is.com/ironsource-mobile/ios/applovin-change-log/
-    s.dependency 'IronSourceAppLovinAdapter', '4.3.36.0'
+    s.dependency 'IronSourceAppLovinAdapter', '4.3.36.1'
 
     # https://cocoapods.org/pods/IronSourceFacebookAdapter
     # https://developers.is.com/ironsource-mobile/ios/meta-audience-network-change-log/
-    s.dependency 'IronSourceFacebookAdapter', '4.3.38.2'
+    s.dependency 'IronSourceFacebookAdapter', '4.3.38.3'
 
     # https://cocoapods.org/pods/IronSourceInMobiAdapter
     # https://developers.is.com/ironsource-mobile/ios/inmobi-change-log/
-    # FIXME: too low version (10.0.5)
-    # s.dependency 'IronSourceInMobiAdapter', '4.3.15.3'
+    # FIXME: too low version (10.0.8)
+    # s.dependency 'IronSourceInMobiAdapter', '4.3.15.4'
 
     # https://cocoapods.org/pods/IronSourceTapjoyAdapter
     # https://developers.is.com/ironsource-mobile/ios/tapjoy-change-log/
     # Low priority.
-    # s.dependency 'IronSourceTapjoyAdapter', '4.1.22.0'
+    # s.dependency 'IronSourceTapjoyAdapter', '4.1.22.1'
 
     # https://cocoapods.org/pods/IronSourceUnityAdsAdapter
     # https://developers.is.com/ironsource-mobile/ios/unityads-change-log/
-    s.dependency 'IronSourceUnityAdsAdapter', '4.3.25.0'
+    s.dependency 'IronSourceUnityAdsAdapter', '4.3.25.1'
 
     # https://cocoapods.org/pods/IronSourceVungleAdapter
     # https://developers.is.com/ironsource-mobile/ios/vungle-change-log/
-    # Low priority.
-    # s.dependency 'IronSourceVungleAdapter', '4.3.22.3'
+    s.dependency 'IronSourceVungleAdapter', '4.3.23.1'
   end
 
   spec.subspec 'notification' do |s|
@@ -403,7 +400,7 @@ Pod::Spec.new do |spec|
     s.dependency 'ee-x/ads'
 
     # https://github.com/Vungle/iOS-SDK/blob/master/CHANGELOG.md
-    s.dependency 'VungleSDK-iOS', '6.12.0'
+    s.dependency 'VungleSDK-iOS', '6.12.1'
   end
 
 =begin

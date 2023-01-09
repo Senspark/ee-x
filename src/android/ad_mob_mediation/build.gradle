@@ -33,25 +33,23 @@ dependencies {
     api 'com.google.ads.mediation:adcolony:4.8.0.0'
 
     // https://developers.google.com/admob/android/mediation/applovin#applovin-android-mediation-adapter-changelog
-    api 'com.google.ads.mediation:applovin:11.5.5.0'
+    api 'com.google.ads.mediation:applovin:11.6.1.0'
 
     // https://developers.google.com/admob/android/mediation/meta#meta-audience-network-android-mediation-adapter-changelog
     api 'com.google.ads.mediation:facebook:6.12.0.0'
 
     // https://developers.google.com/admob/android/mediation/inmobi#inmobi-android-mediation-adapter-changelog
-    api 'com.google.ads.mediation:inmobi:10.1.1.0'
+    api 'com.google.ads.mediation:inmobi:10.1.2.0'
 
     // https://developers.google.com/admob/android/mediation/ironsource#ironsource-android-mediation-adapter-changelog
-    api 'com.google.ads.mediation:ironsource:7.2.5.0'
+    api 'com.google.ads.mediation:ironsource:7.2.6.0'
 
     // https://developers.google.com/admob/android/mediation/tapjoy#tapjoy-android-mediation-adapter-changelog
-    // Low priority.
-    // api 'com.google.ads.mediation:tapjoy:12.11.0.0'
+    api 'com.google.ads.mediation:tapjoy:12.11.1.0'
 
     // https://developers.google.com/admob/android/mediation/unity#unity-ads-android-mediation-adapter-changelog
-    api 'com.google.ads.mediation:unity:4.4.1.0'
+    api 'com.google.ads.mediation:unity:4.5.0.0'
 
     // https://developers.google.com/admob/android/mediation/vungle#vungle-android-mediation-adapter-changelog
-    // Low priority.
-    // api 'com.google.ads.mediation:vungle:6.12.0.0'
+    api 'com.google.ads.mediation:vungle:6.12.0.0'
 }

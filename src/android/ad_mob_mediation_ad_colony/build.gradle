@@ -16,18 +16,14 @@ android {
 }
 
 if (rootProject.ext.has('buildMaven') && rootProject.buildMaven) {
-    configureMaven('ad-mob-mediation')
+    configureMaven('ad-mob-mediation-ad-colony')
 }
 
 dependencies {
+    api project(':ee-x-ad-mob')
+
     // https://maven.google.com/web/index.html#com.google.ads.mediation
+    // https://developers.google.com/admob/android/mediation/adcolony#adcolony-android-mediation-adapter-changelog
     // Use "api" to inherit manifest elements.
-    api project(':ee-x-ad-mob-mediation-ad-colony')
-    api project(':ee-x-ad-mob-mediation-app-lovin')
-    api project(':ee-x-ad-mob-mediation-facebook')
-    api project(':ee-x-ad-mob-mediation-inmobi')
-    api project(':ee-x-ad-mob-mediation-iron-source')
-    api project(':ee-x-ad-mob-mediation-tapjoy')
-    api project(':ee-x-ad-mob-mediation-unity')
-    api project(':ee-x-ad-mob-mediation-vungle')
+    api 'com.google.ads.mediation:adcolony:4.8.0.0'
 }

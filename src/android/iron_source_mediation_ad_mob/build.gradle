@@ -2,7 +2,6 @@ apply plugin: 'com.android.library'
 
 repositories {
     maven { url 'https://android-sdk.is.com' }
-    maven { url 'https://sdk.tapjoy.com' }
 }
 
 android {
@@ -21,17 +20,15 @@ android {
 }
 
 if (rootProject.ext.has('buildMaven') && rootProject.buildMaven) {
-    configureMaven('iron-source-mediation')
+    configureMaven('iron-source-mediation-ad-mob')
 }
 
 dependencies {
+    api project(':ee-x-iron-source')
+    
     // https://github.com/ironsource-mobile/android-adapters/releases
-    api project(':ee-x-iron-source-mediation-ad-colony')
-    api project(':ee-x-iron-source-mediation-ad-mob')
-    api project(':ee-x-iron-source-mediation-app-lovin')
-    api project(':ee-x-iron-source-mediation-facebook')
-    api project(':ee-x-iron-source-mediation-inmobi')
-    api project(':ee-x-iron-source-mediation-tapjoy')
-    api project(':ee-x-iron-source-mediation-unity')
-    api project(':ee-x-iron-source-mediation-vungle')
+    // https://developers.is.com/ironsource-mobile/android/admob-change-log/
+    // Use "api" to inherit manifest elements.
+    api 'com.ironsource.adapters:admobadapter:4.3.33'
+    api 'com.google.android.gms:play-services-ads:21.4.0'
 }

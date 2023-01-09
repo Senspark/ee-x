@@ -7,6 +7,18 @@ using UnityEditor;
 using UnityEngine;
 
 namespace EE.Editor {
+    internal enum AdNetwork {
+        AdColony,
+        AdMob,
+        AppLovin,
+        Facebook,
+        InMobi,
+        IronSource,
+        Tapjoy,
+        Unity,
+        Vungle,
+    }
+
     internal class LibrarySettings : ScriptableObject {
         private const string LibraryVersion = "2.10.3";
 
@@ -35,7 +47,7 @@ namespace EE.Editor {
         private bool _overwriteNSUserTrackingUsageDescription = false;
 
         [SerializeField]
-        private bool _isCoreEnabled = true;
+        private bool _isCoreEnabled = false;
 
         [SerializeField]
         private bool _isAdjustEnabled = false;
@@ -50,10 +62,7 @@ namespace EE.Editor {
         private bool _isAdMobEnabled = false;
 
         [SerializeField]
-        private bool _isAdMobMediationEnabled = false;
-
-        [SerializeField]
-        private bool _isAdMobTestSuiteEnabled = false;
+        private int _adMobMediationFlags = 0;
 
         [SerializeField]
         private string _adMobAndroidAppId;
@@ -68,7 +77,7 @@ namespace EE.Editor {
         private bool _isIronSourceEnabled = false;
 
         [SerializeField]
-        private bool _isIronSourceMediationEnabled = false;
+        private int _ironSourceMediationFlag = 0;
 
         [SerializeField]
         private bool _isUnityAdsEnabled = false;
@@ -123,16 +132,6 @@ namespace EE.Editor {
             set => _isAdMobEnabled = value;
         }
 
-        public bool IsAdMobMediationEnabled {
-            get => _isAdMobMediationEnabled;
-            set => _isAdMobMediationEnabled = value;
-        }
-
-        public bool IsAdMobTestSuiteEnabled {
-            get => _isAdMobTestSuiteEnabled;
-            set => _isAdMobTestSuiteEnabled = value;
-        }
-
         public string AdMobAndroidAppId {
             get => _adMobAndroidAppId;
             set => _adMobAndroidAppId = value;
@@ -151,11 +150,6 @@ namespace EE.Editor {
         public bool IsIronSourceEnabled {
             get => _isIronSourceEnabled;
             set => _isIronSourceEnabled = value;
-        }
-
-        public bool IsIronSourceMediationEnabled {
-            get => _isIronSourceMediationEnabled;
-            set => _isIronSourceMediationEnabled = value;
         }
 
         public bool IsUnityAdsEnabled {
@@ -179,6 +173,30 @@ namespace EE.Editor {
                     }
                 }
                 return _sharedInstance;
+            }
+        }
+
+        public bool IsAdMobMediationEnabled(AdNetwork network) {
+            return ((_adMobMediationFlags >> (int) network) & 1) == 1;
+        }
+
+        public void SetAdMobMediationEnabled(AdNetwork network, bool enabled) {
+            if (enabled) {
+                _adMobMediationFlags |= 1 << (int) network;
+            } else {
+                _adMobMediationFlags &= ~(1 << (int) network);
+            }
+        }
+
+        public bool IsIronSourceMediationEnabled(AdNetwork network) {
+            return ((_ironSourceMediationFlag >> (int) network) & 1) == 1;
+        }
+
+        public void SetIronSourceMediationEnabled(AdNetwork network, bool enabled) {
+            if (enabled) {
+                _ironSourceMediationFlag |= 1 << (int) network;
+            } else {
+                _ironSourceMediationFlag &= ~(1 << (int) network);
             }
         }
 
@@ -227,15 +245,15 @@ namespace EE.Editor {
                 fastAndroidLibraries.Add("androidx.core:core:[1.9.0]");
                 fastAndroidLibraries.Add("androidx.core:core-ktx:[1.9.0]");
                 fastAndroidLibraries.Add("androidx.lifecycle:lifecycle-runtime:[2.5.1]");
-                if (IsAdMobEnabled || IsIronSourceMediationEnabled) {
+                if (IsAdMobEnabled || IsIronSourceMediationEnabled(AdNetwork.AdMob)) {
                     fastAndroidLibraries.Add("com.google.android.gms:play-services-ads:[21.3.0]");
                     fastAndroidLibraries.Add("com.google.android.gms:play-services-base:[18.1.0]");
                     fastAndroidLibraries.Add("com.google.android.gms:play-services-basement:[18.1.0]");
                 }
-                if (IsAdMobMediationEnabled || IsIronSourceEnabled) {
+                if (IsAdMobMediationEnabled(AdNetwork.IronSource) || IsIronSourceEnabled) {
                     androidRepositories.Add("https://android-sdk.is.com");
                 }
-                if (IsAdMobMediationEnabled || IsIronSourceMediationEnabled) {
+                if (IsAdMobMediationEnabled(AdNetwork.Tapjoy) || IsIronSourceMediationEnabled(AdNetwork.Tapjoy)) {
                     androidRepositories.Add("https://sdk.tapjoy.com");
                 }
                 if (IsAdjustEnabled) {
@@ -253,18 +271,23 @@ namespace EE.Editor {
                     iosLibraries.Add("ee-x/ad-colony");
                 }
                 if (IsAdMobEnabled) {
-                    if (IsAdMobMediationEnabled) {
-                        androidLibraries.Add($"com.senspark.ee:ad-mob-mediation:[{LibraryVersion}]");
-                        iosLibraries.Add("ee-x/ad-mob-mediation");
-                    } else {
-                        androidLibraries.Add($"com.senspark.ee:ad-mob:[{LibraryVersion}]");
-                        iosLibraries.Add("ee-x/ad-mob");
-                    }
-                    if (IsAdMobTestSuiteEnabled) {
-                        androidLibraries.Add($"com.senspark.ee:ad-mob-test-suite:[{LibraryVersion}]");
-
-                        // FIXME: fix in podspec first.
-                        // iosLibraries.Add("ee-x/ad-mob-test-suite");
+                    androidLibraries.Add($"com.senspark.ee:ad-mob:[{LibraryVersion}]");
+                    iosLibraries.Add("ee-x/ad-mob");
+                    var networks = new Dictionary<AdNetwork, string> {
+                        { AdNetwork.AdColony, "ad-colony" },
+                        { AdNetwork.AppLovin, "app-lovin" },
+                        { AdNetwork.Facebook, "facebook" },
+                        { AdNetwork.InMobi, "inmobi" },
+                        { AdNetwork.IronSource, "iron-source" },
+                        { AdNetwork.Tapjoy, "tapjoy" },
+                        { AdNetwork.Unity, "unity" },
+                        { AdNetwork.Vungle, "vungle" },
+                    };
+                    foreach (var (network, path) in networks) {
+                        if (IsAdMobMediationEnabled(network)) {
+                            androidLibraries.Add($"com.senspark.ee:ad-mob-mediation-{path}:[{LibraryVersion}]");
+                            iosLibraries.Add($"ee-x/ad-mob-mediation-{path}");
+                        }
                     }
                 }
                 if (IsFacebookAdsEnabled) {
@@ -272,12 +295,23 @@ namespace EE.Editor {
                     iosLibraries.Add("ee-x/facebook-ads");
                 }
                 if (IsIronSourceEnabled) {
-                    if (IsIronSourceMediationEnabled) {
-                        androidLibraries.Add($"com.senspark.ee:iron-source-mediation:[{LibraryVersion}]");
-                        iosLibraries.Add("ee-x/iron-source-mediation");
-                    } else {
-                        androidLibraries.Add($"com.senspark.ee:iron-source:[{LibraryVersion}]");
-                        iosLibraries.Add("ee-x/iron-source");
+                    androidLibraries.Add($"com.senspark.ee:iron-source:[{LibraryVersion}]");
+                    iosLibraries.Add("ee-x/iron-source");
+                    var networks = new Dictionary<AdNetwork, string> {
+                        { AdNetwork.AdColony, "ad-colony" },
+                        { AdNetwork.AdMob, "ad-mob" },
+                        { AdNetwork.AppLovin, "app-lovin" },
+                        { AdNetwork.Facebook, "facebook" },
+                        { AdNetwork.InMobi, "inmobi" },
+                        { AdNetwork.Tapjoy, "tapjoy" },
+                        { AdNetwork.Unity, "unity" },
+                        { AdNetwork.Vungle, "vungle" },
+                    };
+                    foreach (var (network, path) in networks) {
+                        if (IsIronSourceMediationEnabled(network)) {
+                            androidLibraries.Add($"com.senspark.ee:iron-source-mediation-{path}:[{LibraryVersion}]");
+                            iosLibraries.Add($"ee-x/iron-source-mediation-{path}");
+                        }
                     }
                 }
                 if (IsUnityAdsEnabled) {

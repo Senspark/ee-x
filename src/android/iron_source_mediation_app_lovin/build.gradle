@@ -29,6 +29,6 @@ dependencies {
     // https://github.com/ironsource-mobile/android-adapters/releases
     // https://developers.is.com/ironsource-mobile/android/applovin-change-log/
     // Use "api" to inherit manifest elements.
-    api 'com.ironsource.adapters:applovinadapter:4.3.35'
+    api 'com.ironsource.adapters:applovinadapter:4.3.36'
     api 'com.applovin:applovin-sdk:11.6.1'
 }

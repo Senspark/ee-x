@@ -29,6 +29,6 @@ dependencies {
     // https://github.com/ironsource-mobile/android-adapters/releases
     // https://developers.is.com/ironsource-mobile/android/admob-change-log/
     // Use "api" to inherit manifest elements.
-    api 'com.ironsource.adapters:admobadapter:4.3.33'
+    api 'com.ironsource.adapters:admobadapter:4.3.34'
     api 'com.google.android.gms:play-services-ads:21.4.0'
 }

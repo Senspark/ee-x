@@ -21,11 +21,18 @@ namespace EE.Internal {
         }
 
         public void Resolve(Result result) {
-            _finalizer(result);
+            // Keep copies.
+            var finalizer = _finalizer;
+            var source = _source;
+
+            // Update state.
             _finalizer = null;
-            _source.SetResult(result);
             _source = null;
             IsProcessing = false;
+
+            // Process.
+            finalizer(result);
+            source.SetResult(result);
         }
     }
 }

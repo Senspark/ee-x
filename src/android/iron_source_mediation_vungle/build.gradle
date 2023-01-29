@@ -29,6 +29,6 @@ dependencies {
     // https://github.com/ironsource-mobile/android-adapters/releases
     // https://developers.is.com/ironsource-mobile/android/vungle-change-log/
     // Use "api" to inherit manifest elements.
-    api 'com.ironsource.adapters:vungleadapter:4.3.18'
+    api 'com.ironsource.adapters:vungleadapter:4.3.19'
     api 'com.vungle:publisher-sdk-android:6.12.1'
 }

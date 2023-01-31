@@ -8,15 +8,16 @@ using UnityEngine;
 
 namespace EE.Editor {
     internal enum AdNetwork {
-        AdColony,
-        AdMob,
-        AppLovin,
-        Facebook,
-        InMobi,
-        IronSource,
-        Tapjoy,
-        Unity,
-        Vungle,
+        AdColony = 0,
+        AdMob = 1,
+        AppLovin = 2,
+        Facebook = 3,
+        InMobi = 4,
+        IronSource = 5,
+        Pangle = 9,
+        Tapjoy = 6,
+        Unity = 7,
+        Vungle = 8,
     }
 
     internal class LibrarySettings : ScriptableObject {

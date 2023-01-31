@@ -140,6 +140,7 @@ Pod::Spec.new do |spec|
     s.dependency 'ee-x/ad-mob-mediation-facebook'
     s.dependency 'ee-x/ad-mob-mediation-inmobi'
     s.dependency 'ee-x/ad-mob-mediation-iron-source'
+    s.dependency 'ee-x/ad-mob-mediation-pangle'
     s.dependency 'ee-x/ad-mob-mediation-tapjoy'
     s.dependency 'ee-x/ad-mob-mediation-unity'
     s.dependency 'ee-x/ad-mob-mediation-vungle'
@@ -179,6 +180,13 @@ Pod::Spec.new do |spec|
     
     # https://developers.google.com/admob/ios/mediation/ironsource#ironsource-ios-mediation-adapter-changelog
     s.dependency 'GoogleMobileAdsMediationIronSource', '7.2.7.0.0'
+  end
+
+  spec.subspec 'ad-mob-mediation-pangle' do |s|
+    s.dependency 'ee-x/ad-mob'
+
+    # https://developers.google.com/admob/ios/mediation/pangle#pangle-ios-mediation-adapter-changelog
+    s.dependency 'GoogleMobileAdsMediationPangle', '4.9.0.8.0'
   end
 
   spec.subspec 'ad-mob-mediation-tapjoy' do |s|
@@ -353,6 +361,7 @@ Pod::Spec.new do |spec|
     s.dependency 'ee-x/iron-source-mediation-app-lovin'
     s.dependency 'ee-x/iron-source-mediation-facebook'
     s.dependency 'ee-x/iron-source-mediation-inmobi'
+    s.dependency 'ee-x/iron-source-mediation-pangle'
     s.dependency 'ee-x/iron-source-mediation-tapjoy'
     s.dependency 'ee-x/iron-source-mediation-unity'
     s.dependency 'ee-x/iron-source-mediation-vungle'
@@ -396,6 +405,16 @@ Pod::Spec.new do |spec|
     # https://cocoapods.org/pods/IronSourceInMobiAdapter
     # https://developers.is.com/ironsource-mobile/ios/inmobi-change-log/
     s.dependency 'IronSourceInMobiAdapter', '4.3.16.0'
+  end
+
+  spec.subspec 'iron-source-mediation-pangle' do |s|
+    s.dependency 'ee-x/iron-source'
+
+    # https://cocoapods.org/pods/IronSourcePangleAdapter
+    # https://github.com/CocoaPods/Specs/tree/master/Specs/0/c/4/IronSourcePangleAdapter
+    # https://developers.is.com/ironsource-mobile/ios/pangle-change-log/
+    # FIXME: conflict with admob.
+    # s.dependency 'IronSourcePangleAdapter', '4.3.18.0'
   end
 
   spec.subspec 'iron-source-mediation-tapjoy' do |s|

@@ -2,7 +2,7 @@ apply plugin: 'com.android.library'
 
 repositories {
     maven { url 'https://android-sdk.is.com' }
-    maven { url 'https://sdk.tapjoy.com' }
+    maven { url 'https://artifact.bytedance.com/repository/pangle/' }
 }
 
 android {
@@ -21,18 +21,16 @@ android {
 }
 
 if (rootProject.ext.has('buildMaven') && rootProject.buildMaven) {
-    configureMaven('iron-source-mediation')
+    configureMaven('iron-source-mediation-pangle')
 }
 
 dependencies {
+    api project(':ee-x-iron-source')
+    
     // https://github.com/ironsource-mobile/android-adapters/releases
-    api project(':ee-x-iron-source-mediation-ad-colony')
-    api project(':ee-x-iron-source-mediation-ad-mob')
-    api project(':ee-x-iron-source-mediation-app-lovin')
-    api project(':ee-x-iron-source-mediation-facebook')
-    api project(':ee-x-iron-source-mediation-inmobi')
-    api project(':ee-x-iron-source-mediation-pangle')
-    api project(':ee-x-iron-source-mediation-tapjoy')
-    api project(':ee-x-iron-source-mediation-unity')
-    api project(':ee-x-iron-source-mediation-vungle')
+    // https://developers.is.com/ironsource-mobile/android/pangle-change-log/
+    // Use "api" to inherit manifest elements.
+    // FIXME: too low version.
+    // api 'com.ironsource.adapters:pangleadapter:4.3.16'
+    // api 'com.pangle.global:ads-sdk:4.7.0.9'
 }

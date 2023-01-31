@@ -257,6 +257,9 @@ namespace EE.Editor {
                 if (IsAdMobMediationEnabled(AdNetwork.Tapjoy) || IsIronSourceMediationEnabled(AdNetwork.Tapjoy)) {
                     androidRepositories.Add("https://sdk.tapjoy.com");
                 }
+                if (IsAdMobMediationEnabled(AdNetwork.Pangle) || IsIronSourceMediationEnabled(AdNetwork.Pangle)) {
+                    androidRepositories.Add("https://artifact.bytedance.com/repository/pangle/");
+                }
                 if (IsAdjustEnabled) {
                     androidLibraries.Add($"com.senspark.ee:adjust:[{LibraryVersion}]");
                     iosLibraries.Add("ee-x/adjust");

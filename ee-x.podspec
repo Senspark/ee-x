@@ -150,7 +150,7 @@ Pod::Spec.new do |spec|
 
     # https://developers.google.com/admob/ios/mediation/adcolony#adcolony-ios-mediation-adapter-changelog
     # FIXME: hanging on iPad iOS 13.5.1, need test.
-    # s.dependency 'GoogleMobileAdsMediationAdColony', '4.9.0.0'
+    s.dependency 'GoogleMobileAdsMediationAdColony', '4.9.0.0'
   end
 
   spec.subspec 'ad-mob-mediation-app-lovin' do |s|

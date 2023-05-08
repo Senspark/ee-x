@@ -1,0 +1,34 @@
+apply plugin: 'com.android.library'
+
+repositories {
+    maven { url 'https://android-sdk.is.com' }
+}
+
+android {
+    buildToolsVersion rootProject.buildToolsVersion
+    compileSdkVersion rootProject.compileSdkVersion
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    defaultConfig {
+        minSdkVersion 19
+        targetSdkVersion rootProject.targetSdkVersion
+    }
+}
+
+if (rootProject.ext.has('buildMaven') && rootProject.buildMaven) {
+    configureMaven('iron-source-mediation-app-lovin')
+}
+
+dependencies {
+    api project(':ee-x-iron-source')
+    
+    // https://github.com/ironsource-mobile/android-adapters/releases
+    // https://developers.is.com/ironsource-mobile/android/applovin-change-log/
+    // Use "api" to inherit manifest elements.
+    api 'com.ironsource.adapters:applovinadapter:4.3.36'
+    api 'com.applovin:applovin-sdk:11.6.1'
+}

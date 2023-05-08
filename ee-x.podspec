@@ -131,53 +131,86 @@ Pod::Spec.new do |spec|
     s.dependency 'ee-x/ads'
 
     # https://developers.google.com/admob/ios/rel-notes
-    s.dependency 'Google-Mobile-Ads-SDK', '9.13.0'
+    s.dependency 'Google-Mobile-Ads-SDK', '9.14.0'
   end
 
-  # FIXME: currently not supported SDK 8.x
-  # spec.subspec 'ad-mob-test-suite' do |s|
-  #   s.source_files = 'src/ios/ee/ad_mob_test_suite/**/*'
-  #   s.header_mappings_dir = 'src/ios'
-  #   s.dependency 'ee-x/ad-mob'
-
-  #   # https://developers.google.com/admob/ios/mediation-test-suite
-  #   s.dependency 'GoogleMobileAdsMediationTestSuite', '1.4.0'
-  # end
-
   spec.subspec 'ad-mob-mediation' do |s|
+    s.dependency 'ee-x/ad-mob-mediation-ad-colony'
+    s.dependency 'ee-x/ad-mob-mediation-app-lovin'
+    s.dependency 'ee-x/ad-mob-mediation-facebook'
+    s.dependency 'ee-x/ad-mob-mediation-inmobi'
+    s.dependency 'ee-x/ad-mob-mediation-iron-source'
+    s.dependency 'ee-x/ad-mob-mediation-pangle'
+    s.dependency 'ee-x/ad-mob-mediation-tapjoy'
+    s.dependency 'ee-x/ad-mob-mediation-unity'
+    s.dependency 'ee-x/ad-mob-mediation-vungle'
+  end
+
+  spec.subspec 'ad-mob-mediation-ad-colony' do |s|
     s.dependency 'ee-x/ad-mob'
 
     # https://developers.google.com/admob/ios/mediation/adcolony#adcolony-ios-mediation-adapter-changelog
     # FIXME: hanging on iPad iOS 13.5.1, need test.
-    # s.dependency 'GoogleMobileAdsMediationAdColony', '4.9.0.0'
+    s.dependency 'GoogleMobileAdsMediationAdColony', '4.9.0.0'
+  end
+
+  spec.subspec 'ad-mob-mediation-app-lovin' do |s|
+    s.dependency 'ee-x/ad-mob'
 
     # https://cocoapods.org/pods/GoogleMobileAdsMediationAppLovin
     # https://developers.google.com/admob/ios/mediation/applovin#applovin-ios-mediation-adapter-changelog
-    s.dependency 'GoogleMobileAdsMediationAppLovin', '11.5.5.0'
+    s.dependency 'GoogleMobileAdsMediationAppLovin', '11.6.1.0'
+  end
 
+  spec.subspec 'ad-mob-mediation-facebook' do |s|
     # https://cocoapods.org/pods/GoogleMobileAdsMediationFacebook
     # https://developers.google.com/admob/ios/mediation/facebook#facebook-ios-mediation-adapter-changelog
     s.dependency 'GoogleMobileAdsMediationFacebook', '6.12.0.0'
+  end
+
+  spec.subspec 'ad-mob-mediation-inmobi' do |s|
+    s.dependency 'ee-x/ad-mob'
 
     # https://developers.google.com/admob/ios/mediation/inmobi#inmobi-ios-mediation-adapter-changelog
-    s.dependency 'GoogleMobileAdsMediationInMobi', '10.1.1.0'
+    s.dependency 'GoogleMobileAdsMediationInMobi', '10.1.2.1'
+  end
+
+  spec.subspec 'ad-mob-mediation-iron-source' do |s|
+    s.dependency 'ee-x/ad-mob'
     
     # https://developers.google.com/admob/ios/mediation/ironsource#ironsource-ios-mediation-adapter-changelog
-    s.dependency 'GoogleMobileAdsMediationIronSource', '7.2.5.1.0'
+    s.dependency 'GoogleMobileAdsMediationIronSource', '7.2.7.0.0'
+  end
+
+  spec.subspec 'ad-mob-mediation-pangle' do |s|
+    s.dependency 'ee-x/ad-mob'
+
+    # https://developers.google.com/admob/ios/mediation/pangle#pangle-ios-mediation-adapter-changelog
+    s.dependency 'GoogleMobileAdsMediationPangle', '4.9.0.8.0'
+  end
+
+  spec.subspec 'ad-mob-mediation-tapjoy' do |s|
+    s.dependency 'ee-x/ad-mob'
 
     # https://cocoapods.org/pods/GoogleMobileAdsMediationTapjoy
     # https://developers.google.com/admob/ios/mediation/tapjoy#tapjoy-ios-mediation-adapter-changelog
-    # Low priority.
-    # s.dependency 'GoogleMobileAdsMediationTapjoy', '12.11.0.0'
+    s.dependency 'GoogleMobileAdsMediationTapjoy', '12.11.0.0'
+  end
+
+  spec.subspec 'ad-mob-mediation-unity' do |s|
+    s.dependency 'ee-x/ad-mob'
 
     # https://cocoapods.org/pods/GoogleMobileAdsMediationUnity
     # https://developers.google.com/admob/ios/mediation/unity#unity-ads-ios-mediation-adapter-changelog
-    s.dependency 'GoogleMobileAdsMediationUnity', '4.4.1.0'
+    s.dependency 'GoogleMobileAdsMediationUnity', '4.5.0.0'
+  end
+
+  spec.subspec 'ad-mob-mediation-vungle' do |s|
+    s.dependency 'ee-x/ad-mob'
 
     # https://cocoapods.org/pods/GoogleMobileAdsMediationVungle
     # https://developers.google.com/admob/ios/mediation/vungle#vungle-ios-mediation-adapter-changelog
-    # Low priority.# Low priority.
-    # s.dependency 'GoogleMobileAdsMediationVungle', '6.12.0.0'
+    s.dependency 'GoogleMobileAdsMediationVungle', '6.12.1.1'
   end
 
   spec.subspec 'ads' do |s|
@@ -201,7 +234,7 @@ Pod::Spec.new do |spec|
     s.dependency 'ee-x/core'
 
     # https://github.com/AppLovin/AppLovin-MAX-SDK-iOS/releases
-    s.dependency 'AppLovinSDK', '11.5.5'
+    s.dependency 'AppLovinSDK', '11.6.1'
   end
 
   spec.subspec 'apps-flyer' do |s|
@@ -319,46 +352,95 @@ Pod::Spec.new do |spec|
     s.dependency 'ee-x/iron-source-private'
 
     # https://developers.ironsrc.com/ironsource-mobile/ios/sdk-change-log/
-    s.dependency 'IronSourceSDK', '7.2.5.1'
+    s.dependency 'IronSourceSDK', '7.2.7.0'
   end
 
   spec.subspec 'iron-source-mediation' do |s|
+    s.dependency 'ee-x/iron-source-mediation-ad-colony'
+    s.dependency 'ee-x/iron-source-mediation-ad-mob'
+    s.dependency 'ee-x/iron-source-mediation-app-lovin'
+    s.dependency 'ee-x/iron-source-mediation-facebook'
+    s.dependency 'ee-x/iron-source-mediation-inmobi'
+    s.dependency 'ee-x/iron-source-mediation-pangle'
+    s.dependency 'ee-x/iron-source-mediation-tapjoy'
+    s.dependency 'ee-x/iron-source-mediation-unity'
+    s.dependency 'ee-x/iron-source-mediation-vungle'
+  end
+
+  spec.subspec 'iron-source-mediation-ad-colony' do |s|
     s.dependency 'ee-x/iron-source'
 
     # https://cocoapods.org/pods/IronSourceAdColonyAdapter
     # https://developers.is.com/ironsource-mobile/ios/adcolony-change-log/
-    s.dependency 'IronSourceAdColonyAdapter', '4.3.15.2'
+    s.dependency 'IronSourceAdColonyAdapter', '4.3.15.4'
+  end
+
+  spec.subspec 'iron-source-mediation-ad-mob' do |s|
+    s.dependency 'ee-x/iron-source'
 
     # https://cocoapods.org/pods/IronSourceAdMobAdapter
     # https://developers.is.com/ironsource-mobile/ios/admob-change-log/
-    s.dependency 'IronSourceAdMobAdapter', '4.3.37.0'
+    s.dependency 'IronSourceAdMobAdapter', '4.3.40.0'
+  end
+
+  spec.subspec 'iron-source-mediation-app-lovin' do |s|
+    s.dependency 'ee-x/iron-source'
 
     # https://cocoapods.org/pods/IronSourceAppLovinAdapter
     # https://developers.is.com/ironsource-mobile/ios/applovin-change-log/
-    s.dependency 'IronSourceAppLovinAdapter', '4.3.36.0'
+    s.dependency 'IronSourceAppLovinAdapter', '4.3.37.1'
+  end
+
+  spec.subspec 'iron-source-mediation-facebook' do |s|
+    s.dependency 'ee-x/iron-source'
 
     # https://cocoapods.org/pods/IronSourceFacebookAdapter
     # https://developers.is.com/ironsource-mobile/ios/meta-audience-network-change-log/
-    s.dependency 'IronSourceFacebookAdapter', '4.3.38.2'
+    s.dependency 'IronSourceFacebookAdapter', '4.3.38.4'
+  end
+
+  spec.subspec 'iron-source-mediation-inmobi' do |s|
+    s.dependency 'ee-x/iron-source'
 
     # https://cocoapods.org/pods/IronSourceInMobiAdapter
     # https://developers.is.com/ironsource-mobile/ios/inmobi-change-log/
-    # FIXME: too low version (10.0.5)
-    # s.dependency 'IronSourceInMobiAdapter', '4.3.15.3'
+    s.dependency 'IronSourceInMobiAdapter', '4.3.16.0'
+  end
+
+  spec.subspec 'iron-source-mediation-pangle' do |s|
+    s.dependency 'ee-x/iron-source'
+
+    # https://cocoapods.org/pods/IronSourcePangleAdapter
+    # https://github.com/CocoaPods/Specs/tree/master/Specs/0/c/4/IronSourcePangleAdapter
+    # https://developers.is.com/ironsource-mobile/ios/pangle-change-log/
+    # FIXME: conflict with admob.
+    # s.dependency 'IronSourcePangleAdapter', '4.3.18.0'
+  end
+
+  spec.subspec 'iron-source-mediation-tapjoy' do |s|
+    s.dependency 'ee-x/iron-source'
 
     # https://cocoapods.org/pods/IronSourceTapjoyAdapter
     # https://developers.is.com/ironsource-mobile/ios/tapjoy-change-log/
-    # Low priority.
-    # s.dependency 'IronSourceTapjoyAdapter', '4.1.22.0'
+    # FIXME: conflict with admob.
+    # s.dependency 'IronSourceTapjoyAdapter', '4.1.23.1'
+  end
+
+  spec.subspec 'iron-source-mediation-unity' do |s|
+    s.dependency 'ee-x/iron-source'
 
     # https://cocoapods.org/pods/IronSourceUnityAdsAdapter
     # https://developers.is.com/ironsource-mobile/ios/unityads-change-log/
-    s.dependency 'IronSourceUnityAdsAdapter', '4.3.25.0'
+    # FIXME: conflict with admob.
+    # s.dependency 'IronSourceUnityAdsAdapter', '4.3.25.2'
+  end
+
+  spec.subspec 'iron-source-mediation-vungle' do |s|
+    s.dependency 'ee-x/iron-source'
 
     # https://cocoapods.org/pods/IronSourceVungleAdapter
     # https://developers.is.com/ironsource-mobile/ios/vungle-change-log/
-    # Low priority.
-    # s.dependency 'IronSourceVungleAdapter', '4.3.22.3'
+    s.dependency 'IronSourceVungleAdapter', '4.3.24.0'
   end
 
   spec.subspec 'notification' do |s|
@@ -394,7 +476,7 @@ Pod::Spec.new do |spec|
     s.dependency 'ee-x/ads'
 
     # https://github.com/Unity-Technologies/unity-ads-ios/releases
-    s.dependency 'UnityAds', '4.4.1'
+    s.dependency 'UnityAds', '4.5.0'
   end
 
   spec.subspec 'vungle' do |s|
@@ -403,7 +485,7 @@ Pod::Spec.new do |spec|
     s.dependency 'ee-x/ads'
 
     # https://github.com/Vungle/iOS-SDK/blob/master/CHANGELOG.md
-    s.dependency 'VungleSDK-iOS', '6.12.0'
+    s.dependency 'VungleSDK-iOS', '6.12.1'
   end
 
 =begin

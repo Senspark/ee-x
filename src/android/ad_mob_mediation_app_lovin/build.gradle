@@ -16,10 +16,14 @@ android {
 }
 
 if (rootProject.ext.has('buildMaven') && rootProject.buildMaven) {
-    configureMaven('ad-mob-test-suite')
+    configureMaven('ad-mob-mediation-app-lovin')
 }
 
 dependencies {
     api project(':ee-x-ad-mob')
-    api 'com.google.android.ads:mediation-test-suite:3.0.0'
+
+    // https://maven.google.com/web/index.html#com.google.ads.mediation
+    // https://developers.google.com/admob/android/mediation/applovin#applovin-android-mediation-adapter-changelog
+    // Use "api" to inherit manifest elements.
+    api 'com.google.ads.mediation:applovin:11.6.1.0'
 }

@@ -25,7 +25,7 @@ dependencies {
     api project(':ee-x-ads')
 
     // https://developers.google.com/admob/android/rel-notes
-    api 'com.google.android.gms:play-services-ads:21.3.0'
+    api 'com.google.android.gms:play-services-ads:21.4.0'
 
     // https://developers.google.com/admob/android/mediation-test-suite
     // In maintenance mode.

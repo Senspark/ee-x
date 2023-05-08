@@ -1,5 +1,5 @@
 buildscript {
-    ext.kotlinVersion = '1.7.20'
+    ext.kotlinVersion = '1.7.21'
     ext.kotlinCoroutinesVersion = '1.6.4'
     ext.kotlinSerializationVersion = '1.4.1'
     repositories {
@@ -19,6 +19,7 @@ allprojects {
         mavenCentral()
         maven { url 'https://android-sdk.is.com' }
         maven { url 'https://sdk.tapjoy.com' }
+        maven { url 'https://artifact.bytedance.com/repository/pangle/' }
         mavenLocal()
     }
 }

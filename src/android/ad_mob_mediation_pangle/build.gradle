@@ -1,0 +1,33 @@
+apply plugin: 'com.android.library'
+
+repositories {
+    maven { url 'https://artifact.bytedance.com/repository/pangle/' }
+}
+
+android {
+    buildToolsVersion rootProject.buildToolsVersion
+    compileSdkVersion rootProject.compileSdkVersion
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    defaultConfig {
+        minSdkVersion 19
+        targetSdkVersion rootProject.targetSdkVersion
+    }
+}
+
+if (rootProject.ext.has('buildMaven') && rootProject.buildMaven) {
+    configureMaven('ad-mob-mediation-pangle')
+}
+
+dependencies {
+    api project(':ee-x-ad-mob')
+
+    // https://maven.google.com/web/index.html#com.google.ads.mediation
+    // https://developers.google.com/admob/android/mediation/pangle#pangle-android-mediation-adapter-changelog
+    // Use "api" to inherit manifest elements.
+    api 'com.google.ads.mediation:pangle:4.9.0.8.0'
+}

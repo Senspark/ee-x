@@ -1,0 +1,29 @@
+apply plugin: 'com.android.library'
+
+android {
+    buildToolsVersion rootProject.buildToolsVersion
+    compileSdkVersion rootProject.compileSdkVersion
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    defaultConfig {
+        minSdkVersion 19
+        targetSdkVersion rootProject.targetSdkVersion
+    }
+}
+
+if (rootProject.ext.has('buildMaven') && rootProject.buildMaven) {
+    configureMaven('ad-mob-mediation-facebook')
+}
+
+dependencies {
+    api project(':ee-x-ad-mob')
+
+    // https://maven.google.com/web/index.html#com.google.ads.mediation
+    // https://developers.google.com/admob/android/mediation/meta#meta-audience-network-android-mediation-adapter-changelog
+    // Use "api" to inherit manifest elements.
+    api 'com.google.ads.mediation:facebook:6.12.0.0'
+}

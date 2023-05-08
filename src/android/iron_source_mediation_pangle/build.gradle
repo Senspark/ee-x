@@ -1,0 +1,36 @@
+apply plugin: 'com.android.library'
+
+repositories {
+    maven { url 'https://android-sdk.is.com' }
+    maven { url 'https://artifact.bytedance.com/repository/pangle/' }
+}
+
+android {
+    buildToolsVersion rootProject.buildToolsVersion
+    compileSdkVersion rootProject.compileSdkVersion
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    defaultConfig {
+        minSdkVersion 19
+        targetSdkVersion rootProject.targetSdkVersion
+    }
+}
+
+if (rootProject.ext.has('buildMaven') && rootProject.buildMaven) {
+    configureMaven('iron-source-mediation-pangle')
+}
+
+dependencies {
+    api project(':ee-x-iron-source')
+    
+    // https://github.com/ironsource-mobile/android-adapters/releases
+    // https://developers.is.com/ironsource-mobile/android/pangle-change-log/
+    // Use "api" to inherit manifest elements.
+    // FIXME: too low version.
+    // api 'com.ironsource.adapters:pangleadapter:4.3.16'
+    // api 'com.pangle.global:ads-sdk:4.7.0.9'
+}

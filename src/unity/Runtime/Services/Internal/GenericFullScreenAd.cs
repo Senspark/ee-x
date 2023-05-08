@@ -20,7 +20,7 @@ namespace EE.Internal {
                 return AdResult.Capped;
             }
             if (_ad.IsLoaded) {
-                var hasInternet = await TestConnection(0.2f);
+                var hasInternet = await TestConnection(0.5f);
                 if (hasInternet) {
                     // OK.
                 } else {
@@ -29,9 +29,9 @@ namespace EE.Internal {
             } else {
                 Utils.NoAwait(async () => await Load());
                 var hasInternet = false;
-                await Task.WhenAll(Task.Delay(100),
+                await Task.WhenAll(Task.Delay(300),
                     ((Func<Task>) (async () => { //
-                        hasInternet = await TestConnection(0.2f);
+                        hasInternet = await TestConnection(0.5f);
                     }))());
                 if (hasInternet) {
                     // OK.

@@ -63,7 +63,7 @@ class Inventory {
     fun getAllOwnedSkus(@SkuType itemType: String): List<String> {
         return _purchaseMap.values
             .filter { it.first == itemType }
-            .map { it.second.sku }
+            .map { it.second.skus.get(0) }
     }
 
     fun getAllPurchases(): List<Pair<String, Purchase>> {
@@ -75,7 +75,7 @@ class Inventory {
     }
 
     fun addPurchase(@SkuType itemType: String, purchase: Purchase) {
-        _purchaseMap[purchase.sku] = Pair(itemType, purchase)
+        _purchaseMap[purchase.skus.get(0)] = Pair(itemType, purchase)
     }
 
     fun addPurchaseToSubscriptionPurchaseHistory(sku: String) {

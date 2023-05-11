@@ -6,12 +6,17 @@ import androidx.annotation.AnyThread
 import com.applovin.adview.AppLovinIncentivizedInterstitial
 import com.applovin.adview.AppLovinInterstitialAd
 import com.applovin.adview.AppLovinInterstitialAdDialog
+import com.applovin.mediation.ads.MaxInterstitialAd
+import com.applovin.mediation.ads.MaxRewardedAd
 import com.applovin.sdk.AppLovinAdSize
 import com.applovin.sdk.AppLovinSdk
+import com.applovin.sdk.AppLovinSdkConfiguration
 import com.applovin.sdk.AppLovinSdkSettings
 import com.ee.internal.AppLovinMaxInterstitialAdListener
 import com.ee.internal.AppLovinMaxRewardedAdListener
+import com.ee.internal.deserialize
 import kotlinx.coroutines.suspendCancellableCoroutine
+import kotlinx.serialization.Serializable
 import kotlin.coroutines.resume
 
 class AppLovinMaxBridge(
@@ -19,6 +24,13 @@ class AppLovinMaxBridge(
     private val _logger: ILogger,
     private val _application: Application,
     private var _activity: Activity?) : IPlugin {
+
+    @Serializable
+    private class InitializeRequest(
+        val bannerAdId: String,
+        val interstitialAdId: String,
+        val rewardedAdId: String
+    )
     companion object {
         private val kTag = AppLovinMaxBridge::class.java.name
         private const val kPrefix = "AppLovinMaxBridge"
@@ -36,9 +48,9 @@ class AppLovinMaxBridge(
     private var _initializing = false
     private var _initialized = false
     private var _sdk: AppLovinSdk? = null
-    private var _interstitialAd: AppLovinInterstitialAdDialog? = null
+    private var _interstitialAd: MaxInterstitialAd? = null
     private var _interstitialAdListener: AppLovinMaxInterstitialAdListener? = null
-    private var _rewardedAd: AppLovinIncentivizedInterstitial? = null
+    private var _rewardedAd: MaxRewardedAd? = null
     private var _rewardedAdListener: AppLovinMaxRewardedAdListener? = null
 
     init {
@@ -66,11 +78,6 @@ class AppLovinMaxBridge(
                 return@runOnMainThread
             }
             _sdk = null
-            _interstitialAd?.let { ad ->
-                ad.setAdLoadListener(null)
-                ad.setAdDisplayListener(null)
-                ad.setAdClickListener(null)
-            }
             _interstitialAd = null
             _interstitialAdListener = null
             _rewardedAd = null
@@ -81,7 +88,14 @@ class AppLovinMaxBridge(
     @AnyThread
     private fun registerHandlers() {
         _bridge.registerAsyncHandler(kInitialize) { message ->
-            Utils.toString(initialize(message))
+            val request = deserialize<InitializeRequest>(message)
+            Utils.toString(
+                initialize(
+                    request.bannerAdId,
+                    request.rewardedAdId,
+                    request.interstitialAdId
+                )
+            )
         }
         _bridge.registerHandler(kSetVerboseLogging) { message ->
             setVerboseLogging(Utils.toBoolean(message))
@@ -135,7 +149,11 @@ class AppLovinMaxBridge(
     }
 
     @AnyThread
-    suspend fun initialize(key: String): Boolean {
+    suspend fun initialize(
+        bannerAdId: String,
+        rewardedAdId: String,
+        interstitialAdId: String
+    ): Boolean {
         return suspendCancellableCoroutine { cont ->
             Thread.runOnMainThread {
                 if (_initializing) {
@@ -147,8 +165,9 @@ class AppLovinMaxBridge(
                     return@runOnMainThread
                 }
                 _initializing = true
-                val settings = AppLovinSdkSettings(_application)
-                val sdk = AppLovinSdk.getInstance(key, settings, _application)
+
+                val sdk = AppLovinSdk.getInstance(_application);
+                sdk.mediationProvider = "max";
                 sdk.initializeSdk {
                     if (cont.isActive) {
                         // OK.
@@ -160,16 +179,15 @@ class AppLovinMaxBridge(
                         _initialized = true
                         cont.resume(true)
                     }
-                }
+                };
 
+                val interstitialAd = MaxInterstitialAd(interstitialAdId, _activity)
                 val interstitialAdListener = AppLovinMaxInterstitialAdListener(_bridge, _logger)
-                val interstitialAd = AppLovinInterstitialAd.create(sdk, _activity)
-                interstitialAd.setAdLoadListener(interstitialAdListener)
-                interstitialAd.setAdDisplayListener(interstitialAdListener)
-                interstitialAd.setAdClickListener(interstitialAdListener)
+                interstitialAd.setListener(interstitialAdListener)
 
-                val rewardedAd = AppLovinIncentivizedInterstitial.create(sdk)
+                val rewardedAd = MaxRewardedAd.getInstance(rewardedAdId, _activity)
                 val rewardedAdListener = AppLovinMaxRewardedAdListener(_bridge, _logger)
+                rewardedAd.setListener(rewardedAdListener);
 
                 _sdk = sdk
                 _interstitialAd = interstitialAd
@@ -199,14 +217,14 @@ class AppLovinMaxBridge(
     }
 
     private val hasInterstitialAd: Boolean
-        @AnyThread get() = _interstitialAdListener?.isLoaded ?: false
+        @AnyThread get() = _interstitialAd?.isReady ?: false
 
     @AnyThread
     fun loadInterstitialAd() {
         Thread.runOnMainThread {
             checkInitialized()
-            val sdk = _sdk ?: return@runOnMainThread
-            sdk.adService.loadNextAd(AppLovinAdSize.INTERSTITIAL, _interstitialAdListener)
+            val ad = _interstitialAd ?: return@runOnMainThread
+            ad.loadAd()
         }
     }
 
@@ -215,19 +233,19 @@ class AppLovinMaxBridge(
         Thread.runOnMainThread {
             checkInitialized()
             val ad = _interstitialAd ?: return@runOnMainThread
-            ad.show()
+            ad.showAd()
         }
     }
 
     val hasRewardedAd: Boolean
-        @AnyThread get() = _rewardedAdListener?.isLoaded ?: false
+        @AnyThread get() = _rewardedAd?.isReady ?: false
 
     @AnyThread
     fun loadRewardedAd() {
         Thread.runOnMainThread {
             checkInitialized()
             val ad = _rewardedAd ?: return@runOnMainThread
-            ad.preload(_rewardedAdListener)
+            ad.loadAd()
         }
     }
 
@@ -236,7 +254,7 @@ class AppLovinMaxBridge(
         Thread.runOnMainThread {
             checkInitialized()
             val ad = _rewardedAd ?: return@runOnMainThread
-            ad.show(_application, _rewardedAdListener, _rewardedAdListener, _rewardedAdListener, _rewardedAdListener)
+            ad.showAd()
         }
     }
 }

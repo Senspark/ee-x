@@ -1,11 +1,6 @@
 package com.ee.internal
 
-import com.applovin.sdk.AppLovinAd
-import com.applovin.sdk.AppLovinAdClickListener
-import com.applovin.sdk.AppLovinAdDisplayListener
-import com.applovin.sdk.AppLovinAdLoadListener
-import com.applovin.sdk.AppLovinAdRewardListener
-import com.applovin.sdk.AppLovinAdVideoPlaybackListener
+import com.applovin.mediation.*
 import com.ee.ILogger
 import com.ee.IMessageBridge
 import com.ee.Thread
@@ -16,14 +11,13 @@ import java.util.concurrent.atomic.AtomicBoolean
 internal class AppLovinMaxRewardedAdListener(
     private val _bridge: IMessageBridge,
     private val _logger: ILogger)
-    : AppLovinAdLoadListener, AppLovinAdDisplayListener, AppLovinAdClickListener, AppLovinAdRewardListener, AppLovinAdVideoPlaybackListener {
+    : MaxRewardedAdListener {
     @Serializable
     @Suppress("unused")
     private class ErrorResponse(
         val code: Int,
         val message: String
     )
-
     companion object {
         private val kTag = AppLovinMaxRewardedAdListener::class.java.name
         private const val kPrefix = "AppLovinMaxBridge"
@@ -39,77 +33,67 @@ internal class AppLovinMaxRewardedAdListener(
     val isLoaded: Boolean
         get() = _isLoaded.get()
 
-    override fun adReceived(ad: AppLovinAd) {
+    override fun onAdLoaded(p0: MaxAd?) {
         Thread.runOnMainThread {
-            _logger.debug("$kTag: ${this::adReceived.name}")
+            _logger.debug("$kTag: ${this::onAdLoaded.name}")
             _isLoaded.set(true)
             _bridge.callCpp(kOnRewardedAdLoaded)
         }
     }
 
-    override fun failedToReceiveAd(errorCode: Int) {
+    override fun onAdDisplayed(p0: MaxAd?) {
         Thread.runOnMainThread {
-            _logger.debug("$kTag: ${this::failedToReceiveAd.name}: code $errorCode")
-            _bridge.callCpp(kOnRewardedAdFailedToLoad, ErrorResponse(errorCode, "").serialize())
-        }
-    }
-
-    override fun adDisplayed(ad: AppLovinAd) {
-        Thread.runOnMainThread {
-            _logger.debug("$kTag: ${this::adDisplayed.name}")
+            _logger.debug("$kTag: ${this::onAdDisplayed.name}")
             _rewarded = false
         }
     }
 
-    override fun videoPlaybackBegan(ad: AppLovinAd) {
+    override fun onAdHidden(p0: MaxAd?) {
         Thread.runOnMainThread {
-            _logger.debug("$kTag: ${this::videoPlaybackBegan.name}")
+            _logger.info("$kTag: ${this::onAdHidden.name}")
+            _isLoaded.set(false)
+            _bridge.callCpp(kOnRewardedAdClosed, Utils.toString(_rewarded))
         }
     }
 
-    override fun adClicked(ad: AppLovinAd) {
+    override fun onAdClicked(p0: MaxAd?) {
         Thread.runOnMainThread {
-            _logger.debug("$kTag: ${this::adClicked.name}")
+            _logger.debug("$kTag: ${this::onAdClicked.name}")
             _bridge.callCpp(kOnRewardedAdClicked)
         }
     }
 
-    override fun videoPlaybackEnded(ad: AppLovinAd, percentViewed: Double, fullyWatched: Boolean) {
+    override fun onAdLoadFailed(p0: String?, p1: MaxError?) {
         Thread.runOnMainThread {
-            _logger.debug("$kTag: ${this::videoPlaybackEnded.name}")
+            val errCode = p1?.code ?: 0;
+            val errMsg = p1?.message ?: "";
+            _logger.debug("$kTag: ${this::onAdLoadFailed.name}: code $errCode")
+            _bridge.callCpp(kOnRewardedAdFailedToLoad, ErrorResponse(errCode, errMsg).serialize())
         }
     }
 
-    override fun userRewardVerified(ad: AppLovinAd, response: Map<String, String>) {
+    override fun onAdDisplayFailed(p0: MaxAd?, p1: MaxError?) {
         Thread.runOnMainThread {
-            _logger.info("$kTag: ${this::userRewardVerified.name}: $response")
+            _logger.debug("$kTag: ${this::onAdDisplayFailed.name}")
+        }
+    }
+
+    override fun onUserRewarded(p0: MaxAd?, p1: MaxReward?) {
+        Thread.runOnMainThread {
+            _logger.info("$kTag: ${this::onUserRewarded.name}: ${p1?.amount} ${p1?.label}")
             _rewarded = true
         }
     }
 
-    override fun userRewardRejected(ad: AppLovinAd, response: Map<String, String>) {
+    override fun onRewardedVideoStarted(p0: MaxAd?) {
         Thread.runOnMainThread {
-            _logger.info("$kTag: ${this::userRewardRejected.name}: $response")
+            _logger.debug("$kTag: ${this::onRewardedVideoStarted.name}")
         }
     }
 
-    override fun userOverQuota(ad: AppLovinAd, response: Map<String, String>) {
+    override fun onRewardedVideoCompleted(p0: MaxAd?) {
         Thread.runOnMainThread {
-            _logger.info("$kTag: ${this::userOverQuota.name}: $response")
-        }
-    }
-
-    override fun validationRequestFailed(ad: AppLovinAd, responseCode: Int) {
-        Thread.runOnMainThread {
-            _logger.info("$kTag: ${this::validationRequestFailed.name}: code = $responseCode")
-        }
-    }
-
-    override fun adHidden(ad: AppLovinAd) {
-        Thread.runOnMainThread {
-            _logger.info("$kTag: ${this::adHidden.name}")
-            _isLoaded.set(false)
-            _bridge.callCpp(kOnRewardedAdClosed, Utils.toString(_rewarded))
+            _logger.debug("$kTag: ${this::onRewardedVideoCompleted.name}")
         }
     }
 }

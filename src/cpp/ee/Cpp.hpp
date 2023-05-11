@@ -8,6 +8,7 @@
 #include "ee/adjust/Adjust.hpp"
 #include "ee/ads/Ads.hpp"
 #include "ee/app_lovin/AppLovin.hpp"
+#include "ee/app_lovin_max/AppLovinMax.hpp"
 #include "ee/apps_flyer/AppsFlyer.hpp"
 #include "ee/cocos/Cocos.hpp"
 #include "ee/core/Core.hpp"

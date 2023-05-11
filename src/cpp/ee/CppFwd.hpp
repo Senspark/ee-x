@@ -8,6 +8,7 @@
 #include "ee/adjust/AdjustFwd.hpp"
 #include "ee/ads/AdsFwd.hpp"
 #include "ee/app_lovin/AppLovinFwd.hpp"
+#include "ee/app_lovin_max/AppLovinMaxFwd.hpp"
 #include "ee/apps_flyer/AppsFlyerFwd.hpp"
 #include "ee/cocos/CocosFwd.hpp"
 #include "ee/core/CoreFwd.hpp"

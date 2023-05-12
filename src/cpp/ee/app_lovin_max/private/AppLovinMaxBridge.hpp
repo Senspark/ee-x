@@ -15,41 +15,56 @@ public:
 
     virtual void destroy() override;
 
-    virtual Task<bool> initialize(const std::string& key) override;
-    virtual void setVerboseLogging(bool enabled) override;
-    virtual void setMuted(bool enabled) override;
-    virtual std::shared_ptr<IFullScreenAd> createRewardedAd() override;
+    virtual Task<bool> initialize(
+        const std::string& bannerAdId,
+        const std::string& rewardedAdId,
+        const std::string& interstitialAdId) override;
+
+    virtual std::shared_ptr<IBannerAd> createBannerAd(const std::string& adId, MaxBannerAdSize adSize) override;
+    virtual std::shared_ptr<IFullScreenAd> createRewardedAd(const std::string& adId) override;
+    virtual std::shared_ptr<IFullScreenAd> createInterstitialAd(const std::string& adId) override;
 
 private:
+    friend InterstitialAd;
     friend RewardedAd;
 
-    bool destroyRewardedAd();
+    std::pair<int, int> getBannerAdSize(BannerAdSize adSize);
+
+    bool destroyBannerAd(const std::string& adId);
+    bool destroyInterstitialAd(const std::string& adId);
+    bool destroyRewardedAd(const std::string& adId);
 
     bool hasInterstitialAd() const;
     void loadInterstitialAd();
-    void showInterstitialAd();
+    void showInterstitialAd(const std::string& adId);
 
     bool hasRewardedAd() const;
-    void loadRewardedAd();
-    void showRewardedAd();
+    Task<bool> loadRewardedAd();
+    void showRewardedAd(const std::string& adId);
 
     void onInterstitialAdLoaded();
     void onInterstitialAdFailedToLoad(int code, const std::string& message);
+    void onInterstitialAdFailedToShow(int code, const std::string& message);
     void onInterstitialAdClicked();
     void onInterstitialAdClosed();
 
     void onRewardedAdLoaded();
-    void onRewardedAdFailedToLoad(int code, const std::string& message);
+    void onRewardedAdFailedToShow(int code, const std::string& message);
     void onRewardedAdClicked();
     void onRewardedAdClosed(bool rewarded);
+
+    void onMediationAdClosed(AdResult result);
 
     IMessageBridge& bridge_;
     ILogger& logger_;
     Destroyer destroyer_;
     std::string network_;
 
-    /// Share the same instance.
-    RewardedAd* rewardedAd_;
+    /// Share the same ad instance.
+    std::shared_ptr<IBannerAd> bannerAd_;
+    std::shared_ptr<InterstitialAd> interstitialAd_;
+    std::shared_ptr<IFullScreenAd> sharedInterstitialAd_;
+    std::shared_ptr<RewardedAd> rewardedAd_;
     std::shared_ptr<IFullScreenAd> sharedRewardedAd_;
 
     std::shared_ptr<ads::IAsyncHelper<AdResult>> displayer_;

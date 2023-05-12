@@ -38,6 +38,7 @@ Pod::Spec.new do |spec|
       'src/cpp/ee/adjust/**/*',
       'src/cpp/ee/ads/**/*',
       'src/cpp/ee/app_lovin/**/*',
+      'src/cpp/ee/app_lovin_max/**/*',
       'src/cpp/ee/apps_flyer/**/*',
       'src/cpp/ee/cocos/**/*',
       'src/cpp/ee/core/**/*',
@@ -235,6 +236,15 @@ Pod::Spec.new do |spec|
 
     # https://github.com/AppLovin/AppLovin-MAX-SDK-iOS/releases
     s.dependency 'AppLovinSDK', '11.6.1'
+  end
+
+  spec.subspec 'app-lovin-max' do |s|
+    s.source_files = 'src/ios/ee/app_lovin_max/**/*'
+    s.header_mappings_dir = 'src/ios'
+    s.dependency 'ee-x/core'
+
+    # https://github.com/AppLovin/AppLovin-MAX-SDK-iOS/releases
+    s.dependency 'AppLovinSDK', '11.9.0'
   end
 
   spec.subspec 'apps-flyer' do |s|

@@ -3,15 +3,11 @@ package com.ee
 import android.app.Activity
 import android.app.Application
 import androidx.annotation.AnyThread
-import com.applovin.adview.AppLovinIncentivizedInterstitial
-import com.applovin.adview.AppLovinInterstitialAd
-import com.applovin.adview.AppLovinInterstitialAdDialog
+import com.applovin.mediation.ads.MaxAdView
 import com.applovin.mediation.ads.MaxInterstitialAd
 import com.applovin.mediation.ads.MaxRewardedAd
-import com.applovin.sdk.AppLovinAdSize
 import com.applovin.sdk.AppLovinSdk
-import com.applovin.sdk.AppLovinSdkConfiguration
-import com.applovin.sdk.AppLovinSdkSettings
+import com.ee.internal.AppLovinMaxBannerAdListener
 import com.ee.internal.AppLovinMaxInterstitialAdListener
 import com.ee.internal.AppLovinMaxRewardedAdListener
 import com.ee.internal.deserialize
@@ -28,8 +24,8 @@ class AppLovinMaxBridge(
     @Serializable
     private class InitializeRequest(
         val bannerAdId: String,
+        val rewardedAdId: String,
         val interstitialAdId: String,
-        val rewardedAdId: String
     )
     companion object {
         private val kTag = AppLovinMaxBridge::class.java.name
@@ -48,6 +44,8 @@ class AppLovinMaxBridge(
     private var _initializing = false
     private var _initialized = false
     private var _sdk: AppLovinSdk? = null
+//    private var _adView: MaxAdView? = null
+//    private var _adViewListener: AppLovinMaxBannerAdListener? = null;
     private var _interstitialAd: MaxInterstitialAd? = null
     private var _interstitialAdListener: AppLovinMaxInterstitialAdListener? = null
     private var _rewardedAd: MaxRewardedAd? = null
@@ -171,6 +169,7 @@ class AppLovinMaxBridge(
                 sdk.initializeSdk {
                     if (cont.isActive) {
                         // OK.
+                        sdk.showMediationDebugger()
                     } else {
                         return@initializeSdk
                     }
@@ -180,6 +179,10 @@ class AppLovinMaxBridge(
                         cont.resume(true)
                     }
                 };
+//
+//                val adView = MaxAdView(bannerAdId, _activity);
+//                val adViewListener = AppLovinMaxBannerAdListener(_bridge, _logger);
+//                adView.setListener(adViewListener);
 
                 val interstitialAd = MaxInterstitialAd(interstitialAdId, _activity)
                 val interstitialAdListener = AppLovinMaxInterstitialAdListener(_bridge, _logger)
@@ -190,6 +193,8 @@ class AppLovinMaxBridge(
                 rewardedAd.setListener(rewardedAdListener);
 
                 _sdk = sdk
+//                _adView = adView;
+//                _adViewListener = adViewListener;
                 _interstitialAd = interstitialAd
                 _interstitialAdListener = interstitialAdListener
                 _rewardedAd = rewardedAd

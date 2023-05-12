@@ -14,15 +14,18 @@ namespace ee {
 namespace app_lovin_max {
 class IBridge : public IPlugin {
 public:
-    [[nodiscard]] virtual Task<bool> initialize(const std::string& key) = 0;
+    [[nodiscard]] virtual Task<bool> initialize(
+        const std::string& bannerAdId,
+        const std::string& rewardedAdId,
+        const std::string& interstitialAdId) = 0;
 
-    /// Disabled by default.
-    virtual void setVerboseLogging(bool enabled) = 0;
+    virtual std::shared_ptr<IBannerAd> createBannerAd(const std::string& adId, MaxBannerAdSize adSize) = 0;
 
-    /// Disabled by default.
-    virtual void setMuted(bool enabled) = 0;
+    /// Creates an interstitial ad with the specified placement ID.
+    virtual std::shared_ptr<IFullScreenAd> createInterstitialAd(const std::string& adId) = 0;
 
-    virtual std::shared_ptr<IFullScreenAd> createRewardedAd() = 0;
+    /// Creates a rewarded video with the specified placement ID.
+    virtual std::shared_ptr<IFullScreenAd> createRewardedAd(const std::string& adId) = 0;
 };
 } // namespace app_lovin_max
 } // namespace ee

@@ -14,20 +14,19 @@ using Self = RewardedAd;
 
 Self::RewardedAd(ILogger& logger,
                  const std::shared_ptr<ads::IAsyncHelper<AdResult>>& displayer,
-                 Bridge* plugin, const std::string& network)
+                 Bridge* plugin, const std::string& adId)
     : logger_(logger)
     , displayer_(displayer)
     , plugin_(plugin)
-    , network_(network) {
+    , adId_(adId) {
     logger_.debug("%s", __PRETTY_FUNCTION__);
-    loader_ = std::make_unique<ads::AsyncHelper<bool>>();
 }
 
 Self::~RewardedAd() = default;
 
 void Self::destroy() {
-    logger_.debug("%s", __PRETTY_FUNCTION__);
-    plugin_->destroyRewardedAd();
+    logger_.debug("%s: adId = %s", __PRETTY_FUNCTION__, adId_.c_str());
+    plugin_->destroyRewardedAd(adId_);
 }
 
 bool Self::isLoaded() const {
@@ -35,24 +34,21 @@ bool Self::isLoaded() const {
 }
 
 Task<bool> Self::load() {
-    logger_.debug("%s: loading = %s", __PRETTY_FUNCTION__,
-                  core::toString(loader_->isProcessing()).c_str());
-    auto result = co_await loader_->process(
-        [this] { //
-            plugin_->loadRewardedAd();
-        },
-        [](bool result) {
-            // OK.
-        });
-    co_return result;
+    // Should return whether this ad is loaded.
+    noAwait([this]() -> Task<> { //
+        co_await plugin_->loadRewardedAd();
+    });
+    // Should return whether this ad is loaded.
+    co_return isLoaded();
 }
 
 Task<AdResult> Self::show() {
-    logger_.debug("%s: displaying = %s", __PRETTY_FUNCTION__,
+    logger_.debug("%s: adId = %s displaying = %s", __PRETTY_FUNCTION__,
+                  adId_.c_str(),
                   core::toString(displayer_->isProcessing()).c_str());
     auto result = co_await displayer_->process(
         [this] { //
-            plugin_->showRewardedAd();
+            plugin_->showRewardedAd(adId_);
         },
         [](AdResult result) {
             // OK.
@@ -61,23 +57,7 @@ Task<AdResult> Self::show() {
 }
 
 void Self::onLoaded() {
-    logger_.debug("%s: loading = %s", __PRETTY_FUNCTION__,
-                  core::toString(loader_->isProcessing()).c_str());
-    if (loader_->isProcessing()) {
-        loader_->resolve(true);
-        dispatchEvent([this](auto&& observer) {
-            if (observer.onLoadResult) {
-                observer.onLoadResult({
-                    .network = network_,
-                    .result = true,
-                });
-            }
-        });
-    } else {
-        logger_.error("%s: this ad is expected to be loading",
-                      __PRETTY_FUNCTION__);
-        assert(false);
-    }
+    logger_.debug("%s: adId = %s", __PRETTY_FUNCTION__, adId_.c_str());
     dispatchEvent([](auto&& observer) {
         if (observer.onLoaded) {
             observer.onLoaded();
@@ -85,31 +65,21 @@ void Self::onLoaded() {
     });
 }
 
-void Self::onFailedToLoad(int code, const std::string& message) {
-    logger_.debug("%s: loading = %s message = %s", __PRETTY_FUNCTION__,
-                  core::toString(loader_->isProcessing()).c_str(),
+void Self::onFailedToShow(int code, const std::string& message) {
+    logger_.debug("%s: adId = %s displaying = %s message = %s",
+                  __PRETTY_FUNCTION__, adId_.c_str(),
+                  core::toString(displayer_->isProcessing()).c_str(),
                   message.c_str());
-    if (loader_->isProcessing()) {
-        loader_->resolve(false);
-        dispatchEvent([this, code, message](auto&& observer) {
-            if (observer.onLoadResult) {
-                observer.onLoadResult({
-                    .network = network_,
-                    .result = false,
-                    .errorCode = code,
-                    .errorMessage = message,
-                });
-            }
-        });
+    if (displayer_->isProcessing()) {
+        displayer_->resolve(AdResult::Failed);
     } else {
-        logger_.error("%s: this ad is expected to be loading",
+        logger_.error("%s: this ad is expected to be displaying",
                       __PRETTY_FUNCTION__);
-        assert(false);
     }
 }
 
 void Self::onClicked() {
-    logger_.debug("%s", __PRETTY_FUNCTION__);
+    logger_.debug("%s: adId = %s", __PRETTY_FUNCTION__, adId_.c_str());
     dispatchEvent([](auto&& observer) {
         if (observer.onClicked) {
             observer.onClicked();
@@ -118,7 +88,8 @@ void Self::onClicked() {
 }
 
 void Self::onClosed(bool rewarded) {
-    logger_.debug("%s: displaying = %s rewarded = %s", __PRETTY_FUNCTION__,
+    logger_.debug("%s: adId = %s displaying = %s rewarded = %s",
+                  __PRETTY_FUNCTION__, adId_.c_str(),
                   core::toString(displayer_->isProcessing()).c_str(),
                   core::toString(rewarded).c_str());
     if (displayer_->isProcessing()) {
@@ -127,8 +98,7 @@ void Self::onClosed(bool rewarded) {
     } else {
         logger_.error("%s: this ad is expected to be displaying",
                       __PRETTY_FUNCTION__);
-        assert(false);
     }
 }
-} // namespace app_lovin
+} // namespace app_lovin_max
 } // namespace ee

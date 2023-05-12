@@ -1,9 +1,10 @@
 #include "ee/app_lovin_max/private/AppLovinMaxBridge.hpp"
 
-#include <cassert>
-
 #include <ee/ads/internal/Capper.hpp>
+#include <ee/ads/internal/DefaultBannerAd.hpp>
+#include <ee/ads/internal/GuardedBannerAd.hpp>
 #include <ee/ads/internal/GuardedFullScreenAd.hpp>
+#include <ee/ads/internal/IAsyncHelper.hpp>
 #include <ee/ads/internal/MediationManager.hpp>
 #include <ee/ads/internal/Retrier.hpp>
 #include <ee/core/ILogger.hpp>
@@ -12,36 +13,34 @@
 #include <ee/core/Utils.hpp>
 #include <ee/nlohmann/json.hpp>
 
+#include "ee/app_lovin_max/private/AppLovinMaxInterstitialAd.hpp"
 #include "ee/app_lovin_max/private/AppLovinMaxRewardedAd.hpp"
 
 namespace ee {
 namespace app_lovin_max {
 namespace {
-// clang-format off
 const std::string kPrefix = "AppLovinMaxBridge";
-
-const auto kInitialize         = kPrefix + "Initialize";
-const auto kSetVerboseLogging  = kPrefix + "SetVerboseLogging";
-const auto kSetMuted           = kPrefix + "SetMuted";
-
-const auto kHasInterstitialAd  = kPrefix + "HasInterstitialAd";
+const auto kInitialize = kPrefix + "Initialize";
+const auto kGetBannerAdSize = kPrefix + "GetBannerAdSize";
+const auto kCreateBannerAd = kPrefix + "CreateBannerAd";
+const auto kDestroyAd = kPrefix + "DestroyAd";
+const auto kHasInterstitialAd = kPrefix + "HasInterstitialAd";
 const auto kLoadInterstitialAd = kPrefix + "LoadInterstitialAd";
 const auto kShowInterstitialAd = kPrefix + "ShowInterstitialAd";
-
-const auto kHasRewardedAd      = kPrefix + "HasRewardedAd";
-const auto kLoadRewardedAd     = kPrefix + "LoadRewardedAd";
-const auto kShowRewardedAd     = kPrefix + "ShowRewardedAd";
-
-const auto kOnInterstitialAdLoaded       = kPrefix + "OnInterstitialAdLoaded";
-const auto kOnInterstitialAdFailedToLoad = kPrefix + "OnInterstitialAdFailedToLoad";
-const auto kOnInterstitialAdClicked      = kPrefix + "OnInterstitialAdClicked";
-const auto kOnInterstitialAdClosed       = kPrefix + "OnInterstitialAdClosed";
-
-const auto kOnRewardedAdLoaded       = kPrefix + "OnRewardedAdLoaded";
-const auto kOnRewardedAdFailedToLoad = kPrefix + "OnRewardedAdFailedToLoad";
-const auto kOnRewardedAdClicked      = kPrefix + "OnRewardedAdClicked";
-const auto kOnRewardedAdClosed       = kPrefix + "OnRewardedAdClosed";
-// clang-format on
+const auto kHasRewardedAd = kPrefix + "HasRewardedAd";
+const auto kLoadRewardedAd = kPrefix + "LoadRewardedAd";
+const auto kShowRewardedAd = kPrefix + "ShowRewardedAd";
+const auto kOnInterstitialAdLoaded = kPrefix + "OnInterstitialAdLoaded";
+const auto kOnInterstitialAdFailedToLoad =
+    kPrefix + "OnInterstitialAdFailedToLoad";
+const auto kOnInterstitialAdFailedToShow =
+    kPrefix + "OnInterstitialAdFailedToShow";
+const auto kOnInterstitialAdClicked = kPrefix + "OnInterstitialAdClicked";
+const auto kOnInterstitialAdClosed = kPrefix + "OnInterstitialAdClosed";
+const auto kOnRewardedAdLoaded = kPrefix + "OnRewardedAdLoaded";
+const auto kOnRewardedAdFailedToShow = kPrefix + "OnRewardedAdFailedToShow";
+const auto kOnRewardedAdClicked = kPrefix + "OnRewardedAdClicked";
+const auto kOnRewardedAdClosed = kPrefix + "OnRewardedAdClosed";
 } // namespace
 
 using Self = Bridge;
@@ -51,10 +50,11 @@ Self::Bridge(IMessageBridge& bridge, ILogger& logger,
     : bridge_(bridge)
     , logger_(logger)
     , destroyer_(destroyer)
-    , network_("app_lovin_max") {
+    , network_("max") {
     logger_.debug("%s", __PRETTY_FUNCTION__);
     auto&& mediation = ads::MediationManager::getInstance();
     displayer_ = mediation.getAdDisplayer();
+    interstitialAd_ = nullptr;
     rewardedAd_ = nullptr;
 
     bridge_.registerHandler(
@@ -69,6 +69,12 @@ Self::Bridge(IMessageBridge& bridge, ILogger& logger,
         },
         kOnInterstitialAdFailedToLoad);
     bridge_.registerHandler(
+        [this](const std::string& message) {
+            auto json = nlohmann::json::parse(message);
+            onInterstitialAdFailedToShow(json["code"], json["message"]);
+        },
+        kOnInterstitialAdFailedToShow);
+    bridge_.registerHandler(
         [this](const std::string& message) { //
             onInterstitialAdClicked();
         },
@@ -78,6 +84,7 @@ Self::Bridge(IMessageBridge& bridge, ILogger& logger,
             onInterstitialAdClosed();
         },
         kOnInterstitialAdClosed);
+
     bridge_.registerHandler(
         [this](const std::string& message) { //
             onRewardedAdLoaded();
@@ -86,9 +93,9 @@ Self::Bridge(IMessageBridge& bridge, ILogger& logger,
     bridge_.registerHandler(
         [this](const std::string& message) {
             auto json = nlohmann::json::parse(message);
-            onRewardedAdFailedToLoad(json["code"], json["message"]);
+            onRewardedAdFailedToShow(json["code"], json["message"]);
         },
-        kOnRewardedAdFailedToLoad);
+        kOnRewardedAdFailedToShow);
     bridge_.registerHandler(
         [this](const std::string& message) { //
             onRewardedAdClicked();
@@ -108,117 +115,226 @@ void Self::destroy() {
 
     bridge_.deregisterHandler(kOnInterstitialAdLoaded);
     bridge_.deregisterHandler(kOnInterstitialAdFailedToLoad);
+    bridge_.deregisterHandler(kOnRewardedAdFailedToShow);
     bridge_.deregisterHandler(kOnInterstitialAdClicked);
     bridge_.deregisterHandler(kOnInterstitialAdClosed);
+
     bridge_.deregisterHandler(kOnRewardedAdLoaded);
-    bridge_.deregisterHandler(kOnRewardedAdFailedToLoad);
+    bridge_.deregisterHandler(kOnRewardedAdFailedToShow);
     bridge_.deregisterHandler(kOnRewardedAdClicked);
     bridge_.deregisterHandler(kOnRewardedAdClosed);
+
     destroyer_();
 }
 
-Task<bool> Self::initialize(const std::string& key) {
-    logger_.debug("%s: key = %s", __PRETTY_FUNCTION__, key.c_str());
-    auto response = co_await bridge_.callAsync(kInitialize, key);
+Task<bool> Self::initialize(const std::string& bannerId,
+                            const std::string& interstitialId,
+                            const std::string& rewardedId) {
+    logger_.debug("%s: bannerId = %s interstitialId = %s rewardedId = %s",
+                  __PRETTY_FUNCTION__, bannerId.c_str(), interstitialId.c_str(),
+                  rewardedId.c_str());
+    nlohmann::json json;
+    json["bannerAdId"] = bannerId;
+    json["interstitialAdId"] = interstitialId;
+    json["rewardedAdId"] = rewardedId;
+    auto response = co_await bridge_.callAsync(kInitialize, json.dump());
+    createInterstitialAd(interstitialId);
+    createRewardedAd(rewardedId);
     co_return core::toBool(response);
 }
 
-void Self::setVerboseLogging(bool enabled) {
-    bridge_.call(kSetVerboseLogging, core::toString(enabled));
+std::pair<int, int> Self::getBannerAdSize(BannerAdSize adSize) {
+    auto response = bridge_.call(kGetBannerAdSize,
+                                 std::to_string(static_cast<int>(adSize)));
+    auto json = nlohmann::json::parse(response);
+    int width = json["width"];
+    int height = json["height"];
+    return std::pair(width, height);
 }
 
-void Self::setMuted(bool enabled) {
-    bridge_.call(kSetMuted, core::toString(enabled));
+std::shared_ptr<IBannerAd> Self::createBannerAd(const std::string& adId,
+                                                BannerAdSize adSize) {
+    logger_.debug("%s: id = %s size = %d", __PRETTY_FUNCTION__, adId.c_str(),
+                  static_cast<int>(adSize));
+    return nullptr;
+// test
+    if (bannerAd_) {
+        return bannerAd_;
+    }
+    nlohmann::json json;
+    json["adId"] = adId;
+    json["adSize"] = static_cast<int>(adSize);
+    auto response = bridge_.call(kCreateBannerAd, json.dump());
+    if (not core::toBool(response)) {
+        logger_.error("%s: There was an error when attempt to create an ad.",
+                      __PRETTY_FUNCTION__);
+        assert(false);
+        return nullptr;
+    }
+    auto size = getBannerAdSize(adSize);
+    bannerAd_ = std::make_shared<ads::GuardedBannerAd>(
+        std::make_shared<ads::DefaultBannerAd>( //
+            "MaxBannerAd", bridge_, logger_,
+            [this, adId] { //
+                destroyBannerAd(adId);
+            },
+            network_, adId, size));
+    return bannerAd_;
+}
+
+bool Self::destroyBannerAd(const std::string& adId) {
+    logger_.debug("%s: adId = %s", __PRETTY_FUNCTION__, adId.c_str());
+    if (bannerAd_ == nullptr) {
+        return false;
+    }
+    auto&& response = bridge_.call(kDestroyAd, adId);
+    if (not core::toBool(response)) {
+        logger_.error("%s: There was an error when attempt to destroy an ad.",
+                      __PRETTY_FUNCTION__);
+        assert(false);
+        return false;
+    }
+    bannerAd_.reset();
+    return true;
+}
+
+std::shared_ptr<IFullScreenAd>
+Self::createInterstitialAd(const std::string& adId) {
+    // adId has no usage at the moment since all ads share the same instance.
+    logger_.debug("%s: adId = %s", __PRETTY_FUNCTION__, adId.c_str());
+    if (sharedInterstitialAd_) {
+        return sharedInterstitialAd_;
+    }
+    interstitialAd_ = std::make_shared<InterstitialAd>(logger_, displayer_,
+                                                       this, adId);
+    sharedInterstitialAd_ =
+        std::make_shared<ads::GuardedFullScreenAd>(interstitialAd_);
+    return sharedInterstitialAd_;
+}
+
+bool Self::destroyInterstitialAd(const std::string& adId) {
+    logger_.debug("%s: adId = %s", __PRETTY_FUNCTION__, adId.c_str());
+    if (sharedInterstitialAd_ == nullptr) {
+        return false;
+    }
+    interstitialAd_.reset();
+    sharedInterstitialAd_.reset();
+    return true;
+}
+
+std::shared_ptr<IFullScreenAd> Self::createRewardedAd(const std::string& adId) {
+    // adId has no usage at the moment since all ads share the same instance.
+    logger_.debug("%s: adId = %s", __PRETTY_FUNCTION__, adId.c_str());
+    if (sharedRewardedAd_) {
+        return sharedRewardedAd_;
+    }
+    rewardedAd_ = std::make_shared<RewardedAd>(logger_, displayer_, this, adId);
+    sharedRewardedAd_ = std::make_shared<ads::GuardedFullScreenAd>(rewardedAd_);
+    return sharedRewardedAd_;
+}
+
+bool Self::destroyRewardedAd(const std::string& adId) {
+    logger_.debug("%s: adId = %s", __PRETTY_FUNCTION__, adId.c_str());
+    if (sharedRewardedAd_ == nullptr) {
+        return false;
+    }
+    rewardedAd_.reset();
+    sharedRewardedAd_.reset();
+    return true;
 }
 
 bool Self::hasInterstitialAd() const {
-    auto result = bridge_.call(kHasInterstitialAd);
-    return core::toBool(result);
+    auto response = bridge_.call(kHasInterstitialAd);
+    return core::toBool(response);
 }
 
 void Self::loadInterstitialAd() {
     bridge_.call(kLoadInterstitialAd);
 }
 
-void Self::showInterstitialAd() {
-    bridge_.call(kShowInterstitialAd);
-}
-
-std::shared_ptr<IFullScreenAd> Self::createRewardedAd() {
-    logger_.debug("%s", __PRETTY_FUNCTION__);
-    if (sharedRewardedAd_) {
-        return sharedRewardedAd_;
-    }
-    rewardedAd_ = new RewardedAd(logger_, displayer_, this, network_);
-    sharedRewardedAd_ = std::make_shared<ads::GuardedFullScreenAd>(
-        std::shared_ptr<RewardedAd>(rewardedAd_));
-    return sharedRewardedAd_;
-}
-
-bool Self::destroyRewardedAd() {
-    logger_.debug("%s", __PRETTY_FUNCTION__);
-    if (sharedRewardedAd_ == nullptr) {
-        return false;
-    }
-    rewardedAd_ = nullptr;
-    sharedRewardedAd_.reset();
-    return true;
+void Self::showInterstitialAd(const std::string& adId) {
+    bridge_.call(kShowInterstitialAd, adId);
 }
 
 bool Self::hasRewardedAd() const {
-    auto result = bridge_.call(kHasRewardedAd);
-    return core::toBool(result);
+    auto response = bridge_.call(kHasRewardedAd);
+    return core::toBool(response);
 }
 
-void Self::loadRewardedAd() {
+Task<bool> Self::loadRewardedAd() {
     logger_.debug("%s", __PRETTY_FUNCTION__);
-    bridge_.call(kLoadRewardedAd);
+    auto response = co_await bridge_.callAsync(kLoadRewardedAd);
+    co_return core::toBool(response);
 }
 
-void Self::showRewardedAd() {
-    bridge_.call(kShowRewardedAd);
+void Self::showRewardedAd(const std::string& adId) {
+    bridge_.call(kShowRewardedAd, adId);
 }
+
+#pragma mark - Interstitial Ad Callbacks.
 
 void Self::onInterstitialAdLoaded() {
     logger_.debug("%s", __PRETTY_FUNCTION__);
-    // TODO.
-}
-
-void Self::onInterstitialAdFailedToLoad(int code, const std::string& message) {
-    logger_.debug("%s: message = %s", __PRETTY_FUNCTION__, message.c_str());
-    // TODO.
-}
-
-void Self::onInterstitialAdClicked() {
-    logger_.debug("%s", __PRETTY_FUNCTION__);
-    // TODO.
-}
-
-void Self::onInterstitialAdClosed() {
-    logger_.debug("%s", __PRETTY_FUNCTION__);
-    // TODO.
-}
-
-void Self::onRewardedAdLoaded() {
-    logger_.debug("%s", __PRETTY_FUNCTION__);
-    if (rewardedAd_) {
-        rewardedAd_->onLoaded();
+    if (interstitialAd_) {
+        interstitialAd_->onLoaded();
     } else {
         assert(false);
     }
 }
 
-void Self::onRewardedAdFailedToLoad(int code, const std::string& message) {
-    logger_.debug("%s: message = %s", __PRETTY_FUNCTION__, message.c_str());
+void Self::onInterstitialAdFailedToLoad(int code, const std::string& message) {
+    logger_.debug("%s", __PRETTY_FUNCTION__);
+    if (interstitialAd_) {
+        interstitialAd_->onFailedToLoad(code, message);
+    } else {
+        assert(false);
+    }
+}
+
+void Self::onInterstitialAdFailedToShow(int code, const std::string& message) {
+    if (interstitialAd_) {
+        interstitialAd_->onFailedToShow(code, message);
+    } else {
+        assert(false);
+    }
+}
+
+void Self::onInterstitialAdClicked() {
+    if (interstitialAd_) {
+        interstitialAd_->onClicked();
+    } else {
+        assert(false);
+    }
+}
+
+void Self::onInterstitialAdClosed() {
+    logger_.debug("%s", __PRETTY_FUNCTION__);
+    if (interstitialAd_) {
+        interstitialAd_->onClosed();
+    } else {
+        onMediationAdClosed(AdResult::Completed);
+    }
+}
+
+#pragma mark - Rewarded Ad Callbacks.
+
+void Self::onRewardedAdLoaded() {
     if (rewardedAd_) {
-        rewardedAd_->onFailedToLoad(code, message);
+        rewardedAd_->onLoaded();
+    } else {
+        // Automatically reloaded by SDK.
+    }
+}
+
+void Self::onRewardedAdFailedToShow(int code, const std::string& message) {
+    if (rewardedAd_) {
+        rewardedAd_->onFailedToShow(code, message);
     } else {
         assert(false);
     }
 }
 
 void Self::onRewardedAdClicked() {
-    logger_.debug("%s", __PRETTY_FUNCTION__);
     if (rewardedAd_) {
         rewardedAd_->onClicked();
     } else {
@@ -231,8 +347,20 @@ void Self::onRewardedAdClosed(bool rewarded) {
     if (rewardedAd_) {
         rewardedAd_->onClosed(rewarded);
     } else {
-        assert(false);
+        onMediationAdClosed(rewarded ? AdResult::Completed
+                                     : AdResult::Canceled);
     }
 }
-} // namespace app_lovin
+
+#pragma mark - Mediation Ad Callbacks.
+
+void Self::onMediationAdClosed(AdResult result) {
+    logger_.debug("%s", __PRETTY_FUNCTION__);
+    if (displayer_->isProcessing()) {
+        displayer_->resolve(result);
+        return;
+    }
+    assert(false);
+}
+} // namespace iron_source
 } // namespace ee

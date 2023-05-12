@@ -16,6 +16,8 @@
 #include <ee/ads/internal/NullRetrier.hpp>
 #include <ee/ads/internal/Retrier.hpp>
 #include <ee/app_lovin/IAppLovinBridge.hpp>
+#include <ee/app_lovin_max/IAppLovinMaxBridge.hpp>
+#include <ee/app_lovin_max/AppLovinMaxBannerAdSize.hpp>
 #include <ee/core/Delay.hpp>
 #include <ee/core/PluginManager.hpp>
 #include <ee/core/Task.hpp>
@@ -40,6 +42,9 @@ AdNetwork AdsConfigUtils::parseNetwork(const std::string& id) {
     }
     if (id == "app_lovin") {
         return AdNetwork::AppLovin;
+    }
+    if (id == "app_lovin_max") {
+        return AdNetwork::AppLovinMax;
     }
     if (id == "facebook_ads") {
         return AdNetwork::FacebookAds;
@@ -160,6 +165,8 @@ INetworkConfig::parse(const nlohmann::json& node) {
         return std::make_shared<AdMobConfig>(node);
     case AdNetwork::AppLovin:
         return std::make_shared<AppLovinConfig>(node);
+    case AdNetwork::AppLovinMax:
+        return std::make_shared<AppLovinMaxConfig>(node);
     case AdNetwork::FacebookAds:
         return std::make_shared<FacebookAdsConfig>(node);
     case AdNetwork::IronSource:
@@ -241,6 +248,45 @@ std::shared_ptr<IAd> AppLovinConfig::createAd(AdFormat format,
         return std::make_shared<NullFullScreenAd>();
     case AdFormat::Rewarded:
         return plugin_->createRewardedAd();
+    case AdFormat::Null:
+        return std::make_shared<NullAd>();
+    }
+}
+
+AppLovinMaxConfig::AppLovinMaxConfig(const nlohmann::json& node) {
+    appId_ = node["app_id"];
+    bannerAdId_ = node["banner_ad_id"];
+    rewardedAdId_ = node["rewarded_ad_id"];
+    interstitialAdId_ = node["interstitial_ad_id"];
+}
+
+Task<> AppLovinMaxConfig::initialize() {
+    plugin_ = PluginManager::createPlugin<IAppLovinMax>();
+    co_await plugin_->initialize(bannerAdId_, rewardedAdId_, interstitialAdId_);
+}
+
+AdNetwork AppLovinMaxConfig::network() const {
+    return AdNetwork::AppLovinMax;
+}
+
+void AppLovinMaxConfig::addTestDevice(const std::string& hash) {}
+
+void AppLovinMaxConfig::openTestSuite() {}
+
+std::shared_ptr<IAd> AppLovinMaxConfig::createAd(AdFormat format,
+                                              const std::string& id) {
+    switch (format) {
+    case AdFormat::Banner:
+        return plugin_->createBannerAd(id, MaxBannerAdSize::Banner);
+    case AdFormat::Rectangle:
+        return std::make_shared<NullBannerAd>();
+    case AdFormat::AppOpen:
+    case AdFormat::RewardedInterstitial:
+        return std::make_shared<NullFullScreenAd>();
+    case AdFormat::Interstitial:
+        return plugin_->createInterstitialAd(id);
+    case AdFormat::Rewarded:
+        return plugin_->createRewardedAd(id);
     case AdFormat::Null:
         return std::make_shared<NullAd>();
     }

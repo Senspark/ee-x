@@ -243,14 +243,6 @@ namespace EE.Editor {
             if (IsCoreEnabled) {
                 androidLibraries.Add($"com.senspark.ee:core:[{LibraryVersion}]");
                 iosLibraries.Add("ee-x/core");
-                fastAndroidLibraries.Add("androidx.core:core:[1.9.0]");
-                fastAndroidLibraries.Add("androidx.core:core-ktx:[1.9.0]");
-                fastAndroidLibraries.Add("androidx.lifecycle:lifecycle-runtime:[2.5.1]");
-                if (IsAdMobEnabled || IsIronSourceMediationEnabled(AdNetwork.AdMob)) {
-                    fastAndroidLibraries.Add("com.google.android.gms:play-services-ads:[21.3.0]");
-                    fastAndroidLibraries.Add("com.google.android.gms:play-services-base:[18.1.0]");
-                    fastAndroidLibraries.Add("com.google.android.gms:play-services-basement:[18.1.0]");
-                }
                 if (IsAdMobMediationEnabled(AdNetwork.IronSource) || IsIronSourceEnabled) {
                     androidRepositories.Add("https://android-sdk.is.com");
                 }

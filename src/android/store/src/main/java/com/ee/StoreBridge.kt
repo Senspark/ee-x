@@ -291,11 +291,11 @@ class StoreBridge(
             if (update.code != BillingResponseCode.OK) {
                 throw StoreException(update.code)
             }
-            if (update.purchases.all { it.sku != details.sku }) {
+            if (update.purchases.all { it.skus.get(0) != details.sku }) {
                 continue
             }
             if (update.code == BillingResponseCode.OK) {
-                return update.purchases.first { it.sku == details.sku }
+                return update.purchases.first { it.skus.get(0) == details.sku }
             } else {
                 throw StoreException(update.code)
             }

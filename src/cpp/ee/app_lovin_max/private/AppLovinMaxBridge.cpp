@@ -128,8 +128,8 @@ void Self::destroy() {
 }
 
 Task<bool> Self::initialize(const std::string& bannerId,
-                            const std::string& interstitialId,
-                            const std::string& rewardedId) {
+                            const std::string& rewardedId,
+                            const std::string& interstitialId) {
     logger_.debug("%s: bannerId = %s interstitialId = %s rewardedId = %s",
                   __PRETTY_FUNCTION__, bannerId.c_str(), interstitialId.c_str(),
                   rewardedId.c_str());
@@ -156,8 +156,6 @@ std::shared_ptr<IBannerAd> Self::createBannerAd(const std::string& adId,
                                                 BannerAdSize adSize) {
     logger_.debug("%s: id = %s size = %d", __PRETTY_FUNCTION__, adId.c_str(),
                   static_cast<int>(adSize));
-    return nullptr;
-// test
     if (bannerAd_) {
         return bannerAd_;
     }

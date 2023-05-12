@@ -11,6 +11,7 @@ import kotlinx.serialization.Serializable
 import java.util.concurrent.atomic.AtomicBoolean
 
 internal class AppLovinMaxInterstitialAdListener(
+    private val _id: String,
     private val _bridge: IMessageBridge,
     private val _logger: ILogger)
     : MaxAdListener {
@@ -37,7 +38,7 @@ internal class AppLovinMaxInterstitialAdListener(
 
     override fun onAdLoaded(p0: MaxAd?) {
         Thread.runOnMainThread {
-            _logger.debug("$kTag: ${this::onAdLoaded.name}")
+            _logger.debug("$kTag: ${this::onAdLoaded.name} $_id")
             _isLoaded.set(true)
             _bridge.callCpp(kOnInterstitialAdLoaded)
         }

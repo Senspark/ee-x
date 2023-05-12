@@ -29,6 +29,7 @@ dependencies {
     // Use "api" to inherit manifest elements.
     api 'com.applovin:applovin-sdk:11.9.0'
     implementation("com.applovin.mediation:facebook-adapter:+")
+    implementation("com.applovin.mediation:google-adapter:+")
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$kotlinCoroutinesVersion"

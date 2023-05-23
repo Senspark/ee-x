@@ -29,5 +29,5 @@ dependencies {
     // https://maven.google.com/web/index.html#com.google.ads.mediation
     // https://developers.google.com/admob/android/mediation/tapjoy#tapjoy-android-mediation-adapter-changelog
     // Use "api" to inherit manifest elements.
-    api 'com.google.ads.mediation:tapjoy:12.11.1.0'
+    api 'com.google.ads.mediation:tapjoy:13.0.1.0'
 }

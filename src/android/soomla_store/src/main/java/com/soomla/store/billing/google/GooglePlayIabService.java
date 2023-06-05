@@ -283,7 +283,9 @@ public class GooglePlayIabService implements IIabService {
     /*====================   Private Utility Methods   ====================*/
 
     private static boolean isVerifyPurchasesEnabled() {
-        return !TextUtils.isEmpty(KeyValueStorage.getValue(VERIFY_PURCHASES_KEY));
+        return false;
+        // nhanc18 disable verify purchase
+        // return !TextUtils.isEmpty(KeyValueStorage.getValue(VERIFY_PURCHASES_KEY));
     }
 
     /**

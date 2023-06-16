@@ -12,12 +12,21 @@ internal class AppLovinMaxRewardedAdListener(
     private val _id: String,
     private val _bridge: IMessageBridge,
     private val _logger: ILogger)
-    : MaxRewardedAdListener {
+    : MaxRewardedAdListener, MaxAdRevenueListener {
     @Serializable
     @Suppress("unused")
     private class ErrorResponse(
         val code: Int,
         val message: String
+    )
+
+    @Serializable
+    @Suppress("unused")
+    private class OnAdRevenuePaidResponse(
+        val networkName: String,
+        val adUnitId: String,
+        val adFormat: String,
+        val revenue: Double,
     )
     companion object {
         private val kTag = AppLovinMaxRewardedAdListener::class.java.name
@@ -26,6 +35,7 @@ internal class AppLovinMaxRewardedAdListener(
         private const val kOnRewardedAdFailedToLoad = "${kPrefix}OnRewardedAdFailedToLoad"
         private const val kOnRewardedAdClicked = "${kPrefix}OnRewardedAdClicked"
         private const val kOnRewardedAdClosed = "${kPrefix}OnRewardedAdClosed"
+        private const val kOnRewardedAdPaid = "${kPrefix}OnRewardedAdPaid"
     }
 
     private val _isLoaded = AtomicBoolean(false)
@@ -96,5 +106,23 @@ internal class AppLovinMaxRewardedAdListener(
         Thread.runOnMainThread {
             _logger.debug("$kTag: ${this::onRewardedVideoCompleted.name}")
         }
+    }
+
+    override fun onAdRevenuePaid(ad: MaxAd?) {
+        if (ad == null) {
+            return;
+        }
+        // Display name of the network that showed the ad (e.g. "AdColony")
+        val networkName = ad.networkName
+        val adUnitId = ad.adUnitId // The MAX Ad Unit ID
+        // The ad format of the ad (e.g. BANNER, MREC, INTERSTITIAL, REWARDED)
+        val adFormat = ad.format.getDisplayName();
+        val revenue = ad.revenue // In USD
+
+        _logger.info("$kTag: $networkName $adUnitId $adFormat $revenue")
+        _bridge.callCpp(
+            kOnRewardedAdPaid,
+            OnAdRevenuePaidResponse(networkName, adUnitId, adFormat, revenue).serialize()
+        )
     }
 }

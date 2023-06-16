@@ -3,6 +3,7 @@ package com.ee.internal
 import androidx.annotation.AnyThread
 import com.applovin.mediation.MaxAd
 import com.applovin.mediation.MaxAdListener
+import com.applovin.mediation.MaxAdRevenueListener
 import com.applovin.mediation.MaxError
 import com.ee.ILogger
 import com.ee.IMessageBridge
@@ -14,7 +15,7 @@ internal class AppLovinMaxInterstitialAdListener(
     private val _id: String,
     private val _bridge: IMessageBridge,
     private val _logger: ILogger)
-    : MaxAdListener {
+    : MaxAdListener, MaxAdRevenueListener {
     @Serializable
     @Suppress("unused")
     private class ErrorResponse(
@@ -22,6 +23,14 @@ internal class AppLovinMaxInterstitialAdListener(
         val message: String
     )
 
+    @Serializable
+    @Suppress("unused")
+    private class OnAdRevenuePaidResponse(
+        val networkName: String,
+        val adUnitId: String,
+        val adFormat: String,
+        val revenue: Double,
+    )
     companion object {
         private val kTag = AppLovinMaxInterstitialAdListener::class.java.name
         private const val kPrefix = "AppLovinMaxBridge"
@@ -29,6 +38,7 @@ internal class AppLovinMaxInterstitialAdListener(
         private const val kOnInterstitialAdFailedToLoad = "${kPrefix}OnInterstitialAdFailedToLoad"
         private const val kOnInterstitialAdClicked = "${kPrefix}OnInterstitialAdClicked"
         private const val kOnInterstitialAdClosed = "${kPrefix}OnInterstitialAdClosed"
+        private const val kOnInterstitialAdPaid = "${kPrefix}OnInterstitialAdPaid"
     }
 
     private val _isLoaded = AtomicBoolean(false)
@@ -78,5 +88,23 @@ internal class AppLovinMaxInterstitialAdListener(
         Thread.runOnMainThread {
             _logger.info("$kTag: ${this::onAdDisplayFailed.name}")
         }
+    }
+
+    override fun onAdRevenuePaid(ad: MaxAd?) {
+        if (ad == null) {
+            return;
+        }
+        // Display name of the network that showed the ad (e.g. "AdColony")
+        val networkName = ad.networkName
+        val adUnitId = ad.adUnitId // The MAX Ad Unit ID
+        // The ad format of the ad (e.g. BANNER, MREC, INTERSTITIAL, REWARDED)
+        val adFormat = ad.format.getDisplayName();
+        val revenue = ad.revenue // In USD
+
+        _logger.info("${kTag}: $networkName $adUnitId $adFormat $revenue")
+        _bridge.callCpp(
+            kOnInterstitialAdPaid,
+            OnAdRevenuePaidResponse(networkName, adUnitId, adFormat, revenue).serialize()
+        )
     }
 }

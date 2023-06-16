@@ -329,6 +329,7 @@ void Self::onInterstitialAdClosed() {
 }
 
 void Self::onInterstitialAdPaid(const std::string& jsonStr) {
+    logger_.debug("%s %s", __PRETTY_FUNCTION__, jsonStr.c_str());
     if (interstitialAd_) {
         auto result = onAdPaid(jsonStr);
         interstitialAd_->onAdPaid(result);
@@ -362,7 +363,6 @@ void Self::onRewardedAdClicked() {
 }
 
 void Self::onRewardedAdClosed(bool rewarded) {
-    logger_.debug("%s", __PRETTY_FUNCTION__);
     if (rewardedAd_) {
         rewardedAd_->onClosed(rewarded);
     } else {

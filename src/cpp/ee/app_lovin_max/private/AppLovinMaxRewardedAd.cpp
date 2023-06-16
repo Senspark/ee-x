@@ -102,7 +102,6 @@ void Self::onClosed(bool rewarded) {
 }
 
 void Self::onAdPaid(const ads::AdPaidResult& result) {
-    logger_.debug("%s: adId = %s", __PRETTY_FUNCTION__, adId_.c_str());
     dispatchEvent([=](auto&& observer) {
         if (observer.onAdPaid) {
             observer.onAdPaid(result);

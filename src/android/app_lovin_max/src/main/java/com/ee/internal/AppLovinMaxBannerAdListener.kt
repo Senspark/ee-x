@@ -25,6 +25,7 @@ internal class AppLovinMaxBannerAdListener(
         private const val kOnBannerAdFailedToLoad = "${kPrefix}OnBannerAdFailedToLoad"
         private const val kOnBannerAdClicked = "${kPrefix}OnBannerAdClicked"
         private const val kOnBannerAdClosed = "${kPrefix}OnBannerAdClosed"
+        private const val kOnBannerAdPaid = "${kPrefix}OnBannerAdPaid"
     }
 
     private val _isLoaded = AtomicBoolean(false)

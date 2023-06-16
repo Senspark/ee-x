@@ -1,6 +1,7 @@
 #ifndef EE_X_APP_LOVIN_MAX_BRIDGE_HPP
 #define EE_X_APP_LOVIN_MAX_BRIDGE_HPP
 
+#include <ee/ads/IAd.hpp>
 #include "ee/app_lovin_max/IAppLovinMaxBridge.hpp"
 
 namespace ee {
@@ -47,11 +48,15 @@ private:
     void onInterstitialAdFailedToShow(int code, const std::string& message);
     void onInterstitialAdClicked();
     void onInterstitialAdClosed();
+    void onInterstitialAdPaid(const std::string& jsonStr);
 
     void onRewardedAdLoaded();
     void onRewardedAdFailedToShow(int code, const std::string& message);
     void onRewardedAdClicked();
     void onRewardedAdClosed(bool rewarded);
+    void onRewardedAdPaid(const std::string& jsonStr);
+
+    ads::AdPaidResult onAdPaid(const std::string& jsonStr);
 
     void onMediationAdClosed(AdResult result);
 

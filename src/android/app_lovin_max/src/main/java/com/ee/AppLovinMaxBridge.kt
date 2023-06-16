@@ -3,6 +3,7 @@ package com.ee
 import android.app.Activity
 import android.app.Application
 import androidx.annotation.AnyThread
+import com.applovin.mediation.MaxAd
 import com.applovin.mediation.ads.MaxAdView
 import com.applovin.mediation.ads.MaxInterstitialAd
 import com.applovin.mediation.ads.MaxRewardedAd
@@ -187,10 +188,12 @@ class AppLovinMaxBridge(
                 val interstitialAd = MaxInterstitialAd(interstitialAdId, _activity)
                 val interstitialAdListener = AppLovinMaxInterstitialAdListener(interstitialAdId, _bridge, _logger)
                 interstitialAd.setListener(interstitialAdListener)
+                interstitialAd.setRevenueListener(interstitialAdListener)
 
                 val rewardedAd = MaxRewardedAd.getInstance(rewardedAdId, _activity)
                 val rewardedAdListener = AppLovinMaxRewardedAdListener(rewardedAdId, _bridge, _logger)
-                rewardedAd.setListener(rewardedAdListener);
+                rewardedAd.setListener(rewardedAdListener)
+                rewardedAd.setRevenueListener(rewardedAdListener)
 
                 _sdk = sdk
 //                _adView = adView;

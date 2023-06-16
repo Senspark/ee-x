@@ -69,7 +69,7 @@ void Self::onLoaded() {
                   core::toString(loader_->isProcessing()).c_str());
     if (loader_->isProcessing()) {
         loader_->resolve(true);
-        dispatchEvent([this](auto&& observer) {
+        dispatchEvent([](auto&& observer) {
             if (observer.onLoadResult) {
                 observer.onLoadResult({
                     .result = true,
@@ -95,7 +95,7 @@ void Self::onFailedToLoad(int code, const std::string& message) {
                   message.c_str());
     if (loader_->isProcessing()) {
         loader_->resolve(false);
-        dispatchEvent([this, code, message](auto&& observer) {
+        dispatchEvent([code, message](auto&& observer) {
             if (observer.onLoadResult) {
                 observer.onLoadResult({
                     .result = false,
@@ -128,6 +128,14 @@ void Self::onClicked() {
     dispatchEvent([](auto&& observer) {
         if (observer.onClicked) {
             observer.onClicked();
+        }
+    });
+}
+
+void Self::onAdPaid(const ads::AdPaidResult& result) {
+    dispatchEvent([=](auto&& observer) {
+        if (observer.onAdPaid) {
+            observer.onAdPaid(result);
         }
     });
 }

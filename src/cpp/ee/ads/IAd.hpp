@@ -18,6 +18,14 @@ struct AdLoadResult {
     std::string errorMessage;
 };
 
+struct AdPaidResult {
+    std::string adPlatform;
+    std::string networkName;
+    std::string adUnitId;
+    std::string adFormat;
+    double revenue;
+};
+
 struct AdObserver {
     /// Occurs when this ad is loaded.
     std::function<void()> onLoaded;
@@ -27,6 +35,8 @@ struct AdObserver {
 
     /// Occurs when the user clicks this ad.
     std::function<void()> onClicked;
+
+    std::function<void(const AdPaidResult& result)> onAdPaid;
 };
 
 class IAd : public virtual IObserverManager<AdObserver> {

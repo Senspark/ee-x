@@ -29,6 +29,7 @@ private:
     void onFailedToShow(int code, const std::string& message);
     void onClicked();
     void onClosed(bool rewarded);
+    void onAdPaid(const ads::AdPaidResult& result);
 
     ILogger& logger_;
     std::shared_ptr<ads::IAsyncHelper<AdResult>> displayer_;

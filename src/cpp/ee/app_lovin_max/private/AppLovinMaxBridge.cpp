@@ -37,10 +37,12 @@ const auto kOnInterstitialAdFailedToShow =
     kPrefix + "OnInterstitialAdFailedToShow";
 const auto kOnInterstitialAdClicked = kPrefix + "OnInterstitialAdClicked";
 const auto kOnInterstitialAdClosed = kPrefix + "OnInterstitialAdClosed";
+const auto kOnInterstitialAdPaid = kPrefix + "OnInterstitialAdPaid";
 const auto kOnRewardedAdLoaded = kPrefix + "OnRewardedAdLoaded";
 const auto kOnRewardedAdFailedToShow = kPrefix + "OnRewardedAdFailedToShow";
 const auto kOnRewardedAdClicked = kPrefix + "OnRewardedAdClicked";
 const auto kOnRewardedAdClosed = kPrefix + "OnRewardedAdClosed";
+const auto kOnRewardedAdPaid = kPrefix + "OnRewardedAdPaid";
 } // namespace
 
 using Self = Bridge;
@@ -84,6 +86,11 @@ Self::Bridge(IMessageBridge& bridge, ILogger& logger,
             onInterstitialAdClosed();
         },
         kOnInterstitialAdClosed);
+    bridge_.registerHandler(
+        [this](const std::string &message) {//
+            onInterstitialAdPaid(message);
+        },
+        kOnInterstitialAdPaid);
 
     bridge_.registerHandler(
         [this](const std::string& message) { //
@@ -106,6 +113,11 @@ Self::Bridge(IMessageBridge& bridge, ILogger& logger,
             onRewardedAdClosed(core::toBool(message));
         },
         kOnRewardedAdClosed);
+    bridge_.registerHandler(
+        [this](const std::string &message) {//
+            onRewardedAdPaid(message);
+        },
+        kOnRewardedAdPaid);
 }
 
 Self::~Bridge() = default;
@@ -118,11 +130,13 @@ void Self::destroy() {
     bridge_.deregisterHandler(kOnRewardedAdFailedToShow);
     bridge_.deregisterHandler(kOnInterstitialAdClicked);
     bridge_.deregisterHandler(kOnInterstitialAdClosed);
+    bridge_.deregisterHandler(kOnInterstitialAdPaid);
 
     bridge_.deregisterHandler(kOnRewardedAdLoaded);
     bridge_.deregisterHandler(kOnRewardedAdFailedToShow);
     bridge_.deregisterHandler(kOnRewardedAdClicked);
     bridge_.deregisterHandler(kOnRewardedAdClosed);
+    bridge_.deregisterHandler(kOnRewardedAdPaid);
 
     destroyer_();
 }
@@ -314,6 +328,13 @@ void Self::onInterstitialAdClosed() {
     }
 }
 
+void Self::onInterstitialAdPaid(const std::string& jsonStr) {
+    if (interstitialAd_) {
+        auto result = onAdPaid(jsonStr);
+        interstitialAd_->onAdPaid(result);
+    }
+}
+
 #pragma mark - Rewarded Ad Callbacks.
 
 void Self::onRewardedAdLoaded() {
@@ -348,6 +369,25 @@ void Self::onRewardedAdClosed(bool rewarded) {
         onMediationAdClosed(rewarded ? AdResult::Completed
                                      : AdResult::Canceled);
     }
+}
+
+void Self::onRewardedAdPaid(const std::string& jsonStr) {
+    if (rewardedAd_) {
+        auto result = onAdPaid(jsonStr);
+        rewardedAd_->onAdPaid(result);
+    }
+}
+
+ads::AdPaidResult Self::onAdPaid(const std::string& jsonStr) {
+    auto json = nlohmann::json::parse(jsonStr);
+    ads::AdPaidResult result;
+    result.adPlatform = "appLovin";
+    result.networkName = json["networkName"];
+    result.adUnitId = json["adUnitId"];
+    result.adFormat = json["adFormat"];
+    result.revenue = json["revenue"];
+
+    return result;
 }
 
 #pragma mark - Mediation Ad Callbacks.

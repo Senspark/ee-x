@@ -132,6 +132,15 @@ void Self::onClicked() {
     });
 }
 
+void Self::onAdPaid(const ads::AdPaidResult& result) {
+    logger_.debug("%s: adId = %s", __PRETTY_FUNCTION__, adId_.c_str());
+    dispatchEvent([=](auto&& observer) {
+        if (observer.onAdPaid) {
+            observer.onAdPaid(result);
+        }
+    });
+}
+
 void Self::onClosed() {
     logger_.debug("%s: adId = %s displaying = %s", __PRETTY_FUNCTION__,
                   adId_.c_str(),

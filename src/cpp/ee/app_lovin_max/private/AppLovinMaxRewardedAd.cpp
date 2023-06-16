@@ -100,5 +100,14 @@ void Self::onClosed(bool rewarded) {
                       __PRETTY_FUNCTION__);
     }
 }
+
+void Self::onAdPaid(const ads::AdPaidResult& result) {
+    logger_.debug("%s: adId = %s", __PRETTY_FUNCTION__, adId_.c_str());
+    dispatchEvent([=](auto&& observer) {
+        if (observer.onAdPaid) {
+            observer.onAdPaid(result);
+        }
+    });
+}
 } // namespace app_lovin_max
 } // namespace ee

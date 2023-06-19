@@ -29,5 +29,5 @@ dependencies {
     // https://maven.google.com/web/index.html#com.google.ads.mediation
     // https://developers.google.com/admob/android/mediation/ironsource#ironsource-android-mediation-adapter-changelog
     // Use "api" to inherit manifest elements.
-    api 'com.google.ads.mediation:ironsource:7.3.0.1.0'
+    api 'com.google.ads.mediation:ironsource:7.3.1.0'
 }

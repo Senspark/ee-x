@@ -51,6 +51,7 @@ private:
     void onInterstitialAdPaid(const std::string& jsonStr);
 
     void onRewardedAdLoaded();
+    void onRewardedAdFailedToLoad(int code, const std::string& message);
     void onRewardedAdFailedToShow(int code, const std::string& message);
     void onRewardedAdClicked();
     void onRewardedAdClosed(bool rewarded);

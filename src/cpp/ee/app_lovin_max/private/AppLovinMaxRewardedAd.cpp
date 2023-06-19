@@ -65,6 +65,13 @@ void Self::onLoaded() {
     });
 }
 
+void Self::onFailedToLoad(int code, const std::string& message) {
+    logger_.debug("%s: adId = %s code = %d message = %s",
+                  __PRETTY_FUNCTION__, adId_.c_str(),
+                  code,
+                  message.c_str());
+}
+
 void Self::onFailedToShow(int code, const std::string& message) {
     logger_.debug("%s: adId = %s displaying = %s message = %s",
                   __PRETTY_FUNCTION__, adId_.c_str(),

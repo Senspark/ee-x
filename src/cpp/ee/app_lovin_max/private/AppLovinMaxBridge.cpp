@@ -39,6 +39,7 @@ const auto kOnInterstitialAdClicked = kPrefix + "OnInterstitialAdClicked";
 const auto kOnInterstitialAdClosed = kPrefix + "OnInterstitialAdClosed";
 const auto kOnInterstitialAdPaid = kPrefix + "OnInterstitialAdPaid";
 const auto kOnRewardedAdLoaded = kPrefix + "OnRewardedAdLoaded";
+const auto kOnRewardedAdFailedToLoaded = kPrefix + "OnRewardedAdFailedToLoad";
 const auto kOnRewardedAdFailedToShow = kPrefix + "OnRewardedAdFailedToShow";
 const auto kOnRewardedAdClicked = kPrefix + "OnRewardedAdClicked";
 const auto kOnRewardedAdClosed = kPrefix + "OnRewardedAdClosed";
@@ -98,6 +99,12 @@ Self::Bridge(IMessageBridge& bridge, ILogger& logger,
         },
         kOnRewardedAdLoaded);
     bridge_.registerHandler(
+            [this](const std::string& message) {
+                auto json = nlohmann::json::parse(message);
+                onRewardedAdFailedToLoad(json["code"], json["message"]);
+            },
+            kOnRewardedAdFailedToLoaded);
+    bridge_.registerHandler(
         [this](const std::string& message) {
             auto json = nlohmann::json::parse(message);
             onRewardedAdFailedToShow(json["code"], json["message"]);
@@ -118,7 +125,7 @@ Self::Bridge(IMessageBridge& bridge, ILogger& logger,
             onRewardedAdPaid(message);
         },
         kOnRewardedAdPaid);
-}
+    }
 
 Self::~Bridge() = default;
 
@@ -127,7 +134,7 @@ void Self::destroy() {
 
     bridge_.deregisterHandler(kOnInterstitialAdLoaded);
     bridge_.deregisterHandler(kOnInterstitialAdFailedToLoad);
-    bridge_.deregisterHandler(kOnRewardedAdFailedToShow);
+    bridge_.deregisterHandler(kOnInterstitialAdFailedToShow);
     bridge_.deregisterHandler(kOnInterstitialAdClicked);
     bridge_.deregisterHandler(kOnInterstitialAdClosed);
     bridge_.deregisterHandler(kOnInterstitialAdPaid);
@@ -343,6 +350,14 @@ void Self::onRewardedAdLoaded() {
         rewardedAd_->onLoaded();
     } else {
         // Automatically reloaded by SDK.
+    }
+}
+
+void Self::onRewardedAdFailedToLoad(int code, const std::string& message) {
+    if (rewardedAd_) {
+        rewardedAd_->onFailedToLoad(code, message);
+    } else {
+        assert(false);
     }
 }
 

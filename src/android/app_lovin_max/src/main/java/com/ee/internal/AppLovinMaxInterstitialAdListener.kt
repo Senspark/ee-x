@@ -5,6 +5,7 @@ import com.applovin.mediation.MaxAd
 import com.applovin.mediation.MaxAdListener
 import com.applovin.mediation.MaxAdRevenueListener
 import com.applovin.mediation.MaxError
+import com.ee.AdRevenueData
 import com.ee.ILogger
 import com.ee.IMessageBridge
 import com.ee.Thread
@@ -14,22 +15,15 @@ import java.util.concurrent.atomic.AtomicBoolean
 internal class AppLovinMaxInterstitialAdListener(
     private val _id: String,
     private val _bridge: IMessageBridge,
-    private val _logger: ILogger)
+    private val _logger: ILogger,
+    private val _logAppsFlyerRevenue : (AdRevenueData) -> Unit
+    )
     : MaxAdListener, MaxAdRevenueListener {
     @Serializable
     @Suppress("unused")
     private class ErrorResponse(
         val code: Int,
         val message: String
-    )
-
-    @Serializable
-    @Suppress("unused")
-    private class OnAdRevenuePaidResponse(
-        val networkName: String,
-        val adUnitId: String,
-        val adFormat: String,
-        val revenue: Double,
     )
     companion object {
         private val kTag = AppLovinMaxInterstitialAdListener::class.java.name
@@ -101,10 +95,13 @@ internal class AppLovinMaxInterstitialAdListener(
         val adFormat = ad.format.getDisplayName();
         val revenue = ad.revenue // In USD
 
+        val data = AdRevenueData(networkName, adUnitId, adFormat, revenue);
+
         _logger.info("${kTag}: $networkName $adUnitId $adFormat $revenue")
         _bridge.callCpp(
             kOnInterstitialAdPaid,
-            OnAdRevenuePaidResponse(networkName, adUnitId, adFormat, revenue).serialize()
+            data.serialize()
         )
+        _logAppsFlyerRevenue(data)
     }
 }

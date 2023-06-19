@@ -3,24 +3,27 @@ package com.ee
 import android.app.Activity
 import android.app.Application
 import androidx.annotation.AnyThread
-import com.applovin.mediation.MaxAd
-import com.applovin.mediation.ads.MaxAdView
 import com.applovin.mediation.ads.MaxInterstitialAd
 import com.applovin.mediation.ads.MaxRewardedAd
 import com.applovin.sdk.AppLovinSdk
-import com.ee.internal.AppLovinMaxBannerAdListener
+import com.appsflyer.adrevenue.AppsFlyerAdRevenue
+import com.appsflyer.adrevenue.adnetworks.generic.MediationNetwork
+import com.appsflyer.adrevenue.adnetworks.generic.Scheme
 import com.ee.internal.AppLovinMaxInterstitialAdListener
 import com.ee.internal.AppLovinMaxRewardedAdListener
 import com.ee.internal.deserialize
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.serialization.Serializable
+import java.util.*
 import kotlin.coroutines.resume
+
 
 class AppLovinMaxBridge(
     private val _bridge: IMessageBridge,
     private val _logger: ILogger,
     private val _application: Application,
-    private var _activity: Activity?) : IPlugin {
+    private var _activity: Activity?
+) : IPlugin {
 
     @Serializable
     private class InitializeRequest(
@@ -28,6 +31,7 @@ class AppLovinMaxBridge(
         val rewardedAdId: String,
         val interstitialAdId: String,
     )
+
     companion object {
         private val kTag = AppLovinMaxBridge::class.java.name
         private const val kPrefix = "AppLovinMaxBridge"
@@ -45,8 +49,9 @@ class AppLovinMaxBridge(
     private var _initializing = false
     private var _initialized = false
     private var _sdk: AppLovinSdk? = null
-//    private var _adView: MaxAdView? = null
-//    private var _adViewListener: AppLovinMaxBannerAdListener? = null;
+
+    //    private var _adView: MaxAdView? = null
+    //    private var _adViewListener: AppLovinMaxBannerAdListener? = null;
     private var _interstitialAd: MaxInterstitialAd? = null
     private var _interstitialAdListener: AppLovinMaxInterstitialAdListener? = null
     private var _rewardedAd: MaxRewardedAd? = null
@@ -55,6 +60,14 @@ class AppLovinMaxBridge(
     init {
         _logger.info("$kTag: constructor begin: application = $_application activity = $_activity")
         registerHandlers()
+
+        // init appsflyer
+        if(_activity != null)
+        {
+            val afRevenueBuilder = AppsFlyerAdRevenue.Builder(_activity!!.application)
+            AppsFlyerAdRevenue.initialize(afRevenueBuilder.build())
+        }
+
         _logger.info("$kTag: constructor end")
     }
 
@@ -186,12 +199,16 @@ class AppLovinMaxBridge(
 //                adView.setListener(adViewListener);
 
                 val interstitialAd = MaxInterstitialAd(interstitialAdId, _activity)
-                val interstitialAdListener = AppLovinMaxInterstitialAdListener(interstitialAdId, _bridge, _logger)
+                val interstitialAdListener = AppLovinMaxInterstitialAdListener(
+                    interstitialAdId, _bridge, _logger
+                ) { d -> logAppsFlyerAdRevenue(d) }
                 interstitialAd.setListener(interstitialAdListener)
                 interstitialAd.setRevenueListener(interstitialAdListener)
 
                 val rewardedAd = MaxRewardedAd.getInstance(rewardedAdId, _activity)
-                val rewardedAdListener = AppLovinMaxRewardedAdListener(rewardedAdId, _bridge, _logger)
+                val rewardedAdListener = AppLovinMaxRewardedAdListener(
+                    rewardedAdId, _bridge, _logger
+                ) { d -> logAppsFlyerAdRevenue(d) }
                 rewardedAd.setListener(rewardedAdListener)
                 rewardedAd.setRevenueListener(rewardedAdListener)
 
@@ -264,5 +281,21 @@ class AppLovinMaxBridge(
             val ad = _rewardedAd ?: return@runOnMainThread
             ad.showAd()
         }
+    }
+
+    private fun logAppsFlyerAdRevenue(revenueData: AdRevenueData) {
+        val customParams: MutableMap<String, String> = HashMap()
+        customParams[Scheme.AD_UNIT] = revenueData.adUnitId
+        customParams[Scheme.AD_TYPE] = revenueData.adFormat
+        customParams[Scheme.PLACEMENT] = "place"
+        customParams[Scheme.ECPM_PAYLOAD] = "encrypt"
+
+        AppsFlyerAdRevenue.logAdRevenue(
+            revenueData.networkName,
+            MediationNetwork.applovinmax,
+            Currency.getInstance(Locale.US),
+            revenueData.revenue,
+            customParams
+        )
     }
 }

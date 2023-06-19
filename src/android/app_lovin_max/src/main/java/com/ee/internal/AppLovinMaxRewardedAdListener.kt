@@ -1,32 +1,22 @@
 package com.ee.internal
 
 import com.applovin.mediation.*
-import com.ee.ILogger
-import com.ee.IMessageBridge
-import com.ee.Thread
-import com.ee.Utils
+import com.ee.*
 import kotlinx.serialization.Serializable
 import java.util.concurrent.atomic.AtomicBoolean
 
 internal class AppLovinMaxRewardedAdListener(
     private val _id: String,
     private val _bridge: IMessageBridge,
-    private val _logger: ILogger)
+    private val _logger: ILogger,
+    private val _logAppsFlyerRevenue : (AdRevenueData) -> Unit
+    )
     : MaxRewardedAdListener, MaxAdRevenueListener {
     @Serializable
     @Suppress("unused")
     private class ErrorResponse(
         val code: Int,
         val message: String
-    )
-
-    @Serializable
-    @Suppress("unused")
-    private class OnAdRevenuePaidResponse(
-        val networkName: String,
-        val adUnitId: String,
-        val adFormat: String,
-        val revenue: Double,
     )
     companion object {
         private val kTag = AppLovinMaxRewardedAdListener::class.java.name
@@ -119,10 +109,13 @@ internal class AppLovinMaxRewardedAdListener(
         val adFormat = ad.format.getDisplayName();
         val revenue = ad.revenue // In USD
 
+        val data = AdRevenueData(networkName, adUnitId, adFormat, revenue);
+
         _logger.info("$kTag: $networkName $adUnitId $adFormat $revenue")
         _bridge.callCpp(
             kOnRewardedAdPaid,
-            OnAdRevenuePaidResponse(networkName, adUnitId, adFormat, revenue).serialize()
+            data.serialize()
         )
+        _logAppsFlyerRevenue(data)
     }
 }

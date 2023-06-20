@@ -23,6 +23,7 @@ if (rootProject.ext.has('buildMaven') && rootProject.buildMaven) {
 
 dependencies {
     api project(':ee-x-ads')
+    api project(':ee-x-apps-flyer')
 
     // https://developers.google.com/admob/android/rel-notes
     api 'com.google.android.gms:play-services-ads:22.1.0'

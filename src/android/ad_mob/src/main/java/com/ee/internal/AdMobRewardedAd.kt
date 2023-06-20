@@ -2,15 +2,8 @@ package com.ee.internal
 
 import android.app.Activity
 import androidx.annotation.AnyThread
-import com.ee.IFullScreenAd
-import com.ee.ILogger
-import com.ee.IMessageBridge
-import com.ee.Thread
-import com.ee.Utils
-import com.google.android.gms.ads.AdError
-import com.google.android.gms.ads.AdRequest
-import com.google.android.gms.ads.FullScreenContentCallback
-import com.google.android.gms.ads.LoadAdError
+import com.ee.*
+import com.google.android.gms.ads.*
 import com.google.android.gms.ads.rewarded.RewardedAd
 import com.google.android.gms.ads.rewarded.RewardedAdLoadCallback
 import kotlinx.serialization.Serializable
@@ -23,7 +16,9 @@ internal class AdMobRewardedAd(
     private val _bridge: IMessageBridge,
     private val _logger: ILogger,
     private var _activity: Activity?,
-    private val _adId: String) : IFullScreenAd {
+    private val _adId: String,
+    private val _onAdPaid: (AdPaidResponse) -> Unit
+) : IFullScreenAd {
     @Serializable
     @Suppress("unused")
     private class ErrorResponse(
@@ -113,11 +108,30 @@ internal class AdMobRewardedAd(
                     }
                 }
             }
+
+            val onAdPaid = object : OnPaidEventListener {
+                override fun onPaidEvent(adValue: AdValue) {
+                    if (_ad == null) {
+                        return;
+                    }
+
+                    _onAdPaid(
+                        AdPaidResponse(
+                            _ad!!.adUnitId,
+                            "Rewarded",
+                            adValue.valueMicros,
+                            _ad!!.responseInfo.loadedAdapterResponseInfo
+                        )
+                    );
+                }
+            }
+
             val loadCallback = object : RewardedAdLoadCallback() {
                 override fun onAdLoaded(ad: RewardedAd) {
                     Thread.runOnMainThread {
                         _logger.debug("$kTag: ${this::onAdLoaded.name}: id = $_adId")
                         ad.fullScreenContentCallback = showCallback
+                        ad.onPaidEventListener = onAdPaid
                         _isLoaded.set(true)
                         _ad = ad
                         _bridge.callCpp(_messageHelper.onLoaded)

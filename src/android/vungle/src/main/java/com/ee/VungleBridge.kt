@@ -264,6 +264,7 @@ class VungleBridge(
                     }
                 }
 
+                @Deprecated("Deprecated in Java")
                 override fun onAdEnd(adId: String, completed: Boolean, isCTAClicked: Boolean) {
                     // Deprecated.
                 }

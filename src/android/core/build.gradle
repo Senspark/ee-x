@@ -22,7 +22,7 @@ if (rootProject.ext.has('buildMaven') && rootProject.buildMaven) {
 }
 
 dependencies {
-    api 'androidx.annotation:annotation:1.5.0'
+    api 'androidx.annotation:annotation:1.6.0'
     api 'com.android.installreferrer:installreferrer:2.2'
     implementation 'com.google.android.gms:play-services-ads-identifier:18.0.1'
     implementation 'com.google.android.gms:play-services-instantapps:18.0.1'

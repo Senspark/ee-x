@@ -130,7 +130,6 @@ class AppsFlyerBridge(
             }
             _tracker.init(devKey, listener, _application)
             _tracker.anonymizeUser(false)
-            _tracker.enableLocationCollection(true)
         }
     }
 
@@ -142,7 +141,7 @@ class AppsFlyerBridge(
     }
 
     val deviceId: String
-        @AnyThread get() = _tracker.getAppsFlyerUID(_application)
+        @AnyThread get() = _tracker.getAppsFlyerUID(_application)!!
 
     @AnyThread
     fun setDebugEnabled(enabled: Boolean) {

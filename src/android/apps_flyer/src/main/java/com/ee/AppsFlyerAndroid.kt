@@ -11,7 +11,7 @@ import java.util.*
 import kotlin.collections.HashMap
 
 class AppsFlyerAndroid(private val activity: Activity) {
-    private val _af: AppsFlyerLib;
+//    private val _af: AppsFlyerLib;
     private var _initialized = false;
 
     init {
@@ -29,15 +29,16 @@ class AppsFlyerAndroid(private val activity: Activity) {
             }
         };
 
-        _af = AppsFlyerLib.getInstance();
-        _af.setDebugLog(true);
-        _af.start(activity, "", onInitResponse);
+//        _af = AppsFlyerLib.getInstance();
+//        _af.setDebugLog(true);
+//        _af.start(activity, "", onInitResponse);
+        onInitResponse.onSuccess();
     }
 
     fun logAdRevenue(revenueData: AdRevenueData) {
-        if (!_initialized) {
-            return;
-        }
+//        if (!_initialized) {
+//            return;
+//        }
         val customParams: MutableMap<String, String> = HashMap()
         customParams[Scheme.AD_UNIT] = revenueData.adUnitId
         customParams[Scheme.AD_TYPE] = revenueData.adFormat

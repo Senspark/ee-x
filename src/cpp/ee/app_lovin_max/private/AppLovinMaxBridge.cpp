@@ -15,6 +15,7 @@
 
 #include "ee/app_lovin_max/private/AppLovinMaxInterstitialAd.hpp"
 #include "ee/app_lovin_max/private/AppLovinMaxRewardedAd.hpp"
+#include "ee/app_lovin_max/private/AppLovinMaxBannerAd.hpp"
 
 namespace ee {
 namespace app_lovin_max {
@@ -23,6 +24,7 @@ const std::string kPrefix = "AppLovinMaxBridge";
 const auto kInitialize = kPrefix + "Initialize";
 const auto kGetBannerAdSize = kPrefix + "GetBannerAdSize";
 const auto kCreateBannerAd = kPrefix + "CreateBannerAd";
+const auto kOnBannerAdPaid = kPrefix + "OnBannerAdPaid";
 const auto kDestroyAd = kPrefix + "DestroyAd";
 const auto kHasInterstitialAd = kPrefix + "HasInterstitialAd";
 const auto kLoadInterstitialAd = kPrefix + "LoadInterstitialAd";
@@ -61,6 +63,11 @@ Self::Bridge(IMessageBridge& bridge, ILogger& logger,
     rewardedAd_ = nullptr;
 
     bridge_.registerHandler(
+        [this](const std::string &message) {//
+            onBannerAdPaid(message);
+        },
+        kOnBannerAdPaid);
+    bridge_.registerHandler(
         [this](const std::string& message) { //
             onInterstitialAdLoaded();
         },
@@ -92,7 +99,6 @@ Self::Bridge(IMessageBridge& bridge, ILogger& logger,
             onInterstitialAdPaid(message);
         },
         kOnInterstitialAdPaid);
-
     bridge_.registerHandler(
         [this](const std::string& message) { //
             onRewardedAdLoaded();
@@ -177,8 +183,8 @@ std::shared_ptr<IBannerAd> Self::createBannerAd(const std::string& adId,
                                                 BannerAdSize adSize) {
     logger_.debug("%s: id = %s size = %d", __PRETTY_FUNCTION__, adId.c_str(),
                   static_cast<int>(adSize));
-    if (bannerAd_) {
-        return bannerAd_;
+    if (sharedBannerAd_) {
+        return sharedBannerAd_;
     }
     nlohmann::json json;
     json["adId"] = adId;
@@ -191,19 +197,28 @@ std::shared_ptr<IBannerAd> Self::createBannerAd(const std::string& adId,
         return nullptr;
     }
     auto size = getBannerAdSize(adSize);
-    bannerAd_ = std::make_shared<ads::GuardedBannerAd>(
-        std::make_shared<ads::DefaultBannerAd>( //
-            "MaxBannerAd", bridge_, logger_,
-            [this, adId] { //
-                destroyBannerAd(adId);
-            },
-            network_, adId, size));
-    return bannerAd_;
+
+    bannerAd_ = std::make_shared<BannerAd>( //
+        kPrefix, bridge_, logger_,
+        [this, adId] { //
+            destroyBannerAd(adId);
+        }, network_, adId, size);
+
+    sharedBannerAd_ = std::make_shared<ads::GuardedBannerAd>(bannerAd_);
+    return sharedBannerAd_;
+}
+
+void Self::onBannerAdPaid(const std::string& jsonStr) {
+    logger_.debug("%s %s", __PRETTY_FUNCTION__, jsonStr.c_str());
+    if (bannerAd_) {
+        auto result = onAdPaid(jsonStr);
+        bannerAd_->onAdPaid(result);
+    }
 }
 
 bool Self::destroyBannerAd(const std::string& adId) {
     logger_.debug("%s: adId = %s", __PRETTY_FUNCTION__, adId.c_str());
-    if (bannerAd_ == nullptr) {
+    if (sharedBannerAd_ == nullptr) {
         return false;
     }
     auto&& response = bridge_.call(kDestroyAd, adId);
@@ -213,7 +228,7 @@ bool Self::destroyBannerAd(const std::string& adId) {
         assert(false);
         return false;
     }
-    bannerAd_.reset();
+    sharedBannerAd_.reset();
     return true;
 }
 

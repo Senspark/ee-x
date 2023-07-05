@@ -257,6 +257,8 @@ class AppLovinMaxBridge(
             banner.setListener(bannerListener)
             banner.setRevenueListener(bannerListener)
 
+            createBanner();
+
             val interstitialAd = MaxInterstitialAd(interstitialAdId, _activity)
             val interstitialAdListener = AppLovinMaxInterstitialAdListener(
                 interstitialAdId, _bridge, _logger
@@ -388,17 +390,16 @@ class AppLovinMaxBridge(
         if (_bannerVisible) {
             return true;
         }
-        if (_banner == null) {
-            return createBanner();
-        }
-        Thread.runOnMainThread {
-            checkInitialized()
-            val rootView = _activity?.findViewById<ViewGroup>(android.R.id.content)
-            if (_banner!!.parent != null) {
-                (_banner!!.parent as ViewGroup).removeView(_banner);
+        if (_banner != null) {
+            Thread.runOnMainThread {
+                checkInitialized()
+                val rootView = _activity?.findViewById<ViewGroup>(android.R.id.content)
+                if (_banner!!.parent != null) {
+                    (_banner!!.parent as ViewGroup).removeView(_banner);
+                }
+                rootView?.addView(_banner)
+                _bannerVisible = true;
             }
-            rootView?.addView(_banner)
-            _bannerVisible = true;
         }
         return true
     }

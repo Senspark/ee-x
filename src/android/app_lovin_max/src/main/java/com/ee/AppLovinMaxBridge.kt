@@ -231,7 +231,7 @@ class AppLovinMaxBridge(
                 sdk.initializeSdk {
                     if (cont.isActive) {
                         // Enable Test Ads?
-                        sdk.showMediationDebugger()
+                        // sdk.showMediationDebugger()
                     } else {
                         return@initializeSdk
                     }
@@ -251,13 +251,13 @@ class AppLovinMaxBridge(
     @AnyThread
     fun initAds(bannerAdId: String, interstitialAdId: String, rewardedAdId: String) {
         Thread.runOnMainThread {
-            val banner = MaxAdView(bannerAdId, _activity);
-            val bannerListener = AppLovinMaxBannerAdListener(_bridge, _logger)
-            { d -> logAppsFlyerAdRevenue(d) }
-            banner.setListener(bannerListener)
-            banner.setRevenueListener(bannerListener)
-
-            createBanner();
+//            val banner = MaxAdView(bannerAdId, _activity);
+//            val bannerListener = AppLovinMaxBannerAdListener(_bridge, _logger)
+//            { d -> logAppsFlyerAdRevenue(d) }
+//            banner.setListener(bannerListener)
+//            banner.setRevenueListener(bannerListener)
+//
+//            createBanner();
 
             val interstitialAd = MaxInterstitialAd(interstitialAdId, _activity)
             val interstitialAdListener = AppLovinMaxInterstitialAdListener(
@@ -273,8 +273,8 @@ class AppLovinMaxBridge(
             rewardedAd.setListener(rewardedAdListener)
             rewardedAd.setRevenueListener(rewardedAdListener)
 
-            _banner = banner
-            _bannerListener = bannerListener
+//            _banner = banner
+//            _bannerListener = bannerListener
             _interstitialAd = interstitialAd
             _interstitialAdListener = interstitialAdListener
             _rewardedAd = rewardedAd

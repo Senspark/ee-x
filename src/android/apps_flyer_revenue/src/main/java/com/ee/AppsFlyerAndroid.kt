@@ -23,7 +23,7 @@ class AppsFlyerAndroid(private val activity: Activity) {
         val builder = PurchaseClient.Builder(application, Store.GOOGLE)
             .logSubscriptions(true)
             .autoLogInApps(true)
-            .setSandbox(true)
+            .setSandbox(false)
             .setInAppValidationResultListener(AppsFlyerIapResultListener())
             .setSubscriptionValidationResultListener(AppsFlyerSubscriptionResultListener())
 

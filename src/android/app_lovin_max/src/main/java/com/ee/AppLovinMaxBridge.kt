@@ -2,6 +2,7 @@ package com.ee
 
 import android.app.Activity
 import android.app.Application
+import android.util.Log
 import androidx.annotation.AnyThread
 import com.applovin.mediation.ads.MaxInterstitialAd
 import com.applovin.mediation.ads.MaxRewardedAd
@@ -9,6 +10,10 @@ import com.applovin.sdk.AppLovinSdk
 import com.appsflyer.adrevenue.AppsFlyerAdRevenue
 import com.appsflyer.adrevenue.adnetworks.generic.MediationNetwork
 import com.appsflyer.adrevenue.adnetworks.generic.Scheme
+import com.appsflyer.api.PurchaseClient
+import com.appsflyer.api.Store
+import com.appsflyer.internal.models.InAppPurchaseValidationResult
+import com.appsflyer.internal.models.SubscriptionValidationResult
 import com.ee.internal.AppLovinMaxInterstitialAdListener
 import com.ee.internal.AppLovinMaxRewardedAdListener
 import com.ee.internal.deserialize
@@ -62,11 +67,25 @@ class AppLovinMaxBridge(
         registerHandlers()
 
         // init appsflyer
-        if(_activity != null)
-        {
-            val afRevenueBuilder = AppsFlyerAdRevenue.Builder(_activity!!.application)
-            AppsFlyerAdRevenue.initialize(afRevenueBuilder.build())
-        }
+        // af_ad_revenue
+        val application = _activity!!.application;
+        val afRevenueBuilder = AppsFlyerAdRevenue.Builder(application)
+        AppsFlyerAdRevenue.initialize(afRevenueBuilder.build())
+
+        log("Init af_ad_revenue success");
+
+        // af_purchase
+        val builder = PurchaseClient.Builder(application, Store.GOOGLE)
+            .logSubscriptions(true)
+            .autoLogInApps(true)
+            .setSandbox(false)
+            .setInAppValidationResultListener(AppsFlyerIapResultListener())
+            .setSubscriptionValidationResultListener(AppsFlyerSubscriptionResultListener())
+
+        val afPurchaseClient = builder.build();
+        afPurchaseClient.startObservingTransactions();
+
+        log("Init af_purchase success");
 
         _logger.info("$kTag: constructor end")
     }
@@ -297,5 +316,53 @@ class AppLovinMaxBridge(
             revenueData.revenue,
             customParams
         )
+    }
+
+    private fun log(message: String) {
+        Log.d("AppsFlyer", message);
+    }
+}
+
+class AppsFlyerIapResultListener : PurchaseClient.InAppPurchaseValidationResultListener {
+    override fun onResponse(result: Map<String, InAppPurchaseValidationResult>?) {
+        result?.forEach { (k: String, v: InAppPurchaseValidationResult?) ->
+            if (v.success) {
+                val productPurchase = v.productPurchase
+                log("Validation success: $k $productPurchase")
+            } else {
+                val failureData = v.failureData
+                log("Validation fail: $k $failureData")
+            }
+        }
+    }
+
+    override fun onFailure(result: String, error: Throwable?) {
+        log("Validation fail: $result, $error");
+    }
+
+    private fun log(message: String) {
+        Log.d("AppsFlyer", message);
+    }
+}
+
+class AppsFlyerSubscriptionResultListener : PurchaseClient.SubscriptionPurchaseValidationResultListener {
+    override fun onResponse(result: MutableMap<String, out SubscriptionValidationResult>?) {
+        result?.forEach { (k: String, v: SubscriptionValidationResult?) ->
+            if (v.success) {
+                val productPurchase = v.subscriptionPurchase;
+                log("Validation success: $k $productPurchase")
+            } else {
+                val failureData = v.failureData
+                log("Validation fail: $k $failureData")
+            }
+        }
+    }
+
+    override fun onFailure(result: String, error: Throwable?) {
+        log("Validation fail: $result, $error")
+    }
+
+    private fun log(message: String) {
+        Log.d("AppsFlyer", message);
     }
 }

@@ -35,6 +35,8 @@ private:
     bool destroyInterstitialAd(const std::string& adId);
     bool destroyRewardedAd(const std::string& adId);
 
+    void onBannerAdPaid(const std::string& jsonStr);
+
     bool hasInterstitialAd() const;
     void loadInterstitialAd();
     void showInterstitialAd(const std::string& adId);
@@ -67,7 +69,8 @@ private:
     std::string network_;
 
     /// Share the same ad instance.
-    std::shared_ptr<IBannerAd> bannerAd_;
+    std::shared_ptr<BannerAd> bannerAd_;
+    std::shared_ptr<IBannerAd> sharedBannerAd_;
     std::shared_ptr<InterstitialAd> interstitialAd_;
     std::shared_ptr<IFullScreenAd> sharedInterstitialAd_;
     std::shared_ptr<RewardedAd> rewardedAd_;

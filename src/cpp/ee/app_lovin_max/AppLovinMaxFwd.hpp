@@ -10,6 +10,7 @@ namespace app_lovin_max {
 enum class BannerAdSize;
 class IBridge;
 class Bridge;
+class BannerAd;
 class InterstitialAd;
 class RewardedAd;
 } // namespace app_lovin_max

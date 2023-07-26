@@ -11,10 +11,11 @@ class NotificationReceiver : BroadcastReceiver() {
         val title = intent.getStringExtra("title") ?: ""
         val body = intent.getStringExtra("body") ?: ""
         val tag = intent.getIntExtra("tag", 0)
+        val style = intent.getIntExtra("style", 0)
         try {
             val clazz = Class.forName(className)
             val clickIntent = NotificationUtils.createClickIntent(context, clazz, tag)
-            NotificationUtils.showNotification(context, ticker, title, body, clickIntent, tag)
+            NotificationUtils.showNotification(context, ticker, title, body, clickIntent, tag, style)
         } catch (e: ClassNotFoundException) {
             e.printStackTrace()
         } catch (e: IllegalArgumentException) {

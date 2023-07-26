@@ -24,8 +24,9 @@ public:
     virtual void destroy() override;
 
     virtual void schedule(const NotificationBuilder& builder) override;
-    virtual void schedule(const std::string& message, int tag, int delay,
-                          int interval) override;
+
+    virtual void
+    schedule(const std::string &message, int tag, int style, int delay, int interval) override;
 
     virtual void unschedule(int tag) override;
     virtual void clearAll() override;

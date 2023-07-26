@@ -38,13 +38,22 @@ object NotificationUtils {
      * @param context  The context.
      * @param activityClass The activity will be opened when the notification is clicked.
      */
-    fun createClickIntent(context: Context, activityClass: Class<*>, requestCode: Int): PendingIntent {
+    fun createClickIntent(
+        context: Context,
+        activityClass: Class<*>,
+        requestCode: Int
+    ): PendingIntent {
         // Use FLAG_ACTIVITY_CLEAR_TOP | FLAG_ACTIVITY_SINGLE_TOP
         // to resume exist activity instead of restarting it.
         val intent = Intent(context, activityClass)
             .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
             .setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
-        return PendingIntent.getActivity(context, requestCode, intent, PendingIntent.FLAG_UPDATE_CURRENT)
+        return PendingIntent.getActivity(
+            context,
+            requestCode,
+            intent,
+            PendingIntent.FLAG_UPDATE_CURRENT
+        )
     }
 
     /**
@@ -58,8 +67,10 @@ object NotificationUtils {
      * @param interval    How long between each alarms.
      */
     @JvmOverloads
-    fun scheduleAlarm(context: Context, intent: Intent, requestCode: Int, flags: Int, delay: Int,
-                      interval: Int = 0) {
+    fun scheduleAlarm(
+        context: Context, intent: Intent, requestCode: Int, flags: Int, delay: Int,
+        interval: Int = 0
+    ) {
         val intervalInMilliseconds = interval.toLong() * 1000
         val delayInMilliseconds = delay.toLong() * 1000
         val currentTime = System.currentTimeMillis()
@@ -69,7 +80,12 @@ object NotificationUtils {
         if (interval == 0) {
             alarmManager[AlarmManager.RTC_WAKEUP, triggerTime] = alarmIntent
         } else {
-            alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, triggerTime, intervalInMilliseconds, alarmIntent)
+            alarmManager.setRepeating(
+                AlarmManager.RTC_WAKEUP,
+                triggerTime,
+                intervalInMilliseconds,
+                alarmIntent
+            )
         }
     }
 
@@ -90,7 +106,12 @@ object NotificationUtils {
      * of the pending intent.
      */
     fun unscheduleAlarm(context: Context, intent: Intent, requestCode: Int) {
-        val pendingIntent = PendingIntent.getBroadcast(context, requestCode, intent, PendingIntent.FLAG_UPDATE_CURRENT)
+        val pendingIntent = PendingIntent.getBroadcast(
+            context,
+            requestCode,
+            intent,
+            PendingIntent.FLAG_UPDATE_CURRENT
+        )
         if (pendingIntent != null) {
             pendingIntent.cancel()
             val manager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
@@ -98,13 +119,37 @@ object NotificationUtils {
         }
     }
 
-    fun showNotification(context: Context, ticker: String, title: String, body: String,
-                         clickIntent: PendingIntent, tag: Int) {
-        val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+    fun showNotification(
+        context: Context,
+        ticker: String,
+        title: String,
+        body: String,
+        clickIntent: PendingIntent,
+        tag: Int,
+        style: Int,
+    ) {
+        if (style == 1) {
+            showCustomNotification(context, ticker, title, body, clickIntent, tag)
+        } else {
+            showBasicNotification(context, ticker, title, body, clickIntent, tag)
+        }
+    }
+
+    private fun showBasicNotification(
+        context: Context,
+        ticker: String,
+        title: String,
+        body: String,
+        clickIntent: PendingIntent,
+        tag: Int
+    ) {
+        val notificationManager =
+            context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         val channelId = "ee_x_channel_id_01"
         val channelName = "ee_x_channel_name"
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val notificationChannel = NotificationChannel(channelId, channelName, NotificationManager.IMPORTANCE_HIGH)
+            val notificationChannel =
+                NotificationChannel(channelId, channelName, NotificationManager.IMPORTANCE_HIGH)
             notificationChannel.setShowBadge(true)
             notificationManager.createNotificationChannel(notificationChannel)
         }
@@ -118,5 +163,18 @@ object NotificationUtils {
             .setContentText(body)
             .setContentIntent(clickIntent)
         notificationManager.notify(tag, notificationBuilder.build())
+    }
+
+    private fun showCustomNotification(
+        context: Context,
+        ticker: String,
+        title: String,
+        body: String,
+        clickIntent: PendingIntent,
+        tag: Int
+    ) {
+        com.senspark.custom_notification.NotificationHelper.createNotificationChannel(context)
+        val notificationManager = com.senspark.custom_notification.NotificationHelper(context)
+        notificationManager.showNotification(tag, body, clickIntent)
     }
 }

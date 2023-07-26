@@ -2,9 +2,13 @@ package com.ee
 
 import android.app.Activity
 import android.app.Application
+
+import android.util.Log
+
 import android.view.Gravity
 import android.view.ViewGroup
 import android.widget.FrameLayout
+
 import androidx.annotation.AnyThread
 import com.applovin.mediation.ads.MaxAdView
 import com.applovin.mediation.ads.MaxInterstitialAd
@@ -13,8 +17,15 @@ import com.applovin.sdk.AppLovinSdk
 import com.appsflyer.adrevenue.AppsFlyerAdRevenue
 import com.appsflyer.adrevenue.adnetworks.generic.MediationNetwork
 import com.appsflyer.adrevenue.adnetworks.generic.Scheme
+
+import com.appsflyer.api.PurchaseClient
+import com.appsflyer.api.Store
+import com.appsflyer.internal.models.InAppPurchaseValidationResult
+import com.appsflyer.internal.models.SubscriptionValidationResult
+
 import com.ee.applovinmax.R
 import com.ee.internal.AppLovinMaxBannerAdListener
+
 import com.ee.internal.AppLovinMaxInterstitialAdListener
 import com.ee.internal.AppLovinMaxRewardedAdListener
 import com.ee.internal.deserialize
@@ -91,10 +102,25 @@ class AppLovinMaxBridge(
         registerHandlers()
 
         // init appsflyer
-        if (_activity != null) {
-            val afRevenueBuilder = AppsFlyerAdRevenue.Builder(_activity!!.application)
-            AppsFlyerAdRevenue.initialize(afRevenueBuilder.build())
-        }
+        // af_ad_revenue
+        val application = _activity!!.application;
+        val afRevenueBuilder = AppsFlyerAdRevenue.Builder(application)
+        AppsFlyerAdRevenue.initialize(afRevenueBuilder.build())
+
+        log("Init af_ad_revenue success");
+
+        // af_purchase
+        val builder = PurchaseClient.Builder(application, Store.GOOGLE)
+            .logSubscriptions(true)
+            .autoLogInApps(true)
+            .setSandbox(false)
+            .setInAppValidationResultListener(AppsFlyerIapResultListener())
+            .setSubscriptionValidationResultListener(AppsFlyerSubscriptionResultListener())
+
+        val afPurchaseClient = builder.build();
+        afPurchaseClient.startObservingTransactions();
+
+        log("Init af_purchase success");
 
         _logger.info("$kTag: constructor end")
     }
@@ -368,7 +394,7 @@ class AppLovinMaxBridge(
         }
     }
 
-    private fun createBanner() : Boolean {
+    private fun createBanner(): Boolean {
         if (_banner != null) {
             Thread.runOnMainThread {
                 checkInitialized()
@@ -417,5 +443,54 @@ class AppLovinMaxBridge(
             }
         }
         return true;
+    }
+
+    private fun log(message: String) {
+        Log.d("AppsFlyer", message);
+    }
+}
+
+class AppsFlyerIapResultListener : PurchaseClient.InAppPurchaseValidationResultListener {
+    override fun onResponse(result: Map<String, InAppPurchaseValidationResult>?) {
+        result?.forEach { (k: String, v: InAppPurchaseValidationResult?) ->
+            if (v.success) {
+                val productPurchase = v.productPurchase
+                log("Validation success: $k $productPurchase")
+            } else {
+                val failureData = v.failureData
+                log("Validation fail: $k $failureData")
+            }
+        }
+    }
+
+    override fun onFailure(result: String, error: Throwable?) {
+        log("Validation fail: $result, $error");
+    }
+
+    private fun log(message: String) {
+        Log.d("AppsFlyer", message);
+    }
+}
+
+class AppsFlyerSubscriptionResultListener :
+    PurchaseClient.SubscriptionPurchaseValidationResultListener {
+    override fun onResponse(result: MutableMap<String, out SubscriptionValidationResult>?) {
+        result?.forEach { (k: String, v: SubscriptionValidationResult?) ->
+            if (v.success) {
+                val productPurchase = v.subscriptionPurchase;
+                log("Validation success: $k $productPurchase")
+            } else {
+                val failureData = v.failureData
+                log("Validation fail: $k $failureData")
+            }
+        }
+    }
+
+    override fun onFailure(result: String, error: Throwable?) {
+        log("Validation fail: $result, $error")
+    }
+
+    private fun log(message: String) {
+        Log.d("AppsFlyer", message);
     }
 }

@@ -77,7 +77,11 @@ class AppsFlyerBridge(
             ""
         }
         _bridge.registerHandler(kGetDeviceId) {
-            deviceId
+            if(deviceId != null) {
+                deviceId!!
+            } else {
+                ""
+            }
         }
         _bridge.registerHandler(kSetDebugEnabled) { message ->
             setDebugEnabled(Utils.toBoolean(message))
@@ -130,7 +134,6 @@ class AppsFlyerBridge(
             }
             _tracker.init(devKey, listener, _application)
             _tracker.anonymizeUser(false)
-            _tracker.enableLocationCollection(true)
         }
     }
 
@@ -141,7 +144,7 @@ class AppsFlyerBridge(
         }
     }
 
-    val deviceId: String
+    val deviceId: String?
         @AnyThread get() = _tracker.getAppsFlyerUID(_application)
 
     @AnyThread

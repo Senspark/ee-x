@@ -44,7 +44,7 @@ object NotificationUtils {
         val intent = Intent(context, activityClass)
             .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
             .setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
-        return PendingIntent.getActivity(context, requestCode, intent, PendingIntent.FLAG_UPDATE_CURRENT)
+        return PendingIntent.getActivity(context, requestCode, intent, PendingIntent.FLAG_CANCEL_CURRENT or PendingIntent.FLAG_IMMUTABLE)
     }
 
     /**
@@ -90,7 +90,7 @@ object NotificationUtils {
      * of the pending intent.
      */
     fun unscheduleAlarm(context: Context, intent: Intent, requestCode: Int) {
-        val pendingIntent = PendingIntent.getBroadcast(context, requestCode, intent, PendingIntent.FLAG_UPDATE_CURRENT)
+        val pendingIntent = PendingIntent.getBroadcast(context, requestCode, intent, PendingIntent.FLAG_CANCEL_CURRENT or PendingIntent.FLAG_IMMUTABLE)
         if (pendingIntent != null) {
             pendingIntent.cancel()
             val manager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager

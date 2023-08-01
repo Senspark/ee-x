@@ -105,8 +105,14 @@ class NotificationBridge(
         intent.putExtra("body", body)
         intent.putExtra("tag", tag)
         intent.putExtra("className", activity::class.java.name)
-        NotificationUtils.scheduleAlarm(_application, intent, tag, PendingIntent.FLAG_UPDATE_CURRENT,
-            delay, interval)
+        NotificationUtils.scheduleAlarm(
+            _application,
+            intent,
+            tag,
+            PendingIntent.FLAG_CANCEL_CURRENT or PendingIntent.FLAG_IMMUTABLE,
+            delay,
+            interval
+        )
     }
 
     fun unschedule(tag: Int) {

@@ -48,6 +48,9 @@ public:
     /// Default is zero.
     NotificationBuilder& setTag(int tag);
 
+    /// 0: Basic | 1: Custom
+    NotificationBuilder& setStyle(int style);
+
 private:
     friend Bridge;
 
@@ -57,6 +60,7 @@ private:
     int delay_;
     int interval_;
     int tag_;
+    int style_;
 };
 } // namespace notification
 } // namespace ee

@@ -46,15 +46,17 @@ void Self::schedule(const NotificationBuilder& builder) {
     json["delay"] = builder.delay_;
     json["interval"] = builder.interval_;
     json["tag"] = builder.tag_;
+    json["style"] = builder.style_;
     bridge_.call(kSchedule, json.dump());
 }
 
-void Self::schedule(const std::string& msg, int tag, int delay, int interval) {
+void Self::schedule(const std::string& msg, int tag, int style, int delay, int interval) {
     auto builder = NotificationBuilder();
     builder.setBody(msg);
     builder.setDelay(delay);
     builder.setInterval(interval);
     builder.setTag(tag);
+    builder.setStyle(style);
     schedule(builder);
 }
 

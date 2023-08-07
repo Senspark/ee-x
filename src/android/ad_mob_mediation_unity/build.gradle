@@ -25,5 +25,5 @@ dependencies {
     // https://maven.google.com/web/index.html#com.google.ads.mediation
     // https://developers.google.com/admob/android/mediation/unity#unity-ads-android-mediation-adapter-changelog
     // Use "api" to inherit manifest elements.
-    api 'com.google.ads.mediation:unity:4.7.1.0'
+    api 'com.google.ads.mediation:unity:4.8.0.0'
 }

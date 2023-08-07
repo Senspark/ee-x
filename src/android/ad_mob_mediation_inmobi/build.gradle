@@ -25,5 +25,5 @@ dependencies {
     // https://maven.google.com/web/index.html#com.google.ads.mediation
     // https://developers.google.com/admob/android/mediation/inmobi#inmobi-android-mediation-adapter-changelog
     // Use "api" to inherit manifest elements.
-    api 'com.google.ads.mediation:inmobi:10.5.4.1'
+    api 'com.google.ads.mediation:inmobi:10.5.7.0'
 }

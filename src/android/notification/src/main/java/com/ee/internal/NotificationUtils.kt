@@ -52,7 +52,7 @@ object NotificationUtils {
             context,
             requestCode,
             intent,
-            PendingIntent.FLAG_UPDATE_CURRENT
+            PendingIntent.FLAG_IMMUTABLE
         )
     }
 
@@ -110,7 +110,7 @@ object NotificationUtils {
             context,
             requestCode,
             intent,
-            PendingIntent.FLAG_UPDATE_CURRENT
+            PendingIntent.FLAG_IMMUTABLE
         )
         if (pendingIntent != null) {
             pendingIntent.cancel()

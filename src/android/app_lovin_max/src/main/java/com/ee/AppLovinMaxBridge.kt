@@ -14,6 +14,7 @@ import com.applovin.mediation.ads.MaxAdView
 import com.applovin.mediation.ads.MaxInterstitialAd
 import com.applovin.mediation.ads.MaxRewardedAd
 import com.applovin.sdk.AppLovinSdk
+import com.applovin.sdk.AppLovinSdkUtils
 import com.appsflyer.adrevenue.AppsFlyerAdRevenue
 import com.appsflyer.adrevenue.adnetworks.generic.MediationNetwork
 import com.appsflyer.adrevenue.adnetworks.generic.Scheme
@@ -71,8 +72,11 @@ class AppLovinMaxBridge(
         private const val kSetMuted = "${kPrefix}SetMuted"
 
         private const val kCreateBannerAd = "${kPrefix}CreateBannerAd"
+        private const val kLoadBannerAd = "${kPrefix}LoadBanner"
         private const val kGetBannerAdSize = "${kPrefix}GetBannerAdSize"
         private const val kSetBannerVisible = "${kPrefix}SetBannerVisible"
+        private const val kSetBannerPosition = "${kPrefix}_setPosition_"
+        private const val kSetBannerSize = "${kPrefix}_setSize_"
         private const val kDestroyAd = "${kPrefix}DestroyAd"
 
         private const val kHasInterstitialAd = "${kPrefix}HasInterstitialAd"
@@ -88,9 +92,9 @@ class AppLovinMaxBridge(
     private var _initialized = false
     private var _sdk: AppLovinSdk? = null
 
-    private var _bannerVisible = false
+    private var _bannerAdId: String? = null
     private var _banner: MaxAdView? = null
-    private var _bannerListener: AppLovinMaxBannerAdListener? = null;
+    private var _bannerListener: AppLovinMaxBannerAdListener? = null
 
     private var _interstitialAd: MaxInterstitialAd? = null
     private var _interstitialAdListener: AppLovinMaxInterstitialAdListener? = null
@@ -103,11 +107,11 @@ class AppLovinMaxBridge(
 
         // init appsflyer
         // af_ad_revenue
-        val application = _activity!!.application;
+        val application = _activity!!.application
         val afRevenueBuilder = AppsFlyerAdRevenue.Builder(application)
         AppsFlyerAdRevenue.initialize(afRevenueBuilder.build())
 
-        log("Init af_ad_revenue success");
+        log("Init af_ad_revenue success")
 
         // af_purchase
         val builder = PurchaseClient.Builder(application, Store.GOOGLE)
@@ -117,10 +121,10 @@ class AppLovinMaxBridge(
             .setInAppValidationResultListener(AppsFlyerIapResultListener())
             .setSubscriptionValidationResultListener(AppsFlyerSubscriptionResultListener())
 
-        val afPurchaseClient = builder.build();
-        afPurchaseClient.startObservingTransactions();
+        val afPurchaseClient = builder.build()
+        afPurchaseClient.startObservingTransactions()
 
-        log("Init af_purchase success");
+        log("Init af_purchase success")
 
         _logger.info("$kTag: constructor end")
     }
@@ -171,18 +175,24 @@ class AppLovinMaxBridge(
             setMuted(Utils.toBoolean(message))
             ""
         }
-        _bridge.registerHandler(kCreateBannerAd) { message ->
-            showBanner()
+        _bridge.registerHandler(kCreateBannerAd) { _ ->
+            // do nothing
+            Log.d("ee_x", "nhanc18 kCreateBannerAd")
             Utils.toString(true)
         }
-        _bridge.registerHandler(kGetBannerAdSize) { message ->
+        _bridge.registerHandler(kLoadBannerAd) { _ ->
+            // do nothing
+            Log.d("ee_x", "nhanc18 kLoadBannerAd")
+            Utils.toString(showBanner())
+        }
+        _bridge.registerHandler(kGetBannerAdSize) { _ ->
             val response = GetBannerAdSizeResponse(0, 0)
             response.serialize()
         }
         _bridge.registerHandler(kSetBannerVisible) { message ->
             Utils.toString(setBannerVisible(message))
         }
-        _bridge.registerHandler(kDestroyAd) { message ->
+        _bridge.registerHandler(kDestroyAd) { _ ->
             hideBanner()
             Utils.toString(true)
         }
@@ -226,6 +236,8 @@ class AppLovinMaxBridge(
         _bridge.deregisterHandler(kGetBannerAdSize)
         _bridge.deregisterHandler(kDestroyAd)
         _bridge.deregisterHandler(kSetBannerVisible)
+        _bridge.deregisterHandler(kSetBannerPosition + _bannerAdId)
+        _bridge.deregisterHandler(kSetBannerSize + _bannerAdId)
     }
 
     private fun checkInitialized() {
@@ -252,12 +264,12 @@ class AppLovinMaxBridge(
                 }
                 _initializing = true
 
-                val sdk = AppLovinSdk.getInstance(_application);
-                sdk.mediationProvider = "max";
+                val sdk = AppLovinSdk.getInstance(_application)
+                sdk.mediationProvider = "max"
                 sdk.initializeSdk {
                     if (cont.isActive) {
                         // Enable Test Ads?
-                        // sdk.showMediationDebugger()
+//                         sdk.showMediationDebugger()
                     } else {
                         return@initializeSdk
                     }
@@ -267,7 +279,7 @@ class AppLovinMaxBridge(
                         initAds(bannerAdId, interstitialAdId, rewardedAdId)
                         cont.resume(true)
                     }
-                };
+                }
 
                 _sdk = sdk
             }
@@ -277,14 +289,21 @@ class AppLovinMaxBridge(
     @AnyThread
     fun initAds(bannerAdId: String, interstitialAdId: String, rewardedAdId: String) {
         Thread.runOnMainThread {
-//            val banner = MaxAdView(bannerAdId, _activity);
-//            val bannerListener = AppLovinMaxBannerAdListener(_bridge, _logger)
-//            { d -> logAppsFlyerAdRevenue(d) }
-//            banner.setListener(bannerListener)
-//            banner.setRevenueListener(bannerListener)
-//
-//            createBanner();
+            // Banner
+            val bannerListener = AppLovinMaxBannerAdListener(_bridge, _logger, bannerAdId)
+            { d -> logAppsFlyerAdRevenue(d) }
+            _bridge.registerHandler(kSetBannerPosition + bannerAdId) {
+                // do nothing
+                Log.d("ee_x", "nhanc18 kSetBannerPosition")
+                Utils.toString(true)
+            }
+            _bridge.registerHandler(kSetBannerSize + bannerAdId) {
+                // do nothing
+                Log.d("ee_x", "nhanc18 kSetBannerSize")
+                Utils.toString(true)
+            }
 
+            // Interstitial
             val interstitialAd = MaxInterstitialAd(interstitialAdId, _activity)
             val interstitialAdListener = AppLovinMaxInterstitialAdListener(
                 interstitialAdId, _bridge, _logger
@@ -292,6 +311,7 @@ class AppLovinMaxBridge(
             interstitialAd.setListener(interstitialAdListener)
             interstitialAd.setRevenueListener(interstitialAdListener)
 
+            // Rewarded
             val rewardedAd = MaxRewardedAd.getInstance(rewardedAdId, _activity)
             val rewardedAdListener = AppLovinMaxRewardedAdListener(
                 rewardedAdId, _bridge, _logger
@@ -299,8 +319,8 @@ class AppLovinMaxBridge(
             rewardedAd.setListener(rewardedAdListener)
             rewardedAd.setRevenueListener(rewardedAdListener)
 
-//            _banner = banner
-//            _bannerListener = bannerListener
+            _bannerAdId = bannerAdId
+            _bannerListener = bannerListener
             _interstitialAd = interstitialAd
             _interstitialAdListener = interstitialAdListener
             _rewardedAd = rewardedAd
@@ -388,65 +408,58 @@ class AppLovinMaxBridge(
         val visible = Utils.toBoolean(message)
         _logger.info("nhanc18 set banner visible: $visible")
         return if (visible) {
-            showBanner();
+            showBanner()
         } else {
-            hideBanner();
+            hideBanner()
         }
-    }
-
-    private fun createBanner(): Boolean {
-        if (_banner != null) {
-            Thread.runOnMainThread {
-                checkInitialized()
-                val width = ViewGroup.LayoutParams.MATCH_PARENT
-                val heightPx = _activity?.resources?.getDimensionPixelSize(R.dimen.banner_height)
-                _banner!!.layoutParams =
-                    FrameLayout.LayoutParams(width, heightPx ?: 0, Gravity.BOTTOM)
-                if (_banner!!.parent != null) {
-                    (_banner!!.parent as ViewGroup).removeView(_banner);
-                }
-                _banner!!.loadAd()
-                _bannerVisible = false;
-            }
-        }
-        return true
     }
 
     private fun showBanner(): Boolean {
-        if (_bannerVisible) {
-            return true;
-        }
+        checkInitialized()
         if (_banner != null) {
-            Thread.runOnMainThread {
-                checkInitialized()
-                val rootView = _activity?.findViewById<ViewGroup>(android.R.id.content)
-                if (_banner!!.parent != null) {
-                    (_banner!!.parent as ViewGroup).removeView(_banner);
-                }
-                rootView?.addView(_banner)
-                _bannerVisible = true;
-            }
+            return true
+        }
+        if (_activity == null) {
+            return false
+        }
+        val activity: Activity = _activity as Activity
+        Thread.runOnMainThread {
+            val banner = MaxAdView(_bannerAdId, activity)
+            banner.setListener(_bannerListener)
+            banner.setRevenueListener(_bannerListener)
+            _banner = banner
+
+            val isTablet = AppLovinSdkUtils.isTablet(activity)
+            val width = ViewGroup.LayoutParams.MATCH_PARENT
+            val height = AppLovinSdkUtils.dpToPx(activity, if (isTablet) 90 else 50)
+            banner.layoutParams = FrameLayout.LayoutParams(width, height, Gravity.BOTTOM)
+            val rootView = activity.findViewById<ViewGroup>(android.R.id.content)
+            rootView?.addView(banner)
+
+            banner.loadAd()
         }
         return true
     }
 
     private fun hideBanner(): Boolean {
-        if (!_bannerVisible) {
-            return true;
+        if (_banner == null) {
+            return true
         }
-        if (_banner != null) {
-            Thread.runOnMainThread {
-                if (_banner!!.parent != null) {
-                    (_banner!!.parent as ViewGroup).removeView(_banner);
-                    _bannerVisible = false;
-                }
+
+        val banner: MaxAdView = _banner as MaxAdView
+        _banner = null
+
+        Thread.runOnMainThread {
+            if (banner.parent != null) {
+                (banner.parent as ViewGroup).removeView(banner)
             }
+            banner.destroy()
         }
-        return true;
+        return true
     }
 
     private fun log(message: String) {
-        Log.d("AppsFlyer", message);
+        Log.d("AppsFlyer", message)
     }
 }
 
@@ -464,11 +477,11 @@ class AppsFlyerIapResultListener : PurchaseClient.InAppPurchaseValidationResultL
     }
 
     override fun onFailure(result: String, error: Throwable?) {
-        log("Validation fail: $result, $error");
+        log("Validation fail: $result, $error")
     }
 
     private fun log(message: String) {
-        Log.d("AppsFlyer", message);
+        Log.d("AppsFlyer", message)
     }
 }
 
@@ -477,7 +490,7 @@ class AppsFlyerSubscriptionResultListener :
     override fun onResponse(result: MutableMap<String, out SubscriptionValidationResult>?) {
         result?.forEach { (k: String, v: SubscriptionValidationResult?) ->
             if (v.success) {
-                val productPurchase = v.subscriptionPurchase;
+                val productPurchase = v.subscriptionPurchase
                 log("Validation success: $k $productPurchase")
             } else {
                 val failureData = v.failureData
@@ -491,6 +504,6 @@ class AppsFlyerSubscriptionResultListener :
     }
 
     private fun log(message: String) {
-        Log.d("AppsFlyer", message);
+        Log.d("AppsFlyer", message)
     }
 }

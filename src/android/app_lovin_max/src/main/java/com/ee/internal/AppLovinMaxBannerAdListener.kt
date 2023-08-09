@@ -14,6 +14,7 @@ import java.util.concurrent.atomic.AtomicBoolean
 internal class AppLovinMaxBannerAdListener(
     private val _bridge: IMessageBridge,
     private val _logger: ILogger,
+    private val _adId: String,
     private val _logAppsFlyerRevenue: (AdRevenueData) -> Unit
 ) : MaxAdViewAdListener, MaxAdRevenueListener {
     @Serializable
@@ -25,10 +26,10 @@ internal class AppLovinMaxBannerAdListener(
     companion object {
         private val kTag = AppLovinMaxBannerAdListener::class.java.name
         private const val kPrefix = "AppLovinMaxBridge"
-        private const val kOnBannerAdLoaded = "${kPrefix}OnBannerAdLoaded"
-        private const val kOnBannerAdFailedToLoad = "${kPrefix}OnBannerAdFailedToLoad"
-        private const val kOnBannerAdClicked = "${kPrefix}OnBannerAdClicked"
-        private const val kOnBannerAdClosed = "${kPrefix}OnBannerAdClosed"
+        private const val kOnBannerAdLoaded = "${kPrefix}_onLoaded_"
+        private const val kOnBannerAdFailedToLoad = "${kPrefix}_onFailedToLoad_"
+        private const val kOnBannerAdClicked = "${kPrefix}_onClicked_"
+        private const val kOnBannerAdClosed = "${kPrefix}_onClosed_"
         private const val kOnBannerAdPaid = "${kPrefix}OnBannerAdPaid"
     }
 
@@ -40,8 +41,11 @@ internal class AppLovinMaxBannerAdListener(
     override fun onAdLoaded(p0: MaxAd?) {
         Thread.runOnMainThread {
             _logger.debug("$kTag: ${this::onAdLoaded.name}")
-            _isLoaded.set(true)
-//            _bridge.callCpp(kOnBannerAdLoaded)
+            if (!_isLoaded.get()) {
+                _isLoaded.set(true)
+                // Chỉ send message 1 lần
+                _bridge.callCpp("${kOnBannerAdLoaded}${_adId}")
+            }
         }
     }
 
@@ -60,6 +64,7 @@ internal class AppLovinMaxBannerAdListener(
     override fun onAdClicked(p0: MaxAd?) {
         Thread.runOnMainThread {
             _logger.info("$kTag: ${this::onAdClicked.name}")
+            _bridge.callCpp("${kOnBannerAdClicked}${_adId}")
         }
     }
 
@@ -69,7 +74,7 @@ internal class AppLovinMaxBannerAdListener(
             val errMsg = p1?.message ?: "";
             _logger.info("$kTag: ${this::onAdLoadFailed.name}: code $errCode msg: $errMsg")
 //            _bridge.callCpp(
-//                kOnBannerAdFailedToLoad, ErrorResponse(errCode, errMsg).serialize()
+//                "${kOnBannerAdFailedToLoad}${_adId}", ErrorResponse(errCode, errMsg).serialize()
 //            )
         }
     }

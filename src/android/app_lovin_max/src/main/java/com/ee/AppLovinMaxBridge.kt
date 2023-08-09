@@ -6,6 +6,7 @@ import android.app.Application
 import android.util.Log
 
 import android.view.Gravity
+import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
 
@@ -302,6 +303,7 @@ class AppLovinMaxBridge(
                 Log.d("ee_x", "nhanc18 kSetBannerSize")
                 Utils.toString(true)
             }
+            createBanner(bannerAdId, bannerListener)
 
             // Interstitial
             val interstitialAd = MaxInterstitialAd(interstitialAdId, _activity)
@@ -414,30 +416,41 @@ class AppLovinMaxBridge(
         }
     }
 
-    private fun showBanner(): Boolean {
+    private fun createBanner(bannerAdId: String, bannerListener: AppLovinMaxBannerAdListener) {
         checkInitialized()
         if (_banner != null) {
-            return true
+            return
         }
         if (_activity == null) {
-            return false
+            return
         }
         val activity: Activity = _activity as Activity
-        Thread.runOnMainThread {
-            val banner = MaxAdView(_bannerAdId, activity)
-            banner.setListener(_bannerListener)
-            banner.setRevenueListener(_bannerListener)
-            _banner = banner
 
-            val isTablet = AppLovinSdkUtils.isTablet(activity)
-            val width = ViewGroup.LayoutParams.MATCH_PARENT
-            val height = AppLovinSdkUtils.dpToPx(activity, if (isTablet) 90 else 50)
-            banner.layoutParams = FrameLayout.LayoutParams(width, height, Gravity.BOTTOM)
-            val rootView = activity.findViewById<ViewGroup>(android.R.id.content)
-            rootView?.addView(banner)
+        val banner = MaxAdView(bannerAdId, activity)
+        banner.setListener(bannerListener)
+        banner.setRevenueListener(bannerListener)
+        _banner = banner
 
-            banner.loadAd()
+        val isTablet = AppLovinSdkUtils.isTablet(activity)
+        val width = ViewGroup.LayoutParams.MATCH_PARENT
+        val height = AppLovinSdkUtils.dpToPx(activity, if (isTablet) 90 else 50)
+        banner.layoutParams = FrameLayout.LayoutParams(width, height, Gravity.BOTTOM)
+        val rootView = activity.findViewById<ViewGroup>(android.R.id.content)
+        rootView?.addView(banner)
+
+        banner.loadAd()
+    }
+
+    private fun showBanner(): Boolean {
+        if (_banner == null) {
+            return true;
         }
+        val banner = _banner as MaxAdView
+        Thread.runOnMainThread {
+            banner.visibility = View.VISIBLE
+            banner.startAutoRefresh()
+        }
+
         return true
     }
 
@@ -445,15 +458,11 @@ class AppLovinMaxBridge(
         if (_banner == null) {
             return true
         }
-
-        val banner: MaxAdView = _banner as MaxAdView
-        _banner = null
-
+        val banner = _banner as MaxAdView
         Thread.runOnMainThread {
-            if (banner.parent != null) {
-                (banner.parent as ViewGroup).removeView(banner)
-            }
-            banner.destroy()
+            banner.setExtraParameter( "allow_pause_auto_refresh_immediately", "true" )
+            banner.stopAutoRefresh()
+            banner.visibility = View.INVISIBLE
         }
         return true
     }

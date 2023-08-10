@@ -2,6 +2,7 @@ package com.ee
 
 import android.app.Activity
 import android.app.Application
+import android.graphics.Color
 
 import android.util.Log
 
@@ -432,9 +433,10 @@ class AppLovinMaxBridge(
         _banner = banner
 
         val isTablet = AppLovinSdkUtils.isTablet(activity)
-        val width = ViewGroup.LayoutParams.MATCH_PARENT
+        val width = AppLovinSdkUtils.dpToPx(activity, if (isTablet) 728 else 320)
         val height = AppLovinSdkUtils.dpToPx(activity, if (isTablet) 90 else 50)
-        banner.layoutParams = FrameLayout.LayoutParams(width, height, Gravity.BOTTOM)
+        banner.layoutParams = FrameLayout.LayoutParams(width, height, Gravity.BOTTOM or Gravity.CENTER_HORIZONTAL)
+        banner.setBackgroundColor(Color.TRANSPARENT)
         val rootView = activity.findViewById<ViewGroup>(android.R.id.content)
         rootView?.addView(banner)
 

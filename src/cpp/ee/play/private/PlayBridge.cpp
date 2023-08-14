@@ -4,6 +4,8 @@
 //
 
 #include "ee/play/private/PlayBridge.hpp"
+#include "ee/play/private/CloudData.h"
+#include "ee/play/private/InternalCloudDataHandler.h"
 
 #include <ee/core/IMessageBridge.hpp>
 #include <ee/core/Task.hpp>
@@ -24,6 +26,9 @@ const auto kUnlockAchievement    = kPrefix + "UnlockAchievement";
 const auto kShowLeaderboard      = kPrefix + "ShowLeaderboard";
 const auto kShowAllLeaderboards  = kPrefix + "ShowAllLeaderboards";
 const auto kSubmitScore          = kPrefix + "SubmitScore";
+const auto kPushToCloud          = kPrefix + "PushToCloud";
+const auto kPullFromCloud        = kPrefix + "PullFromCloud";
+const auto kDeleteCloud          = kPrefix + "DeleteCloud";
 // clang-format on
 } // namespace
 
@@ -92,5 +97,29 @@ void Self::submitScore(const std::string& leaderboardId, std::int64_t score) {
     json["score"] = score;
     bridge_.call(kSubmitScore, json.dump());
 }
+
+Task<bool> Self::PushToCloud(std::unique_ptr<ICloudDataHandler> handler, std::string title) {
+    nlohmann::json json;
+    json["title"] = title;
+    json["data"] = handler.exportData();
+    auto response = co_await bridge_.callAsync(kPushToCloud, json.dump());
+    co_return core::toBool(response);
+}
+
+Task<std::unique_ptr<ICloudDataHandler>> Self::PullFromCloud() {
+    auto response = co_await bridge_.callAsync(kPullFromCloud);
+    auto json = nlohmann::json::parse(response);
+    auto cloudData = CloudData::parseJson(json.dump());
+    auto handler = std::make_unique<InternalCloudDataHandler>();
+    handler->importData(cloudData->originData);
+    co_return handler;
+}
+
+Task<bool> Self::DeleteCloud() {
+    auto response = co_await
+    bridge_.callAsync(kDeleteCloud);
+    co_return core::toBool(response);
+}
+
 } // namespace play
 } // namespace ee

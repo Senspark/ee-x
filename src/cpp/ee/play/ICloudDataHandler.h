@@ -12,6 +12,7 @@ namespace ee::play {
 
 class ICloudDataHandler {
 public:
+    virtual ~ICloudDataHandler() {};
     virtual std::map<std::string, std::string> exportData() = 0;
 
     virtual void importData(std::map<std::string, std::string> importData) = 0;

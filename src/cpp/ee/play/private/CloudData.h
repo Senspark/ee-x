@@ -17,12 +17,10 @@ public:
     std::string hash;
     long timeStamp;
 
-    static std::unique_ptr<CloudData> parseJson(const std::string& json);
+    static std::unique_ptr<CloudData> parseJson(const std::string &json);
 
     std::string toJson();
 };
 
 }
-
-
 #endif //COCOS2DCPP_CLOUDDATA_H

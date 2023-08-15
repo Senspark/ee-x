@@ -6,7 +6,7 @@
 
 namespace ee::play {
 
-std::unique_ptr<CloudData> CloudData::parseJson(const std::string& json) {
+std::unique_ptr<CloudData> CloudData::parseJson(const std::string &json) {
     try {
         nlohmann::json j = nlohmann::json::parse(json);
         auto data = std::make_unique<CloudData>();

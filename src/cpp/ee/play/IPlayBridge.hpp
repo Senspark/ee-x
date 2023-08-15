@@ -44,13 +44,13 @@ public:
 							 std::int64_t score) = 0;
 
 	/// Push save game data to cloud.
-	[[nodiscard]] virtual Task<bool> PushToCloud(std::unique_ptr<ICloudDataHandler> handler, std::string title) = 0;
+	[[nodiscard]] virtual Task<bool> pushToCloud(std::shared_ptr<ICloudDataHandler> handler, std::string title) = 0;
 
 	/// Pull save game data from cloud.
-	[[nodiscard]] virtual Task<std::unique_ptr<ICloudDataHandler>> PullFromCloud() = 0;
+	[[nodiscard]] virtual Task<std::shared_ptr<ICloudDataHandler>> pullFromCloud() = 0;
 
 	/// Push save game data to cloud.
-	[[nodiscard]] virtual Task<bool> DeleteCloud() = 0;
+	[[nodiscard]] virtual Task<bool> deleteCloud() = 0;
 };
 } // namespace play
 } // namespace ee

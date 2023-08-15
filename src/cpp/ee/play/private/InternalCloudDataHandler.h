@@ -10,8 +10,10 @@
 
 namespace ee::play {
 
-class InternalCloudDataHandler : ee::play::ICloudDataHandler {
+class InternalCloudDataHandler : public ee::play::ICloudDataHandler {
 public:
+    ~InternalCloudDataHandler() override {};
+
     std::map<std::string, std::string> exportData() override;
 
     void importData(std::map<std::string, std::string> importData) override;

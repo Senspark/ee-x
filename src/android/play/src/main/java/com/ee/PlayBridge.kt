@@ -2,6 +2,7 @@ package com.ee
 
 import android.app.Activity
 import android.app.Application
+import android.util.Log
 import androidx.annotation.AnyThread
 import androidx.annotation.UiThread
 import com.ee.internal.deserialize
@@ -22,7 +23,8 @@ class PlayBridge(
     private val _bridge: IMessageBridge,
     private val _logger: ILogger,
     private val _application: Application,
-    private var _activity: Activity?) : IPlugin {
+    private var _activity: Activity?
+) : IPlugin {
     companion object {
         private val kTag = PlayBridge::class.java.name
         private const val kPrefix = "PlayBridge"
@@ -35,6 +37,9 @@ class PlayBridge(
         private const val kShowLeaderboard = "${kPrefix}ShowLeaderboard"
         private const val kShowAllLeaderboards = "${kPrefix}ShowAllLeaderboards"
         private const val kSubmitScore = "${kPrefix}SubmitScore"
+        private const val kPushToCloud = "${kPrefix}pushToCloud"
+        private const val kPullFromCloud = "${kPrefix}pullFromCloud"
+        private const val kDeleteCloud = "${kPrefix}deleteCloud"
     }
 
     private val _options = GoogleSignInOptions.DEFAULT_GAMES_SIGN_IN
@@ -141,6 +146,18 @@ class PlayBridge(
         _bridge.registerHandler(kSubmitScore) { message ->
             val request = deserialize<SubmitScoreRequest>(message)
             submitScore(request.leaderboard_id, request.score)
+            ""
+        }
+        _bridge.registerHandler(kPushToCloud) { message ->
+            pushToCloud(message)
+            ""
+        }
+        _bridge.registerHandler(kPullFromCloud) {
+            pullFromCloud()
+            ""
+        }
+        _bridge.registerHandler(kDeleteCloud) {
+            deleteCloud()
             ""
         }
     }
@@ -344,5 +361,20 @@ class PlayBridge(
             val client = leaderboardsClient ?: return@runOnMainThread
             client.submitScore(leaderboardId, score)
         }
+    }
+
+    @AnyThread
+    private fun pushToCloud(jsonData: String) {
+        Log.d(kTag, "${this::pushToCloud.name}: nhanc18 $jsonData")
+    }
+
+    @AnyThread
+    private fun pullFromCloud() {
+        Log.d(kTag, "${this::pullFromCloud.name}: nhanc18")
+    }
+
+    @AnyThread
+    private fun deleteCloud() {
+        Log.d(kTag, "${this::deleteCloud.name}: nhanc18")
     }
 }

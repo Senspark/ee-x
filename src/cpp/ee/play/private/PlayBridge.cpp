@@ -101,7 +101,7 @@ void Self::submitScore(const std::string& leaderboardId, std::int64_t score) {
 Task<bool> Self::PushToCloud(std::unique_ptr<ICloudDataHandler> handler, std::string title) {
     nlohmann::json json;
     json["title"] = title;
-    json["data"] = handler.exportData();
+    json["data"] = handler->exportData();
     auto response = co_await bridge_.callAsync(kPushToCloud, json.dump());
     co_return core::toBool(response);
 }

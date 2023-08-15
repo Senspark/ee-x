@@ -12,6 +12,7 @@
 #ifdef __cplusplus
 
 #include <ee/core/CoreFwd.hpp>
+#include "ee/play/ICloudDataHandler.h"
 
 namespace ee {
 namespace play {
@@ -20,6 +21,7 @@ class Bridge;
 } // namespace play
 
 using IPlay = play::IBridge;
+using ICloudDataHandler = play::ICloudDataHandler;
 } // namespace ee
 
 #endif // __cplusplus

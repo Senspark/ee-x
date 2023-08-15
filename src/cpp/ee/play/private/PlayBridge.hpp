@@ -33,9 +33,9 @@ public:
                              std::int64_t score) override;
 
 	// Cloud Save
-	virtual Task<bool> PushToCloud(std::unique_ptr<ICloudDataHandler> handler, std::string title) override;
-	virtual Task<std::unique_ptr<ICloudDataHandler>> PullFromCloud() override;
-	virtual Task<bool> DeleteCloud() override;
+	Task<bool> PushToCloud(std::unique_ptr<ICloudDataHandler> handler, std::string title) override;
+	Task<std::unique_ptr<ICloudDataHandler>> PullFromCloud() override;
+	Task<bool> DeleteCloud() override;
 
 private:
     IMessageBridge& bridge_;

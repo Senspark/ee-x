@@ -9,7 +9,6 @@
 #include <ee/core/IPlugin.hpp>
 
 #include "ee/play/PlayFwd.hpp"
-#include "ee/play/ICloudDataHandler.h"
 
 namespace ee {
 namespace play {
@@ -45,10 +44,10 @@ public:
 							 std::int64_t score) = 0;
 
 	/// Push save game data to cloud.
-	[[nodiscard]] virtual Task<bool> PushToCloud(ICloudDataHandler handler, std::string title) = 0;
+	[[nodiscard]] virtual Task<bool> PushToCloud(std::unique_ptr<ICloudDataHandler> handler, std::string title) = 0;
 
 	/// Pull save game data from cloud.
-	[[nodiscard]] virtual Task<ICloudDataHandler> PullFromCloud() = 0;
+	[[nodiscard]] virtual Task<std::unique_ptr<ICloudDataHandler>> PullFromCloud() = 0;
 
 	/// Push save game data to cloud.
 	[[nodiscard]] virtual Task<bool> DeleteCloud() = 0;

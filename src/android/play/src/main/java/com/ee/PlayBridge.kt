@@ -37,16 +37,22 @@ class PlayBridge(
         private const val kShowLeaderboard = "${kPrefix}ShowLeaderboard"
         private const val kShowAllLeaderboards = "${kPrefix}ShowAllLeaderboards"
         private const val kSubmitScore = "${kPrefix}SubmitScore"
-        private const val kPushToCloud = "${kPrefix}pushToCloud"
-        private const val kPullFromCloud = "${kPrefix}pullFromCloud"
-        private const val kDeleteCloud = "${kPrefix}deleteCloud"
+        private const val kPushToCloud = "${kPrefix}PushToCloud"
+        private const val kPullFromCloud = "${kPrefix}PullFromCloud"
+        private const val kDeleteCloud = "${kPrefix}DeleteCloud"
     }
 
     private val _options = GoogleSignInOptions.DEFAULT_GAMES_SIGN_IN
     private var _client: GoogleSignInClient? = null
+    private val _cloudSave: CloudSave
 
     init {
+        Log.d(kTag, "nhanc18 constructor begin: application = $_application activity = $_activity")
         _logger.info("$kTag: constructor begin: application = $_application activity = $_activity")
+        _cloudSave = CloudSave()
+        if (_activity != null) {
+            _cloudSave.onCreate(_activity!!, _logger)
+        }
         registerHandlers()
         Thread.runOnMainThread {
             _activity?.let { activity ->
@@ -57,8 +63,10 @@ class PlayBridge(
     }
 
     override fun onCreate(activity: Activity) {
+        Log.d(kTag, "nhanc18 constructor begin: application = $_application activity = $_activity")
         _activity = activity
         _client = GoogleSignIn.getClient(activity, _options)
+        _cloudSave.onCreate(activity, _logger)
     }
 
     override fun onStart() {}
@@ -148,17 +156,26 @@ class PlayBridge(
             submitScore(request.leaderboard_id, request.score)
             ""
         }
-        _bridge.registerHandler(kPushToCloud) { message ->
-            pushToCloud(message)
-            ""
+        _bridge.registerAsyncHandler(kPushToCloud) { message ->
+            suspendCoroutine { cont ->
+                pushToCloud(message) { successful ->
+                    cont.resume(Utils.toString(successful))
+                }
+            }
         }
-        _bridge.registerHandler(kPullFromCloud) {
-            pullFromCloud()
-            ""
+        _bridge.registerAsyncHandler(kPullFromCloud) {
+            suspendCoroutine { cont ->
+                pullFromCloud { jsonData ->
+                    cont.resume(jsonData)
+                }
+            }
         }
-        _bridge.registerHandler(kDeleteCloud) {
-            deleteCloud()
-            ""
+        _bridge.registerAsyncHandler(kDeleteCloud) {
+            suspendCoroutine { cont ->
+                deleteCloud { successful ->
+                    cont.resume(Utils.toString(successful))
+                }
+            }
         }
     }
 
@@ -173,6 +190,9 @@ class PlayBridge(
         _bridge.deregisterHandler(kShowLeaderboard)
         _bridge.deregisterHandler(kShowAllLeaderboards)
         _bridge.deregisterHandler(kSubmitScore)
+        _bridge.deregisterHandler(kPushToCloud)
+        _bridge.deregisterHandler(kPullFromCloud)
+        _bridge.deregisterHandler(kDeleteCloud)
     }
 
     private val signInAccount: GoogleSignInAccount?
@@ -364,17 +384,25 @@ class PlayBridge(
     }
 
     @AnyThread
-    private fun pushToCloud(jsonData: String) {
+    private fun pushToCloud(jsonData: String, callback: (Boolean) -> Unit) {
         Log.d(kTag, "${this::pushToCloud.name}: nhanc18 $jsonData")
+        _cloudSave.push(jsonData) { successful ->
+            Log.d(kTag, "${this::pushToCloud.name}: nhanc18 $successful")
+            callback(successful)
+        }
     }
 
     @AnyThread
-    private fun pullFromCloud() {
+    private fun pullFromCloud(callback: (jsonData: String) -> Unit) {
         Log.d(kTag, "${this::pullFromCloud.name}: nhanc18")
+        _cloudSave.pull { jsonData ->
+            Log.d(kTag, "${this::pullFromCloud.name}: nhanc18 $jsonData")
+            callback(jsonData)
+        }
     }
 
     @AnyThread
-    private fun deleteCloud() {
+    private fun deleteCloud(callback: (Boolean) -> Unit) {
         Log.d(kTag, "${this::deleteCloud.name}: nhanc18")
     }
 }

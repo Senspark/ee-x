@@ -10,6 +10,7 @@
 #include <ee/core/IMessageBridge.hpp>
 #include <ee/core/Task.hpp>
 #include <ee/core/Utils.hpp>
+#include <ee/core/Logger.hpp>
 #include <ee/nlohmann/json.hpp>
 
 namespace ee {
@@ -26,9 +27,9 @@ const auto kUnlockAchievement    = kPrefix + "UnlockAchievement";
 const auto kShowLeaderboard      = kPrefix + "ShowLeaderboard";
 const auto kShowAllLeaderboards  = kPrefix + "ShowAllLeaderboards";
 const auto kSubmitScore          = kPrefix + "SubmitScore";
-const auto kPushToCloud          = kPrefix + "pushToCloud";
-const auto kPullFromCloud        = kPrefix + "pullFromCloud";
-const auto kDeleteCloud          = kPrefix + "deleteCloud";
+const auto kPushToCloud          = kPrefix + "PushToCloud";
+const auto kPullFromCloud        = kPrefix + "PullFromCloud";
+const auto kDeleteCloud          = kPrefix + "DeleteCloud";
 // clang-format on
 } // namespace
 

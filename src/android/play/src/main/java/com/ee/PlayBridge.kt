@@ -386,18 +386,22 @@ class PlayBridge(
     @AnyThread
     private fun pushToCloud(jsonData: String, callback: (Boolean) -> Unit) {
         Log.d(kTag, "${this::pushToCloud.name}: nhanc18 $jsonData")
-        _cloudSave.push(jsonData) { successful ->
-            Log.d(kTag, "${this::pushToCloud.name}: nhanc18 $successful")
-            callback(successful)
+        Thread.runOnMainThread {
+            _cloudSave.push(jsonData) { successful ->
+                Log.d(kTag, "${this::pushToCloud.name}: nhanc18 $successful")
+                callback(successful)
+            }
         }
     }
 
     @AnyThread
     private fun pullFromCloud(callback: (jsonData: String) -> Unit) {
         Log.d(kTag, "${this::pullFromCloud.name}: nhanc18")
-        _cloudSave.pull { jsonData ->
-            Log.d(kTag, "${this::pullFromCloud.name}: nhanc18 $jsonData")
-            callback(jsonData)
+        Thread.runOnMainThread {
+            _cloudSave.pull { jsonData ->
+                Log.d(kTag, "${this::pullFromCloud.name}: nhanc18 $jsonData")
+                callback(jsonData)
+            }
         }
     }
 

@@ -179,12 +179,10 @@ class AppLovinMaxBridge(
         }
         _bridge.registerHandler(kCreateBannerAd) { _ ->
             // do nothing
-            Log.d("ee_x", "nhanc18 kCreateBannerAd")
             Utils.toString(true)
         }
         _bridge.registerHandler(kLoadBannerAd) { _ ->
             // do nothing
-            Log.d("ee_x", "nhanc18 kLoadBannerAd")
             Utils.toString(showBanner())
         }
         _bridge.registerHandler(kGetBannerAdSize) { _ ->
@@ -296,12 +294,10 @@ class AppLovinMaxBridge(
             { d -> logAppsFlyerAdRevenue(d) }
             _bridge.registerHandler(kSetBannerPosition + bannerAdId) {
                 // do nothing
-                Log.d("ee_x", "nhanc18 kSetBannerPosition")
                 Utils.toString(true)
             }
             _bridge.registerHandler(kSetBannerSize + bannerAdId) {
                 // do nothing
-                Log.d("ee_x", "nhanc18 kSetBannerSize")
                 Utils.toString(true)
             }
             createBanner(bannerAdId, bannerListener)
@@ -409,7 +405,6 @@ class AppLovinMaxBridge(
 
     private fun setBannerVisible(message: String): Boolean {
         val visible = Utils.toBoolean(message)
-        _logger.info("nhanc18 set banner visible: $visible")
         return if (visible) {
             showBanner()
         } else {

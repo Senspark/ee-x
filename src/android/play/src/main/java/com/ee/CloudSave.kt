@@ -1,6 +1,7 @@
 package com.ee
 
 import android.app.Activity
+import android.util.Log
 import com.google.android.gms.games.PlayGames
 import com.google.android.gms.games.SnapshotsClient
 import com.google.android.gms.games.snapshot.SnapshotMetadataChange
@@ -24,12 +25,12 @@ class CloudSave() {
         client.open(K_SAVE_NAME, true, SnapshotsClient.RESOLUTION_POLICY_MOST_RECENTLY_MODIFIED)
             .addOnSuccessListener { task ->
                 if (task.isConflict) {
-                    _logger.info("snapshot isConflict")
+                    log("snapshot isConflict")
                     return@addOnSuccessListener
                 }
                 val snapshot = task.data
                 if (snapshot == null) {
-                    _logger.info("snapshot is null")
+                    log("snapshot is null")
                     return@addOnSuccessListener
                 }
 
@@ -41,24 +42,24 @@ class CloudSave() {
                     .build()
                 client.commitAndClose(snapshot, snapshotMetadataChange)
                     .addOnSuccessListener {
-                        _logger.info("snapshot commit success")
+                        log("snapshot commit success")
                         completion(true)
                     }
                     .addOnFailureListener {
-                        _logger.info("snapshot commit failed")
+                        log("snapshot commit failed")
                         completion(false)
                     }
                     .addOnCanceledListener {
-                        _logger.info("snapshot commit canceled")
+                        log("snapshot commit canceled")
                         completion(false)
                     }
             }
             .addOnFailureListener {
-                _logger.info("snapshot open failed")
+                log("snapshot open failed")
                 completion(false)
             }
             .addOnCanceledListener {
-                _logger.info("snapshot open canceled")
+                log("snapshot open canceled")
                 completion(false)
             }
     }
@@ -68,12 +69,12 @@ class CloudSave() {
         client.open(K_SAVE_NAME, true, SnapshotsClient.RESOLUTION_POLICY_MOST_RECENTLY_MODIFIED)
             .addOnSuccessListener { task ->
                 if (task.isConflict) {
-                    _logger.info("snapshot isConflict")
+                    log("snapshot isConflict")
                     return@addOnSuccessListener
                 }
                 val snapshot = task.data
                 if (snapshot == null) {
-                    _logger.info("snapshot is null")
+                    log("snapshot is null")
                     return@addOnSuccessListener
                 }
 
@@ -82,12 +83,17 @@ class CloudSave() {
                 completion(saveData)
             }
             .addOnFailureListener {
-                _logger.info("snapshot open failed")
+                log("snapshot open failed")
                 completion("")
             }
             .addOnCanceledListener {
-                _logger.info("snapshot open canceled")
+                log("snapshot open canceled")
                 completion("")
             }
+    }
+
+    private fun log(message: String) {
+        Log.d("senspark", "nhanc18 $message")
+        _logger.info(message)
     }
 }

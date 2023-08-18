@@ -5,8 +5,10 @@
 #ifndef COCOS2DCPP_LIBRARIES_EE_X_SRC_CPP_EE_PLAY_ICLOUDDATAHANDLER_H
 #define COCOS2DCPP_LIBRARIES_EE_X_SRC_CPP_EE_PLAY_ICLOUDDATAHANDLER_H
 
-#include <map>
+#ifdef __cplusplus
+
 #include <string>
+#include <map>
 
 namespace ee::play {
 
@@ -19,5 +21,7 @@ public:
 };
 
 } // ee
+
+#endif
 
 #endif //COCOS2DCPP_LIBRARIES_EE_X_SRC_CPP_EE_PLAY_ICLOUDDATAHANDLER_H

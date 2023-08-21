@@ -130,7 +130,7 @@ Task<std::string> Self::getDeviceId() {
 
 SafeInset Self::getSafeInset() {
     SafeInset result;
-#ifdef EE_X_ANDROID
+#ifdef EE_X_MOBILE
     auto response = bridge_->call(kGetSafeInset);
     auto json = nlohmann::json::parse(response);
 

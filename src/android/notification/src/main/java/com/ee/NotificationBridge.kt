@@ -123,7 +123,7 @@ class NotificationBridge(
         intent.putExtra("tag", tag)
         intent.putExtra("style", style)
         intent.putExtra("className", activity::class.java.name)
-        NotificationUtils.scheduleAlarm(_application, intent, tag, PendingIntent.FLAG_IMMUTABLE,
+        NotificationUtils.scheduleAlarm(_application, intent, tag, PendingIntent.FLAG_UPDATE_CURRENT,
             delay, interval)
     }
 

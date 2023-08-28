@@ -16,6 +16,8 @@ import com.ee.Logger
  */
 object NotificationUtils {
     private val _logger = Logger(NotificationUtils::class.java.name)
+    private val channelId = "ee_x_channel_id_01"
+    private val channelName = "ee_x_channel_name"
 
     /**
      * http://stackoverflow.com/questions/28387602/notification-bar-icon-turns-white-in-android-5
@@ -52,7 +54,7 @@ object NotificationUtils {
             context,
             requestCode,
             intent,
-            PendingIntent.FLAG_IMMUTABLE
+            PendingIntent.FLAG_UPDATE_CURRENT
         )
     }
 
@@ -110,7 +112,7 @@ object NotificationUtils {
             context,
             requestCode,
             intent,
-            PendingIntent.FLAG_IMMUTABLE
+            PendingIntent.FLAG_UPDATE_CURRENT
         )
         if (pendingIntent != null) {
             pendingIntent.cancel()
@@ -143,16 +145,7 @@ object NotificationUtils {
         clickIntent: PendingIntent,
         tag: Int
     ) {
-        val notificationManager =
-            context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        val channelId = "ee_x_channel_id_01"
-        val channelName = "ee_x_channel_name"
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val notificationChannel =
-                NotificationChannel(channelId, channelName, NotificationManager.IMPORTANCE_HIGH)
-            notificationChannel.setShowBadge(true)
-            notificationManager.createNotificationChannel(notificationChannel)
-        }
+        val notificationManager = createChannel(context)
         val notificationBuilder = NotificationCompat.Builder(context, channelId)
         notificationBuilder.setAutoCancel(true)
             .setDefaults(Notification.DEFAULT_ALL)
@@ -165,6 +158,18 @@ object NotificationUtils {
         notificationManager.notify(tag, notificationBuilder.build())
     }
 
+    private fun createChannel(context: Context): NotificationManager {
+        val notificationManager =
+            context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val notificationChannel =
+                NotificationChannel(channelId, channelName, NotificationManager.IMPORTANCE_HIGH)
+            notificationChannel.setShowBadge(true)
+            notificationManager.createNotificationChannel(notificationChannel)
+        }
+        return notificationManager
+    }
+
     private fun showCustomNotification(
         context: Context,
         ticker: String,
@@ -173,8 +178,14 @@ object NotificationUtils {
         clickIntent: PendingIntent,
         tag: Int
     ) {
-        com.senspark.custom_notification.NotificationHelper.createNotificationChannel(context)
-        val notificationManager = com.senspark.custom_notification.NotificationHelper(context)
-        notificationManager.showNotification(tag, body, clickIntent)
+        val notificationManager = createChannel(context)
+        val helper = com.senspark.custom_notification.NotificationHelper(context)
+        val notificationBuilder = helper.cocosCreateNotificationBuilder(body)
+        notificationBuilder.setAutoCancel(true)
+            .setDefaults(Notification.DEFAULT_ALL)
+            .setWhen(System.currentTimeMillis())
+            .setTicker(ticker)
+            .setContentIntent(clickIntent)
+        notificationManager.notify(tag, notificationBuilder.build())
     }
 }

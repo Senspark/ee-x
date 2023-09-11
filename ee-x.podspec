@@ -243,7 +243,7 @@ Pod::Spec.new do |spec|
     s.dependency 'ee-x/core'
 
     # https://cocoapods.org/pods/AppsFlyerFramework
-    s.dependency 'AppsFlyerFramework', '6.9.0'
+    s.dependency 'AppsFlyerFramework', '6.12.2'
   end
 
   spec.subspec 'core' do |s|

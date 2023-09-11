@@ -6,6 +6,9 @@
 //
 
 import AppsFlyerLib
+import AppsFlyerAdRevenue
+import StoreKit
+import PurchaseConnector
 
 private let kTag = "\(AppsFlyerBridge.self)"
 private let kPrefix = "AppsFlyerBridge"
@@ -17,10 +20,12 @@ private let kSetStopTracking = "\(kPrefix)SetStopTracking"
 private let kTrackEvent = "\(kPrefix)TrackEvent"
 
 @objc(EEAppsFlyerBridge)
-class AppsFlyerBridge: NSObject, IPlugin, AppsFlyerLibDelegate {
+class AppsFlyerBridge: NSObject, IPlugin, AppsFlyerLibDelegate, PurchaseRevenueDelegate {
     private let _bridge: IMessageBridge
     private let _logger: ILogger
     private let _tracker = AppsFlyerLib.shared()
+    private let _adRevenue = AppsFlyerAdRevenue.shared()
+    private let _purchase = PurchaseConnector.shared()
 
     public required init(_ bridge: IMessageBridge, _ logger: ILogger) {
         _bridge = bridge
@@ -94,12 +99,17 @@ class AppsFlyerBridge: NSObject, IPlugin, AppsFlyerLibDelegate {
             self._tracker.delegate = self
             self._tracker.shouldCollectDeviceName = true
             self._tracker.anonymizeUser = false
+            
+            self._purchase.purchaseRevenueDelegate = self
+            self._purchase.autoLogPurchaseRevenue = [.autoRenewableSubscriptions, .inAppPurchases]
         }
     }
 
     func startTracking() {
         Thread.runOnMainThread {
             self._tracker.start()
+            self._purchase.startObservingTransactions()
+            AppsFlyerAdRevenue.start()
         }
     }
 
@@ -110,6 +120,8 @@ class AppsFlyerBridge: NSObject, IPlugin, AppsFlyerLibDelegate {
     func setDebugEnabled(_ enabled: Bool) {
         Thread.runOnMainThread {
             self._tracker.isDebug = enabled
+            self._adRevenue.isDebug = enabled
+            self._purchase.isSandbox = enabled
         }
     }
 
@@ -156,5 +168,12 @@ class AppsFlyerBridge: NSObject, IPlugin, AppsFlyerLibDelegate {
             restorationHandler(items as? [UIUserActivityRestoring])
         }
         return false
+    }
+    
+    // PurchaseRevenueDelegate method implementation
+    func didReceivePurchaseRevenueValidationInfo(_ validationInfo: [AnyHashable : Any]?, error: Error?) {
+        print("AppsFlyer PurchaseRevenueDelegate: \(validationInfo)")
+        print("AppsFlyer PurchaseRevenueDelegate: \(error)")
+        // process validationInfo here
     }
 }

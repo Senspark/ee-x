@@ -19,16 +19,20 @@ internal class AdMobBannerAd: NSObject, IBannerAd, GADBannerViewDelegate {
     private let _viewHelper: ViewHelper
     private var _isLoaded = false
     private var _ad: GADBannerView?
+    private let _onAdPaid: (AdPaidResponse) -> (Void)
 
     init(_ bridge: IMessageBridge,
          _ logger: ILogger,
          _ adId: String,
          _ adSize: GADAdSize,
-         _ bannerHelper: AdMobBannerHelper) {
+         _ bannerHelper: AdMobBannerHelper,
+         _ onAdPaid: @escaping (AdPaidResponse) -> (Void)
+    ) {
         _bridge = bridge
         _logger = logger
         _adId = adId
         _adSize = adSize
+        _onAdPaid = onAdPaid
         _messageHelper = MessageHelper("AdMobBannerAd", _adId)
         _viewHelper = ViewHelper(CGPoint.zero, bannerHelper.getSize(adSize: adSize), false)
         super.init()
@@ -76,6 +80,14 @@ internal class AdMobBannerAd: NSObject, IBannerAd, GADBannerViewDelegate {
             ad.delegate = nil
             ad.removeFromSuperview()
             self._ad = nil
+            self._ad?.paidEventHandler = {adValue in
+                let responseInfo = ad.responseInfo
+                let loadedAdNetworkResponseInfo = responseInfo?.loadedAdNetworkResponseInfo
+                let adSourceName = loadedAdNetworkResponseInfo?.adSourceName
+                
+                let adResponse = AdPaidResponse(adUnitId: self._adId, adFormat: "Banner", valueMicros: adValue.value, networkName: adSourceName ?? "")
+                self._onAdPaid(adResponse)
+            }
             self._viewHelper.view = nil
         }
     }

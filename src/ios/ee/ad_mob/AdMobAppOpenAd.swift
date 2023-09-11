@@ -17,13 +17,17 @@ internal class AdMobAppOpenAd: NSObject, IFullScreenAd, GADFullScreenContentDele
     private var _helper: FullScreenAdHelper?
     private var _isLoaded = false
     private var _ad: GADAppOpenAd?
+    private let _onAdPaid: (AdPaidResponse) -> (Void)
 
     init(_ bridge: IMessageBridge,
          _ logger: ILogger,
-         _ adId: String) {
+         _ adId: String,
+         _ onAdPaid: @escaping (AdPaidResponse) -> (Void)
+    ) {
         _bridge = bridge
         _logger = logger
         _adId = adId
+        _onAdPaid = onAdPaid
         _messageHelper = MessageHelper("AdMobAppOpenAd", _adId)
         super.init()
         _helper = FullScreenAdHelper(_bridge, self, _messageHelper)
@@ -69,6 +73,14 @@ internal class AdMobAppOpenAd: NSObject, IFullScreenAd, GADFullScreenContentDele
                         self._isLoaded = true
                         self._ad = ad
                         self._ad?.fullScreenContentDelegate = self
+                        self._ad?.paidEventHandler = {adValue in
+                            let responseInfo = ad?.responseInfo
+                            let loadedAdNetworkResponseInfo = responseInfo?.loadedAdNetworkResponseInfo
+                            let adSourceName = loadedAdNetworkResponseInfo?.adSourceName
+                            
+                            let adResponse = AdPaidResponse(adUnitId: self._adId, adFormat: "App Open", valueMicros: adValue.value, networkName: adSourceName ?? "")
+                            self._onAdPaid(adResponse)
+                        }
                         self._bridge.callCpp(self._messageHelper.onLoaded)
                     }
                 }

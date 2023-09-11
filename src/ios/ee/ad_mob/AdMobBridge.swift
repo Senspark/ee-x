@@ -7,6 +7,7 @@
 
 import GoogleMobileAds
 import RxSwift
+import AppsFlyerAdRevenue
 
 private let kTag = "\(AdMobBridge.self)"
 private let kPrefix = "AdMobBridge"
@@ -191,7 +192,7 @@ class AdMobBridge: NSObject, IPlugin {
 
     func createBannerAd(_ adId: String, _ adSize: GADAdSize) -> Bool {
         return createAd(adId) {
-            AdMobBannerAd(_bridge, _logger, adId, adSize, _bannerHelper)
+            AdMobBannerAd(_bridge, _logger, adId, adSize, _bannerHelper, onAdPaid)
         }
     }
 
@@ -206,25 +207,25 @@ class AdMobBridge: NSObject, IPlugin {
 
     func createAppOpenAd(_ adId: String) -> Bool {
         return createAd(adId) {
-            AdMobAppOpenAd(self._bridge, self._logger, adId)
+            AdMobAppOpenAd(self._bridge, self._logger, adId, onAdPaid)
         }
     }
 
     func createInterstitialAd(_ adId: String) -> Bool {
         return createAd(adId) {
-            AdMobInterstitialAd(self._bridge, self._logger, adId)
+            AdMobInterstitialAd(self._bridge, self._logger, adId, onAdPaid)
         }
     }
 
     func createRewardedInterstitialAd(_ adId: String) -> Bool {
         return createAd(adId) {
-            AdMobRewardedInterstitialAd(self._bridge, self._logger, adId)
+            AdMobRewardedInterstitialAd(self._bridge, self._logger, adId, onAdPaid)
         }
     }
 
     func createRewardedAd(_ adId: String) -> Bool {
         return createAd(adId) {
-            AdMobRewardedAd(self._bridge, self._logger, adId)
+            AdMobRewardedAd(self._bridge, self._logger, adId, onAdPaid)
         }
     }
 
@@ -246,5 +247,18 @@ class AdMobBridge: NSObject, IPlugin {
         ad.destroy()
         _ads.removeValue(forKey: adId)
         return true
+    }
+    
+    func onAdPaid(adResponse:AdPaidResponse) -> Void {
+        _logger.info("AppsFlyer log af: " + adResponse.valueMicros.stringValue)
+        let adRevenueParams:[AnyHashable: Any] = [
+            kAppsFlyerAdRevenueAdUnit : adResponse.adUnitId,
+            kAppsFlyerAdRevenueAdType : adResponse.adFormat,
+        ]
+        AppsFlyerAdRevenue.shared().logAdRevenue(
+            monetizationNetwork: adResponse.networkName,
+            mediationNetwork: MediationNetworkType.googleAdMob,
+            eventRevenue: adResponse.valueMicros,
+            revenueCurrency: "USD",additionalParameters: adRevenueParams)
     }
 }

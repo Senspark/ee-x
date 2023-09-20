@@ -244,6 +244,8 @@ Pod::Spec.new do |spec|
 
     # https://cocoapods.org/pods/AppsFlyerFramework
     s.dependency 'AppsFlyerFramework', '6.12.2'
+    s.dependency 'AppsFlyer-AdRevenue'
+    s.dependency 'PurchaseConnector', '6.12.2'
   end
 
   spec.subspec 'core' do |s|

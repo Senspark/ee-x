@@ -9,6 +9,7 @@
 #ifndef EE_X_FIREBASE_ANALYTICS_BRIDGE_HPP
 #define EE_X_FIREBASE_ANALYTICS_BRIDGE_HPP
 
+#include <functional>
 #include "ee/firebase_analytics/IFirebaseAnalyticsBridge.hpp"
 
 namespace ee {

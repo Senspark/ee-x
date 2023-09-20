@@ -9,6 +9,7 @@
 #ifndef EE_X_FIREBASE_REMOTE_CONFIG_BRIDGE_HPP
 #define EE_X_FIREBASE_REMOTE_CONFIG_BRIDGE_HPP
 
+#include <functional>
 #include "ee/firebase_remote_config/IFirebaseRemoteConfigBridge.hpp"
 
 namespace ee {

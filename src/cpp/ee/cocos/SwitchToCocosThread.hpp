@@ -3,8 +3,6 @@
 
 #ifdef __cplusplus
 
-#include <experimental/coroutine>
-
 #include "ee/cocos/CocosFwd.hpp"
 
 namespace ee {
@@ -20,7 +18,7 @@ public:
     SwitchToCocosThread(const Self&) = delete;
     Self& operator=(const Self&) = delete;
 
-    void await_suspend(std::experimental::coroutine_handle<> handle);
+    void await_suspend(coroutine_handle handle);
     bool await_ready();
     void await_resume();
 };

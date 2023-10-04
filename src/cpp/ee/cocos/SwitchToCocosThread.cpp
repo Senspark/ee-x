@@ -11,7 +11,7 @@ using Self = SwitchToCocosThread;
 Self::SwitchToCocosThread() = default;
 Self::~SwitchToCocosThread() = default;
 
-void Self::await_suspend(std::experimental::coroutine_handle<> handle) {
+void Self::await_suspend(coroutine_handle handle) {
     auto director = cocos2d::Director::getInstance();
     auto scheduler = director->getScheduler();
     scheduler->performFunctionInCocosThread([this, handle]() mutable { //

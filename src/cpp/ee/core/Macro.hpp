@@ -12,6 +12,7 @@
 #if defined(__ANDROID__)
 #define EE_X_ANDROID
 #define EE_X_MOBILE
+#define EE_X_COROUTINE
 #elif defined(__APPLE__)
 #include "TargetConditionals.h"
 #if TARGET_IPHONE_SIMULATOR

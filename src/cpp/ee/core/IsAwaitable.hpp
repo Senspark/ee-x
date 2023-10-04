@@ -18,9 +18,15 @@ struct any {
 template <typename T>
 struct is_coroutine_handle : std::false_type {};
 
+#if defined(EE_X_COROUTINE)// && __cplusplus >= 202002L // Check for C++20 or later
+template <typename PROMISE>
+struct is_coroutine_handle<std::coroutine_handle<PROMISE>>
+    : std::true_type {};
+#else
 template <typename PROMISE>
 struct is_coroutine_handle<std::experimental::coroutine_handle<PROMISE>>
     : std::true_type {};
+#endif // __cplusplus >= 202002L
 
 // NOTE: We're accepting a return value of coroutine_handle<P> here
 // which is an extension supported by Clang which is not yet part of
@@ -41,14 +47,14 @@ template <typename T>
 struct is_awaiter<
     T, std::void_t<decltype(std::declval<T>().await_ready()),
                    decltype(std::declval<T>().await_suspend(
-                       std::declval<std::experimental::coroutine_handle<>>())),
+                       std::declval<coroutine_handle>())),
                    decltype(std::declval<T>().await_resume())>>
     : std::conjunction<
           std::is_constructible<bool,
                                 decltype(std::declval<T>().await_ready())>,
           detail::is_valid_await_suspend_return_value<decltype(
               std::declval<T>().await_suspend(
-                  std::declval<std::experimental::coroutine_handle<>>()))>> {};
+                  std::declval<coroutine_handle>()))>> {};
 
 template <typename T>
 auto get_awaiter_impl(T&& value, int) noexcept(

@@ -3,7 +3,6 @@
 
 #ifdef __cplusplus
 
-#include <experimental/coroutine>
 #include <functional>
 #include <mutex>
 #include <optional>
@@ -66,7 +65,7 @@ public:
         , ready_(std::exchange(other.ready_, false))
         , handles_(std::exchange(other.handles_, {})) {}
 
-    void await_suspend(std::experimental::coroutine_handle<> handle) {
+    void await_suspend(coroutine_handle handle) {
         std::unique_lock<SpinLock> lk(lock_);
         handles_.push_back(handle);
         if (invoked_) {
@@ -96,7 +95,7 @@ private:
     bool invoked_;
     bool ready_;
     std::optional<Result> result_;
-    std::vector<std::experimental::coroutine_handle<>> handles_;
+    std::vector<coroutine_handle> handles_;
 };
 
 template <>
@@ -131,7 +130,7 @@ public:
         , ready_(std::exchange(other.ready_, false))
         , handles_(std::exchange(other.handles_, {})) {}
 
-    void await_suspend(std::experimental::coroutine_handle<> handle) {
+    void await_suspend(coroutine_handle handle) {
         std::unique_lock<SpinLock> lk(lock_);
         handles_.push_back(handle);
         if (invoked_) {
@@ -157,7 +156,7 @@ private:
     SpinLock lock_;
     bool invoked_;
     bool ready_;
-    std::vector<std::experimental::coroutine_handle<>> handles_;
+    std::vector<coroutine_handle> handles_;
 };
 } // namespace core
 } // namespace ee

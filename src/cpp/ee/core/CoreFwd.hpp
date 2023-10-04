@@ -15,16 +15,10 @@
 
 #if defined(EE_X_COROUTINE)// && __cplusplus >= 202002L // Check for C++20 or later
 #include <coroutine>
-using suspend_always = std::suspend_always;
-using coroutine_handle = std::coroutine_handle<>;
-using coroutine_handle_void = std::coroutine_handle<void>;
-using suspend_never = std::suspend_never;
+namespace estd = std;
 #else
 #include <experimental/coroutine>
-using suspend_always = std::experimental::suspend_always;
-using coroutine_handle = std::experimental::coroutine_handle<>;
-using coroutine_handle_void = std::experimental::coroutine_handle<void>;
-using suspend_never = std::experimental::suspend_never;
+namespace estd = std::experimental;
 #endif // __cplusplus >= 202002L
 
 namespace cppcoro {

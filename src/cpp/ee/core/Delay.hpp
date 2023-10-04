@@ -17,7 +17,7 @@ public:
     Delay(const Self&) = delete;
     Self& operator=(const Self&) = delete;
 
-    void await_suspend(coroutine_handle handle);
+    void await_suspend(estd::coroutine_handle<> handle);
     bool await_ready();
     void await_resume();
 

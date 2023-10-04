@@ -19,11 +19,11 @@ public:
         }
 
         auto initial_suspend() const noexcept { //
-            return suspend_never();
+            return estd::suspend_never();
         }
 
         auto final_suspend() const noexcept { //
-            return suspend_never();
+            return estd::suspend_never();
         }
 
         void return_void() const noexcept {}

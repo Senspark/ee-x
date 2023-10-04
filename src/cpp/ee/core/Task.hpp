@@ -20,7 +20,7 @@ public:
         }
 
         auto initial_suspend() { //
-            return suspend_always();
+            return estd::suspend_always();
         }
 
         auto final_suspend() noexcept {
@@ -32,7 +32,7 @@ public:
                 }
 
                 void await_suspend(
-                    coroutine_handle handle) noexcept {
+                    estd::coroutine_handle<> handle) noexcept {
                     me_->handle_.resume();
                 }
 
@@ -54,7 +54,7 @@ public:
         friend Task;
 
         std::variant<std::monostate, T, std::exception_ptr> result_;
-        coroutine_handle handle_;
+        estd::coroutine_handle<> handle_;
     };
 
     Task(const Task&) = delete;
@@ -72,7 +72,7 @@ public:
         return false;
     }
 
-    void await_suspend(coroutine_handle_void handle) {
+    void await_suspend(estd::coroutine_handle<void> handle) {
         handle_.promise().handle_ = handle;
         handle_.resume();
     }
@@ -85,11 +85,7 @@ public:
     }
 
 private:
-#if defined(EE_X_COROUTINE)// && __cplusplus >= 202002L // Check for C++20 or later
-    using Handle = std::coroutine_handle<promise_type>;
-#else
-    using Handle = std::experimental::coroutine_handle<promise_type>;
-#endif
+    using Handle = estd::coroutine_handle<promise_type>;
 
     Task(promise_type* p)
         : handle_(Handle::from_promise(*p)) {}
@@ -107,7 +103,7 @@ public:
         }
 
         auto initial_suspend() { //
-            return suspend_always();
+            return estd::suspend_always();
         }
 
         auto final_suspend() noexcept {
@@ -119,7 +115,7 @@ public:
                 }
 
                 void await_suspend(
-                    coroutine_handle handle) noexcept {
+                    estd::coroutine_handle<> handle) noexcept {
                     me_->handle_.resume();
                 }
 
@@ -138,7 +134,7 @@ public:
         friend Task;
 
         std::variant<std::monostate, std::exception_ptr> result_;
-        coroutine_handle handle_;
+        estd::coroutine_handle<> handle_;
     };
 
     Task(const Task&) = delete;
@@ -156,7 +152,7 @@ public:
         return false;
     }
 
-    void await_suspend(coroutine_handle_void handle) {
+    void await_suspend(estd::coroutine_handle<void> handle) {
         handle_.promise().handle_ = handle;
         handle_.resume();
     }
@@ -168,11 +164,7 @@ public:
     }
 
 private:
-#if defined(EE_X_COROUTINE)// && __cplusplus >= 202002L // Check for C++20 or later
-    using Handle = std::coroutine_handle<promise_type>;
-#else
-    using Handle = std::experimental::coroutine_handle<promise_type>;
-#endif
+    using Handle = estd::coroutine_handle<promise_type>;
 
     explicit Task(promise_type* p)
         : handle_(Handle::from_promise(*p)) {}

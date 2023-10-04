@@ -8,7 +8,7 @@ using Self = SwitchToMainThread;
 Self::SwitchToMainThread() = default;
 Self::~SwitchToMainThread() = default;
 
-void Self::await_suspend(coroutine_handle handle) {
+void Self::await_suspend(estd::coroutine_handle<> handle) {
     runOnMainThread([handle]() mutable { //
         handle.resume();
     });

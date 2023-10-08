@@ -12,7 +12,9 @@
 #if defined(__ANDROID__)
 #define EE_X_ANDROID
 #define EE_X_MOBILE
+#if __cplusplus >= 202002L
 #define EE_X_COROUTINE
+#endif // __cplusplus >= 202002L
 #elif defined(__APPLE__)
 #include "TargetConditionals.h"
 #if TARGET_IPHONE_SIMULATOR

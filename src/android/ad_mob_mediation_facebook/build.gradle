@@ -25,5 +25,5 @@ dependencies {
     // https://maven.google.com/web/index.html#com.google.ads.mediation
     // https://developers.google.com/admob/android/mediation/meta#meta-audience-network-android-mediation-adapter-changelog
     // Use "api" to inherit manifest elements.
-    api 'com.google.ads.mediation:facebook:6.15.0.0'
+    api 'com.google.ads.mediation:facebook:6.16.0.0'
 }

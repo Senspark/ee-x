@@ -9,6 +9,7 @@ import AppsFlyerLib
 import AppsFlyerAdRevenue
 import StoreKit
 import PurchaseConnector
+import AppTrackingTransparency
 
 private let kTag = "\(AppsFlyerBridge.self)"
 private let kPrefix = "AppsFlyerBridge"
@@ -102,6 +103,13 @@ class AppsFlyerBridge: NSObject, IPlugin, AppsFlyerLibDelegate, PurchaseRevenueD
             
             self._purchase.purchaseRevenueDelegate = self
             self._purchase.autoLogPurchaseRevenue = [.autoRenewableSubscriptions, .inAppPurchases]
+            
+            if #available(iOS 14, *) {
+                self._tracker.waitForATTUserAuthorization(timeoutInterval: 60)
+                ATTrackingManager.requestTrackingAuthorization { status in
+                    // do nothing
+                }
+            }
         }
     }
 

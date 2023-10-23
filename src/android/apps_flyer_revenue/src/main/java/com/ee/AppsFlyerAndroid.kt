@@ -82,7 +82,7 @@ class AppsFlyerIapResultListener : PurchaseClient.InAppPurchaseValidationResultL
 }
 
 class AppsFlyerSubscriptionResultListener : PurchaseClient.SubscriptionPurchaseValidationResultListener {
-    override fun onResponse(result: MutableMap<String, out SubscriptionValidationResult>?) {
+    override fun onResponse(result: Map<String, SubscriptionValidationResult>?) {
         result?.forEach { (k: String, v: SubscriptionValidationResult?) ->
             if (v.success) {
                 val productPurchase = v.subscriptionPurchase;

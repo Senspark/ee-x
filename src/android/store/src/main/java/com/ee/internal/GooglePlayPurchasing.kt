@@ -95,10 +95,16 @@ class GooglePlayPurchasing(
                     ?: throw IllegalStateException("Unexpected state")
                 val skuDetails = _inventory.getSkuDetails(suspectBadPurchase.productId)
                     ?: throw IllegalStateException("Unexpected state")
-                _unityPurchasing.onPurchaseSucceeded(purchase.skus.get(0), encodeReceipt(purchase, skuDetails),
-                    purchase.orderId.ifEmpty {
+                val transactionId: String =
+                    if (purchase.orderId?.isNotEmpty() == true)
+                        purchase.orderId!!
+                    else
                         purchase.purchaseToken
-                    })
+                _unityPurchasing.onPurchaseSucceeded(
+                    purchase.skus[0],
+                    encodeReceipt(purchase, skuDetails),
+                    transactionId
+                )
                 notified = true
             }
             if (!notified) {
@@ -148,9 +154,12 @@ class GooglePlayPurchasing(
 
     private fun findPurchaseByOrderId(orderId: String): Pair<String, Purchase>? {
         return _inventory.getAllPurchases().find { item ->
-            orderId == item.second.orderId.ifEmpty {
-                item.second.purchaseToken
-            }
+            val transactionId =
+                if (item.second.orderId?.isNotEmpty() == true)
+                    item.second.orderId!!
+                else
+                    item.second.purchaseToken
+            orderId == transactionId
         }
     }
 
@@ -170,9 +179,11 @@ class GooglePlayPurchasing(
             val purchase = inventory.getPurchase(sku)
             val description = if (purchase != null) {
                 val receipt = encodeReceipt(purchase, details)
-                val transactionId = purchase.orderId.ifEmpty {
-                    purchase.purchaseToken
-                }
+                val transactionId =
+                    if (purchase.orderId?.isNotEmpty() == true)
+                        purchase.orderId!!
+                    else
+                        purchase.purchaseToken
                 ProductDescription(sku, metadata, receipt, transactionId)
             } else {
                 ProductDescription(sku, metadata, "", "")
@@ -273,12 +284,18 @@ class GooglePlayPurchasing(
                 _purchaseInProgress = false
                 _inventory.addPurchase(details.type, purchase)
                 if (details.type == SkuType.SUBS) {
-                    _inventory.addPurchaseToSubscriptionPurchaseHistory(purchase.skus.get(0))
+                    _inventory.addPurchaseToSubscriptionPurchaseHistory(purchase.skus[0])
                 }
-                _unityPurchasing.onPurchaseSucceeded(purchase.skus.get(0), encodeReceipt(purchase, details),
-                    purchase.orderId.ifEmpty {
+                val transactionId =
+                    if (purchase.orderId?.isNotEmpty() == true)
+                        purchase.orderId!!
+                    else
                         purchase.purchaseToken
-                    })
+                _unityPurchasing.onPurchaseSucceeded(
+                    purchase.skus[0],
+                    encodeReceipt(purchase, details),
+                    transactionId
+                )
             } catch (ex: StoreException) {
                 _purchaseInProgress = false
                 val responseCode = ex.responseCode

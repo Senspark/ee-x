@@ -255,16 +255,20 @@ class StoreBridge(
         return result
     }
 
-    override suspend fun getPurchases(@SkuType skuType: String): List<Purchase> {
-        val client = connect()
-        val result = client.queryPurchases(skuType)
-        if (result.responseCode == BillingResponseCode.OK) {
-            val purchaseList = result.purchasesList
-            return purchaseList ?: ArrayList()
-        } else {
-            throw StoreException(result.responseCode)
+    override suspend fun getPurchases(@SkuType skuType: String): List<Purchase> =
+        suspendCancellableCoroutine { continuation ->
+            _scope.launch {
+                val client = connect()
+                client.queryPurchasesAsync(skuType)
+                { result, purchases ->
+                    if (result.responseCode == BillingResponseCode.OK) {
+                        continuation.resume(purchases)
+                    } else {
+                        continuation.resumeWithException(StoreException(result.responseCode))
+                    }
+                }
+            }
         }
-    }
 
     override suspend fun getPurchaseHistory(@SkuType skuType: String): List<PurchaseHistoryRecord> {
         val client = connect()
@@ -291,14 +295,10 @@ class StoreBridge(
             if (update.code != BillingResponseCode.OK) {
                 throw StoreException(update.code)
             }
-            if (update.purchases.all { it.skus.get(0) != details.sku }) {
+            if (update.purchases.all { it.skus[0] != details.sku }) {
                 continue
             }
-            if (update.code == BillingResponseCode.OK) {
-                return update.purchases.first { it.skus.get(0) == details.sku }
-            } else {
-                throw StoreException(update.code)
-            }
+            return update.purchases.first { it.skus[0] == details.sku }
         }
     }
 

@@ -34,6 +34,9 @@ public:
              const std::unordered_map<
                  std::string, std::variant<std::int64_t, double, std::string>>&
                  parameters) override;
+    
+    void logRevenue(const AdRevenue &adRevenue) override;
+    void logRevenue(const IapRevenue &iapRevenue) override;
 
 private:
     IMessageBridge& bridge_;

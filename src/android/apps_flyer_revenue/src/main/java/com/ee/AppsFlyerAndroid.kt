@@ -62,9 +62,14 @@ class AppsFlyerAndroid(private val activity: Activity) {
 class AppsFlyerIapResultListener : PurchaseClient.InAppPurchaseValidationResultListener {
     override fun onResponse(result: Map<String, InAppPurchaseValidationResult>?) {
         result?.forEach { (k: String, v: InAppPurchaseValidationResult?) ->
-            if (v.success) {
-                val productPurchase = v.productPurchase
-                log("Validation success: $k $productPurchase")
+            if (v.success && v.productPurchase != null) {
+                val productPurchase = v.productPurchase!!
+                val orderId = productPurchase.orderId
+                val isTest = productPurchase.purchaseType != null && productPurchase.purchaseType == 0
+                val productId = productPurchase.productId
+                
+                log("Validation success: $k $orderId $isTest $productId")
+                log("Product info $productPurchase")
             } else {
                 val failureData = v.failureData
                 log("Validation fail: $k $failureData")

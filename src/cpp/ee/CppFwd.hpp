@@ -11,6 +11,7 @@
 #include "ee/apps_flyer/AppsFlyerFwd.hpp"
 #include "ee/cocos/CocosFwd.hpp"
 #include "ee/core/CoreFwd.hpp"
+#include "ee/cost_center_analytics/CostCenterAnalyticsFwd.hpp"
 #include "ee/facebook/FacebookFwd.hpp"
 #include "ee/facebook_ads/FacebookAdsFwd.hpp"
 #include "ee/firebase_analytics/FirebaseAnalyticsFwd.hpp"

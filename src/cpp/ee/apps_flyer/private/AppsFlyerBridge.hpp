@@ -32,6 +32,10 @@ public:
     trackEvent(const std::string& name,
                const std::map<std::string, std::string>& values) override;
 
+    void logRevenue(const ee::core::ILibraryAnalytics::AdRevenue &adRevenue) override;
+
+    void logRevenue(const ee::core::ILibraryAnalytics::IapRevenue &iapRevenue) override;
+
 private:
     IMessageBridge& bridge_;
     ILogger& logger_;

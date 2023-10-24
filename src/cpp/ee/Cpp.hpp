@@ -11,6 +11,7 @@
 #include "ee/apps_flyer/AppsFlyer.hpp"
 #include "ee/cocos/Cocos.hpp"
 #include "ee/core/Core.hpp"
+#include "ee/cost_center_analytics/CostCenterAnalytics.hpp"
 #include "ee/facebook/Facebook.hpp"
 #include "ee/facebook_ads/FacebookAds.hpp"
 #include "ee/firebase_analytics/FirebaseAnalytics.hpp"

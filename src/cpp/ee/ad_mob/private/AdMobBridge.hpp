@@ -29,6 +29,7 @@ public:
     virtual std::string getEmulatorTestDeviceHash() const override;
     virtual void addTestDevice(const std::string& hash) override;
     virtual void openTestSuite() override;
+    void addAnalytics(std::shared_ptr<ILibraryAnalytics> analytics) override;
     virtual std::shared_ptr<IBannerAd>
     createBannerAd(const std::string& adId, BannerAdSize adSize) override;
     virtual std::shared_ptr<IBannerAd>
@@ -52,12 +53,15 @@ private:
 
     bool destroyAd(const std::string& adId);
 
+    void onAdPaidEvent(const std::string& jsonData);
+
     IMessageBridge& bridge_;
     ILogger& logger_;
     Destroyer destroyer_;
     std::string network_;
     std::map<std::string, std::shared_ptr<IAd>> ads_;
     std::shared_ptr<ads::IAsyncHelper<AdResult>> displayer_;
+    std::shared_ptr<ILibraryAnalytics> analytics_;
 };
 } // namespace ad_mob
 } // namespace ee

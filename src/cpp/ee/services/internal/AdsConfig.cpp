@@ -141,6 +141,12 @@ void NetworkConfigManager::openTestSuite(AdNetwork network) {
     }
 }
 
+void NetworkConfigManager::addAnalytics(std::shared_ptr<ILibraryAnalytics> analytics) {
+    for (auto&& item : networks_) {
+        item->addAnalytics(analytics);
+    }
+}
+
 std::shared_ptr<IAd> NetworkConfigManager::createAd(AdNetwork network,
                                                     AdFormat format,
                                                     const std::string& id) {
@@ -192,6 +198,10 @@ void AdMobConfig::openTestSuite() {
     plugin_->openTestSuite();
 }
 
+void AdMobConfig::addAnalytics(std::shared_ptr<ILibraryAnalytics> analytics) {
+    plugin_->addAnalytics(analytics);
+}
+
 std::shared_ptr<IAd> AdMobConfig::createAd(AdFormat format,
                                            const std::string& id) {
     switch (format) {
@@ -229,6 +239,8 @@ void AppLovinConfig::addTestDevice(const std::string& hash) {}
 
 void AppLovinConfig::openTestSuite() {}
 
+void AppLovinConfig::addAnalytics(std::shared_ptr<ILibraryAnalytics> analytics) {}
+
 std::shared_ptr<IAd> AppLovinConfig::createAd(AdFormat format,
                                               const std::string& id) {
     switch (format) {
@@ -262,6 +274,8 @@ void FacebookAdsConfig::addTestDevice(const std::string& hash) {
 }
 
 void FacebookAdsConfig::openTestSuite() {}
+
+void FacebookAdsConfig::addAnalytics(std::shared_ptr<ILibraryAnalytics> analytics) {}
 
 std::shared_ptr<IAd> FacebookAdsConfig::createAd(AdFormat format,
                                                  const std::string& id) {
@@ -300,6 +314,8 @@ AdNetwork IronSourceConfig::network() const {
 void IronSourceConfig::addTestDevice(const std::string& hash) {}
 
 void IronSourceConfig::openTestSuite() {}
+
+void IronSourceConfig::addAnalytics(std::shared_ptr<ILibraryAnalytics> analytics) {}
 
 std::shared_ptr<IAd> IronSourceConfig::createAd(AdFormat format,
                                                 const std::string& id) {
@@ -344,6 +360,8 @@ void UnityAdsConfig::addTestDevice(const std::string& hash) {}
 
 void UnityAdsConfig::openTestSuite() {}
 
+void UnityAdsConfig::addAnalytics(std::shared_ptr<ILibraryAnalytics> analytics) {}
+
 std::shared_ptr<IAd> UnityAdsConfig::createAd(AdFormat format,
                                               const std::string& id) {
     switch (format) {
@@ -387,6 +405,8 @@ void VungleConfig::addTestDevice(const std::string& hash) {}
 
 void VungleConfig::openTestSuite() {}
 
+void VungleConfig::addAnalytics(std::shared_ptr<ILibraryAnalytics> analytics) {}
+
 std::shared_ptr<IAd> VungleConfig::createAd(AdFormat format,
                                             const std::string& id) {
     switch (format) {
@@ -415,6 +435,8 @@ AdNetwork NullNetworkConfig::network() const {
 void NullNetworkConfig::addTestDevice(const std::string& hash) {}
 
 void NullNetworkConfig::openTestSuite() {}
+
+void NullNetworkConfig::addAnalytics(std::shared_ptr<ILibraryAnalytics> analytics) {}
 
 std::shared_ptr<IAd> NullNetworkConfig::createAd(AdFormat format,
                                                  const std::string& id) {
@@ -665,6 +687,10 @@ void Self::addTestDevice(const std::string& hash) {
 
 void Self::openTestSuite(AdNetwork network) {
     networkManager_->openTestSuite(network);
+}
+
+void Self::addAnalytics(std::shared_ptr<ILibraryAnalytics> analytics) {
+    networkManager_->addAnalytics(analytics);
 }
 
 std::shared_ptr<IAd> Self::createAd(AdFormat format) {

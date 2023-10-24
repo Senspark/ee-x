@@ -70,5 +70,13 @@ void Self::trackEvent(const std::string& name,
     json["values"] = values;
     bridge_.call(kTrackEvent, json.dump());
 }
+
+void Self::logRevenue(const ILibraryAnalytics::AdRevenue &adRevenue) {
+    // no need to implement
+}
+
+void Self::logRevenue(const ILibraryAnalytics::IapRevenue &iapRevenue) {
+    // no need to implement
+}
 } // namespace apps_flyer
 } // namespace ee

@@ -14,12 +14,14 @@
 #include <string>
 
 #include <ee/core/IPlugin.hpp>
+#include <ee/core/ILibraryAnalytics.h>
 
 #include "ee/apps_flyer/AppsFlyerFwd.hpp"
 
 namespace ee {
 namespace apps_flyer {
-class IBridge : public IPlugin {
+class IBridge : public IPlugin,
+                public ILibraryAnalytics {
 public:
     virtual ~IBridge() = default;
 

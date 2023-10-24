@@ -66,6 +66,71 @@ void Self::logEvent(
     request["parameters"] = parameters;
     bridge_.call(kLogEvent, request.dump());
 }
+
+void Self::logRevenue(const ILibraryAnalytics::AdRevenue &adRevenue) {
+    if (adRevenue.mediationNetwork == AdNetwork::AdMob) {
+        // https://firebase.google.com/docs/analytics/measure-ad-revenue#implementation-admob
+        // Logged automatically.
+        return;
+    }
+
+    auto isValid = !adRevenue.monetizationNetwork.empty() && !adRevenue.adUnit.empty() && adRevenue.revenue > 0;
+    auto evName = isValid ? "ad_impression" : "ad_impression_error";
+
+    std::string adFormat;
+    switch (adRevenue.adFormat) {
+        case AdFormat::AppOpen:
+            adFormat = "App Open";
+            break;
+        case AdFormat::Banner:
+            adFormat = "Banner";
+            break;
+        case AdFormat::Interstitial:
+            adFormat = "Interstitial";
+            break;
+        case AdFormat::Rectangle:
+            adFormat = "Rect";
+            break;
+        case AdFormat::Rewarded:
+            adFormat = "Rewarded";
+            break;
+        case AdFormat::RewardedInterstitial:
+            adFormat = "Rewarded Interstitial";
+            break;
+        default:
+            adFormat = "Others";
+            break;
+    }
+
+    std::string adPlatform;
+    switch (adRevenue.mediationNetwork) {
+        case ads::AdNetwork::AppLovin:
+            adPlatform = "AppLovin";
+            break;
+        case ads::AdNetwork::IronSource:
+            adPlatform = "IronSource";
+            break;
+        default:
+            adPlatform = "Others";
+            break;
+    }
+
+    nlohmann::json request;
+    request["name"] = evName;
+    request["parameters"] = std::unordered_map<std::string, std::variant<std::int64_t, double, std::string>>{
+        {"ad_platform", adPlatform},
+        {"ad_source", adRevenue.monetizationNetwork},
+        {"ad_unit", adRevenue.adUnit},
+        {"ad_format", adFormat},
+        {"value", adRevenue.revenue},
+        {"currency", adRevenue.currencyCode},
+    };
+    bridge_.call(kLogEvent, request.dump());
+}
+
+void Self::logRevenue(const ILibraryAnalytics::IapRevenue &iapRevenue) {
+    // do nothing
+}
 } // namespace analytics
 } // namespace firebase
 } // namespace ee

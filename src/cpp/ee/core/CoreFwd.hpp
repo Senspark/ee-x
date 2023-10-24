@@ -56,6 +56,8 @@ class IThreadImpl;
 class VideoPlayer;
 class VideoPlayerManager;
 
+class ILibraryAnalytics;
+
 template <class T>
 class DynamicValue;
 
@@ -136,6 +138,8 @@ using core::LambdaAwaiter;
 using core::SwitchToLibraryThread;
 using core::SwitchToMainThread;
 using core::Task;
+
+using ee::core::ILibraryAnalytics;
 
 using SwitchToUiThread [[deprecated]] = SwitchToMainThread;
 

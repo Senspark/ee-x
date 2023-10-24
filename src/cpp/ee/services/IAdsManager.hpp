@@ -14,6 +14,7 @@ public:
     virtual ~IAdsManager() = default;
     virtual void addTestDevice(const std::string& hash) = 0;
     virtual void openTestSuite() = 0;
+    virtual void addAnalytics(std::shared_ptr<ILibraryAnalytics> analytics) = 0;
     virtual std::shared_ptr<IBannerAd> getBannerAd() = 0;
     virtual std::shared_ptr<IBannerAd> getRectangleAd() = 0;
     virtual std::shared_ptr<IFullScreenAd> getAppOpenAd() = 0;

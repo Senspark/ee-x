@@ -40,6 +40,7 @@ class AdMobBridge(
         private const val kCreateRewardedInterstitialAd = "${kPrefix}CreateRewardedInterstitialAd"
         private const val kCreateRewardedAd = "${kPrefix}CreateRewardedAd"
         private const val kDestroyAd = "${kPrefix}DestroyAd"
+        private const val kOnAdPaid = "${kPrefix}OnAdPaid"
     }
 
     private var _initializing = false
@@ -312,17 +313,19 @@ class AdMobBridge(
     }
 
     private fun onAdPaid(data: AdPaidResponse) {
-        val revenue = data.valueMicros / 1000000.0; // 1 million
+        val revenue = data.valueMicros / 1e6 // 1 million
         val mediationName = "admob"
-        var networkName = "";
+        var networkName = ""
 
         if (data.info != null) {
             networkName = data.info.adSourceName
         }
 
-        val data = AdRevenueData(networkName, mediationName, data.adUnitId, data.adFormat, revenue);
-        _af.logAdRevenue(data);
+        val adPaidData = AdRevenueData(networkName, mediationName, data.adUnitId, data.adFormat, revenue)
+        _logger.info("${kTag}: $networkName $adPaidData.adUnitId $adPaidData.adFormat $revenue")
+        _bridge.callCpp(kOnAdPaid, adPaidData.serialize())
 
-        _logger.info("${kTag}: $networkName $data.adUnitId $data.adFormat $revenue")
+        // FIXME: Để đây để move vào logic chính
+        _af.logAdRevenue(adPaidData);
     }
 }

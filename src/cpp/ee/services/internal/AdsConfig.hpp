@@ -45,6 +45,7 @@ public:
     virtual Task<> initialize() = 0;
     virtual void addTestDevice(const std::string& hash) = 0;
     virtual void openTestSuite(AdNetwork network) = 0;
+    virtual void addAnalytics(std::shared_ptr<ILibraryAnalytics> analytics) = 0;
     virtual std::shared_ptr<IAd> createAd(AdNetwork network, AdFormat format,
                                           const std::string& id) = 0;
 };
@@ -56,6 +57,7 @@ public:
     virtual Task<> initialize() override;
     virtual void addTestDevice(const std::string& hash) override;
     virtual void openTestSuite(AdNetwork network) override;
+    void addAnalytics(std::shared_ptr<ILibraryAnalytics> analytics) override;
     virtual std::shared_ptr<IAd> createAd(AdNetwork network, AdFormat format,
                                           const std::string& id) override;
 
@@ -73,6 +75,7 @@ public:
     virtual AdNetwork network() const = 0;
     virtual void addTestDevice(const std::string& hash) = 0;
     virtual void openTestSuite() = 0;
+    virtual void addAnalytics(std::shared_ptr<ILibraryAnalytics> analytics) = 0;
     virtual std::shared_ptr<IAd> createAd(AdFormat format,
                                           const std::string& id) = 0;
 };
@@ -85,6 +88,7 @@ public:
     virtual AdNetwork network() const override;
     virtual void addTestDevice(const std::string& hash) override;
     virtual void openTestSuite() override;
+    virtual void addAnalytics(std::shared_ptr<ILibraryAnalytics> analytics) override;
     virtual std::shared_ptr<IAd> createAd(AdFormat format,
                                           const std::string& id) override;
 
@@ -100,6 +104,7 @@ public:
     virtual AdNetwork network() const override;
     virtual void addTestDevice(const std::string& hash) override;
     virtual void openTestSuite() override;
+    virtual void addAnalytics(std::shared_ptr<ILibraryAnalytics> analytics) override;
     virtual std::shared_ptr<IAd> createAd(AdFormat format,
                                           const std::string& id) override;
 
@@ -116,6 +121,7 @@ public:
     virtual AdNetwork network() const override;
     virtual void addTestDevice(const std::string& hash) override;
     virtual void openTestSuite() override;
+    virtual void addAnalytics(std::shared_ptr<ILibraryAnalytics> analytics) override;
     virtual std::shared_ptr<IAd> createAd(AdFormat format,
                                           const std::string& id) override;
 
@@ -131,6 +137,7 @@ public:
     virtual AdNetwork network() const override;
     virtual void addTestDevice(const std::string& hash) override;
     virtual void openTestSuite() override;
+    virtual void addAnalytics(std::shared_ptr<ILibraryAnalytics> analytics) override;
     virtual std::shared_ptr<IAd> createAd(AdFormat format,
                                           const std::string& id) override;
 
@@ -147,6 +154,7 @@ public:
     virtual AdNetwork network() const override;
     virtual void addTestDevice(const std::string& hash) override;
     virtual void openTestSuite() override;
+    virtual void addAnalytics(std::shared_ptr<ILibraryAnalytics> analytics) override;
     virtual std::shared_ptr<IAd> createAd(AdFormat format,
                                           const std::string& id) override;
 
@@ -164,6 +172,7 @@ public:
     virtual AdNetwork network() const override;
     virtual void addTestDevice(const std::string& hash) override;
     virtual void openTestSuite() override;
+    virtual void addAnalytics(std::shared_ptr<ILibraryAnalytics> analytics) override;
     virtual std::shared_ptr<IAd> createAd(AdFormat format,
                                           const std::string& id) override;
 
@@ -179,6 +188,7 @@ public:
     virtual AdNetwork network() const override;
     virtual void addTestDevice(const std::string& hash) override;
     virtual void openTestSuite() override;
+    virtual void addAnalytics(std::shared_ptr<ILibraryAnalytics> analytics) override;
     virtual std::shared_ptr<IAd> createAd(AdFormat format,
                                           const std::string& id) override;
 };
@@ -365,6 +375,7 @@ public:
     Task<> initialize();
     void addTestDevice(const std::string& hash);
     void openTestSuite(AdNetwork network);
+    void addAnalytics(std::shared_ptr<ILibraryAnalytics> analytics);
     std::shared_ptr<IAd> createAd(AdFormat format);
 
 private:

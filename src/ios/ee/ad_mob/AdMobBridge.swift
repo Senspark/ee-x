@@ -7,7 +7,6 @@
 
 import GoogleMobileAds
 import RxSwift
-import AppsFlyerAdRevenue
 
 private let kTag = "\(AdMobBridge.self)"
 private let kPrefix = "AdMobBridge"
@@ -23,6 +22,7 @@ private let kCreateInterstitialAd = "\(kPrefix)CreateInterstitialAd"
 private let kCreateRewardedInterstitialAd = "\(kPrefix)CreateRewardedInterstitialAd"
 private let kCreateRewardedAd = "\(kPrefix)CreateRewardedAd"
 private let kDestroyAd = "\(kPrefix)DestroyAd"
+private let kOnAdPaid = "\(kPrefix)OnAdPaid"
 
 @objc(EEAdMobBridge)
 class AdMobBridge: NSObject, IPlugin {
@@ -53,7 +53,7 @@ class AdMobBridge: NSObject, IPlugin {
                 .subscribe(
                     onSuccess: {
                         result in resolver(Utils.toString(result))
-                    }, onError: {
+                    }, onFailure: {
                         _ in resolver(Utils.toString(false))
                     })
         }
@@ -251,6 +251,10 @@ class AdMobBridge: NSObject, IPlugin {
     
     func onAdPaid(adResponse:AdPaidResponse) -> Void {
         _logger.info("AppsFlyer log af: " + adResponse.valueMicros.stringValue)
+        _bridge.callCpp(kOnAdPaid, Utils.toString(adResponse))
+
+        // FIXME: Để đây để move vào logic chính
+
         let adRevenueParams:[AnyHashable: Any] = [
             kAppsFlyerAdRevenueAdUnit : adResponse.adUnitId,
             kAppsFlyerAdRevenueAdType : adResponse.adFormat,

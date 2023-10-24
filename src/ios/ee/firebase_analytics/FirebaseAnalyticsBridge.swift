@@ -1,4 +1,5 @@
 import RxSwift
+import AppTrackingTransparency
 
 private let kPrefix = "FirebaseAnalyticsBridge"
 private let kInitialize = "\(kPrefix)Initialize"
@@ -9,9 +10,11 @@ private let kLogEvent = "\(kPrefix)LogEvent"
 @objc(EEFirebaseAnalyticsBridge)
 class FirebaseAnalyticsBridge: NSObject, IPlugin {
     private let _bridge: IMessageBridge
+    private let _logger: ILogger
 
     public required init(_ bridge: IMessageBridge, _ logger: ILogger) {
         _bridge = bridge
+        _logger = logger
         super.init()
         registerHandlers()
     }
@@ -62,7 +65,22 @@ class FirebaseAnalyticsBridge: NSObject, IPlugin {
     }
 
     func initialize() -> Bool {
-        return FirebaseInitializer.instance.initialize()
+        let initialized = FirebaseInitializer.instance.initialize()
+        requestAppTrackingTransparency()
+        return initialized
+    }
+    
+    func requestAppTrackingTransparency() {
+        if #available(iOS 14, *) {
+            ATTrackingManager.requestTrackingAuthorization { status in
+                if(status == .authorized) {
+                    self._logger.debug("\(kPrefix): \(#function): ATT authorized")
+                } else {
+                    self._logger.debug("\(kPrefix): \(#function): ATT not authorized")
+                    Analytics.setAnalyticsCollectionEnabled(false)
+                }
+            }
+        }
     }
 
     func setUserProperty(_ key: String, _ value: String) {

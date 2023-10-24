@@ -103,17 +103,26 @@ class AppsFlyerBridge: NSObject, IPlugin, AppsFlyerLibDelegate, PurchaseRevenueD
             
             self._purchase.purchaseRevenueDelegate = self
             self._purchase.autoLogPurchaseRevenue = [.autoRenewableSubscriptions, .inAppPurchases]
-            
-            if #available(iOS 14, *) {
-                self._tracker.waitForATTUserAuthorization(timeoutInterval: 60)
-                ATTrackingManager.requestTrackingAuthorization { status in
-                    // do nothing
-                }
-            }
         }
     }
 
     func startTracking() {
+        if #available(iOS 14, *) {
+            self._tracker.waitForATTUserAuthorization(timeoutInterval: 60)
+            ATTrackingManager.requestTrackingAuthorization { status in
+                if(status == .authorized) {
+                    self._logger.debug("\(kTag): \(#function): ATT authorized")
+                    self.startTrackingImpl()
+                } else {
+                    self._logger.debug("\(kTag): \(#function): ATT not authorized")
+                }
+            }
+        } else {
+            startTrackingImpl()
+        }
+    }
+    
+    func startTrackingImpl() {
         Thread.runOnMainThread {
             self._tracker.start()
             self._purchase.startObservingTransactions()

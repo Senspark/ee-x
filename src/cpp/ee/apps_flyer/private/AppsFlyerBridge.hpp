@@ -40,6 +40,7 @@ private:
     IMessageBridge& bridge_;
     ILogger& logger_;
     Destroyer destroyer_;
+    bool initialized_ {false};
 };
 } // namespace apps_flyer
 } // namespace ee

@@ -25,6 +25,11 @@ namespace ee::core::analytics {
         std::string currencyCode;
         AdFormat adFormat;
         std::string adUnit;
+
+    public:
+        bool isValid() const {
+            return !monetizationNetwork.empty() && !adUnit.empty() && revenue > 0;
+        }
     };
 
     struct IapRevenue {

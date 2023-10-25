@@ -48,12 +48,10 @@ class AdMobBridge(
     private val _bannerHelper = AdMobBannerHelper(_application)
     private val _testDevices: MutableList<String> = ArrayList()
     private val _ads: MutableMap<String, IAd> = ConcurrentHashMap()
-    private val _af : AppsFlyerAndroid;
 
     init {
         _logger.info("$kTag: constructor begin: application = $_application activity = $_activity")
         registerHandlers()
-        _af = AppsFlyerAndroid(_activity!!);
         _logger.info("$kTag: constructor end")
     }
 
@@ -112,6 +110,16 @@ class AdMobBridge(
         val adId: String,
         val layoutName: String,
         val identifiers: Map<String, String>
+    )
+
+    @Serializable
+    @Suppress("unused")
+    class AdRevenueData(
+        val networkName: String,
+        val mediationName: String,
+        val adUnitId: String,
+        val adFormat: String,
+        val revenue: Double,
     )
 
     @AnyThread
@@ -324,8 +332,5 @@ class AdMobBridge(
         val adPaidData = AdRevenueData(networkName, mediationName, data.adUnitId, data.adFormat, revenue)
         _logger.info("${kTag}: $networkName $adPaidData.adUnitId $adPaidData.adFormat $revenue")
         _bridge.callCpp(kOnAdPaid, adPaidData.serialize())
-
-        // FIXME: Để đây để move vào logic chính
-        _af.logAdRevenue(adPaidData);
     }
 }

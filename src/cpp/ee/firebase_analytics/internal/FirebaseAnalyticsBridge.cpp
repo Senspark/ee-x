@@ -74,8 +74,7 @@ void Self::logRevenue(const ILibraryAnalytics::AdRevenue &adRevenue) {
         return;
     }
 
-    auto isValid = !adRevenue.monetizationNetwork.empty() && !adRevenue.adUnit.empty() && adRevenue.revenue > 0;
-    auto evName = isValid ? "ad_impression" : "ad_impression_error";
+    auto evName = adRevenue.isValid() ? "ad_impression" : "ad_impression_error";
 
     std::string adFormat;
     switch (adRevenue.adFormat) {

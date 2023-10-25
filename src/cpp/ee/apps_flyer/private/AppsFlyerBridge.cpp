@@ -23,6 +23,7 @@ const auto kGetDeviceId     = kPrefix + "GetDeviceId";
 const auto kSetDebugEnabled = kPrefix + "SetDebugEnabled";
 const auto kSetStopTracking = kPrefix + "SetStopTracking";
 const auto kTrackEvent      = kPrefix + "TrackEvent";
+const auto kLogAdRevenue    = kPrefix + "LogAdRevenue";
 // clang-format on
 } // namespace
 
@@ -41,6 +42,10 @@ void Self::destroy() {
 }
 
 void Self::initialize(const std::string& devKey, const std::string& iosAppId) {
+    if (initialized_) {
+        return;
+    }
+    initialized_ = true;
     nlohmann::json json;
     json["devKey"] = devKey;
     json["iosAppId"] = iosAppId;
@@ -72,11 +77,73 @@ void Self::trackEvent(const std::string& name,
 }
 
 void Self::logRevenue(const ILibraryAnalytics::AdRevenue &adRevenue) {
-    // no need to implement
+    if (!adRevenue.isValid()) {
+        return;
+    }
+
+    std::string mediationNetwork;
+    switch (adRevenue.mediationNetwork) {
+        case AdNetwork::AdMob:
+            mediationNetwork = "admob";
+            break;
+        case AdNetwork::AppLovin:
+            mediationNetwork = "applovin";
+            break;
+        default:
+            mediationNetwork = "others";
+            break;
+    }
+
+    std::string adFormat;
+    switch (adRevenue.adFormat) {
+        case AdFormat::AppOpen:
+            adFormat = "App Open";
+            break;
+        case AdFormat::Banner:
+            adFormat = "Banner";
+            break;
+        case AdFormat::Interstitial:
+            adFormat = "Interstitial";
+            break;
+        case AdFormat::Rectangle:
+            adFormat = "Rect";
+            break;
+        case AdFormat::Rewarded:
+            adFormat = "Rewarded";
+            break;
+        case AdFormat::RewardedInterstitial:
+            adFormat = "Rewarded Interstitial";
+            break;
+        default:
+            adFormat = "Others";
+            break;
+    }
+
+    nlohmann::json json;
+    json["mediationNetwork"] = mediationNetwork;
+    json["monetizationNetwork"] = adRevenue.monetizationNetwork;
+    json["revenue"] = adRevenue.revenue;
+    json["currencyCode"] = adRevenue.currencyCode;
+    json["adFormat"] = adFormat;
+    json["adUnit"] = adRevenue.adUnit;
+
+    auto output = json.dump();
+    logger_.info("%s: %s", kPrefix.c_str(), output.c_str());
+    bridge_.call(kLogAdRevenue, output);
 }
 
 void Self::logRevenue(const ILibraryAnalytics::IapRevenue &iapRevenue) {
-    // no need to implement
+    // Đã sử dụng thư viện track iap của AppsFlyer nên ko gửi price nữa
+    nlohmann::json json;
+    json["af_currency"] = iapRevenue.currencyCode;
+    json["af_revenue"] = 0;
+    json["af_quantity"] = 1;
+    json["af_content_type"] = "iap_product";
+    json["af_content_id"] = iapRevenue.productId;
+
+    auto output = json.dump();
+    logger_.info("%s: %s", kPrefix.c_str(), output.c_str());
+    bridge_.call(kTrackEvent, output);
 }
 } // namespace apps_flyer
 } // namespace ee

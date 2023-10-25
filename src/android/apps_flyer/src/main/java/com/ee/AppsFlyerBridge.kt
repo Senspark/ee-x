@@ -5,11 +5,20 @@ import android.app.Application
 import androidx.annotation.AnyThread
 import com.appsflyer.AppsFlyerConversionListener
 import com.appsflyer.AppsFlyerLib
+import com.appsflyer.adrevenue.AppsFlyerAdRevenue
+import com.appsflyer.adrevenue.adnetworks.generic.MediationNetwork
+import com.appsflyer.adrevenue.adnetworks.generic.Scheme
+import com.appsflyer.api.PurchaseClient
+import com.appsflyer.api.Store
+import com.appsflyer.internal.models.InAppPurchaseValidationResult
+import com.appsflyer.internal.models.SubscriptionValidationResult
 import com.ee.internal.deserialize
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.JsonPrimitive
 import kotlinx.serialization.json.doubleOrNull
 import kotlinx.serialization.json.longOrNull
+import java.util.Currency
+import java.util.Locale
 
 class AppsFlyerBridge(
     private val _bridge: IMessageBridge,
@@ -26,6 +35,7 @@ class AppsFlyerBridge(
         private const val kSetDebugEnabled = "${kPrefix}SetDebugEnabled"
         private const val kSetStopTracking = "${kPrefix}SetStopTracking"
         private const val kTrackEvent = "${kPrefix}TrackEvent"
+        private const val kLogAdRevenue = "${kPrefix}LogAdRevenue"
     }
 
     private val _tracker = AppsFlyerLib.getInstance()
@@ -65,6 +75,17 @@ class AppsFlyerBridge(
         val values: Map<String, JsonPrimitive>
     )
 
+    @Serializable
+    @Suppress("unused")
+    class AdRevenueData(
+        val mediationNetwork: String,
+        val monetizationNetwork: String,
+        val currencyCode: String,
+        val adFormat: String,
+        val adUnit: String,
+        val revenue: Double,
+    )
+
     @AnyThread
     private fun registerHandlers() {
         _bridge.registerHandler(kInitialize) { message ->
@@ -90,6 +111,11 @@ class AppsFlyerBridge(
         _bridge.registerHandler(kTrackEvent) { message ->
             val request = deserialize<TrackEventRequest>(message)
             trackEvent(request.name, request.values)
+            ""
+        }
+        _bridge.registerHandler(kLogAdRevenue) { message ->
+            val request = deserialize<AdRevenueData>(message)
+            logAdRevenue(request)
             ""
         }
     }
@@ -130,6 +156,21 @@ class AppsFlyerBridge(
             }
             _tracker.init(devKey, listener, _application)
             _tracker.anonymizeUser(false)
+
+            // af_ad_revenue
+            val afRevenueBuilder = AppsFlyerAdRevenue.Builder(_application)
+            AppsFlyerAdRevenue.initialize(afRevenueBuilder.build())
+
+            // af_purchase
+            val builder = PurchaseClient.Builder(_application, Store.GOOGLE)
+                .logSubscriptions(true)
+                .autoLogInApps(true)
+                .setSandbox(false)
+                .setInAppValidationResultListener(AppsFlyerIapResultListener(_logger))
+                .setSubscriptionValidationResultListener(AppsFlyerSubscriptionResultListener(_logger))
+
+            val afPurchaseClient = builder.build()
+            afPurchaseClient.startObservingTransactions()
         }
     }
 
@@ -180,5 +221,90 @@ class AppsFlyerBridge(
             }
             _tracker.logEvent(_application, name, values)
         }
+    }
+
+    private fun logAdRevenue(revenueData: AdRevenueData) {
+        val customParams: MutableMap<String, String> = HashMap()
+        customParams[Scheme.AD_UNIT] = revenueData.adUnit
+        customParams[Scheme.AD_TYPE] = revenueData.adFormat
+        customParams[Scheme.PLACEMENT] = "place"
+        customParams[Scheme.ECPM_PAYLOAD] = "encrypt"
+
+        val mediationNetwork = when (revenueData.mediationNetwork) {
+            "applovin" -> MediationNetwork.applovinmax
+            "admob" -> MediationNetwork.googleadmob
+            else -> MediationNetwork.customMediation
+        }
+
+        AppsFlyerAdRevenue.logAdRevenue(
+            revenueData.monetizationNetwork,
+            mediationNetwork,
+            Currency.getInstance(Locale.US),
+            revenueData.revenue,
+            customParams
+        )
+    }
+}
+
+
+class AppsFlyerIapResultListener
+    (private val _logger: ILogger) : PurchaseClient.InAppPurchaseValidationResultListener {
+
+    companion object {
+        private val kTag = AppsFlyerIapResultListener::class.java.name
+    }
+
+    override fun onResponse(result: Map<String, InAppPurchaseValidationResult>?) {
+        result?.forEach { (k: String, v: InAppPurchaseValidationResult?) ->
+            if (v.success && v.productPurchase != null) {
+                val productPurchase = v.productPurchase!!
+                val orderId = productPurchase.orderId
+                val isTest =
+                    productPurchase.purchaseType != null && productPurchase.purchaseType == 0
+                val productId = productPurchase.productId
+
+                log("Validation success: $k $orderId $isTest $productId")
+                log("Product info $productPurchase")
+            } else {
+                val failureData = v.failureData
+                log("Validation fail: $k $failureData")
+            }
+        }
+    }
+
+    override fun onFailure(result: String, error: Throwable?) {
+        log("Validation fail: $result, $error");
+    }
+
+    private fun log(message: String) {
+        _logger.info("$kTag: $message")
+    }
+}
+
+class AppsFlyerSubscriptionResultListener
+    (private val _logger: ILogger) : PurchaseClient.SubscriptionPurchaseValidationResultListener {
+
+    companion object {
+        private val kTag = AppsFlyerSubscriptionResultListener::class.java.name
+    }
+
+    override fun onResponse(result: Map<String, SubscriptionValidationResult>?) {
+        result?.forEach { (k: String, v: SubscriptionValidationResult?) ->
+            if (v.success) {
+                val productPurchase = v.subscriptionPurchase;
+                log("Validation success: $k $productPurchase")
+            } else {
+                val failureData = v.failureData
+                log("Validation fail: $k $failureData")
+            }
+        }
+    }
+
+    override fun onFailure(result: String, error: Throwable?) {
+        log("Validation fail: $result, $error")
+    }
+
+    private fun log(message: String) {
+        _logger.info("${kTag}: $message")
     }
 }

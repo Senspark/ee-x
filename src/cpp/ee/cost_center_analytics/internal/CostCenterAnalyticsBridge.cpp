@@ -43,6 +43,10 @@ namespace ee::cost_center::analytics {
     void Self::logRevenue(const ILibraryAnalytics::AdRevenue &adRevenue) {
         // Log ad revenue dùng Firebase (khác với ad_impression đã log bên Firebase)
 
+        if (!adRevenue.isValid()) {
+            return;
+        }
+
         std::string adFormat;
         switch (adRevenue.adFormat) {
             case AdFormat::AppOpen:
@@ -75,8 +79,10 @@ namespace ee::cost_center::analytics {
             {"value",       adRevenue.revenue},
             {"currency",    adRevenue.currencyCode},
         };
-        logger_.info("%s: %s", kTag.c_str(), request.dump().c_str());
-        bridge_.call(kLogEvent, request.dump());
+
+        auto output = request.dump();
+        logger_.info("%s: %s", kTag.c_str(), output.c_str());
+        bridge_.call(kLogEvent, output);
     }
 
     void Self::logRevenue(const ILibraryAnalytics::IapRevenue &iapRevenue) {
@@ -89,7 +95,9 @@ namespace ee::cost_center::analytics {
             {"value",      iapRevenue.revenue},
             {"currency",   iapRevenue.currencyCode},
         };
-        logger_.info("%s: %s", kTag.c_str(), request.dump().c_str());
-        bridge_.call(kLogEvent, request.dump());
+
+        auto output = request.dump();
+        logger_.info("%s: %s", kTag.c_str(), output.c_str());
+        bridge_.call(kLogEvent, output);
     }
 } // namespace ee

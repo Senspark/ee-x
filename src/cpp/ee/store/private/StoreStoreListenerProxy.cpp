@@ -14,12 +14,14 @@ namespace store {
 using Self = StoreListenerProxy;
 
 Self::StoreListenerProxy(const std::shared_ptr<IStoreListener>& forwardTo,
-                         const std::shared_ptr<IExtensionProvider>& extensions)
+                         const std::shared_ptr<IExtensionProvider>& extensions,
+                         const std::shared_ptr<ILibraryAnalytics>& analytics)
     : forwardTo_(forwardTo)
-    , extensions_(extensions) {}
+    , extensions_(extensions)
+    , analytics_(analytics) {}
 
 void Self::onInitialized(const std::shared_ptr<IStoreController>& controller) {
-    forwardTo_->onInitialized(controller, extensions_);
+    forwardTo_->onInitialized(controller, extensions_, analytics_);
 }
 
 void Self::onInitializeFailed(InitializationFailureReason reason) {

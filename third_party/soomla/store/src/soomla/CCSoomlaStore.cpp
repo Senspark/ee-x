@@ -18,11 +18,15 @@
 
 #include <soomla/CCJsonHelper.h>
 #include <soomla/CCSoomlaUtils.h>
+#include <soomla/PurchaseTypes/CCPurchaseWithMarket.h>
+
+#include <ee/core/ILibraryAnalytics.h>
 
 #include "soomla/CCStoreBridge.h"
 #include "soomla/CCStoreEventDispatcher.h"
 #include "soomla/NativeImpl/CCNativeSoomlaStore.h"
 #include "soomla/data/CCStoreInfo.h"
+#include "StoreEventListener.h"
 
 namespace soomla {
 #define TAG "SOOMLA SoomlaStore"
@@ -47,7 +51,8 @@ CCSoomlaStore* CCSoomlaStore::getInstance() {
 }
 
 void CCSoomlaStore::initialize(soomla::CCStoreAssets* storeAssets,
-                               const cocos2d::ValueMap& storeParams) {
+                               const cocos2d::ValueMap& storeParams,
+                               const std::shared_ptr<ee::ILibraryAnalytics> &analytics) {
     if (initialized) {
         CCStoreEventDispatcher::getInstance()->onUnexpectedStoreError(0, true);
         CCSoomlaUtils::logError(TAG, "SoomlaStore is already initialized. You "
@@ -59,7 +64,9 @@ void CCSoomlaStore::initialize(soomla::CCStoreAssets* storeAssets,
 
     CCSoomlaUtils::logDebug(TAG, "CCSoomlaStore Initializing...");
 
-    getInstance()->loadBillingService();
+    auto instance = getInstance();
+    instance->loadBillingService();
+    instance->analytics = analytics;
 
     CCStoreInfo::createShared(storeAssets);
 
@@ -99,5 +106,41 @@ void CCSoomlaStore::buyMarketItem(const std::string& productId,
 
     // complete purchasing routine
     CCStoreEventDispatcher::getInstance()->onItemPurchased(item, payload);
+}
+
+void CCSoomlaStore::logIapRevenue(const std::string& productId, CCError** error) {
+    CCPurchasableVirtualItem *item = CCStoreInfo::sharedStoreInfo()->getPurchasableItemWithProductId(productId, error);
+    if (item == nullptr) {
+        return;
+    }
+
+    auto purchaseType = item->getPurchaseType();
+    auto purchaseWithMarket = dynamic_cast<soomla::CCPurchaseWithMarket *>(purchaseType);
+    if (purchaseWithMarket == nullptr) {
+        return;
+    }
+
+    auto marketItem = purchaseWithMarket->getMarketItem();
+
+    auto listener = std::make_shared<soomla::StoreEventListener>();
+    listener->setMarketPurchaseCallback([this, listener, marketItem](
+        const std::string &purchasableId,
+        const std::string &payload,
+        const std::unordered_map<std::string, std::string> &extraInfo
+    ) {
+        auto price = marketItem->getMarketPriceMicros() / 1e6;
+        auto currencyCode = marketItem->getMarketCurrencyCode();
+        auto orderId = extraInfo.at("orderId");
+        auto productId = marketItem->getProductId();
+
+        analytics->logRevenue(ee::core::analytics::IapRevenue{
+            .revenue = price,
+            .currencyCode = currencyCode,
+            .productId = productId,
+            .orderId = orderId
+        });
+
+        listener->clear();
+    });
 }
 } // namespace soomla

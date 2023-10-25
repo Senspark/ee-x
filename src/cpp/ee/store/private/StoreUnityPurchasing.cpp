@@ -38,7 +38,7 @@ void Self::initialize(const std::shared_ptr<IStoreListener>& listener,
         transactionLog, logger, builder.factory_->service(),
         builder.factory_->storeName());
     auto proxy =
-        std::make_shared<StoreListenerProxy>(listener, builder.factory_);
+        std::make_shared<StoreListenerProxy>(listener, builder.factory_, nullptr);
     manager->initialize(proxy, builder.products());
 }
 } // namespace store

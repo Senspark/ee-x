@@ -15,7 +15,8 @@ class IBridge : public IPlugin {
 public: /// Initializes store plugin.
     [[nodiscard]] virtual Task<bool>
     initialize(const ConfigurationBuilder& builder,
-               const std::shared_ptr<ITransactionLog>& transactionLog) = 0;
+               const std::shared_ptr<ITransactionLog>& transactionLog,
+               const std::shared_ptr<ILibraryAnalytics>& analytics) = 0;
 
     /// Gets all registered products.
     virtual std::shared_ptr<ProductCollection> getProducts() const = 0;

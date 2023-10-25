@@ -25,6 +25,8 @@ USING_NS_CC;
 void CCNativeSoomlaStore::buyMarketItem(const std::string& productId,
                                         const std::string& payload,
                                         CCError** error) {
+    logIapRevenue(productId, error);
+
     ValueMap params;
     params["method"] = "CCSoomlaStore::buyMarketItem";
     params["productId"] = productId;

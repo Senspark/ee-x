@@ -16,7 +16,8 @@ class StoreListenerProxy : public IInternalStoreListener {
 public:
     explicit StoreListenerProxy(
         const std::shared_ptr<IStoreListener>& forwardTo,
-        const std::shared_ptr<IExtensionProvider>& extensions);
+        const std::shared_ptr<IExtensionProvider>& extensions,
+        const std::shared_ptr<ILibraryAnalytics>& analytics);
 
     virtual void
     onInitialized(const std::shared_ptr<IStoreController>& controller) override;
@@ -30,6 +31,7 @@ public:
 private:
     std::shared_ptr<IStoreListener> forwardTo_;
     std::shared_ptr<IExtensionProvider> extensions_;
+    std::shared_ptr<ILibraryAnalytics> analytics_;
 };
 } // namespace store
 } // namespace ee

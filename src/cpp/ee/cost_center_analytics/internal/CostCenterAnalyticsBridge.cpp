@@ -18,6 +18,7 @@
 namespace ee::cost_center::analytics {
     namespace {
         // Dùng Firebase để Log event
+        const std::string kTag = "CostCenterAnalyticsBridge";
         const std::string kPrefix = "FirebaseAnalyticsBridge";
         const std::string kLogEvent = kPrefix + "LogEvent";
     } // namespace
@@ -74,10 +75,21 @@ namespace ee::cost_center::analytics {
             {"value",       adRevenue.revenue},
             {"currency",    adRevenue.currencyCode},
         };
+        logger_.info("%s: %s", kTag.c_str(), request.dump().c_str());
         bridge_.call(kLogEvent, request.dump());
     }
 
     void Self::logRevenue(const ILibraryAnalytics::IapRevenue &iapRevenue) {
-        // not yet implemented
+        // Chưa cần chờ kết quả từ AppsFlyer
+        nlohmann::json request;
+        request["name"] = "iap_sdk_test";
+        request["parameters"] = std::unordered_map<std::string, std::variant<std::int64_t, double, std::string>>{
+            {"product_id", iapRevenue.productId},
+            {"order_id",   iapRevenue.orderId},
+            {"value",      iapRevenue.revenue},
+            {"currency",   iapRevenue.currencyCode},
+        };
+        logger_.info("%s: %s", kTag.c_str(), request.dump().c_str());
+        bridge_.call(kLogEvent, request.dump());
     }
 } // namespace ee

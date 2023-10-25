@@ -25,7 +25,8 @@ public:
 
     virtual Task<bool>
     initialize(const ConfigurationBuilder& builder,
-               const std::shared_ptr<ITransactionLog>& transactionLog) override;
+               const std::shared_ptr<ITransactionLog>& transactionLog,
+               const std::shared_ptr<ILibraryAnalytics>& analytics) override;
     virtual std::shared_ptr<ProductCollection> getProducts() const override;
     virtual std::shared_ptr<SubscriptionInfo>
     getSubscriptionInfo(const std::string& itemId) override;
@@ -44,6 +45,7 @@ private:
     std::shared_ptr<Listener> listener_;
     std::shared_ptr<IStoreController> controller_;
     std::shared_ptr<IExtensionProvider> extensions_;
+    std::shared_ptr<ILibraryAnalytics> analytics_;
 
     bool initialized_;
     std::unique_ptr<LambdaAwaiter<bool>> initializationAwaiter_;

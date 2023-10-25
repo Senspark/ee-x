@@ -236,6 +236,7 @@ class AppsFlyerBridge(
             else -> MediationNetwork.customMediation
         }
 
+        _logger.info("$kTag: ${this::logAdRevenue.name}: ${revenueData.mediationNetwork} ${revenueData.revenue}")
         AppsFlyerAdRevenue.logAdRevenue(
             revenueData.monetizationNetwork,
             mediationNetwork,

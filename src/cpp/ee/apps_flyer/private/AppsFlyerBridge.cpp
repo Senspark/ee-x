@@ -24,6 +24,7 @@ const auto kSetDebugEnabled = kPrefix + "SetDebugEnabled";
 const auto kSetStopTracking = kPrefix + "SetStopTracking";
 const auto kTrackEvent      = kPrefix + "TrackEvent";
 const auto kLogAdRevenue    = kPrefix + "LogAdRevenue";
+const auto kOnPurchaseValidated    = kPrefix + "OnPurchaseValidated";
 // clang-format on
 } // namespace
 

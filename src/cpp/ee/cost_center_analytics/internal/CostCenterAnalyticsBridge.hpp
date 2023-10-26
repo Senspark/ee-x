@@ -34,6 +34,11 @@ namespace ee::cost_center::analytics {
         IMessageBridge &bridge_;
         ILogger &logger_;
         Destroyer destroyer_;
+        std::unique_ptr<IapRevenue> lastIapRevenue_ {nullptr};
+
+        void onPurchaseValidated(const std::string& jsonData);
+
+        void logIapRevenue(const IapRevenue &iapRevenue, bool isTestPurchase);
     };
 } // namespace
 

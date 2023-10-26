@@ -13,6 +13,7 @@ import com.appsflyer.api.Store
 import com.appsflyer.internal.models.InAppPurchaseValidationResult
 import com.appsflyer.internal.models.SubscriptionValidationResult
 import com.ee.internal.deserialize
+import com.ee.internal.serialize
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.JsonPrimitive
 import kotlinx.serialization.json.doubleOrNull
@@ -36,6 +37,7 @@ class AppsFlyerBridge(
         private const val kSetStopTracking = "${kPrefix}SetStopTracking"
         private const val kTrackEvent = "${kPrefix}TrackEvent"
         private const val kLogAdRevenue = "${kPrefix}LogAdRevenue"
+        private const val kOnPurchaseValidated = "${kPrefix}OnPurchaseValidated"
     }
 
     private val _tracker = AppsFlyerLib.getInstance()
@@ -84,6 +86,15 @@ class AppsFlyerBridge(
         val adFormat: String,
         val adUnit: String,
         val revenue: Double,
+    )
+
+    @Serializable
+    @Suppress("unused")
+    class PurchaseValidateData(
+        val isSuccess: Boolean,
+        val isTestPurchase: Boolean,
+        val orderId: String,
+        val productId: String,
     )
 
     @AnyThread
@@ -161,13 +172,23 @@ class AppsFlyerBridge(
             val afRevenueBuilder = AppsFlyerAdRevenue.Builder(_application)
             AppsFlyerAdRevenue.initialize(afRevenueBuilder.build())
 
+            val onValidated = { data: PurchaseValidateData ->
+                val message = data.serialize()
+                _bridge.callCpp(kOnPurchaseValidated, message)
+            }
+
             // af_purchase
             val builder = PurchaseClient.Builder(_application, Store.GOOGLE)
                 .logSubscriptions(true)
                 .autoLogInApps(true)
                 .setSandbox(false)
-                .setInAppValidationResultListener(AppsFlyerIapResultListener(_logger))
-                .setSubscriptionValidationResultListener(AppsFlyerSubscriptionResultListener(_logger))
+                .setInAppValidationResultListener(AppsFlyerIapResultListener(_logger, onValidated))
+                .setSubscriptionValidationResultListener(
+                    AppsFlyerSubscriptionResultListener(
+                        _logger,
+                        onValidated
+                    )
+                )
 
             val afPurchaseClient = builder.build()
             afPurchaseClient.startObservingTransactions()
@@ -248,8 +269,10 @@ class AppsFlyerBridge(
 }
 
 
-class AppsFlyerIapResultListener
-    (private val _logger: ILogger) : PurchaseClient.InAppPurchaseValidationResultListener {
+class AppsFlyerIapResultListener(
+    private val _logger: ILogger,
+    private val _onValidated: (AppsFlyerBridge.PurchaseValidateData) -> Unit,
+) : PurchaseClient.InAppPurchaseValidationResultListener {
 
     companion object {
         private val kTag = AppsFlyerIapResultListener::class.java.name
@@ -263,9 +286,18 @@ class AppsFlyerIapResultListener
                 val isTest =
                     productPurchase.purchaseType != null && productPurchase.purchaseType == 0
                 val productId = productPurchase.productId
+                val isSuccess = productPurchase.purchaseState == 0
 
                 log("Validation success: $k $orderId $isTest $productId")
-                log("Product info $productPurchase")
+//                log("Product info $productPurchase")
+                _onValidated(
+                    AppsFlyerBridge.PurchaseValidateData(
+                        isSuccess,
+                        isTest,
+                        orderId,
+                        productId
+                    )
+                )
             } else {
                 val failureData = v.failureData
                 log("Validation fail: $k $failureData")
@@ -282,8 +314,10 @@ class AppsFlyerIapResultListener
     }
 }
 
-class AppsFlyerSubscriptionResultListener
-    (private val _logger: ILogger) : PurchaseClient.SubscriptionPurchaseValidationResultListener {
+class AppsFlyerSubscriptionResultListener(
+    private val _logger: ILogger,
+    private val _onValidated: (AppsFlyerBridge.PurchaseValidateData) -> Unit,
+) : PurchaseClient.SubscriptionPurchaseValidationResultListener {
 
     companion object {
         private val kTag = AppsFlyerSubscriptionResultListener::class.java.name
@@ -291,9 +325,24 @@ class AppsFlyerSubscriptionResultListener
 
     override fun onResponse(result: Map<String, SubscriptionValidationResult>?) {
         result?.forEach { (k: String, v: SubscriptionValidationResult?) ->
-            if (v.success) {
-                val productPurchase = v.subscriptionPurchase;
-                log("Validation success: $k $productPurchase")
+            val productPurchase = v.subscriptionPurchase
+            if (v.success && productPurchase != null) {
+                val isSuccess = productPurchase.subscriptionState == "SUBSCRIPTION_STATE_ACTIVE"
+                val isTest = productPurchase.testPurchase != null
+                val orderId = productPurchase.latestOrderId
+                val productId = productPurchase.lineItems[0].productId
+
+//                log("Validation success: $k $productPurchase")
+                log("Validation success: $k $orderId $isTest $productId")
+
+                _onValidated(
+                    AppsFlyerBridge.PurchaseValidateData(
+                        isSuccess,
+                        isTest,
+                        orderId,
+                        productId
+                    )
+                )
             } else {
                 val failureData = v.failureData
                 log("Validation fail: $k $failureData")

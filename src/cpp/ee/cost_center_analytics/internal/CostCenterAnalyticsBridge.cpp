@@ -19,8 +19,10 @@ namespace ee::cost_center::analytics {
     namespace {
         // Dùng Firebase để Log event
         const std::string kTag = "CostCenterAnalyticsBridge";
-        const std::string kPrefix = "FirebaseAnalyticsBridge";
-        const std::string kLogEvent = kPrefix + "LogEvent";
+        const std::string kFirebasePrefix = "FirebaseAnalyticsBridge";
+        const std::string kAppsFlyerPrefix = "AppsFlyerBridge";
+        const std::string kLogEvent = kFirebasePrefix + "LogEvent";
+        const std::string kOnPurchaseValidated = kAppsFlyerPrefix + "OnPurchaseValidated";
     } // namespace
 
     using Self = Bridge;
@@ -28,15 +30,20 @@ namespace ee::cost_center::analytics {
     Bridge::Bridge(IMessageBridge &bridge, ILogger &logger, const Destroyer &destroyer) :
         bridge_(bridge),
         logger_(logger),
-        destroyer_(destroyer) {}
+        destroyer_(destroyer) {
+    }
 
     Self::~Bridge() = default;
 
     void Self::destroy() {
         destroyer_();
+        bridge_.deregisterHandler(kOnPurchaseValidated);
     }
 
     Task<bool> Self::initialize() {
+        bridge_.registerHandler([this](const std::string &message) {
+            onPurchaseValidated(message);
+        }, kOnPurchaseValidated);
         co_return true;
     }
 
@@ -75,9 +82,9 @@ namespace ee::cost_center::analytics {
         nlohmann::json request;
         request["name"] = "ad_revenue_sdk";
         request["parameters"] = std::unordered_map<std::string, std::variant<std::int64_t, double, std::string>>{
-            {"ad_format",   adFormat},
-            {"value",       adRevenue.revenue},
-            {"currency",    adRevenue.currencyCode},
+            {"ad_format", adFormat},
+            {"value",     adRevenue.revenue},
+            {"currency",  adRevenue.currencyCode},
         };
 
         auto output = request.dump();
@@ -86,9 +93,38 @@ namespace ee::cost_center::analytics {
     }
 
     void Self::logRevenue(const ILibraryAnalytics::IapRevenue &iapRevenue) {
-        // Chưa cần chờ kết quả từ AppsFlyer
+        // Chờ kết quả từ AppsFlyer
+        lastIapRevenue_ = std::make_unique<IapRevenue>(std::move(iapRevenue));
+        logger_.info("%s: Add to pending %s %s", kTag.c_str(), iapRevenue.productId.c_str(),
+                     iapRevenue.orderId.c_str());
+    }
+
+    void Bridge::onPurchaseValidated(const std::string &jsonData) {
+        try {
+            auto json = nlohmann::json::parse(jsonData);
+            auto isSuccess = json["isSuccess"].get<bool>();
+            auto isTestPurchase = json["isTestPurchase"].get<bool>();
+            auto orderId = json["orderId"].get<std::string>();
+            auto productId = json["productId"].get<std::string>();
+
+            if (lastIapRevenue_ == nullptr) {
+                logger_.error("%s: lastIapRevenue_ is null", kTag.c_str());
+                return;
+            }
+            if (lastIapRevenue_->orderId != orderId) {
+                logger_.error("%s: orderId or productId doesn't match", kTag.c_str());
+                return;
+            }
+            logIapRevenue(*lastIapRevenue_, isTestPurchase);
+        } catch (const std::exception &e) {
+            logger_.error("%s: %s", kTag.c_str(), e.what());
+            return;
+        }
+    }
+
+    void Bridge::logIapRevenue(const ILibraryAnalytics::IapRevenue &iapRevenue, bool isTestPurchase) {
         nlohmann::json request;
-        request["name"] = "iap_sdk_test";
+        request["name"] = isTestPurchase ? "iap_sdk_test" : "iap_sdk";
         request["parameters"] = std::unordered_map<std::string, std::variant<std::int64_t, double, std::string>>{
             {"product_id", iapRevenue.productId},
             {"order_id",   iapRevenue.orderId},

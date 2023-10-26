@@ -278,8 +278,8 @@ class AppsFlyerIapResultListener(
         private val kTag = AppsFlyerIapResultListener::class.java.name
     }
 
-    override fun onResponse(result: Map<String, InAppPurchaseValidationResult>?) {
-        result?.forEach { (k: String, v: InAppPurchaseValidationResult?) ->
+    override fun onResponse(p0: Map<String, InAppPurchaseValidationResult>?) {
+        p0?.forEach { (k: String, v: InAppPurchaseValidationResult?) ->
             if (v.success && v.productPurchase != null) {
                 val productPurchase = v.productPurchase!!
                 val orderId = productPurchase.orderId
@@ -305,8 +305,8 @@ class AppsFlyerIapResultListener(
         }
     }
 
-    override fun onFailure(result: String, error: Throwable?) {
-        log("Validation fail: $result, $error");
+    override fun onFailure(p0: String, p1: Throwable?) {
+        log("Validation fail: $p0, $p1");
     }
 
     private fun log(message: String) {
@@ -323,8 +323,8 @@ class AppsFlyerSubscriptionResultListener(
         private val kTag = AppsFlyerSubscriptionResultListener::class.java.name
     }
 
-    override fun onResponse(result: Map<String, SubscriptionValidationResult>?) {
-        result?.forEach { (k: String, v: SubscriptionValidationResult?) ->
+    override fun onResponse(p0: Map<String, SubscriptionValidationResult>?) {
+        p0?.forEach { (k: String, v: SubscriptionValidationResult?) ->
             val productPurchase = v.subscriptionPurchase
             if (v.success && productPurchase != null) {
                 val isSuccess = productPurchase.subscriptionState == "SUBSCRIPTION_STATE_ACTIVE"
@@ -350,8 +350,8 @@ class AppsFlyerSubscriptionResultListener(
         }
     }
 
-    override fun onFailure(result: String, error: Throwable?) {
-        log("Validation fail: $result, $error")
+    override fun onFailure(p0: String, p1: Throwable?) {
+        log("Validation fail: $p0, $p1")
     }
 
     private fun log(message: String) {

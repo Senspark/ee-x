@@ -30,15 +30,29 @@ namespace ee::cost_center::analytics {
 
         void logRevenue(const IapRevenue &iapRevenue) override;
 
+        void pushGameLevel(int levelNo, const std::string &levelMode) override;
+
+        void popGameLevel(bool winGame) override;
+
+    private:
+        struct GameLevelData {
+            int levelNo;
+            std::string levelMode;
+        };
+        using Params = std::unordered_map<std::string, std::variant<std::int64_t, double, std::string>>;
+
     private:
         IMessageBridge &bridge_;
         ILogger &logger_;
         Destroyer destroyer_;
-        std::unique_ptr<IapRevenue> lastIapRevenue_ {nullptr};
+        std::unique_ptr<IapRevenue> lastIapRevenue_{nullptr};
+        std::unique_ptr<GameLevelData> gameLevelData_{nullptr};
 
-        void onPurchaseValidated(const std::string& jsonData);
+        void onPurchaseValidated(const std::string &jsonData);
 
         void logIapRevenue(const IapRevenue &iapRevenue, bool isTestPurchase);
+
+        void addGameLevelDataToParams(Params& parameters);
     };
 } // namespace
 

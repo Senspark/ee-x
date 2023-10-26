@@ -49,6 +49,10 @@ namespace ee::core {
         virtual void logRevenue(const AdRevenue &adRevenue) = 0;
 
         virtual void logRevenue(const IapRevenue &iapRevenue) = 0;
+
+        virtual void pushGameLevel(int levelNo, const std::string& levelMode) = 0;
+
+        virtual void popGameLevel(bool winGame) = 0;
     };
 } // namespace ee
 

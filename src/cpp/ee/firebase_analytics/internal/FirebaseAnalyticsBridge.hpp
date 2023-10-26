@@ -38,6 +38,9 @@ public:
     void logRevenue(const AdRevenue &adRevenue) override;
     void logRevenue(const IapRevenue &iapRevenue) override;
 
+    void pushGameLevel(int levelNo, const std::string &levelMode) override {}
+    void popGameLevel(bool winGame) override {}
+
 private:
     IMessageBridge& bridge_;
     ILogger& logger_;

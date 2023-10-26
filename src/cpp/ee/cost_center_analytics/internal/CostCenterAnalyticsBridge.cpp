@@ -79,13 +79,16 @@ namespace ee::cost_center::analytics {
                 break;
         }
 
-        nlohmann::json request;
-        request["name"] = "ad_revenue_sdk";
-        request["parameters"] = std::unordered_map<std::string, std::variant<std::int64_t, double, std::string>>{
+        auto parameters = Params{
             {"ad_format", adFormat},
             {"value",     adRevenue.revenue},
             {"currency",  adRevenue.currencyCode},
         };
+        addGameLevelDataToParams(parameters);
+
+        nlohmann::json request;
+        request["name"] = "ad_revenue_sdk";
+        request["parameters"] = parameters;
 
         auto output = request.dump();
         logger_.info("%s: %s", kTag.c_str(), output.c_str());
@@ -97,6 +100,70 @@ namespace ee::cost_center::analytics {
         lastIapRevenue_ = std::make_unique<IapRevenue>(std::move(iapRevenue));
         logger_.info("%s: Add to pending %s %s", kTag.c_str(), iapRevenue.productId.c_str(),
                      iapRevenue.orderId.c_str());
+    }
+
+    void Bridge::logIapRevenue(const ILibraryAnalytics::IapRevenue &iapRevenue, bool isTestPurchase) {
+        auto parameters = Params{
+            {"product_id", iapRevenue.productId},
+            {"order_id",   iapRevenue.orderId},
+            {"value",      iapRevenue.revenue},
+            {"currency",   iapRevenue.currencyCode},
+        };
+        addGameLevelDataToParams(parameters);
+
+        nlohmann::json request;
+        request["name"] = isTestPurchase ? "iap_sdk_test" : "iap_sdk";
+        request["parameters"] = parameters;
+
+        auto output = request.dump();
+        logger_.info("%s: %s", kTag.c_str(), output.c_str());
+        bridge_.call(kLogEvent, output);
+    }
+
+    void Bridge::pushGameLevel(int levelNo, const std::string &levelMode) {
+        if (!gameLevelData_) {
+            gameLevelData_ = std::make_unique<GameLevelData>();
+        }
+        gameLevelData_->levelNo = levelNo;
+        gameLevelData_->levelMode = levelMode;
+
+        auto parameters = Params{};
+        addGameLevelDataToParams(parameters);
+
+        nlohmann::json request;
+        request["name"] = "level_start";
+        request["parameters"] = parameters;
+
+        logger_.info("%s: Push game level %d %s", kTag.c_str(), levelNo, levelMode.c_str());
+        bridge_.call(kLogEvent, request.dump());
+    }
+
+    void Bridge::popGameLevel(bool winGame) {
+        if (!gameLevelData_) {
+            return;
+        }
+
+        auto winStr = winGame ? "True" : "False";
+        auto parameters = Params{
+            {"success", winStr},
+        };
+        addGameLevelDataToParams(parameters);
+
+        nlohmann::json request;
+        request["name"] = "level_end";
+        request["parameters"] = parameters;
+
+        logger_.info("%s: Pop game level %d %s %s", kTag.c_str(), gameLevelData_->levelNo,
+                     gameLevelData_->levelMode.c_str(), winStr);
+        bridge_.call(kLogEvent, request.dump());
+        gameLevelData_.reset();
+    }
+
+    void Bridge::addGameLevelDataToParams(Bridge::Params &parameters) {
+        if (gameLevelData_) {
+            parameters["level"] = gameLevelData_->levelNo;
+            parameters["level_mode"] = gameLevelData_->levelMode;
+        }
     }
 
     void Bridge::onPurchaseValidated(const std::string &jsonData) {
@@ -120,20 +187,5 @@ namespace ee::cost_center::analytics {
             logger_.error("%s: %s", kTag.c_str(), e.what());
             return;
         }
-    }
-
-    void Bridge::logIapRevenue(const ILibraryAnalytics::IapRevenue &iapRevenue, bool isTestPurchase) {
-        nlohmann::json request;
-        request["name"] = isTestPurchase ? "iap_sdk_test" : "iap_sdk";
-        request["parameters"] = std::unordered_map<std::string, std::variant<std::int64_t, double, std::string>>{
-            {"product_id", iapRevenue.productId},
-            {"order_id",   iapRevenue.orderId},
-            {"value",      iapRevenue.revenue},
-            {"currency",   iapRevenue.currencyCode},
-        };
-
-        auto output = request.dump();
-        logger_.info("%s: %s", kTag.c_str(), output.c_str());
-        bridge_.call(kLogEvent, output);
     }
 } // namespace ee

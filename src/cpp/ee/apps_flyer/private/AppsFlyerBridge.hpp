@@ -36,6 +36,10 @@ public:
 
     void logRevenue(const ee::core::ILibraryAnalytics::IapRevenue &iapRevenue) override;
 
+    void pushGameLevel(int levelNo, const std::string &levelMode) override {}
+
+    void popGameLevel(bool winGame) override {}
+
 private:
     IMessageBridge& bridge_;
     ILogger& logger_;

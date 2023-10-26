@@ -78,7 +78,7 @@ internal class AdMobAppOpenAd: NSObject, IFullScreenAd, GADFullScreenContentDele
                             let loadedAdNetworkResponseInfo = responseInfo?.loadedAdNetworkResponseInfo
                             let adSourceName = loadedAdNetworkResponseInfo?.adSourceName
                             
-                            let adResponse = AdPaidResponse(adUnitId: self._adId, adFormat: "App Open", valueMicros: adValue.value, networkName: adSourceName ?? "")
+                            let adResponse = AdPaidResponse(adUnitId: self._adId, adFormat: "App Open", revenue: adValue.value, networkName: adSourceName ?? "")
                             self._onAdPaid(adResponse)
                         }
                         self._bridge.callCpp(self._messageHelper.onLoaded)

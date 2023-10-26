@@ -41,6 +41,7 @@ Pod::Spec.new do |spec|
       'src/cpp/ee/apps_flyer/**/*',
       'src/cpp/ee/cocos/**/*',
       'src/cpp/ee/core/**/*',
+      'src/cpp/ee/cost_center_analytics/**/*',
       'src/cpp/ee/facebook/**/*',
       'src/cpp/ee/facebook_ads/**/*',
       'src/cpp/ee/firebase_analytics/**/*',
@@ -274,6 +275,12 @@ Pod::Spec.new do |spec|
 
     # https://cocoapods.org/pods/RxSwift
     s.dependency 'RxSwift', '6.6.0'
+  end
+
+  spec.subspec 'cost-center' do |s|
+      s.source_files = 'src/ios/ee/cost_center/**/*'
+      s.header_mappings_dir = 'src/ios'
+      s.dependency 'ee-x/core'
   end
 
   spec.subspec 'facebook' do |s|

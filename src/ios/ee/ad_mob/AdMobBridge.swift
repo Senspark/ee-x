@@ -249,20 +249,20 @@ class AdMobBridge: NSObject, IPlugin {
         return true
     }
     
-    func onAdPaid(adResponse:AdPaidResponse) -> Void {
-        _logger.info("AppsFlyer log af: " + adResponse.valueMicros.stringValue)
-        _bridge.callCpp(kOnAdPaid, Utils.toString(adResponse))
-
-        // FIXME: Để đây để move vào logic chính
-
-        let adRevenueParams:[AnyHashable: Any] = [
-            kAppsFlyerAdRevenueAdUnit : adResponse.adUnitId,
-            kAppsFlyerAdRevenueAdType : adResponse.adFormat,
-        ]
-        AppsFlyerAdRevenue.shared().logAdRevenue(
-            monetizationNetwork: adResponse.networkName,
-            mediationNetwork: MediationNetworkType.googleAdMob,
-            eventRevenue: adResponse.valueMicros,
-            revenueCurrency: "USD",additionalParameters: adRevenueParams)
+    func onAdPaid(_ data:AdPaidResponse) -> Void {
+        let revenue:Double = data.revenue.doubleValue // ko chia cho 1e6 (chỉ chia đối với android)
+        let mediationName = "admob"
+        
+        let adPaidData = AdRevenueData(
+            networkName: data.networkName,
+            mediationName: mediationName,
+            adUnitId: data.adUnitId,
+            adFormat: data.adFormat,
+            revenue: revenue)
+        
+        let outputJson = JSONUtil.toJSON(adPaidData) ?? ""
+        
+        _logger.info("\(kTag): \(adPaidData.networkName) \(adPaidData.adUnitId ) \(adPaidData.adFormat) \(revenue)")
+        _bridge.callCpp(kOnAdPaid, outputJson)
     }
 }

@@ -74,7 +74,7 @@ internal class AdMobRewardedAd: NSObject, IFullScreenAd, GADFullScreenContentDel
                             let loadedAdNetworkResponseInfo = responseInfo?.loadedAdNetworkResponseInfo
                             let adSourceName = loadedAdNetworkResponseInfo?.adSourceName
                             
-                            let adResponse = AdPaidResponse(adUnitId: self._adId, adFormat: "Rewarded", valueMicros: adValue.value, networkName: adSourceName ?? "")
+                            let adResponse = AdPaidResponse(adUnitId: self._adId, adFormat: "Rewarded", revenue: adValue.value, networkName: adSourceName ?? "")
                             self._onAdPaid(adResponse)
                         }
                         self._bridge.callCpp(self._messageHelper.onLoaded)

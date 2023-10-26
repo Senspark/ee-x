@@ -85,7 +85,7 @@ internal class AdMobBannerAd: NSObject, IBannerAd, GADBannerViewDelegate {
                 let loadedAdNetworkResponseInfo = responseInfo?.loadedAdNetworkResponseInfo
                 let adSourceName = loadedAdNetworkResponseInfo?.adSourceName
                 
-                let adResponse = AdPaidResponse(adUnitId: self._adId, adFormat: "Banner", valueMicros: adValue.value, networkName: adSourceName ?? "")
+                let adResponse = AdPaidResponse(adUnitId: self._adId, adFormat: "Banner", revenue: adValue.value, networkName: adSourceName ?? "")
                 self._onAdPaid(adResponse)
             }
             self._viewHelper.view = nil

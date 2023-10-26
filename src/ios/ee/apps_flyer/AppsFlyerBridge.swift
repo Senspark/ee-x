@@ -19,6 +19,7 @@ private let kGetDeviceId = "\(kPrefix)GetDeviceId"
 private let kSetDebugEnabled = "\(kPrefix)SetDebugEnabled"
 private let kSetStopTracking = "\(kPrefix)SetStopTracking"
 private let kTrackEvent = "\(kPrefix)TrackEvent"
+private let kLogAdRevenue = "\(kPrefix)LogAdRevenue"
 
 @objc(EEAppsFlyerBridge)
 class AppsFlyerBridge: NSObject, IPlugin, AppsFlyerLibDelegate, PurchaseRevenueDelegate {
@@ -27,6 +28,15 @@ class AppsFlyerBridge: NSObject, IPlugin, AppsFlyerLibDelegate, PurchaseRevenueD
     private let _tracker = AppsFlyerLib.shared()
     private let _adRevenue = AppsFlyerAdRevenue.shared()
     private let _purchase = PurchaseConnector.shared()
+    
+    struct AdRevenueData : Codable {
+        let mediationNetwork: String
+        let monetizationNetwork: String
+        let currencyCode: String
+        let adFormat: String
+        let adUnit: String
+        let revenue: Double
+    }
 
     public required init(_ bridge: IMessageBridge, _ logger: ILogger) {
         _bridge = bridge
@@ -80,6 +90,13 @@ class AppsFlyerBridge: NSObject, IPlugin, AppsFlyerLibDelegate, PurchaseRevenueD
                 return ""
             }
             self.trackEvent(name, values)
+            return ""
+        }
+        _bridge.registerHandler(kLogAdRevenue) { message in
+            let data = JSONUtil.fromJSON(message, toType: AdRevenueData.self)
+            if (data != nil) {
+                self.logAdRevenue(data: data!)
+            }
             return ""
         }
     }
@@ -192,5 +209,31 @@ class AppsFlyerBridge: NSObject, IPlugin, AppsFlyerLibDelegate, PurchaseRevenueD
         print("AppsFlyer PurchaseRevenueDelegate: \(validationInfo)")
         print("AppsFlyer PurchaseRevenueDelegate: \(error)")
         // process validationInfo here
+    }
+    
+    private func logAdRevenue(data:AdRevenueData) {
+        // https://dev.appsflyer.com/hc/docs/appsflyeradrevenue-1
+        let customParams:[AnyHashable: Any] = [
+            kAppsFlyerAdRevenueAdUnit :data.adUnit,
+            kAppsFlyerAdRevenueAdType :data.adFormat,
+            kAppsFlyerAdRevenuePlacement: "place",
+            kAppsFlyerAdRevenueECPMPayload:"encrypt"
+        ]
+        var mediationNetworkEnum : MediationNetworkType
+        switch data.mediationNetwork {
+        case "applovin":
+            mediationNetworkEnum = MediationNetworkType.applovinMax
+        case "admob":
+            mediationNetworkEnum = MediationNetworkType.googleAdMob
+        default:
+            mediationNetworkEnum = MediationNetworkType.custom
+        }
+        AppsFlyerAdRevenue.shared().logAdRevenue(
+            monetizationNetwork: data.monetizationNetwork,
+            mediationNetwork: mediationNetworkEnum,
+            eventRevenue: NSNumber(value: data.revenue),
+            revenueCurrency: "USD",
+            additionalParameters: customParams
+        )
     }
 }

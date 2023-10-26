@@ -73,7 +73,7 @@ internal class AdMobInterstitialAd: NSObject, IFullScreenAd, GADFullScreenConten
                             let loadedAdNetworkResponseInfo = responseInfo?.loadedAdNetworkResponseInfo
                             let adSourceName = loadedAdNetworkResponseInfo?.adSourceName
                             
-                            let adResponse = AdPaidResponse(adUnitId: self._adId, adFormat: "Interstitial", valueMicros: adValue.value, networkName: adSourceName ?? "")
+                            let adResponse = AdPaidResponse(adUnitId: self._adId, adFormat: "Interstitial", revenue: adValue.value, networkName: adSourceName ?? "")
                             self._onAdPaid(adResponse)
                         }
                         self._bridge.callCpp(self._messageHelper.onLoaded)

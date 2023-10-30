@@ -27,9 +27,9 @@ dependencies {
     // https://dash.applovin.com/docs/integration#androidIntegration
     // https://github.com/AppLovin/AppLovin-MAX-SDK-Android/releases
     // Use "api" to inherit manifest elements.
-    api 'com.applovin:applovin-sdk:11.11.2'
+    api 'com.applovin:applovin-sdk:11.11.3'
     implementation 'com.appsflyer:adrevenue:6.9.1'
-    implementation 'com.appsflyer:purchase-connector:1.0.0'
+    implementation 'com.appsflyer:purchase-connector:2.0.0'
 
     implementation 'com.applovin.mediation:adcolony-adapter:+'
     implementation 'com.applovin.mediation:google-adapter:+'

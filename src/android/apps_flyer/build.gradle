@@ -31,7 +31,7 @@ dependencies {
     // https://support.appsflyer.com/hc/en-us/articles/115001256006-AppsFlyer-Android-SDK-Release-Notes
     // https://support.appsflyer.com/hc/en-us/articles/207032126-AppsFlyer-SDK-Integration-Android
     // https://support.appsflyer.com/hc/en-us/articles/207032126-Android-SDK-integration-for-developers
-    api 'com.appsflyer:af-android-sdk:6.10.3'
+    api 'com.appsflyer:af-android-sdk:6.12.2'
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
     implementation "org.jetbrains.kotlinx:kotlinx-serialization-json:$kotlinSerializationVersion"

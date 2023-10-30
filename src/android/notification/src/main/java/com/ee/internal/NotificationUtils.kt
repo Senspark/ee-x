@@ -179,7 +179,7 @@ object NotificationUtils {
         tag: Int
     ) {
         val notificationManager = createChannel(context)
-        val helper = com.senspark.android.notification.NotificationHelper(context)
+        val helper = com.senspark.custom_notification.NotificationHelper(context)
         val notificationBuilder = helper.cocosCreateNotificationBuilder(body)
         notificationBuilder.setAutoCancel(true)
             .setDefaults(Notification.DEFAULT_ALL)

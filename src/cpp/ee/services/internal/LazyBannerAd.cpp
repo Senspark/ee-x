@@ -65,6 +65,15 @@ void Self::setAd(const std::shared_ptr<IBannerAd>& ad) {
                         }
                     });
                 },
+            .onAdPaid =
+                [this](const ee::ads::AdPaidResult &result) {
+                    // Propagation.
+                    dispatchEvent([=](auto &&observer) {
+                        if (observer.onAdPaid) {
+                            observer.onAdPaid(result);
+                        }
+                    });
+                },
         });
     ad_ = ad;
     ad->setVisible(visible_);

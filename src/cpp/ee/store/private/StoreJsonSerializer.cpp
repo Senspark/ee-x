@@ -160,6 +160,17 @@ PurchaseFailureDescription
 Self::deserializeFailureReason(const std::string& json) {
     using Enum = PurchaseFailureReason;
 
+#if defined(EE_X_ANDROID)
+    static std::map<int, Enum> reasonMap     //
+            {{0, Enum::PurchasingUnavailable},   //
+             {1, Enum::ExistingPurchasePending}, //
+             {2, Enum::ProductUnavailable},      //
+             {3, Enum::SignatureInvalid},        //
+             {4, Enum::UserCancelled},           //
+             {5, Enum::PaymentDeclined},         //
+             {6, Enum::DuplicateTransaction}};
+#endif // defined(EE_X_ANDROID)
+#if defined(EE_X_IOS)
     static std::map<std::string, Enum> reasonMap{
         {"PurchasingUnavailable", Enum::PurchasingUnavailable},
         {"ExistingPurchasePending", Enum::ExistingPurchasePending},

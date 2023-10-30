@@ -16,6 +16,7 @@ public:
     /// Schedules a notification.
     virtual void schedule(const NotificationBuilder& builder) = 0;
 
+    /// style: 0 = basic, 1 = custom
     virtual void
     schedule(const std::string &message, int tag, int style, int delay, int interval) = 0;
 

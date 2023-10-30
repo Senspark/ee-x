@@ -61,6 +61,15 @@ Self& Self::addItem(const std::shared_ptr<IBannerAd>& item) {
                         }
                     });
                 },
+            .onAdPaid =
+                [this](const ee::ads::AdPaidResult &result) {
+                    // Propagation.
+                    dispatchEvent([=](auto &&observer) {
+                        if (observer.onAdPaid) {
+                            observer.onAdPaid(result);
+                        }
+                    });
+                },
         });
     return *this;
 }

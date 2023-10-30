@@ -600,9 +600,10 @@ object Platform {
     }
 
     private fun showInstantPrompt(url: String, referrer: String, activity: Activity) {
-        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url)).addCategory(Intent.CATEGORY_BROWSABLE)
-        val requestCode = 10;
-        com.google.android.gms.instantapps.InstantApps.showInstallPrompt(activity, intent, requestCode, referrer)
+        // No need anymore
+//        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url)).addCategory(Intent.CATEGORY_BROWSABLE)
+//        val requestCode = 10;
+//        com.google.android.gms.instantapps.InstantApps.showInstallPrompt(activity, intent, requestCode, referrer)
     }
 
     private suspend fun getInstallReferrer(activity: Activity): String {

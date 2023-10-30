@@ -19,6 +19,8 @@ public:
         const std::string& rewardedAdId,
         const std::string& interstitialAdId) = 0;
 
+    virtual void addAnalytics(std::shared_ptr<ILibraryAnalytics> analytics) = 0;
+
     virtual std::shared_ptr<IBannerAd> createBannerAd(const std::string& adId, MaxBannerAdSize adSize) = 0;
 
     /// Creates an interstitial ad with the specified placement ID.

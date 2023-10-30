@@ -122,6 +122,7 @@ public:
     virtual AdNetwork network() const override;
     virtual void addTestDevice(const std::string& hash) override;
     virtual void openTestSuite() override;
+    virtual void addAnalytics(std::shared_ptr<ILibraryAnalytics> analytics) override;
     virtual std::shared_ptr<IAd> createAd(AdFormat format,
                                           const std::string& id) override;
 

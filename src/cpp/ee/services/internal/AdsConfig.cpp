@@ -285,6 +285,10 @@ void AppLovinMaxConfig::addTestDevice(const std::string& hash) {}
 
 void AppLovinMaxConfig::openTestSuite() {}
 
+void AppLovinMaxConfig::addAnalytics(std::shared_ptr<ILibraryAnalytics> analytics) {
+    plugin_->addAnalytics(analytics);
+}
+
 std::shared_ptr<IAd> AppLovinMaxConfig::createAd(AdFormat format,
                                               const std::string& id) {
     switch (format) {

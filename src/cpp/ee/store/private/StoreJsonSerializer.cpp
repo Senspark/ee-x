@@ -179,6 +179,7 @@ Self::deserializeFailureReason(const std::string& json) {
         {"UserCancelled", Enum::UserCancelled},
         {"PaymentDeclined", Enum::PaymentDeclined},
         {"DuplicateTransaction", Enum::DuplicateTransaction}};
+#endif // defined(EE_X_IOS)
 
     auto dic = nlohmann::json::parse(json);
     auto reason = PurchaseFailureReason::Unknown;

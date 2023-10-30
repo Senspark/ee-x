@@ -21,6 +21,8 @@ public:
         const std::string& rewardedAdId,
         const std::string& interstitialAdId) override;
 
+    void addAnalytics(std::shared_ptr<ILibraryAnalytics> analytics) override;
+
     virtual std::shared_ptr<IBannerAd> createBannerAd(const std::string& adId, MaxBannerAdSize adSize) override;
     virtual std::shared_ptr<IFullScreenAd> createRewardedAd(const std::string& adId) override;
     virtual std::shared_ptr<IFullScreenAd> createInterstitialAd(const std::string& adId) override;
@@ -59,7 +61,7 @@ private:
     void onRewardedAdClosed(bool rewarded);
     void onRewardedAdPaid(const std::string& jsonStr);
 
-    ads::AdPaidResult onAdPaid(const std::string& jsonStr);
+    void onAdPaid(AdFormat adFormat, const std::string& jsonStr);
 
     void onMediationAdClosed(AdResult result);
 
@@ -77,6 +79,7 @@ private:
     std::shared_ptr<IFullScreenAd> sharedRewardedAd_;
 
     std::shared_ptr<ads::IAsyncHelper<AdResult>> displayer_;
+    std::shared_ptr<ILibraryAnalytics> analytics_;
 };
 } // namespace app_lovin_max
 } // namespace ee

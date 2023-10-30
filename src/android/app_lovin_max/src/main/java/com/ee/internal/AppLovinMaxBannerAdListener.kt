@@ -14,8 +14,7 @@ import java.util.concurrent.atomic.AtomicBoolean
 internal class AppLovinMaxBannerAdListener(
     private val _bridge: IMessageBridge,
     private val _logger: ILogger,
-    private val _adId: String,
-    private val _logAppsFlyerRevenue: (AdRevenueData) -> Unit
+    private val _adId: String
 ) : MaxAdViewAdListener, MaxAdRevenueListener {
     @Serializable
     @Suppress("unused")
@@ -115,6 +114,5 @@ internal class AppLovinMaxBannerAdListener(
             kOnBannerAdPaid,
             data.serialize()
         )
-        _logAppsFlyerRevenue(data)
     }
 }

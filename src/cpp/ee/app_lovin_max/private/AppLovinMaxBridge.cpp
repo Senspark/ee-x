@@ -11,6 +11,7 @@
 #include <ee/core/IMessageBridge.hpp>
 #include <ee/core/Task.hpp>
 #include <ee/core/Utils.hpp>
+#include <ee/core/ILibraryAnalytics.h>
 #include <ee/nlohmann/json.hpp>
 
 #include "ee/app_lovin_max/private/AppLovinMaxInterstitialAd.hpp"
@@ -209,10 +210,8 @@ std::shared_ptr<IBannerAd> Self::createBannerAd(const std::string& adId,
 }
 
 void Self::onBannerAdPaid(const std::string& jsonStr) {
-    logger_.debug("%s %s", __PRETTY_FUNCTION__, jsonStr.c_str());
     if (bannerAd_) {
-        auto result = onAdPaid(jsonStr);
-        bannerAd_->onAdPaid(result);
+        onAdPaid(AdFormat::Banner, jsonStr);
     }
 }
 
@@ -351,10 +350,8 @@ void Self::onInterstitialAdClosed() {
 }
 
 void Self::onInterstitialAdPaid(const std::string& jsonStr) {
-    logger_.debug("%s %s", __PRETTY_FUNCTION__, jsonStr.c_str());
     if (interstitialAd_) {
-        auto result = onAdPaid(jsonStr);
-        interstitialAd_->onAdPaid(result);
+        onAdPaid(AdFormat::Interstitial, jsonStr);
     }
 }
 
@@ -403,21 +400,33 @@ void Self::onRewardedAdClosed(bool rewarded) {
 
 void Self::onRewardedAdPaid(const std::string& jsonStr) {
     if (rewardedAd_) {
-        auto result = onAdPaid(jsonStr);
-        rewardedAd_->onAdPaid(result);
+        onAdPaid(AdFormat::Rewarded, jsonStr);
     }
 }
 
-ads::AdPaidResult Self::onAdPaid(const std::string& jsonStr) {
-    auto json = nlohmann::json::parse(jsonStr);
-    ads::AdPaidResult result;
-    result.adPlatform = "appLovin";
-    result.networkName = json["networkName"];
-    result.adUnitId = json["adUnitId"];
-    result.adFormat = json["adFormat"];
-    result.revenue = json["revenue"];
+void Self::onAdPaid(AdFormat adFormat, const std::string &jsonStr) {
+    logger_.debug("%s: jsonData = %s", __PRETTY_FUNCTION__, jsonStr.c_str());
+    if (!analytics_) {
+        return;
+    }
+    try {
+        auto json = nlohmann::json::parse(jsonStr);
+        auto adSource = json["networkName"].get<std::string>();
+        auto revenue = json["revenue"].get<double>();
+        auto adUnitId = json["adUnitId"].get<std::string>();
 
-    return result;
+        analytics_->logRevenue(ee::core::analytics::AdRevenue {
+                .mediationNetwork = AdNetwork::AppLovinMax,
+                .monetizationNetwork = adSource,
+                .revenue = revenue,
+                .currencyCode = "USD",
+                .adFormat = adFormat,
+                .adUnit = adUnitId
+        });
+    }
+    catch (const std::exception &e) {
+        logger_.error("%s: %s", __PRETTY_FUNCTION__, e.what());
+    }
 }
 
 #pragma mark - Mediation Ad Callbacks.
@@ -430,5 +439,9 @@ void Self::onMediationAdClosed(AdResult result) {
     }
     assert(false);
 }
-} // namespace iron_source
+
+void Bridge::addAnalytics(std::shared_ptr<ILibraryAnalytics> analytics) {
+    analytics_ = analytics;
+}
+    } // namespace app_lovin_max
 } // namespace ee

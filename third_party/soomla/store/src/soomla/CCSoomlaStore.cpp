@@ -128,9 +128,22 @@ void CCSoomlaStore::logIapRevenue(const std::string& productId, CCError** error)
         const std::string &payload,
         const std::unordered_map<std::string, std::string> &extraInfo
     ) {
+        // ios extraInfo: receiptUrl, transactionDate, receiptBase64, originalTransactionIdentifier, originalTransactionDate, transactionIdentifier
+        // android extraInfo: orderId
+        std::string orderId {""};
+
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+        if (extraInfo.find("transactionIdentifier") != extraInfo.end()) {
+            orderId = extraInfo.at("transactionIdentifier");
+        }
+#elif (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+        if (extraInfo.find("orderId") != extraInfo.end()) {
+            orderId = extraInfo.at("orderId");
+        }
+#endif
+        
         auto price = marketItem->getMarketPriceMicros() / 1e6;
         auto currencyCode = marketItem->getMarketCurrencyCode();
-        auto orderId = extraInfo.at("orderId");
         auto productId = marketItem->getProductId();
 
         analytics->logRevenue(ee::core::analytics::IapRevenue{

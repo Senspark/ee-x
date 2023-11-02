@@ -103,7 +103,7 @@ void Self::logRevenue(const ILibraryAnalytics::AdRevenue &adRevenue) {
 
     std::string adPlatform;
     switch (adRevenue.mediationNetwork) {
-        case ads::AdNetwork::AppLovin:
+        case ads::AdNetwork::AppLovinMax:
             adPlatform = "AppLovin";
             break;
         case ads::AdNetwork::IronSource:

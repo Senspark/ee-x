@@ -125,6 +125,7 @@ std::shared_ptr<IStore> Self::instantiateAndroid() {
     auto store = std::make_shared<JsonStore>();
     auto androidStore = nativeStoreProvider_->getAndroidStore(
         store, appStorePlatform_, binder_);
+
     store->setNativeStore(androidStore);
     return store;
 }
@@ -140,6 +141,10 @@ std::shared_ptr<IStore> Self::instantiateApple() {
 std::shared_ptr<IStore> Self::instantiateFakeStore() {
     // FIXME.
     return nullptr;
+}
+
+void StandardPurchasingModule::setObfuscatedAccountId(const std::string &accountId) {
+    storeInstance_->instance()->setObfuscationAccountId(accountId);
 }
 } // namespace store
 } // namespace ee

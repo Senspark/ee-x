@@ -20,13 +20,12 @@ namespace ee::firebase::analytics {
         virtual void setUserProperty(const std::string &key,
                                      const std::string &value) = 0;
 
+        virtual void setAppIdentifier(const std::string& appIdentifier) = 0;
+
         virtual void trackScreen(const std::string &name) = 0;
 
-        virtual void
-        logEvent(const std::string &name,
-                 const std::unordered_map<
-                     std::string, std::variant<std::int64_t, double, std::string>> &
-                 parameters) = 0;
+        virtual void logEvent(const std::string &name,
+                              const std::unordered_map<std::string, std::variant<std::int64_t, double, std::string>> &parameters) = 0;
     };
 } // namespace
 

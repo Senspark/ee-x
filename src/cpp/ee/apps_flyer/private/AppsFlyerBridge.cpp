@@ -42,11 +42,13 @@ void Self::destroy() {
     destroyer_();
 }
 
-void Self::initialize(const std::string& devKey, const std::string& iosAppId) {
+void Self::initialize(const std::string& devKey, const std::string& iosAppId, const std::string& appIdentity) {
     if (initialized_) {
         return;
     }
     initialized_ = true;
+    appIdentity_ = appIdentity;
+
     nlohmann::json json;
     json["devKey"] = devKey;
     json["iosAppId"] = iosAppId;
@@ -134,16 +136,42 @@ void Self::logRevenue(const ILibraryAnalytics::AdRevenue &adRevenue) {
 }
 
 void Self::logRevenue(const ILibraryAnalytics::IapRevenue &iapRevenue) {
-    // Đã sử dụng thư viện track iap của AppsFlyer nên ko gửi price nữa
+    // Prepare name
+    std::string pIdShorten = iapRevenue.productId;
+    if (!appIdentity_.empty()) {
+        auto found = pIdShorten.find(appIdentity_ + ".");
+        if (found != std::string::npos) {
+            pIdShorten.erase(found, appIdentity_.length());
+        }
+    }
+
+    {
+        auto removeStr = "com.senspark.";
+        auto found = pIdShorten.find(removeStr);
+        if (found != std::string::npos) {
+            pIdShorten.erase(found, std::string(removeStr).length());
+        }
+    }
+
+    std::replace(pIdShorten.begin(), pIdShorten.end(), '.', '_');
+    std::replace(pIdShorten.begin(), pIdShorten.end(), '-', '_');
+
+    // Prepare Parameters
+    auto evName = "conv_buy_iap_" + pIdShorten;
+
     nlohmann::json json;
-    json["af_currency"] = iapRevenue.currencyCode;
-    json["af_revenue"] = 0;
-    json["af_quantity"] = 1;
-    json["af_content_type"] = "iap_product";
-    json["af_content_id"] = iapRevenue.productId;
+    json["name"] = evName;
+    json["values"] = {
+        {"af_revenue", 0}, // Đã sử dụng thư viện track iap của AppsFlyer nên ko gửi price nữa
+        {"af_currency", iapRevenue.currencyCode},
+        {"af_quantity", 1},
+        {"af_content_type", "iap_product"},
+        {"af_content_id", iapRevenue.productId},
+    };
 
     auto output = json.dump();
-    logger_.info("%s: %s", kPrefix.c_str(), output.c_str());
+
+    logger_.info("%s %s: %s", kPrefix.c_str(), evName.c_str(), output.c_str());
     bridge_.call(kTrackEvent, output);
 }
 } // namespace apps_flyer

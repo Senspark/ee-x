@@ -63,6 +63,7 @@ class StoreBridge(
         private const val kGetProductJson = "${kPrefix}GetProductJson"
         private const val kRestoreTransactions = "${kPrefix}RestoreTransactions"
         private const val kFinishAdditionalTransaction = "${kPrefix}FinishAdditionalTransaction"
+        private const val kSetObfuscatedAccountId = "${kPrefix}SetObfuscatedAccountId"
     }
 
     private val _scope = MainScope()
@@ -71,6 +72,7 @@ class StoreBridge(
     private val _skuDetailsList: MutableMap<String, SkuDetails> = HashMap()
     private var _client: BillingClient? = null
     private var _clientAwaiter: Deferred<Unit>? = null
+    private var _obfuscatedAccountId: String = ""
 
     init {
         _logger.info("$kTag: constructor begin: application = $_application activity = $_activity")
@@ -132,6 +134,11 @@ class StoreBridge(
             }
             ""
         }
+        _bridge.registerAsyncHandler(kSetObfuscatedAccountId) { message ->
+            _logger.info("$kTag: Set account id = $message")
+            _obfuscatedAccountId = message
+            ""
+        }
     }
 
     private fun deregisterHandlers() {
@@ -141,6 +148,7 @@ class StoreBridge(
         _bridge.deregisterHandler(kGetProductJson)
         _bridge.deregisterHandler(kRestoreTransactions)
         _bridge.deregisterHandler(kFinishAdditionalTransaction)
+        _bridge.deregisterHandler(kSetObfuscatedAccountId)
     }
 
     override fun onSetupFailed(json: String) {
@@ -303,10 +311,12 @@ class StoreBridge(
     }
 
     private suspend fun launchBillingFlow(details: SkuDetails) {
-        return launchBillingFlow(BillingFlowParams
-            .newBuilder()
-            .setSkuDetails(details)
-            .build())
+        val flow = BillingFlowParams.newBuilder()
+        flow.setSkuDetails(details)
+        if (_obfuscatedAccountId.isNotEmpty()) {
+            flow.setObfuscatedAccountId(_obfuscatedAccountId)
+        }
+        return launchBillingFlow(flow.build())
     }
 
     private suspend fun launchBillingFlow(params: BillingFlowParams) {

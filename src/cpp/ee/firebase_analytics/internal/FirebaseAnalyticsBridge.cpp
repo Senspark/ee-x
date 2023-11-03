@@ -15,6 +15,8 @@
 #include <ee/core/internal/JsonUtils.hpp>
 #include <ee/nlohmann/json.hpp>
 
+#include <algorithm>
+
 namespace ee {
 namespace firebase {
 namespace analytics {
@@ -50,6 +52,10 @@ void Self::setUserProperty(const std::string& key, const std::string& value) {
     request["key"] = key;
     request["value"] = value;
     bridge_.call(kSetUserProperty, request.dump());
+}
+
+void Bridge::setAppIdentifier(const std::string &appIdentifier) {
+    appIdentifier_ = appIdentifier;
 }
 
 void Self::trackScreen(const std::string& name) {
@@ -128,7 +134,36 @@ void Self::logRevenue(const ILibraryAnalytics::AdRevenue &adRevenue) {
 }
 
 void Self::logRevenue(const ILibraryAnalytics::IapRevenue &iapRevenue) {
-    // do nothing
+    // Prepare name
+    auto pId = iapRevenue.productId;
+    std::replace(pId.begin(), pId.end(), '.', '_');
+    std::replace(pId.begin(), pId.end(), '-', '_');
+
+    std::string pIdShorten = iapRevenue.productId;
+    if (!appIdentifier_.empty()) {
+        auto found = pIdShorten.find(appIdentifier_ + ".");
+        if (found != std::string::npos) {
+            pIdShorten.erase(found, appIdentifier_.length());
+        }
+    }
+
+    {
+        auto removeStr = "com.senspark.";
+        auto found = pIdShorten.find(removeStr);
+        if (found != std::string::npos) {
+            pIdShorten.erase(found, std::string(removeStr).length());
+        }
+    }
+
+    std::replace(pIdShorten.begin(), pIdShorten.end(), '.', '_');
+    std::replace(pIdShorten.begin(), pIdShorten.end(), '-', '_');
+
+    logEvent("conv_buy_iap_" + pIdShorten, {});
+
+    logEvent("conv_buy_iap", {
+            {"package_name", iapRevenue.productId},
+            {"order_id",     iapRevenue.orderId},
+    });
 }
 } // namespace analytics
 } // namespace firebase

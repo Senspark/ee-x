@@ -32,6 +32,7 @@ public:
     static std::shared_ptr<Self> instance(AppStore androidStore);
 
     virtual void configure() override;
+    virtual void setObfuscatedAccountId(const std::string& accountId);
 
 private:
     explicit StandardPurchasingModule(

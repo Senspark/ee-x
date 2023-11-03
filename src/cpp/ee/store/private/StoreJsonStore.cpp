@@ -173,5 +173,9 @@ Self::parseStoreSpecificPurchaseErrorCode(const std::string& json) {
     }
     return result;
 }
+
+void JsonStore::setObfuscationAccountId(const std::string &obfuscationAccountId) {
+    store_->setObfuscationAccountId(obfuscationAccountId);
+}
 } // namespace store
 } // namespace ee

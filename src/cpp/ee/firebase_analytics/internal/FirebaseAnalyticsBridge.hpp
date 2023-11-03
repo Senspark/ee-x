@@ -28,6 +28,9 @@ public:
     virtual Task<bool> initialize() override;
     virtual void setUserProperty(const std::string& key,
                                  const std::string& value) override;
+
+    void setAppIdentifier(const std::string &appIdentifier) override;
+
     virtual void trackScreen(const std::string& name) override;
     virtual void
     logEvent(const std::string& name,
@@ -45,6 +48,7 @@ private:
     IMessageBridge& bridge_;
     ILogger& logger_;
     Destroyer destroyer_;
+    std::string appIdentifier_;
 };
 } // namespace analytics
 } // namespace firebase

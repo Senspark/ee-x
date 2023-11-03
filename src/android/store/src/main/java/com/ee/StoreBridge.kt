@@ -2,6 +2,7 @@ package com.ee
 
 import android.app.Activity
 import android.app.Application
+import android.os.RemoteException
 import androidx.annotation.AnyThread
 import com.android.billingclient.api.AcknowledgePurchaseParams
 import com.android.billingclient.api.BillingClient
@@ -14,12 +15,15 @@ import com.android.billingclient.api.BillingResult
 import com.android.billingclient.api.ConsumeParams
 import com.android.billingclient.api.Purchase
 import com.android.billingclient.api.PurchaseHistoryRecord
+import com.android.billingclient.api.QueryPurchasesParams
 import com.android.billingclient.api.SkuDetails
 import com.android.billingclient.api.SkuDetailsParams
 import com.android.billingclient.api.acknowledgePurchase
 import com.android.billingclient.api.consumePurchase
 import com.android.billingclient.api.queryPurchaseHistory
 import com.android.billingclient.api.querySkuDetails
+import com.android.installreferrer.api.InstallReferrerClient
+import com.android.installreferrer.api.InstallReferrerStateListener
 import com.ee.internal.GooglePlayPurchasing
 import com.ee.internal.IUnityCallback
 import com.ee.internal.IabHelper
@@ -40,6 +44,7 @@ import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.serialization.Serializable
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
+import kotlin.coroutines.suspendCoroutine
 
 /**
  * Created by Zinge on 5/16/17.
@@ -263,20 +268,20 @@ class StoreBridge(
         return result
     }
 
-    override suspend fun getPurchases(@SkuType skuType: String): List<Purchase> =
-        suspendCancellableCoroutine { continuation ->
-            _scope.launch {
-                val client = connect()
-                client.queryPurchasesAsync(skuType)
-                { result, purchases ->
-                    if (result.responseCode == BillingResponseCode.OK) {
-                        continuation.resume(purchases)
-                    } else {
-                        continuation.resumeWithException(StoreException(result.responseCode))
-                    }
+    override suspend fun getPurchases(@SkuType skuType: String): List<Purchase> {
+        val client = connect()
+        return suspendCoroutine { cont ->
+            client.queryPurchasesAsync(
+                QueryPurchasesParams.newBuilder().setProductType(skuType).build()
+            ) { billingResult, purchaseList ->
+                if (billingResult.responseCode == BillingResponseCode.OK) {
+                    cont.resume(purchaseList)
+                } else {
+                    cont.resumeWithException(StoreException(billingResult.responseCode))
                 }
             }
         }
+    }
 
     override suspend fun getPurchaseHistory(@SkuType skuType: String): List<PurchaseHistoryRecord> {
         val client = connect()

@@ -602,9 +602,6 @@ object Platform {
     private fun showInstantPrompt(url: String, referrer: String, activity: Activity) {
         // nhanc18 remove implementation 'com.google.android.gms:play-services-instantapps:18.0.1' in build.gradle
         // Cho nên ko cần nữa
-//        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url)).addCategory(Intent.CATEGORY_BROWSABLE)
-//        val requestCode = 10;
-//        com.google.android.gms.instantapps.InstantApps.showInstallPrompt(activity, intent, requestCode, referrer)
     }
 
     private suspend fun getInstallReferrer(activity: Activity): String {

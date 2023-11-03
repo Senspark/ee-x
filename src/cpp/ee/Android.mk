@@ -12,6 +12,7 @@ LOCAL_SRC_FILES := \
     ${shell find $(LOCAL_PATH)/adjust                 -print} \
     ${shell find $(LOCAL_PATH)/ads                    -print} \
     ${shell find $(LOCAL_PATH)/app_lovin              -print} \
+    ${shell find $(LOCAL_PATH)/app_lovin_max          -print} \
     ${shell find $(LOCAL_PATH)/apps_flyer             -print} \
     ${shell find $(LOCAL_PATH)/cocos                  -print} \
     ${shell find $(LOCAL_PATH)/core                   -print} \

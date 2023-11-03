@@ -10,6 +10,7 @@ namespace ads {
 enum class AdNetwork {
     AdMob,
     AppLovin,
+    AppLovinMax,
     FacebookAds,
     IronSource,
     UnityAds,

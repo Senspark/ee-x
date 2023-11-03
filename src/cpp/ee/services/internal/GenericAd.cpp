@@ -52,6 +52,15 @@ Self::GenericAd(const std::shared_ptr<IAd>& ad,
                     }
                 });
             },
+        .onAdPaid =
+            [this](const ee::ads::AdPaidResult& result){
+                // Propagation.
+                dispatchEvent([=](auto&& observer) {
+                    if (observer.onAdPaid) {
+                        observer.onAdPaid(result);
+                    }
+                });
+            },
     });
 }
 

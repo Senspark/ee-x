@@ -3,6 +3,7 @@
 
 #include <ee/ad_mob/AdMobFwd.hpp>
 #include <ee/app_lovin/AppLovinFwd.hpp>
+#include <ee/app_lovin_max/AppLovinMaxFwd.hpp>
 #include <ee/facebook_ads/FacebookAdsFwd.hpp>
 #include <ee/iron_source/IronSourceFwd.hpp>
 #include <ee/nlohmann/json_fwd.hpp>
@@ -107,10 +108,30 @@ public:
     virtual void addAnalytics(std::shared_ptr<ILibraryAnalytics> analytics) override;
     virtual std::shared_ptr<IAd> createAd(AdFormat format,
                                           const std::string& id) override;
-
+    
 private:
     std::shared_ptr<IAppLovin> plugin_;
     std::string appId_;
+};
+    
+class AppLovinMaxConfig : public INetworkConfig {
+public:
+    explicit AppLovinMaxConfig(const nlohmann::json& node);
+    
+    virtual Task<> initialize() override;
+    virtual AdNetwork network() const override;
+    virtual void addTestDevice(const std::string& hash) override;
+    virtual void openTestSuite() override;
+    virtual void addAnalytics(std::shared_ptr<ILibraryAnalytics> analytics) override;
+    virtual std::shared_ptr<IAd> createAd(AdFormat format,
+                                          const std::string& id) override;
+
+private:
+    std::shared_ptr<IAppLovinMax> plugin_;
+    std::string appId_;
+    std::string bannerAdId_;
+    std::string rewardedAdId_;
+    std::string interstitialAdId_;
 };
 
 class FacebookAdsConfig : public INetworkConfig {

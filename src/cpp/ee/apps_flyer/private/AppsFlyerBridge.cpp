@@ -89,7 +89,7 @@ void Self::logRevenue(const ILibraryAnalytics::AdRevenue &adRevenue) {
         case AdNetwork::AdMob:
             mediationNetwork = "admob";
             break;
-        case AdNetwork::AppLovin:
+        case AdNetwork::AppLovinMax:
             mediationNetwork = "applovin";
             break;
         default:

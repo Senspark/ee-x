@@ -130,7 +130,6 @@ Task<std::string> Self::getDeviceId() {
 
 SafeInset Self::getSafeInset() {
     SafeInset result;
-#ifdef EE_X_ANDROID
     auto response = bridge_->call(kGetSafeInset);
     auto json = nlohmann::json::parse(response);
 
@@ -138,13 +137,6 @@ SafeInset Self::getSafeInset() {
     result.right = json["right"];
     result.top = json["top"];
     result.bottom = json["bottom"];
-#else  // EE_X_ANDROID
-    // TODO.
-    result.left = 0;
-    result.right = 0;
-    result.top = 0;
-    result.bottom = 0;
-#endif // EE_X_ANDROID
     return result;
 }
 

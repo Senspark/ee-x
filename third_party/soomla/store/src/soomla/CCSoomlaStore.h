@@ -55,6 +55,12 @@ public:
                            const cocos2d::ValueMap &storeParams,
                            const std::shared_ptr<ee::ILibraryAnalytics> &analytics);
 
+    /*
+     * For JSB
+     * */
+    static void initializeLegacy(CCStoreAssets* storeAssets,
+                           const cocos2d::ValueMap &storeParams);
+
     /**
      Starts an in app purchase process in the market (App Store, Google
      Play, etc...).

@@ -50,40 +50,45 @@ CCSoomlaStore* CCSoomlaStore::getInstance() {
     return s_SharedSoomlaStore;
 }
 
-void CCSoomlaStore::initialize(soomla::CCStoreAssets* storeAssets,
-                               const cocos2d::ValueMap& storeParams,
-                               const std::shared_ptr<ee::ILibraryAnalytics> &analytics) {
-    if (initialized) {
-        CCStoreEventDispatcher::getInstance()->onUnexpectedStoreError(0, true);
-        CCSoomlaUtils::logError(TAG, "SoomlaStore is already initialized. You "
-                                     "can't initialize it twice!");
-        return;
+    void CCSoomlaStore::initializeLegacy(soomla::CCStoreAssets *storeAssets,
+                                   const cocos2d::ValueMap &storeParams) {
+        initialize(storeAssets, storeParams, nullptr);
     }
 
-    CCStoreBridge::initShared();
+    void CCSoomlaStore::initialize(soomla::CCStoreAssets* storeAssets,
+                                   const cocos2d::ValueMap& storeParams,
+                                   const std::shared_ptr<ee::ILibraryAnalytics> &analytics) {
+        if (initialized) {
+            CCStoreEventDispatcher::getInstance()->onUnexpectedStoreError(0, true);
+            CCSoomlaUtils::logError(TAG, "SoomlaStore is already initialized. You "
+                                         "can't initialize it twice!");
+            return;
+        }
 
-    CCSoomlaUtils::logDebug(TAG, "CCSoomlaStore Initializing...");
+        CCStoreBridge::initShared();
 
-    auto instance = getInstance();
-    instance->loadBillingService();
-    instance->analytics = analytics;
+        CCSoomlaUtils::logDebug(TAG, "CCSoomlaStore Initializing...");
 
-    CCStoreInfo::createShared(storeAssets);
+        auto instance = getInstance();
+        instance->loadBillingService();
+        instance->analytics = analytics;
 
-    CCStoreBridge::getInstance()->applyParams(storeParams);
+        CCStoreInfo::createShared(storeAssets);
 
-    // #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-    // On iOS we only refresh market items
-    // CCError *error = nullptr;
-    // getInstance()->refreshMarketItemsDetails(&error);
-    // #elif (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-    // On Android we refresh market items and restore transactions
-    // getInstance()->refreshInventory();
-    // #endif
+        CCStoreBridge::getInstance()->applyParams(storeParams);
 
-    initialized = true;
-    CCStoreEventDispatcher::getInstance()->onSoomlaStoreInitialized(true);
-}
+        // #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+        // On iOS we only refresh market items
+        // CCError *error = nullptr;
+        // getInstance()->refreshMarketItemsDetails(&error);
+        // #elif (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+        // On Android we refresh market items and restore transactions
+        // getInstance()->refreshInventory();
+        // #endif
+
+        initialized = true;
+        CCStoreEventDispatcher::getInstance()->onSoomlaStoreInitialized(true);
+    }
 
 void CCSoomlaStore::buyMarketItem(const std::string& productId,
                                   const std::string& payload, CCError** error) {
@@ -146,12 +151,14 @@ void CCSoomlaStore::logIapRevenue(const std::string& productId, CCError** error)
         auto currencyCode = marketItem->getMarketCurrencyCode();
         auto productId = marketItem->getProductId();
 
-        analytics->logRevenue(ee::core::analytics::IapRevenue{
-            .revenue = price,
-            .currencyCode = currencyCode,
-            .productId = productId,
-            .orderId = orderId
-        });
+        if (analytics) {
+            analytics->logRevenue(ee::core::analytics::IapRevenue{
+                    .revenue = price,
+                    .currencyCode = currencyCode,
+                    .productId = productId,
+                    .orderId = orderId
+            });
+        }
 
         listener->clear();
     });

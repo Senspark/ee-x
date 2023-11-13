@@ -1,10 +1,6 @@
-import {
-    ILogger,
-    IMessageBridge,
-    Platform,
-} from "../../core";
-import { INotification } from "../INotification";
-import { NotificationBuilder } from "../NotificationBuilder";
+import {ILogger, IMessageBridge, Platform,} from "../../core";
+import {INotification} from "../INotification";
+import {NotificationBuilder, NotificationStyle} from "../NotificationBuilder";
 
 type Destroyer = () => void;
 
@@ -38,6 +34,7 @@ export class Notification implements INotification {
             body: builder.body,
             delay: builder.delay,
             interval: builder.interval,
+            style: builder.style == NotificationStyle.Basic ? 0 : 1,
             tag: builder.tag,
         };
         this._bridge.call(this.kSchedule, JSON.stringify(request));

@@ -226,7 +226,7 @@ export class AdMob implements IAdMob {
                 this._analytics.logAdRevenue(new AdRevenue(
                     AdNetwork.AdMob,
                     adSource,
-                    revenue / 1e6,
+                    revenue,
                     "USD",
                     adFormatEnum,
                     adUnitId));

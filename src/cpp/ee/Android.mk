@@ -16,6 +16,7 @@ LOCAL_SRC_FILES := \
     ${shell find $(LOCAL_PATH)/apps_flyer             -print} \
     ${shell find $(LOCAL_PATH)/cocos                  -print} \
     ${shell find $(LOCAL_PATH)/core                   -print} \
+    ${shell find $(LOCAL_PATH)/cost_center_analytics  -print} \
     ${shell find $(LOCAL_PATH)/facebook               -print} \
     ${shell find $(LOCAL_PATH)/facebook_ads           -print} \
     ${shell find $(LOCAL_PATH)/firebase_analytics     -print} \

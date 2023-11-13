@@ -1,9 +1,15 @@
+export enum NotificationStyle {
+    Basic,
+    Custom
+}
+
 export class NotificationBuilder {
     private _ticker: string;
     private _title: string;
     private _body: string;
     private _delay: number;
     private _interval: number;
+    private _style: NotificationStyle;
     private _tag: number;
 
     public constructor() {
@@ -12,6 +18,7 @@ export class NotificationBuilder {
         this._body = ``;
         this._delay = 0;
         this._interval = 0;
+        this._style = NotificationStyle.Basic;
         this._tag = 0;
     }
 
@@ -53,6 +60,14 @@ export class NotificationBuilder {
 
     public set interval(value: number) {
         this._interval = value;
+    }
+
+    public get style(): NotificationStyle {
+        return this._style;
+    }
+
+    public set style(value: NotificationStyle) {
+        this._style = value;
     }
 
     public get tag(): number {

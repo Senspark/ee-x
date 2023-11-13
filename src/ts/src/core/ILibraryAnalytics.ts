@@ -3,7 +3,7 @@ export interface ILibraryAnalytics {
 
     logIapRevenue(iapRevenue: IapRevenue): void;
 
-    pushGameLevel(levelNo: number, levelMode: string): void;
+    pushGameLevel(levelNo: string, levelMode: string): void;
 
     popGameLevel(winGame: boolean): void;
 }

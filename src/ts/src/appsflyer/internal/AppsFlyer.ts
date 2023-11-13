@@ -151,7 +151,7 @@ export class AppsFlyer implements IAppsFlyer {
         this._bridge.call(this.kTrackEvent, output);
     }
 
-    public pushGameLevel(levelNo: number, levelMode: string): void {
+    public pushGameLevel(levelNo: string, levelMode: string): void {
         // do nothing
     }
 

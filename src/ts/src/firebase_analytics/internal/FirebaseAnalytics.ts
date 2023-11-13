@@ -135,7 +135,7 @@ export class FirebaseAnalytics implements IFirebaseAnalytics {
         });
     }
 
-    public pushGameLevel(levelNo: number, levelMode: string): void {
+    public pushGameLevel(levelNo: string, levelMode: string): void {
         // do nothing
     }
 

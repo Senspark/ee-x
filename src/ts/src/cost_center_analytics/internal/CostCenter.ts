@@ -106,7 +106,7 @@ export class CostCenter implements ICostCenter {
         this._logger.info(`${this.kTag}: Add to pending: ${JSON.stringify(iapRevenue)}`);
     }
 
-    public pushGameLevel(levelNo: number, levelMode: string): void {
+    public pushGameLevel(levelNo: string, levelMode: string): void {
         this._gameLevelData = {
             levelNo: levelNo,
             levelMode: levelMode,
@@ -153,7 +153,7 @@ export class CostCenter implements ICostCenter {
             return;
         }
         parameters.level = this._gameLevelData.levelNo;
-        parameters.level_move = this._gameLevelData.levelMode;
+        parameters.level_mode = this._gameLevelData.levelMode;
     }
 
     private onPurchaseValidated(json: string): void {
@@ -199,6 +199,6 @@ export class CostCenter implements ICostCenter {
 }
 
 class GameLevelData {
-    public levelNo: number = 0;
+    public levelNo: string = ``;
     public levelMode: string = ``;
 }

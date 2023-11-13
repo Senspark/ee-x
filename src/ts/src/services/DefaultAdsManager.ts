@@ -18,6 +18,7 @@ import {
     LazyFullScreenAd,
     Network,
 } from "./internal";
+import {ILibraryAnalytics} from "../core";
 
 export class DefaultAdsManager implements IAdsManager {
     private _initializer?: Promise<boolean>;
@@ -25,10 +26,12 @@ export class DefaultAdsManager implements IAdsManager {
     private readonly _config: AdsConfig;
     private readonly _bannerAds: { [key: string]: LazyBannerAd };
     private readonly _fullScreenAds: { [key: string]: LazyFullScreenAd };
+    private readonly _analytics: ILibraryAnalytics;
 
-    public constructor(configJson: string) {
+    public constructor(configJson: string, analytics: ILibraryAnalytics) {
         this._initialized = false;
         this._config = AdsConfig.parse(configJson);
+        this._analytics = analytics;
         const displayCapper = new Capper(0.1);
         this._bannerAds = {
             [AdFormat.Banner]: new LazyBannerAd(),
@@ -47,7 +50,7 @@ export class DefaultAdsManager implements IAdsManager {
     }
 
     private async initializeImpl(): Promise<boolean> {
-        await this._config.initialize();
+        await this._config.initialize(this._analytics);
         this.initializeBannerAd(AdFormat.Banner);
         this.initializeBannerAd(AdFormat.Rectangle);
         this.initializeFullScreenAd(AdFormat.AppOpen);

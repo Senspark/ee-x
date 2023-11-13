@@ -21,6 +21,8 @@ import { IPlugin } from "./IPlugin";
 import { Logger } from "./Logger";
 import { LogLevel } from "./LogLevel";
 import { Platform } from "./Platform";
+import {AppsFlyer} from "../appsflyer/internal/AppsFlyer";
+import {CostCenter} from "../cost_center_analytics/internal/CostCenter";
 
 declare const global: any;
 declare const CC_JSB: boolean;
@@ -43,6 +45,8 @@ export enum Plugin {
     IronSource,
     Notification,
     UnityAds,
+    AppsFlyer,
+    CostCenter,
 }
 
 export class PluginManager {
@@ -58,6 +62,8 @@ export class PluginManager {
         [Plugin.IronSource]: [`IronSource`, (bridge, logger, destroyer) => new IronSource(bridge, logger, destroyer)],
         [Plugin.Notification]: [`Notification`, (bridge, logger, destroyer) => new Notification(bridge, logger, destroyer)],
         [Plugin.UnityAds]: [`UnityAds`, (bridge, logger, destroyer) => new UnityAds(bridge, logger, destroyer)],
+        [Plugin.AppsFlyer]: [`AppsFlyer`, (bridge, logger, destroyer) => new AppsFlyer(bridge, logger, destroyer)],
+        [Plugin.CostCenter]: [`CostCenter`, (bridge, logger, destroyer) => new CostCenter(bridge, logger, destroyer)],
     };
 
     private static _impl: IPluginManagerImpl;

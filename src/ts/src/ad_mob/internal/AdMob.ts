@@ -13,6 +13,7 @@ import {
     MediationManager,
 } from "../../ads/internal";
 import {
+    AdFormat, AdNetwork, AdRevenue, ILibraryAnalytics,
     ILogger,
     IMessageBridge,
     Utils,
@@ -37,6 +38,7 @@ export class AdMob implements IAdMob {
     private readonly kCreateRewardedInterstitialAd = this.kPrefix + "CreateRewardedInterstitialAd";
     private readonly kCreateRewardedAd = this.kPrefix + "CreateRewardedAd";
     private readonly kDestroyAd = this.kPrefix + "DestroyAd";
+    private readonly kOnAdPaid = this.kPrefix + "OnAdPaid";
 
     private readonly _bridge: IMessageBridge;
     private readonly _logger: ILogger;
@@ -44,6 +46,8 @@ export class AdMob implements IAdMob {
     private readonly _network: string;
     private readonly _ads: { [index: string]: IAd };
     private readonly _displayer: IAsyncHelper<AdResult>;
+
+    private _analytics: ILibraryAnalytics | null = null;
 
     public constructor(bridge: IMessageBridge, logger: ILogger, destroyer: Destroyer) {
         this._bridge = bridge;
@@ -53,6 +57,10 @@ export class AdMob implements IAdMob {
         this._network = `ad_mob`;
         this._ads = {};
         this._displayer = MediationManager.getInstance().adDisplayer;
+
+        this._bridge.registerHandler( (message: string) => {
+            this.onAdPaidEvent(message);
+        }, this.kOnAdPaid);
     }
 
     public destroy(): void {
@@ -62,10 +70,12 @@ export class AdMob implements IAdMob {
             ad.destroy();
             delete this._ads[id];
         }
+        this._bridge.deregisterHandler(this.kOnAdPaid);
         this._destroyer();
     }
 
-    public async initialize(): Promise<boolean> {
+    public async initialize(analytics: ILibraryAnalytics): Promise<boolean> {
+        this._analytics = analytics;
         const response = await this._bridge.callAsync(this.kInitialize);
         return Utils.toBool(response);
     }
@@ -175,5 +185,54 @@ export class AdMob implements IAdMob {
         }
         delete this._ads[adId];
         return true;
+    }
+
+    private onAdPaidEvent(jsonData: string): void {
+        this._logger.debug(`Ad paid: jsonData = ${jsonData}`);
+        try {
+            const json = JSON.parse(jsonData);
+            const adSource: string = json["networkName"];
+            // const mediationName: string = json["mediationName"];
+            const adUnitId: string = json["adUnitId"];
+            const adFormat: string = json["adFormat"];
+            const revenue: number = json["revenue"];
+
+            let adFormatEnum: AdFormat;
+            switch (adFormat) {
+                case "App Open":
+                    adFormatEnum = AdFormat.AppOpen;
+                    break;
+                case "Banner":
+                    adFormatEnum = AdFormat.Banner;
+                    break;
+                case "Interstitial":
+                    adFormatEnum = AdFormat.Interstitial;
+                    break;
+                case "Rectangle":
+                    adFormatEnum = AdFormat.Rectangle;
+                    break;
+                case "Rewarded":
+                    adFormatEnum = AdFormat.Rewarded;
+                    break;
+                case "Rewarded Interstitial":
+                    adFormatEnum = AdFormat.RewardedInterstitial;
+                    break;
+                default:
+                    adFormatEnum = AdFormat.Null;
+                    break;
+            }
+
+            if (this._analytics) {
+                this._analytics.logAdRevenue(new AdRevenue(
+                    AdNetwork.AdMob,
+                    adSource,
+                    revenue / 1e6,
+                    "USD",
+                    adFormatEnum,
+                    adUnitId));
+            }
+        } catch (e) {
+            this._logger.error(`Ad paid: ${e}`);
+        }
     }
 }

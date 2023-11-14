@@ -1,0 +1,24 @@
+apply plugin: 'com.android.library'
+
+android {
+    buildToolsVersion rootProject.buildToolsVersion
+    compileSdkVersion rootProject.compileSdkVersion
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    defaultConfig {
+        minSdkVersion 17
+        targetSdkVersion rootProject.targetSdkVersion
+    }
+}
+
+if (rootProject.ext.has('buildMaven') && rootProject.buildMaven) {
+    configureMaven('cost-center')
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.aar', '*.jar'], exclude: [])
+}

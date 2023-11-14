@@ -1,6 +1,7 @@
-import { IMessageBridge } from "../IMessageBridge";
-import { Utils } from "../Utils";
-import { IPlatformImpl } from "./IPlatformImpl";
+import {IMessageBridge} from "../IMessageBridge";
+import {Utils} from "../Utils";
+import {IPlatformImpl} from "./IPlatformImpl";
+import {SafeInset} from "../SafeInset";
 
 export class PlatformImplNative implements IPlatformImpl {
     private readonly kPrefix = "Platform_";
@@ -113,5 +114,11 @@ export class PlatformImplNative implements IPlatformImpl {
         };
         const response = await this._bridge.callAsync(this.kTestConnection, JSON.stringify(request));
         return Utils.toBool(response);
+    }
+
+    public getSafeInset(): SafeInset {
+        const response = this._bridge.call(this.kGetSafeInset);
+        const safeInset = JSON.parse(response);
+        return safeInset;
     }
 }

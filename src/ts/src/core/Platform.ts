@@ -1,8 +1,6 @@
-import { IMessageBridge } from "./IMessageBridge";
-import {
-    IPlatformImpl,
-    PlatformImplNative,
-} from "./internal";
+import {IMessageBridge} from "./IMessageBridge";
+import {IPlatformImpl, PlatformImplNative,} from "./internal";
+import {SafeInset} from "./SafeInset";
 
 export class Platform {
     private static _impl: IPlatformImpl;
@@ -37,7 +35,6 @@ export class Platform {
 
     public static getSha1Signature(): string {
         return this._impl.getSha1Signature();
-
     }
 
     public static isInstantApp(): boolean {
@@ -70,5 +67,9 @@ export class Platform {
 
     public static testConnection(hostName: string, timeOut: number): Promise<boolean> {
         return this._impl.testConnection(hostName, timeOut);
+    }
+
+    public static getSafeInset(): SafeInset {
+        return this._impl.getSafeInset();
     }
 }

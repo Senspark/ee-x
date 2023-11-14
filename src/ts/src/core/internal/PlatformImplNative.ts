@@ -31,8 +31,8 @@ export class PlatformImplNative implements IPlatformImpl {
     }
 
     public isApplicationInstalled(applicationId: string): boolean {
-        const repsonse = this._bridge.call(this.kIsApplicationInstalled, applicationId);
-        return Utils.toBool(repsonse);
+        const res = this._bridge.call(this.kIsApplicationInstalled, applicationId);
+        return Utils.toBool(res);
     }
 
     public openApplication(applicationId: string): boolean {
@@ -93,8 +93,7 @@ export class PlatformImplNative implements IPlatformImpl {
     }
 
     public async getDeviceId(): Promise<string> {
-        const response = await this._bridge.callAsync(this.kGetDeviceId);
-        return response;
+        return await this._bridge.callAsync(this.kGetDeviceId);
     }
 
     public sendMail(recipient: string, subject: string, body: string): boolean {
@@ -118,7 +117,9 @@ export class PlatformImplNative implements IPlatformImpl {
 
     public getSafeInset(): SafeInset {
         const response = this._bridge.call(this.kGetSafeInset);
-        const safeInset = JSON.parse(response);
-        return safeInset;
+        if (response && response !== "") {
+            return JSON.parse(response);
+        }
+        return new SafeInset();
     }
 }

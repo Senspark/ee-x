@@ -1,0 +1,11 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <application>
+        <receiver
+            android:name="com.senspark.unity_cmd_receiver.UnityCmdReceiver"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.senspark.ACTION_CMD" />
+            </intent-filter>
+        </receiver>
+    </application>
+</manifest>

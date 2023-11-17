@@ -23,6 +23,7 @@ import { LogLevel } from "./LogLevel";
 import { Platform } from "./Platform";
 import {AppsFlyer} from "../appsflyer/internal/AppsFlyer";
 import {CostCenter} from "../cost_center_analytics/internal/CostCenter";
+import {CommandReceiver} from "../command_receiver/internal/CommandReceiver";
 
 declare const global: any;
 declare const CC_JSB: boolean;
@@ -47,6 +48,7 @@ export enum Plugin {
     UnityAds,
     AppsFlyer,
     CostCenter,
+    CommandReceiver,
 }
 
 export class PluginManager {
@@ -64,6 +66,7 @@ export class PluginManager {
         [Plugin.UnityAds]: [`UnityAds`, (bridge, logger, destroyer) => new UnityAds(bridge, logger, destroyer)],
         [Plugin.AppsFlyer]: [`AppsFlyer`, (bridge, logger, destroyer) => new AppsFlyer(bridge, logger, destroyer)],
         [Plugin.CostCenter]: [`CostCenter`, (bridge, logger, destroyer) => new CostCenter(bridge, logger, destroyer)],
+        [Plugin.CommandReceiver]: [`CommandReceiver`, (bridge, logger, destroyer) => new CommandReceiver(bridge, logger, destroyer)],
     };
 
     private static _impl: IPluginManagerImpl;

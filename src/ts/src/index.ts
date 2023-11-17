@@ -14,3 +14,4 @@ export * from './services';
 export * from './unity_ads';
 export * from './appsflyer';
 export * from './cost_center_analytics';
+export * from './command_receiver';

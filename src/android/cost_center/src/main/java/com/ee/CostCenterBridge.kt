@@ -3,8 +3,6 @@ package com.ee
 import android.app.Activity
 import android.app.Application
 import androidx.annotation.AnyThread
-import com.ee.internal.deserialize
-import com.ee.internal.serialize
 
 class CostCenterBridge(
     private val _bridge: IMessageBridge,
@@ -43,11 +41,7 @@ class CostCenterBridge(
 
     @AnyThread
     private fun registerHandlers() {
-        _bridge.registerHandler(kInitialize) { message ->
-            ""
-        }
-        _bridge.registerHandler(kStartTracking) {
-            startTracking()
+        _bridge.registerHandler(kInitialize) {
             ""
         }
     }
@@ -55,6 +49,5 @@ class CostCenterBridge(
     @AnyThread
     private fun deregisterHandlers() {
         _bridge.deregisterHandler(kInitialize)
-        _bridge.deregisterHandler(kStartTracking)
     }
 }

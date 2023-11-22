@@ -6,6 +6,7 @@ import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.os.Build
 import androidx.annotation.AnyThread
 import com.ee.internal.NotificationReceiver
 import com.ee.internal.NotificationUtils
@@ -27,6 +28,9 @@ class NotificationBridge(
         private const val kUnschedule = "${kPrefix}Unschedule"
         private const val kUnscheduleAll = "${kPrefix}UnscheduleAll"
         private const val kClearAll = "${kPrefix}ClearAll"
+
+        private val isAndroid6OrHigher: Boolean
+            get() = Build.VERSION.SDK_INT >= Build.VERSION_CODES.M // API 21
     }
 
     init {
@@ -123,8 +127,15 @@ class NotificationBridge(
         intent.putExtra("tag", tag)
         intent.putExtra("style", style)
         intent.putExtra("className", activity::class.java.name)
-        NotificationUtils.scheduleAlarm(_application, intent, tag, PendingIntent.FLAG_UPDATE_CURRENT,
-            delay, interval)
+
+        val ptFlags =
+            if (isAndroid6OrHigher) {
+                PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_CANCEL_CURRENT
+            } else {
+                PendingIntent.FLAG_CANCEL_CURRENT
+            }
+
+        NotificationUtils.scheduleAlarm(_application, intent, tag, ptFlags, delay, interval)
     }
 
     fun unschedule(tag: Int) {

@@ -19,12 +19,21 @@ object NotificationUtils {
     private val channelId = "ee_x_channel_id_01"
     private val channelName = "ee_x_channel_name"
 
+    private val isAndroid8OrHigher: Boolean
+        get() = Build.VERSION.SDK_INT >= Build.VERSION_CODES.O // API 26
+
+    private val isAndroid6OrHigher: Boolean
+        get() = Build.VERSION.SDK_INT >= Build.VERSION_CODES.M // API 21
+
+    private val isAndroid5OrHigher: Boolean
+        get() = Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP // API 21
+
     /**
      * http://stackoverflow.com/questions/28387602/notification-bar-icon-turns-white-in-android-5
      * -lollipop
      */
     private fun getNotificationIcon(context: Context): Int {
-        val useWhiteIcon = Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP
+        val useWhiteIcon = isAndroid5OrHigher
         val resourceName = if (useWhiteIcon) "ic_notification" else "ic_launcher"
         val defType = if (useWhiteIcon) "drawable" else "mipmap"
         val resID = context.resources.getIdentifier(resourceName, defType, context.packageName)
@@ -50,12 +59,15 @@ object NotificationUtils {
         val intent = Intent(context, activityClass)
             .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
             .setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
-        return PendingIntent.getActivity(
-            context,
-            requestCode,
-            intent,
-            PendingIntent.FLAG_UPDATE_CURRENT
-        )
+
+        val ptFlags =
+            if (isAndroid6OrHigher) {
+                PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_CANCEL_CURRENT
+            } else {
+                PendingIntent.FLAG_CANCEL_CURRENT
+            }
+
+        return PendingIntent.getActivity(context, requestCode, intent, ptFlags)
     }
 
     /**
@@ -108,12 +120,14 @@ object NotificationUtils {
      * of the pending intent.
      */
     fun unscheduleAlarm(context: Context, intent: Intent, requestCode: Int) {
-        val pendingIntent = PendingIntent.getBroadcast(
-            context,
-            requestCode,
-            intent,
-            PendingIntent.FLAG_UPDATE_CURRENT
-        )
+        val ptFlags =
+            if (isAndroid6OrHigher) {
+                PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_CANCEL_CURRENT
+            } else {
+                PendingIntent.FLAG_CANCEL_CURRENT
+            }
+
+        val pendingIntent = PendingIntent.getBroadcast(context, requestCode, intent, ptFlags)
         if (pendingIntent != null) {
             pendingIntent.cancel()
             val manager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
@@ -161,7 +175,7 @@ object NotificationUtils {
     private fun createChannel(context: Context): NotificationManager {
         val notificationManager =
             context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        if (isAndroid8OrHigher) {
             val notificationChannel =
                 NotificationChannel(channelId, channelName, NotificationManager.IMPORTANCE_HIGH)
             notificationChannel.setShowBadge(true)

@@ -168,11 +168,10 @@ export class CostCenter implements ICostCenter {
                 this._logger.error(`${this.kTag}: last iap revenue is null`);
                 return;
             }
-            if (!orderId) {
+            if (!orderId || orderId !== this._lastIapRevenue.orderId) {
                 this._logger.error(`${this.kTag}: orderId or productId doesn't match`);
                 return;
             }
-            this._lastIapRevenue.orderId = orderId;
             this.logIapRevenueImpl(this._lastIapRevenue, isTestPurchase);
         } catch (e) {
             this._logger.error(`${this.kTag}: onPurchaseValidated: ${e}`)

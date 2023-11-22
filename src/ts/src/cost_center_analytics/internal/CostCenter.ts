@@ -162,16 +162,17 @@ export class CostCenter implements ICostCenter {
             // const isSuccess: boolean = data["isSuccess"];
             const isTestPurchase: boolean = data["isTestPurchase"];
             const orderId: string = data["orderId"];
-            // const productId: string = data["productId"];
+            const productId: string = data["productId"]; // empty
 
             if (!this._lastIapRevenue) {
                 this._logger.error(`${this.kTag}: last iap revenue is null`);
                 return;
             }
-            if (this._lastIapRevenue.orderId !== orderId) {
+            if (!orderId) {
                 this._logger.error(`${this.kTag}: orderId or productId doesn't match`);
                 return;
             }
+            this._lastIapRevenue.orderId = orderId;
             this.logIapRevenueImpl(this._lastIapRevenue, isTestPurchase);
         } catch (e) {
             this._logger.error(`${this.kTag}: onPurchaseValidated: ${e}`)
@@ -189,7 +190,7 @@ export class CostCenter implements ICostCenter {
 
         const json = {
             name: isTestPurchase ? "iap_sdk_test" : "iap_sdk",
-            values: parameters
+            parameters: parameters
         };
 
         const output: string = JSON.stringify(json);

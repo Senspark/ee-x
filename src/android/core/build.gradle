@@ -11,6 +11,13 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
     }
 
+    buildTypes {
+        release {
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
     defaultConfig {
         minSdkVersion 17
         targetSdkVersion rootProject.targetSdkVersion

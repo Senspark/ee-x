@@ -17,6 +17,10 @@ android {
         minSdkVersion 17
         targetSdkVersion rootProject.targetSdkVersion
     }
+
+    buildFeatures {
+        viewBinding true
+    }
 }
 
 if (rootProject.ext.has('buildMaven') && rootProject.buildMaven) {

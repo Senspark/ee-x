@@ -30,13 +30,7 @@ class CommandReceiverBridge(
             val rootView = _activity!!.window.decorView.rootView
             val listener = ViewTreeObserver.OnGlobalLayoutListener {
                 if (!::fab.isInitialized) {
-                    val activity = _activity!!
-                    val density = activity.resources.displayMetrics.density
-                    val sizeInPx = (48 * density).toInt()
-                    fab = com.ee.cheat.Fab(activity, rootView)
-                    fab.layoutParams = ViewGroup.LayoutParams(sizeInPx, sizeInPx)
-                    val viewGroup = activity.window.decorView as ViewGroup
-                    viewGroup.addView(fab)
+                    fab = com.ee.cheat.Fab(_activity!!, rootView)
                 }
             }
             rootView.viewTreeObserver.addOnGlobalLayoutListener(listener)

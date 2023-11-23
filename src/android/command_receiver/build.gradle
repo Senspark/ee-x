@@ -26,4 +26,5 @@ if (rootProject.ext.has('buildMaven') && rootProject.buildMaven) {
 dependencies {
     implementation project(':ee-x-core')
     implementation 'androidx.core:core-ktx:1.9.0'
+    implementation 'com.google.android.material:material:1.9.0'
 }

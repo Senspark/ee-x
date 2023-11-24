@@ -3,10 +3,17 @@ import {ICommandObserver, ICommandReceiver} from "../ICommandReceiver";
 
 type Destroyer = () => void;
 
+export interface ICmdData {
+    cmd: string;
+    desc: string;
+    sample: string;
+}
+
 export class CommandReceiver extends ObserverManager<ICommandObserver> implements ICommandReceiver {
     private readonly kTag = `CommandReceiver`;
     private readonly kPrefix = `${this.kTag}Bridge`;
     private readonly kOnMessageReceived = `${this.kPrefix}OnMessageReceived`;
+    private readonly kAddCommand = `${this.kPrefix}AddCommand`;
 
     private readonly _bridge: IMessageBridge;
     private readonly _logger: ILogger;
@@ -29,6 +36,10 @@ export class CommandReceiver extends ObserverManager<ICommandObserver> implement
         this._bridge.registerHandler((json: string) => {
             this.onMessageReceived(json);
         }, this.kOnMessageReceived);
+    }
+
+    public addCommand(data: ICmdData): void {
+        this._bridge.call(this.kAddCommand, JSON.stringify(data));
     }
 
     private onMessageReceived(json: string): void {

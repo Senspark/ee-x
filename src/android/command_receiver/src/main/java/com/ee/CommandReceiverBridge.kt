@@ -2,7 +2,6 @@ package com.ee
 
 import android.app.Activity
 import android.app.Application
-import android.view.ViewGroup
 import android.view.ViewTreeObserver
 import com.senspark.unity_cmd_receiver.UnityCmdReceiver
 
@@ -16,9 +15,11 @@ class CommandReceiverBridge(
         private val kTag = CommandReceiverBridge::class.java.name
         private const val kPrefix = "CommandReceiverBridge"
         private const val kOnMessageReceived = "${kPrefix}OnMessageReceived"
+        private const val kAddCommand = "${kPrefix}AddCommand"
     }
 
     private lateinit var fab: com.ee.cheat.Fab
+    private val _cachedMessages = mutableListOf<String>()
 
     init {
         _logger.info("$kTag: constructor begin: application = $_application activity = $_activity")
@@ -26,15 +27,21 @@ class CommandReceiverBridge(
         UnityCmdReceiver.callback = { message ->
             onMessageReceived(message)
         }
-        if(_activity != null) {
+        // Init Fab
+        if (_activity != null) {
             val rootView = _activity!!.window.decorView.rootView
             val listener = ViewTreeObserver.OnGlobalLayoutListener {
                 if (!::fab.isInitialized) {
-                    fab = com.ee.cheat.Fab(_activity!!, rootView)
+                    fab = com.ee.cheat.Fab(_activity!!, rootView, _logger, ::onMessageReceived)
+                    for (message in _cachedMessages) {
+                        fab.addCommand(message)
+                    }
+                    _cachedMessages.clear()
                 }
             }
             rootView.viewTreeObserver.addOnGlobalLayoutListener(listener)
         }
+        registerHandlers()
         _logger.info("$kTag: constructor end")
     }
 
@@ -61,8 +68,19 @@ class CommandReceiverBridge(
     }
 
     private fun registerHandlers() {
+        _bridge.registerHandler(kAddCommand) { message ->
+            _logger.info("$kTag: addCommand: message = $message")
+            if (::fab.isInitialized) {
+                fab.addCommand(message)
+            } else {
+                _logger.info("$kTag: addCommand: cache message")
+                _cachedMessages.add(message)
+            }
+            ""
+        }
     }
 
     private fun deregisterHandlers() {
+        _bridge.deregisterHandler(kAddCommand)
     }
 }

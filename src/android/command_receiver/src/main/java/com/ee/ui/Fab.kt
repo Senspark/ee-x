@@ -1,4 +1,4 @@
-package com.ee.cheat
+package com.ee.ui
 
 import android.app.ActionBar.LayoutParams
 import android.app.Activity
@@ -28,19 +28,19 @@ class Fab(
     private var dX = 0f
     private var dY: Float = 0f
 
-    private var _cheatBox: CheatBox? = null
+    private var _listBox: ListBox? = null
     private val _cachedCommands = mutableListOf<String>()
 
     init {
         setOnTouchListener(this)
-        setImageResource(com.ee.command_receiver.R.drawable.ic_cheat)
+        setImageResource(com.ee.command_receiver.R.drawable.ic_config)
         setOnClickListener {
-            if (_cheatBox == null) {
+            if (_listBox == null) {
                 createCheatBox()
                 setImageResource(com.ee.command_receiver.R.drawable.ic_close)
             } else {
                 removeCheatBox()
-                setImageResource(com.ee.command_receiver.R.drawable.ic_cheat)
+                setImageResource(com.ee.command_receiver.R.drawable.ic_config)
             }
         }
 
@@ -137,24 +137,24 @@ class Fab(
     }
 
     private fun createCheatBox() {
-        if (_cheatBox != null) {
+        if (_listBox != null) {
             return
         }
-        val box = CheatBox(_activity, _logger, _onCmdCallback)
+        val box = ListBox(_activity, _logger, _onCmdCallback)
         for (command in _cachedCommands) {
             box.addRow(command)
         }
-        _cheatBox = box
+        _listBox = box
 
         box.addCloseButton(::removeCheatBox)
     }
 
     private fun removeCheatBox() {
-        if (_cheatBox == null) {
+        if (_listBox == null) {
             return
         }
-        _cheatBox?.removeSelf()
-        _cheatBox = null
+        _listBox?.removeSelf()
+        _listBox = null
     }
 
     private fun clamp(value: Float, min: Float, max: Float): Float {

@@ -66,7 +66,7 @@ export class PluginManager {
         [Plugin.UnityAds]: [`UnityAds`, (bridge, logger, destroyer) => new UnityAds(bridge, logger, destroyer)],
         [Plugin.AppsFlyer]: [`AppsFlyer`, (bridge, logger, destroyer) => new AppsFlyer(bridge, logger, destroyer)],
         [Plugin.CostCenter]: [`CostCenter`, (bridge, logger, destroyer) => new CostCenter(bridge, logger, destroyer)],
-        [Plugin.CommandReceiver]: [`CommandReceiver`, (bridge, logger, destroyer) => new CommandReceiver(bridge, logger, destroyer)],
+        [Plugin.CommandReceiver]: [`MReceiver`, (bridge, logger, destroyer) => new CommandReceiver(bridge, logger, destroyer)],
     };
 
     private static _impl: IPluginManagerImpl;

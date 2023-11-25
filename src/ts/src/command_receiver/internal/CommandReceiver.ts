@@ -1,4 +1,4 @@
-import {ILogger, IMessageBridge, ObserverManager,} from "../../core";
+import {ILogger, IMessageBridge, ObserverManager, Platform,} from "../../core";
 import {ICommandObserver, ICommandReceiver} from "../ICommandReceiver";
 
 type Destroyer = () => void;
@@ -10,14 +10,18 @@ export interface ICmdData {
 }
 
 export class CommandReceiver extends ObserverManager<ICommandObserver> implements ICommandReceiver {
-    private readonly kTag = `CommandReceiver`;
+    private readonly kTag = `MReceiver`;
     private readonly kPrefix = `${this.kTag}Bridge`;
     private readonly kOnMessageReceived = `${this.kPrefix}OnMessageReceived`;
     private readonly kAddCommand = `${this.kPrefix}AddCommand`;
+    private readonly kShowUI = `${this.kPrefix}ShowUI`;
 
     private readonly _bridge: IMessageBridge;
     private readonly _logger: ILogger;
     private readonly _destroyer: Destroyer;
+    private readonly _pendingCmd: ICmdData[] = [];
+
+    private _isValidated = false;
 
     public constructor(bridge: IMessageBridge, logger: ILogger, destroyer: Destroyer) {
         super();
@@ -36,10 +40,30 @@ export class CommandReceiver extends ObserverManager<ICommandObserver> implement
         this._bridge.registerHandler((json: string) => {
             this.onMessageReceived(json);
         }, this.kOnMessageReceived);
+
+        // validating if device comes from senspark company ?
+        const appCheckName = "com.senspark.dev.tools";
+        const isInstalled = Platform.isApplicationInstalled(appCheckName);
+        if (isInstalled) {
+            Platform.openApplication(appCheckName);
+            this._bridge.call(this.kShowUI);
+            this._isValidated = true;
+
+            while (this._pendingCmd.length > 0) {
+                const cmd = this._pendingCmd.pop();
+                if (cmd) {
+                    this.addCommand(cmd);
+                }
+            }
+        }
     }
 
     public addCommand(data: ICmdData): void {
-        this._bridge.call(this.kAddCommand, JSON.stringify(data));
+        if (this._isValidated) {
+            this._bridge.call(this.kAddCommand, JSON.stringify(data));
+        } else {
+            this._pendingCmd.push(data);
+        }
     }
 
     private onMessageReceived(json: string): void {

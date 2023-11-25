@@ -21,6 +21,13 @@ android {
     buildFeatures {
         viewBinding true
     }
+
+    buildTypes {
+        release {
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
 }
 
 if (rootProject.ext.has('buildMaven') && rootProject.buildMaven) {

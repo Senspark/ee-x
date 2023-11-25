@@ -247,8 +247,10 @@ object Platform {
     private fun openApplication(context: Context, applicationId: String): Boolean {
         val packetManager = context.packageManager
         val launchIntent = packetManager.getLaunchIntentForPackage(applicationId)
+
+        // Null pointer check in case package name was not found.
         if (launchIntent != null) {
-            // Null pointer check in case package name was not found.
+            launchIntent.putExtra("sender", getApplicationId(context))
             context.startActivity(launchIntent)
             return true
         }

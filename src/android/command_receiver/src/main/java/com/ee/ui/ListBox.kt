@@ -1,22 +1,21 @@
-package com.ee.cheat
+package com.ee.ui
 
 import android.app.Activity
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.RelativeLayout
 import androidx.appcompat.widget.AppCompatButton
 import androidx.appcompat.widget.AppCompatEditText
 import com.ee.ILogger
-import com.ee.command_receiver.databinding.CheatBoxBinding
+import com.ee.command_receiver.databinding.ListBoxBinding
 import org.json.JSONObject
 
-class CheatBox(
+class ListBox(
     activity: Activity,
     private val _logger: ILogger,
     private val _callback: (String) -> Unit
 ) : RelativeLayout(activity) {
-    private val _binding: CheatBoxBinding
+    private val _binding: ListBoxBinding
     private var _commandsId = 0;
     private val _commands = mutableMapOf<Int, CmdData>()
     private val _editTexts = mutableMapOf<Int, android.widget.EditText>()
@@ -27,7 +26,7 @@ class CheatBox(
 
     init {
         val viewGroup = activity.window.decorView as ViewGroup
-        _binding = CheatBoxBinding.inflate(activity.layoutInflater, this, true)
+        _binding = ListBoxBinding.inflate(activity.layoutInflater, this, true)
         viewGroup.addView(this)
     }
 

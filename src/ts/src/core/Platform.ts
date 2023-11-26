@@ -72,4 +72,8 @@ export class Platform {
     public static getSafeInset(): SafeInset {
         return this._impl.getSafeInset();
     }
+
+    public static fetchSocket(hostName: string, port: number, message: string): Promise<string> {
+        return this._impl.fetchSocket(hostName, port, message);
+    }
 }

@@ -23,6 +23,7 @@ export class PlatformImplNative implements IPlatformImpl {
     private readonly kTestConnection = this.kPrefix + "testConnection";
     private readonly kShowInstallPrompt = this.kPrefix + "showInstallPrompt";
     private readonly kGetInstallReferrer = this.kPrefix + "getInstallReferrer";
+    private readonly kFetchSocket = this.kPrefix + "fetchSocket";
 
     private readonly _bridge: IMessageBridge;
 
@@ -121,5 +122,14 @@ export class PlatformImplNative implements IPlatformImpl {
             return JSON.parse(response);
         }
         return new SafeInset();
+    }
+
+    public fetchSocket(hostName: string, port: number, message: string): Promise<string> {
+        const request = {
+            [`host_name`]: hostName,
+            [`port`]: port,
+            [`message`]: message,
+        };
+        return this._bridge.callAsync(this.kFetchSocket, JSON.stringify(request));
     }
 }

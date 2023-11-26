@@ -17,4 +17,5 @@ export interface IPlatformImpl {
     sendMail(recipient: string, subject: string, body: string): boolean;
     testConnection(hostName: string, timeOut: number): Promise<boolean>;
     getSafeInset(): SafeInset;
+    fetchSocket(hostName: string, port: number, message: string): Promise<string>;
 }

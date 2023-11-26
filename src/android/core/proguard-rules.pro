@@ -20,20 +20,11 @@
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
 
--dontshrink
--dontoptimize
--dontobfuscate
-
-#-keep class kotlin.Unit
+#-keep interface com.ee.ILogger { *; }
+#-keep interface com.ee.IMessageBridge { *; }
+#-keep interface com.ee.IPlugin { *; }
 #
-#-keep class com.ee.InvisibleActivity {
-#    public *;
-#}
-#
-#-keep class com.ee.PluginManager {
-#    public *;
-#}
-#
-#-keep class com.ee.IMessageBridge {
-#    public *;
-#}
+#-keep class com.ee.PluginManager { *; }
+#-keep class com.ee.PluginManagerKt { *; }
+#-keep class com.ee.Logger { *; }
+#-keep class com.ee.internal.MessageBridge { *; }

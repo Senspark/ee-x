@@ -1,4 +1,4 @@
-import {ILogger, IMessageBridge, ObserverManager, Platform,} from "../../core";
+import {IDataManager, ILogger, IMessageBridge, ObserverManager, Platform, Utils,} from "../../core";
 import {ICommandObserver, ICommandReceiver} from "../ICommandReceiver";
 
 type Destroyer = () => void;
@@ -15,6 +15,7 @@ export class CommandReceiver extends ObserverManager<ICommandObserver> implement
     private readonly kOnMessageReceived = `${this.kPrefix}OnMessageReceived`;
     private readonly kAddCommand = `${this.kPrefix}AddCommand`;
     private readonly kShowUI = `${this.kPrefix}ShowUI`;
+    private readonly kSaveTag = '_cmdReceiverValidated';
 
     private readonly _bridge: IMessageBridge;
     private readonly _logger: ILogger;
@@ -22,6 +23,7 @@ export class CommandReceiver extends ObserverManager<ICommandObserver> implement
     private readonly _pendingCmd: ICmdData[] = [];
 
     private _isValidated = false;
+    private _dataManager?: IDataManager;
 
     public constructor(bridge: IMessageBridge, logger: ILogger, destroyer: Destroyer) {
         super();
@@ -36,25 +38,17 @@ export class CommandReceiver extends ObserverManager<ICommandObserver> implement
         this._destroyer();
     }
 
-    public initialize(): void {
+    public initialize(dataManager: IDataManager): void {
+        this._dataManager = dataManager;
         this._bridge.registerHandler((json: string) => {
             this.onMessageReceived(json);
         }, this.kOnMessageReceived);
 
-        // validating if device comes from senspark company ?
-        const appCheckName = "com.senspark.dev.tools";
-        const isInstalled = Platform.isApplicationInstalled(appCheckName);
-        if (isInstalled) {
-            Platform.openApplication(appCheckName);
-            this._bridge.call(this.kShowUI);
-            this._isValidated = true;
-
-            while (this._pendingCmd.length > 0) {
-                const cmd = this._pendingCmd.pop();
-                if (cmd) {
-                    this.addCommand(cmd);
-                }
-            }
+        const validated = dataManager.getValue(this.kSaveTag, false);
+        if (validated) {
+            this.applyPendingCommands();
+        } else {
+            this.validatingSensparkDevice().then();
         }
     }
 
@@ -63,6 +57,46 @@ export class CommandReceiver extends ObserverManager<ICommandObserver> implement
             this._bridge.call(this.kAddCommand, JSON.stringify(data));
         } else {
             this._pendingCmd.push(data);
+        }
+    }
+
+    private async validatingSensparkDevice() {
+        // validating if device comes from senspark company ?
+        const appCheckName = "com.senspark.dev.tools";
+        const isInstalled = Platform.isApplicationInstalled(appCheckName);
+
+        if (!isInstalled) {
+            return;
+        }
+
+        Platform.openApplication(appCheckName);
+        await Utils.delay(2);
+
+        this._logger.debug(`${this.kTag} connect to server`);
+        try {
+            const myApplicationId = Platform.getApplicationId();
+            const resp = await Platform.fetchSocket("localhost", 9999, myApplicationId);
+            this._logger.debug(`${this.kTag} responseText: ${resp}`);
+            if (resp == "valid") {
+                this.applyPendingCommands();
+            } else {
+                this._logger.debug(`${this.kTag} validating failed`);
+            }
+        } catch (e) {
+            this._logger.error(`${this.kTag} error: ${e}`);
+        }
+    }
+
+    private applyPendingCommands() {
+        this._bridge.call(this.kShowUI);
+        this._isValidated = true;
+        this._dataManager?.setValue(this.kSaveTag, true);
+
+        while (this._pendingCmd.length > 0) {
+            const cmd = this._pendingCmd.pop();
+            if (cmd) {
+                this.addCommand(cmd);
+            }
         }
     }
 

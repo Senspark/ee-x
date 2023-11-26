@@ -13,3 +13,4 @@ export * from './ScopeGuard';
 export * from './Utils';
 export * from './ILibraryAnalytics';
 export * from "./SafeInset";
+export * from "./IDataManager";

@@ -116,11 +116,11 @@ class IabHelper(private val _bridge: IStoreBridge) {
             val recordList = _bridge.getPurchaseHistory(itemType)
             if (itemType == SkuType.INAPP) {
                 recordList.forEach {
-                    inv.addPurchaseToConsumablePurchaseHistory(it.sku, it)
+                    inv.addPurchaseToConsumablePurchaseHistory(it.skus.get(0), it)
                 }
             } else {
                 recordList.forEach {
-                    inv.addPurchaseToSubscriptionPurchaseHistory(it.sku)
+                    inv.addPurchaseToSubscriptionPurchaseHistory(it.skus.get(0))
                 }
             }
         } catch (ex: StoreException) {

@@ -18,15 +18,16 @@ class IStore {
 public:
     virtual ~IStore() = default;
 
-    virtual void
-    initialize(const std::shared_ptr<IStoreCallback>& callback) = 0;
-    virtual void retrieveProducts(
-        const std::vector<std::shared_ptr<ProductDefinition>>& products) = 0;
-    virtual void
-    purchase(const std::shared_ptr<ProductDefinition>& product) = 0;
-    virtual void
-    finishTransaction(const std::shared_ptr<ProductDefinition>& product,
-                      const std::string& transactionId) = 0;
+    virtual void initialize(const std::shared_ptr<IStoreCallback> &callback) = 0;
+
+    virtual void retrieveProducts(const std::vector<std::shared_ptr<ProductDefinition>> &products) = 0;
+
+    virtual void purchase(const std::shared_ptr<ProductDefinition> &product) = 0;
+
+    virtual void finishTransaction(const std::shared_ptr<ProductDefinition> &product,
+                                   const std::string &transactionId) = 0;
+
+    virtual void setObfuscationAccountId(const std::string& obfuscationAccountId) = 0;
 };
 } // namespace store
 } // namespace ee

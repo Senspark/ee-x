@@ -16,13 +16,24 @@ import com.ee.Logger
  */
 object NotificationUtils {
     private val _logger = Logger(NotificationUtils::class.java.name)
+    private val channelId = "ee_x_channel_id_01"
+    private val channelName = "ee_x_channel_name"
+
+    private val isAndroid8OrHigher: Boolean
+        get() = Build.VERSION.SDK_INT >= Build.VERSION_CODES.O // API 26
+
+    private val isAndroid6OrHigher: Boolean
+        get() = Build.VERSION.SDK_INT >= Build.VERSION_CODES.M // API 21
+
+    private val isAndroid5OrHigher: Boolean
+        get() = Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP // API 21
 
     /**
      * http://stackoverflow.com/questions/28387602/notification-bar-icon-turns-white-in-android-5
      * -lollipop
      */
     private fun getNotificationIcon(context: Context): Int {
-        val useWhiteIcon = Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP
+        val useWhiteIcon = isAndroid5OrHigher
         val resourceName = if (useWhiteIcon) "ic_notification" else "ic_launcher"
         val defType = if (useWhiteIcon) "drawable" else "mipmap"
         val resID = context.resources.getIdentifier(resourceName, defType, context.packageName)
@@ -38,13 +49,25 @@ object NotificationUtils {
      * @param context  The context.
      * @param activityClass The activity will be opened when the notification is clicked.
      */
-    fun createClickIntent(context: Context, activityClass: Class<*>, requestCode: Int): PendingIntent {
+    fun createClickIntent(
+        context: Context,
+        activityClass: Class<*>,
+        requestCode: Int
+    ): PendingIntent {
         // Use FLAG_ACTIVITY_CLEAR_TOP | FLAG_ACTIVITY_SINGLE_TOP
         // to resume exist activity instead of restarting it.
         val intent = Intent(context, activityClass)
             .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
             .setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
-        return PendingIntent.getActivity(context, requestCode, intent, PendingIntent.FLAG_UPDATE_CURRENT)
+
+        val ptFlags =
+            if (isAndroid6OrHigher) {
+                PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_CANCEL_CURRENT
+            } else {
+                PendingIntent.FLAG_CANCEL_CURRENT
+            }
+
+        return PendingIntent.getActivity(context, requestCode, intent, ptFlags)
     }
 
     /**
@@ -58,8 +81,10 @@ object NotificationUtils {
      * @param interval    How long between each alarms.
      */
     @JvmOverloads
-    fun scheduleAlarm(context: Context, intent: Intent, requestCode: Int, flags: Int, delay: Int,
-                      interval: Int = 0) {
+    fun scheduleAlarm(
+        context: Context, intent: Intent, requestCode: Int, flags: Int, delay: Int,
+        interval: Int = 0
+    ) {
         val intervalInMilliseconds = interval.toLong() * 1000
         val delayInMilliseconds = delay.toLong() * 1000
         val currentTime = System.currentTimeMillis()
@@ -69,7 +94,12 @@ object NotificationUtils {
         if (interval == 0) {
             alarmManager[AlarmManager.RTC_WAKEUP, triggerTime] = alarmIntent
         } else {
-            alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, triggerTime, intervalInMilliseconds, alarmIntent)
+            alarmManager.setRepeating(
+                AlarmManager.RTC_WAKEUP,
+                triggerTime,
+                intervalInMilliseconds,
+                alarmIntent
+            )
         }
     }
 
@@ -90,7 +120,14 @@ object NotificationUtils {
      * of the pending intent.
      */
     fun unscheduleAlarm(context: Context, intent: Intent, requestCode: Int) {
-        val pendingIntent = PendingIntent.getBroadcast(context, requestCode, intent, PendingIntent.FLAG_UPDATE_CURRENT)
+        val ptFlags =
+            if (isAndroid6OrHigher) {
+                PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_CANCEL_CURRENT
+            } else {
+                PendingIntent.FLAG_CANCEL_CURRENT
+            }
+
+        val pendingIntent = PendingIntent.getBroadcast(context, requestCode, intent, ptFlags)
         if (pendingIntent != null) {
             pendingIntent.cancel()
             val manager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
@@ -98,16 +135,31 @@ object NotificationUtils {
         }
     }
 
-    fun showNotification(context: Context, ticker: String, title: String, body: String,
-                         clickIntent: PendingIntent, tag: Int) {
-        val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        val channelId = "ee_x_channel_id_01"
-        val channelName = "ee_x_channel_name"
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val notificationChannel = NotificationChannel(channelId, channelName, NotificationManager.IMPORTANCE_HIGH)
-            notificationChannel.setShowBadge(true)
-            notificationManager.createNotificationChannel(notificationChannel)
+    fun showNotification(
+        context: Context,
+        ticker: String,
+        title: String,
+        body: String,
+        clickIntent: PendingIntent,
+        tag: Int,
+        style: Int,
+    ) {
+        if (style == 1) {
+            showCustomNotification(context, ticker, title, body, clickIntent, tag)
+        } else {
+            showBasicNotification(context, ticker, title, body, clickIntent, tag)
         }
+    }
+
+    private fun showBasicNotification(
+        context: Context,
+        ticker: String,
+        title: String,
+        body: String,
+        clickIntent: PendingIntent,
+        tag: Int
+    ) {
+        val notificationManager = createChannel(context)
         val notificationBuilder = NotificationCompat.Builder(context, channelId)
         notificationBuilder.setAutoCancel(true)
             .setDefaults(Notification.DEFAULT_ALL)
@@ -116,6 +168,37 @@ object NotificationUtils {
             .setTicker(ticker)
             .setContentTitle(title)
             .setContentText(body)
+            .setContentIntent(clickIntent)
+        notificationManager.notify(tag, notificationBuilder.build())
+    }
+
+    private fun createChannel(context: Context): NotificationManager {
+        val notificationManager =
+            context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        if (isAndroid8OrHigher) {
+            val notificationChannel =
+                NotificationChannel(channelId, channelName, NotificationManager.IMPORTANCE_HIGH)
+            notificationChannel.setShowBadge(true)
+            notificationManager.createNotificationChannel(notificationChannel)
+        }
+        return notificationManager
+    }
+
+    private fun showCustomNotification(
+        context: Context,
+        ticker: String,
+        title: String,
+        body: String,
+        clickIntent: PendingIntent,
+        tag: Int
+    ) {
+        val notificationManager = createChannel(context)
+        val helper = com.senspark.android.notification.NotificationHelper(context)
+        val notificationBuilder = helper.cocosCreateNotificationBuilder(body)
+        notificationBuilder.setAutoCancel(true)
+            .setDefaults(Notification.DEFAULT_ALL)
+            .setWhen(System.currentTimeMillis())
+            .setTicker(ticker)
             .setContentIntent(clickIntent)
         notificationManager.notify(tag, notificationBuilder.build())
     }

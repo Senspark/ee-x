@@ -13,6 +13,14 @@
 
 #include "ee/core/Macro.hpp"
 
+#if defined(EE_X_COROUTINE)// && __cplusplus >= 202002L // Check for C++20 or later
+#include <coroutine>
+namespace estd = std;
+#else
+#include <experimental/coroutine>
+namespace estd = std::experimental;
+#endif // __cplusplus >= 202002L
+
 namespace cppcoro {
 class async_mutex;
 class async_mutex_lock;
@@ -47,6 +55,8 @@ class IThreadImpl;
 
 class VideoPlayer;
 class VideoPlayerManager;
+
+class ILibraryAnalytics;
 
 template <class T>
 class DynamicValue;
@@ -128,6 +138,8 @@ using core::LambdaAwaiter;
 using core::SwitchToLibraryThread;
 using core::SwitchToMainThread;
 using core::Task;
+
+using ee::core::ILibraryAnalytics;
 
 using SwitchToUiThread [[deprecated]] = SwitchToMainThread;
 

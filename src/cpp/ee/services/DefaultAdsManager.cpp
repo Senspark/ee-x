@@ -73,6 +73,10 @@ void Self::openTestSuite() {
     config_->openTestSuite(AdNetwork::AdMob);
 }
 
+void Self::addAnalytics(std::shared_ptr<ILibraryAnalytics> analytics) {
+    config_->addAnalytics(analytics);
+}
+
 std::shared_ptr<IBannerAd> Self::getBannerAd() {
     return bannerAds_.at(AdFormat::Banner);
 }

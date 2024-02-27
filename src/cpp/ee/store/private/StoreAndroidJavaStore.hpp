@@ -39,6 +39,8 @@ public:
                                      const std::string& transactionId) override;
     virtual void onPurchaseFailed(const std::string& json) override;
 
+    void setObfuscationAccountId(const std::string &obfuscationAccountId) override;
+
     virtual void setPublicKey(const std::string& key) override;
     virtual std::map<std::string, std::string>
     getProductJsonDictionary() const override;
@@ -47,7 +49,6 @@ public:
     virtual void
     finishAdditionalTransaction(const std::string& productId,
                                 const std::string& transactionId) override;
-
 private:
     IMessageBridge& bridge_;
     std::shared_ptr<IUnityCallback> forwardTo_;

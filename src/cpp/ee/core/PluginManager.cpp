@@ -14,8 +14,10 @@
 #include <ee/ad_mob/private/AdMobBridge.hpp>
 #include <ee/adjust/private/AdjustBridge.hpp>
 #include <ee/app_lovin/private/AppLovinBridge.hpp>
+#include <ee/app_lovin_max/private/AppLovinMaxBridge.hpp>
 #include <ee/apps_flyer/private/AppsFlyerBridge.hpp>
 #include <ee/cocos/CocosFwd.hpp>
+#include <ee/cost_center_analytics/internal/CostCenterAnalyticsBridge.hpp>
 #include <ee/facebook/private/FacebookBridge.hpp>
 #include <ee/facebook_ads/private/FacebookAdsBridge.hpp>
 #include <ee/firebase_analytics/internal/FirebaseAnalyticsBridge.hpp>
@@ -69,9 +71,21 @@ struct PluginInfo<IAppLovin> {
 };
 
 template <>
+struct PluginInfo<IAppLovinMax> {
+    using Bridge = app_lovin_max::Bridge;
+    static constexpr auto Name = "AppLovinMax";
+};
+
+template <>
 struct PluginInfo<IAppsFlyer> {
     using Bridge = apps_flyer::Bridge;
     static constexpr auto Name = "AppsFlyer";
+};
+
+template <>
+struct PluginInfo<ICostCenterAnalytics> {
+    using Bridge = cost_center::analytics::Bridge;
+    static constexpr auto Name = "CostCenterAnalytics";
 };
 
 template <>
@@ -205,7 +219,9 @@ EE_DECLARE_PLUGIN(IAdColony)
 EE_DECLARE_PLUGIN(IAdjust)
 EE_DECLARE_PLUGIN(IAdMob)
 EE_DECLARE_PLUGIN(IAppLovin)
+EE_DECLARE_PLUGIN(IAppLovinMax)
 EE_DECLARE_PLUGIN(IAppsFlyer)
+EE_DECLARE_PLUGIN(ICostCenterAnalytics)
 EE_DECLARE_PLUGIN(IFacebook)
 EE_DECLARE_PLUGIN(IFacebookAds)
 EE_DECLARE_PLUGIN(IFirebaseAnalytics)

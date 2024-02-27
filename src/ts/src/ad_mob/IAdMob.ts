@@ -2,11 +2,11 @@ import {
     IBannerAd,
     IFullScreenAd,
 } from "../ads";
-import { IPlugin } from "../core";
+import { IPlugin, ILibraryAnalytics } from "../core";
 import { AdMobBannerAdSize } from "./AdMobBannerAdSIze";
 
 export interface IAdMob extends IPlugin {
-    initialize(): Promise<boolean>;
+    initialize(analytics: ILibraryAnalytics): Promise<boolean>;
     getEmulatorTestDeviceHash(): string;
     addTestDevice(hash: string): void;
     openTestSuite(): void;

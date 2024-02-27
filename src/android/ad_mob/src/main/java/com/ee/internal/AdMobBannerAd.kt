@@ -5,16 +5,9 @@ import android.graphics.Point
 import android.view.Gravity
 import android.widget.FrameLayout
 import androidx.annotation.AnyThread
-import com.ee.IBannerAd
-import com.ee.ILogger
-import com.ee.IMessageBridge
-import com.ee.Thread
+import com.ee.*
 import com.ee.Utils.getRootView
-import com.google.android.gms.ads.AdListener
-import com.google.android.gms.ads.AdRequest
-import com.google.android.gms.ads.AdSize
-import com.google.android.gms.ads.AdView
-import com.google.android.gms.ads.LoadAdError
+import com.google.android.gms.ads.*
 import kotlinx.serialization.Serializable
 import java.util.concurrent.atomic.AtomicBoolean
 
@@ -27,8 +20,9 @@ internal class AdMobBannerAd(
     private var _activity: Activity?,
     private val _adId: String,
     private val _adSize: AdSize,
-    bannerHelper: AdMobBannerHelper)
-    : IBannerAd, AdListener() {
+    bannerHelper: AdMobBannerHelper,
+    private val _onAdPaid: (AdPaidResponse) -> Unit
+) : IBannerAd, AdListener(), OnPaidEventListener {
     @Serializable
     @Suppress("unused")
     private class ErrorResponse(
@@ -99,6 +93,7 @@ internal class AdMobBannerAd(
             ad.setAdSize(_adSize)
             ad.adUnitId = _adId
             ad.adListener = this
+            ad.onPaidEventListener = this
             val params = FrameLayout.LayoutParams(
                 FrameLayout.LayoutParams.WRAP_CONTENT,
                 FrameLayout.LayoutParams.WRAP_CONTENT)
@@ -208,5 +203,20 @@ internal class AdMobBannerAd(
         Thread.runOnMainThread {
             _logger.debug("$kTag: ${this::onAdClosed.name}: id = $_adId")
         }
+    }
+
+    override fun onPaidEvent(adValue: AdValue) {
+        if (_ad == null) {
+            return;
+        }
+
+        _onAdPaid(
+            AdPaidResponse(
+                _ad!!.adUnitId,
+                "Banner",
+                adValue.valueMicros,
+                _ad!!.responseInfo!!.loadedAdapterResponseInfo
+            )
+        );
     }
 }

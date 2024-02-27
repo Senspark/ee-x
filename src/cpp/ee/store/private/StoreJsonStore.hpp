@@ -26,32 +26,34 @@ class JsonStore : public IStore,
 public:
     JsonStore();
 
-    void setNativeStore(const std::shared_ptr<INativeStore>& native);
-    virtual void
-    setModule(const std::shared_ptr<StandardPurchasingModule>& module) override;
+    void setNativeStore(const std::shared_ptr<INativeStore> &native);
 
-    virtual void
-    initialize(const std::shared_ptr<IStoreCallback>& callback) override;
-    virtual void retrieveProducts(
-        const std::vector<std::shared_ptr<ProductDefinition>>& products)
-        override;
-    virtual void
-    purchase(const std::shared_ptr<ProductDefinition>& product) override;
-    virtual void
-    finishTransaction(const std::shared_ptr<ProductDefinition>& product,
-                      const std::string& transactionId) override;
+    virtual void setModule(const std::shared_ptr<StandardPurchasingModule> &module) override;
 
-    virtual void onSetupFailed(const std::string& json) override;
-    virtual void onProductsRetrieved(const std::string& json) override;
-    virtual void onPurchaseSucceeded(const std::string& id,
-                                     const std::string& receipt,
-                                     const std::string& transactionId) override;
-    virtual void onPurchaseFailed(const std::string& json) override;
+    virtual void initialize(const std::shared_ptr<IStoreCallback> &callback) override;
 
-    virtual PurchaseFailureDescription
-    getLastPurchaseFailureDescription() const override;
-    virtual StoreSpecificPurchaseErrorCode
-    getLastStoreSpecificPurchaseErrorCode() const override;
+    virtual void retrieveProducts(const std::vector<std::shared_ptr<ProductDefinition>> &products) override;
+
+    virtual void purchase(const std::shared_ptr<ProductDefinition> &product) override;
+
+    virtual void finishTransaction(const std::shared_ptr<ProductDefinition> &product,
+                                   const std::string &transactionId) override;
+
+    virtual void setObfuscationAccountId(const std::string &obfuscationAccountId) override;
+
+    virtual void onSetupFailed(const std::string &json) override;
+
+    virtual void onProductsRetrieved(const std::string &json) override;
+
+    virtual void onPurchaseSucceeded(const std::string &id,
+                                     const std::string &receipt,
+                                     const std::string &transactionId) override;
+
+    virtual void onPurchaseFailed(const std::string &json) override;
+
+    virtual PurchaseFailureDescription getLastPurchaseFailureDescription() const override;
+
+    virtual StoreSpecificPurchaseErrorCode getLastStoreSpecificPurchaseErrorCode() const override;
 
 protected:
     std::shared_ptr<IStoreCallback> unity_;

@@ -3,7 +3,6 @@
 
 #ifdef __cplusplus
 
-#include <experimental/coroutine>
 #include <type_traits>
 
 #include "ee/core/CoreFwd.hpp"
@@ -20,11 +19,11 @@ public:
         }
 
         auto initial_suspend() const noexcept { //
-            return std::experimental::suspend_never();
+            return estd::suspend_never();
         }
 
         auto final_suspend() const noexcept { //
-            return std::experimental::suspend_never();
+            return estd::suspend_never();
         }
 
         void return_void() const noexcept {}

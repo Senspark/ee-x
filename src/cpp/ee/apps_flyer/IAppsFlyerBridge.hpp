@@ -14,12 +14,14 @@
 #include <string>
 
 #include <ee/core/IPlugin.hpp>
+#include <ee/core/ILibraryAnalytics.h>
 
 #include "ee/apps_flyer/AppsFlyerFwd.hpp"
 
 namespace ee {
 namespace apps_flyer {
-class IBridge : public IPlugin {
+class IBridge : public IPlugin,
+                public ILibraryAnalytics {
 public:
     virtual ~IBridge() = default;
 
@@ -28,7 +30,9 @@ public:
     /// @param[in] iosAppId Your app's Apple ID (taken from the app's page on
     /// iTunes Connect), without the "id" prefix.
     virtual void initialize(const std::string& devKey,
-                            const std::string& iosAppId) = 0;
+                            const std::string& iosAppId,
+                            const std::string& appIdentity
+                            ) = 0;
 
     virtual void startTracking() = 0;
 

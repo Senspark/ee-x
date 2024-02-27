@@ -5,11 +5,21 @@ import android.app.Application
 import androidx.annotation.AnyThread
 import com.appsflyer.AppsFlyerConversionListener
 import com.appsflyer.AppsFlyerLib
+import com.appsflyer.adrevenue.AppsFlyerAdRevenue
+import com.appsflyer.adrevenue.adnetworks.generic.MediationNetwork
+import com.appsflyer.adrevenue.adnetworks.generic.Scheme
+import com.appsflyer.api.PurchaseClient
+import com.appsflyer.api.Store
+import com.appsflyer.internal.models.InAppPurchaseValidationResult
+import com.appsflyer.internal.models.SubscriptionValidationResult
 import com.ee.internal.deserialize
+import com.ee.internal.serialize
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.JsonPrimitive
 import kotlinx.serialization.json.doubleOrNull
 import kotlinx.serialization.json.longOrNull
+import java.util.Currency
+import java.util.Locale
 
 class AppsFlyerBridge(
     private val _bridge: IMessageBridge,
@@ -26,6 +36,8 @@ class AppsFlyerBridge(
         private const val kSetDebugEnabled = "${kPrefix}SetDebugEnabled"
         private const val kSetStopTracking = "${kPrefix}SetStopTracking"
         private const val kTrackEvent = "${kPrefix}TrackEvent"
+        private const val kLogAdRevenue = "${kPrefix}LogAdRevenue"
+        private const val kOnPurchaseValidated = "${kPrefix}OnPurchaseValidated"
     }
 
     private val _tracker = AppsFlyerLib.getInstance()
@@ -65,6 +77,26 @@ class AppsFlyerBridge(
         val values: Map<String, JsonPrimitive>
     )
 
+    @Serializable
+    @Suppress("unused")
+    class AdRevenueData(
+        val mediationNetwork: String,
+        val monetizationNetwork: String,
+        val currencyCode: String,
+        val adFormat: String,
+        val adUnit: String,
+        val revenue: Double,
+    )
+
+    @Serializable
+    @Suppress("unused")
+    class PurchaseValidateData(
+        val isSuccess: Boolean,
+        val isTestPurchase: Boolean,
+        val orderId: String,
+        val productId: String,
+    )
+
     @AnyThread
     private fun registerHandlers() {
         _bridge.registerHandler(kInitialize) { message ->
@@ -90,6 +122,11 @@ class AppsFlyerBridge(
         _bridge.registerHandler(kTrackEvent) { message ->
             val request = deserialize<TrackEventRequest>(message)
             trackEvent(request.name, request.values)
+            ""
+        }
+        _bridge.registerHandler(kLogAdRevenue) { message ->
+            val request = deserialize<AdRevenueData>(message)
+            logAdRevenue(request)
             ""
         }
     }
@@ -130,7 +167,31 @@ class AppsFlyerBridge(
             }
             _tracker.init(devKey, listener, _application)
             _tracker.anonymizeUser(false)
-            _tracker.enableLocationCollection(true)
+
+            // af_ad_revenue
+            val afRevenueBuilder = AppsFlyerAdRevenue.Builder(_application)
+            AppsFlyerAdRevenue.initialize(afRevenueBuilder.build())
+
+            val onValidated = { data: PurchaseValidateData ->
+                val message = data.serialize()
+                _bridge.callCpp(kOnPurchaseValidated, message)
+            }
+
+            // af_purchase
+            val builder = PurchaseClient.Builder(_application, Store.GOOGLE)
+                .logSubscriptions(true)
+                .autoLogInApps(true)
+                .setSandbox(false)
+                .setInAppValidationResultListener(AppsFlyerIapResultListener(_logger, onValidated))
+                .setSubscriptionValidationResultListener(
+                    AppsFlyerSubscriptionResultListener(
+                        _logger,
+                        onValidated
+                    )
+                )
+
+            val afPurchaseClient = builder.build()
+            afPurchaseClient.startObservingTransactions()
         }
     }
 
@@ -142,7 +203,7 @@ class AppsFlyerBridge(
     }
 
     val deviceId: String
-        @AnyThread get() = _tracker.getAppsFlyerUID(_application)
+        @AnyThread get() = _tracker.getAppsFlyerUID(_application)!!
 
     @AnyThread
     fun setDebugEnabled(enabled: Boolean) {
@@ -181,5 +242,119 @@ class AppsFlyerBridge(
             }
             _tracker.logEvent(_application, name, values)
         }
+    }
+
+    private fun logAdRevenue(revenueData: AdRevenueData) {
+        val customParams: MutableMap<String, String> = HashMap()
+        customParams[Scheme.AD_UNIT] = revenueData.adUnit
+        customParams[Scheme.AD_TYPE] = revenueData.adFormat
+        customParams[Scheme.PLACEMENT] = "place"
+        customParams[Scheme.ECPM_PAYLOAD] = "encrypt"
+
+        val mediationNetwork = when (revenueData.mediationNetwork) {
+            "applovin" -> MediationNetwork.applovinmax
+            "admob" -> MediationNetwork.googleadmob
+            else -> MediationNetwork.customMediation
+        }
+
+        _logger.info("$kTag: ${this::logAdRevenue.name}: ${revenueData.mediationNetwork} ${revenueData.revenue}")
+        AppsFlyerAdRevenue.logAdRevenue(
+            revenueData.monetizationNetwork,
+            mediationNetwork,
+            Currency.getInstance(Locale.US),
+            revenueData.revenue,
+            customParams
+        )
+    }
+}
+
+
+class AppsFlyerIapResultListener(
+    private val _logger: ILogger,
+    private val _onValidated: (AppsFlyerBridge.PurchaseValidateData) -> Unit,
+) : PurchaseClient.InAppPurchaseValidationResultListener {
+
+    companion object {
+        private val kTag = AppsFlyerIapResultListener::class.java.name
+    }
+
+    override fun onResponse(p0: Map<String, InAppPurchaseValidationResult>?) {
+        p0?.forEach { (k: String, v: InAppPurchaseValidationResult?) ->
+            if (v.success && v.productPurchase != null) {
+                val productPurchase = v.productPurchase!!
+                val orderId = productPurchase.orderId
+                val isTest =
+                    productPurchase.purchaseType != null && productPurchase.purchaseType == 0
+                val productId = productPurchase.productId
+                val isSuccess = productPurchase.purchaseState == 0
+
+                log("Validation success: $k $orderId $isTest $productId")
+//                log("Product info $productPurchase")
+                _onValidated(
+                    AppsFlyerBridge.PurchaseValidateData(
+                        isSuccess,
+                        isTest,
+                        orderId,
+                        productId
+                    )
+                )
+            } else {
+                val failureData = v.failureData
+                log("Validation fail: $k $failureData")
+            }
+        }
+    }
+
+    override fun onFailure(p0: String, p1: Throwable?) {
+        log("Validation fail: $p0, $p1");
+    }
+
+    private fun log(message: String) {
+        _logger.info("$kTag: $message")
+    }
+}
+
+class AppsFlyerSubscriptionResultListener(
+    private val _logger: ILogger,
+    private val _onValidated: (AppsFlyerBridge.PurchaseValidateData) -> Unit,
+) : PurchaseClient.SubscriptionPurchaseValidationResultListener {
+
+    companion object {
+        private val kTag = AppsFlyerSubscriptionResultListener::class.java.name
+    }
+
+    override fun onResponse(p0: Map<String, SubscriptionValidationResult>?) {
+        p0?.forEach { (k: String, v: SubscriptionValidationResult?) ->
+            val productPurchase = v.subscriptionPurchase
+            if (v.success && productPurchase != null) {
+                val isSuccess = productPurchase.subscriptionState == "SUBSCRIPTION_STATE_ACTIVE"
+                val isTest = productPurchase.testPurchase != null
+                val orderId = productPurchase.latestOrderId
+                val productId = productPurchase.lineItems[0].productId
+
+//                log("Validation success: $k $productPurchase")
+                log("Validation success: $k $orderId $isTest $productId")
+
+                _onValidated(
+                    AppsFlyerBridge.PurchaseValidateData(
+                        isSuccess,
+                        isTest,
+                        orderId,
+                        productId
+                    )
+                )
+            } else {
+                val failureData = v.failureData
+                log("Validation fail: $k $failureData")
+            }
+        }
+    }
+
+    override fun onFailure(p0: String, p1: Throwable?) {
+        log("Validation fail: $p0, $p1")
+    }
+
+    private fun log(message: String) {
+        _logger.info("${kTag}: $message")
     }
 }

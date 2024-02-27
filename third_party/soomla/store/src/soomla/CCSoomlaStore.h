@@ -20,7 +20,7 @@
 #ifdef __cplusplus
 
 #include <cocos2d.h>
-
+#include <ee/CppFwd.hpp>
 #include <soomla/CCError.h>
 
 #include "soomla/CCStoreAssets.h"
@@ -52,7 +52,14 @@ public:
      verification of purchases.
      */
     static void initialize(CCStoreAssets* storeAssets,
-                           const cocos2d::ValueMap& storeParams);
+                           const cocos2d::ValueMap &storeParams,
+                           const std::shared_ptr<ee::ILibraryAnalytics> &analytics);
+
+    /*
+     * For JSB
+     * */
+    static void initializeLegacy(CCStoreAssets* storeAssets,
+                           const cocos2d::ValueMap &storeParams);
 
     /**
      Starts an in app purchase process in the market (App Store, Google
@@ -98,6 +105,10 @@ protected:
      Loads the billing service for the store
      */
     virtual void loadBillingService() {}
+
+    void logIapRevenue(const std::string& productId, CCError** error);
+
+    std::shared_ptr<ee::ILibraryAnalytics> analytics;
 
 private:
     static bool initialized;

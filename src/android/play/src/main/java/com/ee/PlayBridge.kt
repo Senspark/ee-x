@@ -12,6 +12,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.games.AchievementsClient
 import com.google.android.gms.games.Games
 import com.google.android.gms.games.LeaderboardsClient
+import com.google.android.gms.games.PlayGames
 import com.google.android.gms.games.achievement.Achievement
 import kotlinx.serialization.Serializable
 import kotlin.coroutines.resume
@@ -164,14 +165,14 @@ class PlayBridge(
         @UiThread get() {
             val activity = _activity ?: return null
             val account = signInAccount ?: return null
-            return Games.getAchievementsClient(activity, account)
+            return PlayGames.getAchievementsClient(activity)
         }
 
     private val leaderboardsClient: LeaderboardsClient?
         @UiThread get() {
             val activity = _activity ?: return null
             val account = signInAccount ?: return null
-            return Games.getLeaderboardsClient(activity, account)
+            return PlayGames.getLeaderboardsClient(activity)
         }
 
     // Check whether player is already signed in

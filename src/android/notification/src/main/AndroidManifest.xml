@@ -5,5 +5,6 @@
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <application>
         <receiver android:name="com.ee.internal.NotificationReceiver"/>
+<!--        <receiver android:name="com.senspark.android.notification.AlarmReceiver" />-->
     </application>
 </manifest>

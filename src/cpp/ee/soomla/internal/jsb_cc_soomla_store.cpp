@@ -10,6 +10,7 @@
 #ifdef EE_X_COCOS_JS
 #include <ee/core/JsbUtils.hpp>
 #include <soomla/Cocos2dxStore.h>
+#include <ee/core/ILibraryAnalytics.h>
 
 namespace ee {
 namespace core {
@@ -29,7 +30,7 @@ void set_value(se::Value& value, soomla::CCSoomlaStore* input) {
 namespace soomla {
 
 const auto jsb_CCSoomlaStore_initialize =
-    &ee::core::jsb_static_call<&CCSoomlaStore::initialize, CCStoreAssets*,
+    &ee::core::jsb_static_call<&CCSoomlaStore::initializeLegacy, CCStoreAssets*,
                                cocos2d::ValueMap>;
 const auto jsb_CCSoomlaStore_getInstance =
     &ee::core::jsb_static_get<CCSoomlaStore*, &CCSoomlaStore::getInstance>;

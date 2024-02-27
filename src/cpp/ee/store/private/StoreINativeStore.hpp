@@ -21,6 +21,7 @@ public:
     virtual void purchase(const std::string& productJson) = 0;
     virtual void finishTransaction(const std::string& productJson,
                                    const std::string& transactionId) = 0;
+    virtual void setObfuscationAccountId(const std::string& obfuscationAccountId) = 0;
 };
 } // namespace store
 } // namespace ee

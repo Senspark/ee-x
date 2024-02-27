@@ -13,8 +13,9 @@ import {
     AdMobBannerAdSize,
     IAdMob,
 } from "../../ad_mob";
-import { CocosBannerAd } from "../../cocos";
+import {CocosBannerAd} from "../../cocos";
 import {
+    ILibraryAnalytics,
     Plugin,
     PluginManager,
     Utils,
@@ -27,8 +28,8 @@ import {
     IIronSource,
     IronSourceBannerAdSize,
 } from "../../iron_source";
-import { IUnityAds } from "../../unity_ads";
-import { GenericAd } from "./GenericAd";
+import {IUnityAds} from "../../unity_ads";
+import {GenericAd} from "./GenericAd";
 
 type AdsConfigDef = {
     networks: NetworkConfigDef[],
@@ -52,7 +53,9 @@ type UnityAdsConfigDef = {
     time_out?: number,
 }
 
-type AdConfigDef = (BannerConfigDef | RectangleConfigDef | AppOpenConfigDef | InterstitialConfigDef | RewardedInterstitialConfigDef | RewardedConfigDef) & {
+type AdConfigDef =
+    (BannerConfigDef | RectangleConfigDef | AppOpenConfigDef | InterstitialConfigDef | RewardedInterstitialConfigDef | RewardedConfigDef)
+    & {
     format: string,
 }
 
@@ -94,23 +97,35 @@ type WaterfallInstanceConfigDef = SingleInstanceConfigDef[];
 
 function parseNetwork(id: string): Network {
     switch (id) {
-        case "ad_mob": return Network.AdMob;
-        case "facebook_ads": return Network.FacebookAds;
-        case "iron_source": return Network.IronSource;
-        case "unity_ads": return Network.UnityAds;
-        default: return Network.Null;
+        case "ad_mob":
+            return Network.AdMob;
+        case "facebook_ads":
+            return Network.FacebookAds;
+        case "iron_source":
+            return Network.IronSource;
+        case "unity_ads":
+            return Network.UnityAds;
+        default:
+            return Network.Null;
     }
 }
 
 function parseAdFormat(id: string): AdFormat {
     switch (id) {
-        case "banner": return AdFormat.Banner;
-        case "rect": return AdFormat.Rectangle;
-        case "app_open": return AdFormat.AppOpen;
-        case "interstitial": return AdFormat.Interstitial;
-        case "rewarded_interstitial": return AdFormat.RewardedInterstitial;
-        case "rewarded": return AdFormat.Rewarded;
-        default: return AdFormat.Null;
+        case "banner":
+            return AdFormat.Banner;
+        case "rect":
+            return AdFormat.Rectangle;
+        case "app_open":
+            return AdFormat.AppOpen;
+        case "interstitial":
+            return AdFormat.Interstitial;
+        case "rewarded_interstitial":
+            return AdFormat.RewardedInterstitial;
+        case "rewarded":
+            return AdFormat.Rewarded;
+        default:
+            return AdFormat.Null;
     }
 }
 
@@ -133,8 +148,10 @@ export enum AdFormat {
 }
 
 interface INetworkConfigManager {
-    initialize(): Promise<void>;
+    initialize(analytics: ILibraryAnalytics): Promise<void>;
+
     openTestSuite(network: Network): void;
+
     createAd(network: Network, format: AdFormat, id: string): IAd;
 }
 
@@ -148,9 +165,9 @@ class NetworkConfigManager implements INetworkConfigManager {
         }
     }
 
-    public async initialize(): Promise<void> {
+    public async initialize(analytics: ILibraryAnalytics): Promise<void> {
         for (const network of this._networks) {
-            await network.initialize();
+            await network.initialize(analytics);
         }
     }
 
@@ -174,9 +191,12 @@ class NetworkConfigManager implements INetworkConfigManager {
 }
 
 interface INetworkConfig {
-    initialize(): Promise<void>;
+    initialize(analytics: ILibraryAnalytics): Promise<void>;
+
     network: Network;
+
     openTestSuite(): void;
+
     createAd(format: AdFormat, id: string): IAd;
 }
 
@@ -184,11 +204,16 @@ class NetworkConfig {
     public static parse(node: NetworkConfigDef): INetworkConfig {
         const network = parseNetwork(node.network);
         switch (network) {
-            case Network.AdMob: return new AdMobConfig(node);
-            case Network.FacebookAds: return new FacebookAdsConfig(node);
-            case Network.IronSource: return new IronSourceConfig(node as IronSourceConfigDef);
-            case Network.UnityAds: return new UnityAdsConfig(node as UnityAdsConfigDef);
-            case Network.Null: return new NullNetworkConfig();
+            case Network.AdMob:
+                return new AdMobConfig(node);
+            case Network.FacebookAds:
+                return new FacebookAdsConfig(node);
+            case Network.IronSource:
+                return new IronSourceConfig(node as IronSourceConfigDef);
+            case Network.UnityAds:
+                return new UnityAdsConfig(node as UnityAdsConfigDef);
+            case Network.Null:
+                return new NullNetworkConfig();
         }
     }
 }
@@ -199,9 +224,9 @@ class AdMobConfig implements INetworkConfig {
     public constructor(node: AdMobConfigDef) {
     }
 
-    public async initialize(): Promise<void> {
+    public async initialize(analytics: ILibraryAnalytics): Promise<void> {
         this._plugin = PluginManager.createPlugin<IAdMob>(Plugin.AdMob);
-        await this._plugin.initialize();
+        await this._plugin.initialize(analytics);
     }
 
     public get network(): Network {
@@ -241,7 +266,7 @@ class FacebookAdsConfig implements INetworkConfig {
     public constructor(node: FacebookAdsConfigDef) {
     }
 
-    public async initialize(): Promise<void> {
+    public async initialize(analytics: ILibraryAnalytics): Promise<void> {
         this._plugin = PluginManager.createPlugin<IFacebookAds>(Plugin.FacebookAds);
         await this._plugin.initialize();
     }
@@ -283,7 +308,7 @@ class IronSourceConfig implements INetworkConfig {
         this._appId = node.app_id;
     }
 
-    public async initialize(): Promise<void> {
+    public async initialize(analytics: ILibraryAnalytics): Promise<void> {
         this._plugin = PluginManager.createPlugin<IIronSource>(Plugin.IronSource);
         await this._plugin.initialize(this._appId);
     }
@@ -327,7 +352,7 @@ class UnityAdsConfig implements INetworkConfig {
         this._timeOut = node.time_out !== undefined ? node.time_out : 30;
     }
 
-    public async initialize(): Promise<void> {
+    public async initialize(analytics: ILibraryAnalytics): Promise<void> {
         this._plugin = PluginManager.createPlugin<IUnityAds>(Plugin.UnityAds);
         await Promise.race([
             Utils.delay(this._timeOut),
@@ -364,7 +389,7 @@ class UnityAdsConfig implements INetworkConfig {
 }
 
 class NullNetworkConfig implements INetworkConfig {
-    public async initialize(): Promise<void> {
+    public async initialize(analytics: ILibraryAnalytics): Promise<void> {
     }
 
     public get network(): Network {
@@ -418,6 +443,7 @@ class AdConfigManager implements IAdConfigManager {
 
 interface IAdConfig {
     format: AdFormat;
+
     createAd(manager: INetworkConfigManager): IAd;
 }
 
@@ -425,13 +451,20 @@ class AdConfig {
     public static parse(node: AdConfigDef): IAdConfig {
         const format = parseAdFormat(node.format);
         switch (format) {
-            case AdFormat.Banner: return new BannerConfig(node);
-            case AdFormat.Rectangle: return new RectangleConfig(node);
-            case AdFormat.AppOpen: return new AppOpenConfig(node);
-            case AdFormat.Interstitial: return new InterstitialConfig(node);
-            case AdFormat.RewardedInterstitial: return new RewardedInterstitialConfig(node);
-            case AdFormat.Rewarded: return new RewardedConfig(node);
-            case AdFormat.Null: return new NullAdConfig();
+            case AdFormat.Banner:
+                return new BannerConfig(node);
+            case AdFormat.Rectangle:
+                return new RectangleConfig(node);
+            case AdFormat.AppOpen:
+                return new AppOpenConfig(node);
+            case AdFormat.Interstitial:
+                return new InterstitialConfig(node);
+            case AdFormat.RewardedInterstitial:
+                return new RewardedInterstitialConfig(node);
+            case AdFormat.Rewarded:
+                return new RewardedConfig(node);
+            case AdFormat.Null:
+                return new NullAdConfig();
         }
     }
 }
@@ -631,8 +664,8 @@ export class AdsConfig {
         this._adManager = adManager;
     }
 
-    public async initialize(): Promise<void> {
-        await this._networkManager.initialize();
+    public async initialize(analytics: ILibraryAnalytics): Promise<void> {
+        await this._networkManager.initialize(analytics);
     }
 
     public openTestSuite(network: Network): void {

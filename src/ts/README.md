@@ -1,0 +1,1 @@
+Sửa script (.ts) xong nhớ compile (run `tsc`)

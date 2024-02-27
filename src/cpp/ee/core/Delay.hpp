@@ -3,8 +3,6 @@
 
 #ifdef __cplusplus
 
-#include <experimental/coroutine>
-
 #include "ee/core/CoreFwd.hpp"
 
 namespace ee {
@@ -19,7 +17,7 @@ public:
     Delay(const Self&) = delete;
     Self& operator=(const Self&) = delete;
 
-    void await_suspend(std::experimental::coroutine_handle<> handle);
+    void await_suspend(estd::coroutine_handle<> handle);
     bool await_ready();
     void await_resume();
 

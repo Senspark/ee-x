@@ -26,8 +26,8 @@ const auto kOnPurchaseSucceeded = kPrefix + "OnPurchaseSucceeded";
 const auto kOnPurchaseFailed = kPrefix + "OnPurchaseFailed";
 const auto kGetProductJson = kPrefix + "GetProductJson";
 const auto kRestoreTransactions = kPrefix + "RestoreTransactions";
-const auto kFinishAdditionalTransaction =
-    kPrefix + "FinishAdditionalTransaction";
+const auto kFinishAdditionalTransaction = kPrefix + "FinishAdditionalTransaction";
+const auto kSetObfuscatedAccountId = kPrefix + "SetObfuscatedAccountId";
 } // namespace
 
 using Self = AndroidJavaStore;
@@ -128,6 +128,10 @@ void Self::finishAdditionalTransaction(const std::string& productId,
     json["productId"] = productId;
     json["transactionId"] = transactionId;
     bridge_.call(kFinishAdditionalTransaction, json.dump());
+}
+
+void Self::setObfuscationAccountId(const std::string &accountId) {
+    bridge_.call(kSetObfuscatedAccountId, accountId);
 }
 } // namespace store
 } // namespace ee

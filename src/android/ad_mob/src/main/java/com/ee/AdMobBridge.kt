@@ -3,19 +3,15 @@ package com.ee
 import android.app.Activity
 import android.app.Application
 import androidx.annotation.AnyThread
+import com.ee.internal.*
 import com.ee.internal.AdMobAppOpenAd
 import com.ee.internal.AdMobBannerAd
 import com.ee.internal.AdMobBannerHelper
 import com.ee.internal.AdMobInterstitialAd
 import com.ee.internal.AdMobRewardedAd
 import com.ee.internal.AdMobRewardedInterstitialAd
-import com.ee.internal.deserialize
-import com.ee.internal.serialize
 import com.google.android.ads.mediationtestsuite.MediationTestSuite
-import com.google.android.gms.ads.AdRequest
-import com.google.android.gms.ads.AdSize
-import com.google.android.gms.ads.MobileAds
-import com.google.android.gms.ads.RequestConfiguration
+import com.google.android.gms.ads.*
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.serialization.Serializable
 import java.util.concurrent.ConcurrentHashMap
@@ -44,6 +40,7 @@ class AdMobBridge(
         private const val kCreateRewardedInterstitialAd = "${kPrefix}CreateRewardedInterstitialAd"
         private const val kCreateRewardedAd = "${kPrefix}CreateRewardedAd"
         private const val kDestroyAd = "${kPrefix}DestroyAd"
+        private const val kOnAdPaid = "${kPrefix}OnAdPaid"
     }
 
     private var _initializing = false
@@ -113,6 +110,16 @@ class AdMobBridge(
         val adId: String,
         val layoutName: String,
         val identifiers: Map<String, String>
+    )
+
+    @Serializable
+    @Suppress("unused")
+    class AdRevenueData(
+        val networkName: String,
+        val mediationName: String,
+        val adUnitId: String,
+        val adFormat: String,
+        val revenue: Double,
     )
 
     @AnyThread
@@ -250,7 +257,7 @@ class AdMobBridge(
     @AnyThread
     fun createBannerAd(adId: String, adSize: AdSize): Boolean {
         return createAd(adId) {
-            AdMobBannerAd(_bridge, _logger, _activity, adId, adSize, _bannerHelper)
+            AdMobBannerAd(_bridge, _logger, _activity, adId, adSize, _bannerHelper) { onAdPaid(it) }
         }
     }
 
@@ -268,28 +275,28 @@ class AdMobBridge(
     @AnyThread
     fun createAppOpenAd(adId: String): Boolean {
         return createAd(adId) {
-            AdMobAppOpenAd(_bridge, _logger, _application, _activity, adId)
+            AdMobAppOpenAd(_bridge, _logger, _application, _activity, adId) { onAdPaid(it) }
         }
     }
 
     @AnyThread
     fun createInterstitialAd(adId: String): Boolean {
         return createAd(adId) {
-            AdMobInterstitialAd(_bridge, _logger, _activity, adId)
+            AdMobInterstitialAd(_bridge, _logger, _activity, adId) { onAdPaid(it) }
         }
     }
 
     @AnyThread
     fun createRewardedInterstitialAd(adId: String): Boolean {
         return createAd(adId) {
-            AdMobRewardedInterstitialAd(_bridge, _logger, _activity, adId)
+            AdMobRewardedInterstitialAd(_bridge, _logger, _activity, adId) { onAdPaid(it) }
         }
     }
 
     @AnyThread
     fun createRewardedAd(adId: String): Boolean {
         return createAd(adId) {
-            AdMobRewardedAd(_bridge, _logger, _activity, adId)
+            AdMobRewardedAd(_bridge, _logger, _activity, adId) { onAdPaid(it) }
         }
     }
 
@@ -311,5 +318,19 @@ class AdMobBridge(
         ad.destroy()
         _ads.remove(adId)
         return true
+    }
+
+    private fun onAdPaid(data: AdPaidResponse) {
+        val revenue = data.valueMicros / 1e6 // 1 million
+        val mediationName = "admob"
+        var networkName = ""
+
+        if (data.info != null) {
+            networkName = data.info.adSourceName
+        }
+
+        val adPaidData = AdRevenueData(networkName, mediationName, data.adUnitId, data.adFormat, revenue)
+        _logger.info("${kTag}: $networkName $adPaidData.adUnitId $adPaidData.adFormat $revenue")
+        _bridge.callCpp(kOnAdPaid, adPaidData.serialize())
     }
 }

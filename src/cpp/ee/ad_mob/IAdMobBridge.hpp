@@ -34,6 +34,8 @@ public:
 
     virtual void openTestSuite() = 0;
 
+    virtual void addAnalytics(std::shared_ptr<ILibraryAnalytics> analytics) = 0;
+
     /// Creates a banner ad.
     /// @param[in] adId The banner ad unit ID.
     /// @param[in] adSize The banner ad size.

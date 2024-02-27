@@ -23,7 +23,8 @@ public:
                                   PurchaseFailureReason reason) = 0;
     virtual void
     onInitialized(const std::shared_ptr<IStoreController>& controller,
-                  const std::shared_ptr<IExtensionProvider>& extensions) = 0;
+                  const std::shared_ptr<IExtensionProvider>& extensions,
+                  const std::shared_ptr<ILibraryAnalytics>& analytics) = 0;
 };
 } // namespace store
 } // namespace ee

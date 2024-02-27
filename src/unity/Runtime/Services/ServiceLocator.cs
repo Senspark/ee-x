@@ -17,11 +17,13 @@ namespace EE {
         }
 
         public T Resolve<T>() where T : IService {
-            var name = _nameCache.GetServiceName<T>();
+            return (T) Resolve(typeof(T));
+        }
+        
+        public IService Resolve(Type type) {
+            var name = _nameCache.GetServiceName(type);
             if (_services.TryGetValue(name, out var item)) {
-                if (item is T service) {
-                    return service;
-                }
+                return item;
             }
             throw new Exception($"Cannot find the requested service: {name}");
         }
@@ -43,6 +45,10 @@ namespace EE {
         /// </summary>
         public static T Resolve<T>() where T : IService {
             return _impl.Resolve<T>();
+        }
+        
+        public static IService Resolve(Type type) {
+            return _impl.Resolve(type);
         }
     }
 }

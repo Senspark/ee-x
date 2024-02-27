@@ -162,13 +162,13 @@ Self::deserializeFailureReason(const std::string& json) {
 
 #if defined(EE_X_ANDROID)
     static std::map<int, Enum> reasonMap     //
-        {{0, Enum::PurchasingUnavailable},   //
-         {1, Enum::ExistingPurchasePending}, //
-         {2, Enum::ProductUnavailable},      //
-         {3, Enum::SignatureInvalid},        //
-         {4, Enum::UserCancelled},           //
-         {5, Enum::PaymentDeclined},         //
-         {6, Enum::DuplicateTransaction}};
+            {{0, Enum::PurchasingUnavailable},   //
+             {1, Enum::ExistingPurchasePending}, //
+             {2, Enum::ProductUnavailable},      //
+             {3, Enum::SignatureInvalid},        //
+             {4, Enum::UserCancelled},           //
+             {5, Enum::PaymentDeclined},         //
+             {6, Enum::DuplicateTransaction}};
 #endif // defined(EE_X_ANDROID)
 #if defined(EE_X_IOS)
     static std::map<std::string, Enum> reasonMap{
@@ -183,9 +183,14 @@ Self::deserializeFailureReason(const std::string& json) {
 
     auto dic = nlohmann::json::parse(json);
     auto reason = PurchaseFailureReason::Unknown;
-    auto iter = reasonMap.find(dic["reason"]);
-    if (iter != reasonMap.cend()) {
-        reason = iter->second;
+    try {
+        auto iter = reasonMap.find(dic["reason"]);
+        if (iter != reasonMap.cend()) {
+            reason = iter->second;
+        }
+    }
+    catch (...) {
+        reason = PurchaseFailureReason::Unknown;
     }
     return PurchaseFailureDescription(dic["productId"], reason, dic["message"]);
 }

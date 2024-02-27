@@ -162,6 +162,7 @@ class IronSourceBannerAd(
             _viewHelper.size = value
         }
 
+    @Deprecated("Deprecated in Java")
     override fun onBannerAdLoaded() {
         Thread.runOnMainThread {
             _logger.debug("$kTag: ${this::onBannerAdLoaded.name}: id = $_adId")
@@ -170,6 +171,7 @@ class IronSourceBannerAd(
         }
     }
 
+    @Deprecated("Deprecated in Java")
     override fun onBannerAdLoadFailed(error: IronSourceError) {
         Thread.runOnMainThread {
             _logger.debug("$kTag: onAdFailedToLoad: id = $_adId message = ${error.errorMessage}")
@@ -177,24 +179,28 @@ class IronSourceBannerAd(
         }
     }
 
+    @Deprecated("Deprecated in Java")
     override fun onBannerAdScreenPresented() {
         Thread.runOnMainThread {
             _logger.debug("$kTag: ${this::onBannerAdScreenPresented.name}: id = $_adId")
         }
     }
 
+    @Deprecated("Deprecated in Java")
     override fun onBannerAdScreenDismissed() {
         Thread.runOnMainThread {
             _logger.debug("$kTag: ${this::onBannerAdScreenDismissed.name}: id = $_adId")
         }
     }
 
+    @Deprecated("Deprecated in Java")
     override fun onBannerAdLeftApplication() {
         Thread.runOnMainThread {
             _logger.debug("$kTag: ${this::onBannerAdLeftApplication.name}: id = $_adId")
         }
     }
 
+    @Deprecated("Deprecated in Java")
     override fun onBannerAdClicked() {
         Thread.runOnMainThread {
             _logger.debug("$kTag: ${this::onBannerAdClicked.name}: id = $_adId")

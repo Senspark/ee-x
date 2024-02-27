@@ -19,6 +19,7 @@
 #include <ee/core/IMessageBridge.hpp>
 #include <ee/core/Task.hpp>
 #include <ee/core/Utils.hpp>
+#include <ee/core/ILibraryAnalytics.h>
 #include <ee/nlohmann/json.hpp>
 
 #include "ee/ad_mob/AdMobNativeAdLayout.hpp"
@@ -40,6 +41,7 @@ const auto kCreateInterstitialAd         = kPrefix + "CreateInterstitialAd";
 const auto kCreateRewardedInterstitialAd = kPrefix + "CreateRewardedInterstitialAd";
 const auto kCreateRewardedAd             = kPrefix + "CreateRewardedAd";
 const auto kDestroyAd                    = kPrefix + "DestroyAd";
+const auto kOnAdPaid                     = kPrefix + "OnAdPaid";
 // clang-format on
 } // namespace
 
@@ -54,6 +56,10 @@ Self::Bridge(IMessageBridge& bridge, ILogger& logger,
     logger_.debug("%s", __PRETTY_FUNCTION__);
     auto&& mediation = ads::MediationManager::getInstance();
     displayer_ = mediation.getAdDisplayer();
+
+    bridge_.registerHandler([this](const std::string &message) {
+        onAdPaidEvent(message);
+    }, kOnAdPaid);
 }
 
 Self::~Bridge() = default;
@@ -63,6 +69,7 @@ void Self::destroy() {
     for (auto&& [key, value] : ads_) {
         value->destroy();
     }
+    bridge_.deregisterHandler(kOnAdPaid);
     destroyer_();
 }
 
@@ -79,6 +86,14 @@ void Self::addTestDevice(const std::string& hash) {
     bridge_.call(kAddTestDevice, hash);
 }
 
+void Self::openTestSuite() {
+    bridge_.call(kOpenTestSuite);
+}
+
+void Bridge::addAnalytics(std::shared_ptr<ILibraryAnalytics> analytics) {
+    analytics_ = analytics;
+}
+
 std::pair<int, int> Self::getBannerAdSize(BannerAdSize adSize) {
     auto response = bridge_.call(kGetBannerAdSize,
                                  std::to_string(static_cast<int>(adSize)));
@@ -86,10 +101,6 @@ std::pair<int, int> Self::getBannerAdSize(BannerAdSize adSize) {
     int width = json["width"];
     int height = json["height"];
     return std::pair(width, height);
-}
-
-void Self::openTestSuite() {
-    bridge_.call(kOpenTestSuite);
 }
 
 std::shared_ptr<IBannerAd> Self::createBannerAd(const std::string& adId,
@@ -249,5 +260,49 @@ bool Self::destroyAd(const std::string& adId) {
     ads_.erase(iter);
     return true;
 }
+
+void Bridge::onAdPaidEvent(const std::string &jsonData) {
+    logger_.debug("%s: jsonData = %s", __PRETTY_FUNCTION__, jsonData.c_str());
+    try {
+        auto json = nlohmann::json::parse(jsonData);
+        auto adSource = json["networkName"].get<std::string>();
+        auto mediationName = json["mediationName"].get<std::string>();
+        auto adUnitId = json["adUnitId"].get<std::string>();
+        auto adFormat = json["adFormat"].get<std::string>();
+        auto revenue = json["revenue"].get<double>();
+
+        AdFormat adFormatEnum;
+        if (adFormat == "App Open") {
+            adFormatEnum = AdFormat::AppOpen;
+        } else if (adFormat == "Banner") {
+            adFormatEnum = AdFormat::Banner;
+        } else if (adFormat == "Interstitial") {
+            adFormatEnum = AdFormat::Interstitial;
+        } else if (adFormat == "Rectangle") {
+            adFormatEnum = AdFormat::Rectangle;
+        } else if (adFormat == "Rewarded") {
+            adFormatEnum = AdFormat::Rewarded;
+        } else if (adFormat == "Rewarded Interstitial") {
+            adFormatEnum = AdFormat::RewardedInterstitial;
+        } else {
+            adFormatEnum = AdFormat::Null;
+        }
+
+        if (analytics_) {
+            analytics_->logRevenue(ee::core::analytics::AdRevenue{
+                .mediationNetwork = AdNetwork::AdMob,
+                .monetizationNetwork = adSource,
+                .revenue = revenue, //  đã chia cho 1e6f ở AdMobBridge.kt rồi
+                .currencyCode = "USD",
+                .adFormat = adFormatEnum,
+                .adUnit = adUnitId
+            });
+        }
+    }
+    catch (const std::exception &e) {
+        logger_.error("%s: %s", __PRETTY_FUNCTION__, e.what());
+    }
+}
+
 } // namespace ad_mob
 } // namespace ee

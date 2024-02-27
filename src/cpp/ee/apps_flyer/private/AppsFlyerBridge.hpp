@@ -23,7 +23,9 @@ public:
     virtual void destroy() override;
 
     virtual void initialize(const std::string& devKey,
-                            const std::string& iosAppId) override;
+                            const std::string& iosAppId,
+                            const std::string& appIdentity
+                            ) override;
     virtual void startTracking() override;
     virtual std::string getDeviceId() const override;
     virtual void setDebugEnabled(bool enabled) override;
@@ -32,10 +34,20 @@ public:
     trackEvent(const std::string& name,
                const std::map<std::string, std::string>& values) override;
 
+    void logRevenue(const ee::core::ILibraryAnalytics::AdRevenue &adRevenue) override;
+
+    void logRevenue(const ee::core::ILibraryAnalytics::IapRevenue &iapRevenue) override;
+
+    void pushGameLevel(int levelNo, const std::string &levelMode) override {}
+
+    void popGameLevel(bool winGame) override {}
+
 private:
     IMessageBridge& bridge_;
     ILogger& logger_;
     Destroyer destroyer_;
+    bool initialized_ {false};
+    std::string appIdentity_ {};
 };
 } // namespace apps_flyer
 } // namespace ee

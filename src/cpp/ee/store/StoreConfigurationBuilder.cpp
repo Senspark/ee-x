@@ -38,5 +38,11 @@ Self& Self::addProduct(const std::string& id, ProductType type,
     return *this;
 }
 
+Self &ConfigurationBuilder::setObfuscatedAccountId(const std::string &accountId) {
+    obfuscatedAccountId_ = accountId;
+    StandardPurchasingModule::instance()->setObfuscatedAccountId(accountId);
+    return *this;
+}
+
 } // namespace store
 } // namespace ee

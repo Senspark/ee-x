@@ -11,3 +11,6 @@ export * from './Platform';
 export * from './PluginManager';
 export * from './ScopeGuard';
 export * from './Utils';
+export * from './ILibraryAnalytics';
+export * from "./SafeInset";
+export * from "./IDataManager";

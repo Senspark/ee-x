@@ -4,7 +4,7 @@ apply plugin: 'kotlinx-serialization'
 
 android {
     buildToolsVersion rootProject.buildToolsVersion
-    compileSdkVersion rootProject.compileSdkVersion
+    compileSdk rootProject.compileSdkVersion
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
@@ -15,6 +15,7 @@ android {
         minSdkVersion 17
         targetSdkVersion rootProject.targetSdkVersion
     }
+
 }
 
 if (rootProject.ext.has('buildMaven') && rootProject.buildMaven) {
@@ -22,8 +23,11 @@ if (rootProject.ext.has('buildMaven') && rootProject.buildMaven) {
 }
 
 dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.aar', '*.jar'], exclude: [])
+
     api project(':ee-x-core')
-    implementation 'androidx.core:core-ktx:1.9.0'
+    implementation 'androidx.core:core-ktx:1.10.1'
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
     implementation "org.jetbrains.kotlinx:kotlinx-serialization-json:$kotlinSerializationVersion"
+    implementation 'com.github.hanthuyen8:Senspark-Android-Banner-Notification:v1.1.5'
 }

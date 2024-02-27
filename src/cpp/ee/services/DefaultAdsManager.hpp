@@ -21,6 +21,7 @@ public:
 
     virtual void addTestDevice(const std::string& hash) override;
     virtual void openTestSuite() override;
+    virtual void addAnalytics(std::shared_ptr<ILibraryAnalytics> analytics) override;
     virtual std::shared_ptr<IBannerAd> getBannerAd() override;
     virtual std::shared_ptr<IBannerAd> getRectangleAd() override;
     virtual std::shared_ptr<IFullScreenAd> getAppOpenAd() override;

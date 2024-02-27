@@ -15,6 +15,8 @@
 #include <ee/core/internal/JsonUtils.hpp>
 #include <ee/nlohmann/json.hpp>
 
+#include <algorithm>
+
 namespace ee {
 namespace firebase {
 namespace analytics {
@@ -52,6 +54,10 @@ void Self::setUserProperty(const std::string& key, const std::string& value) {
     bridge_.call(kSetUserProperty, request.dump());
 }
 
+void Bridge::setAppIdentifier(const std::string &appIdentifier) {
+    appIdentifier_ = appIdentifier;
+}
+
 void Self::trackScreen(const std::string& name) {
     bridge_.call(kTrackScreen, name);
 }
@@ -65,6 +71,99 @@ void Self::logEvent(
     request["name"] = name;
     request["parameters"] = parameters;
     bridge_.call(kLogEvent, request.dump());
+}
+
+void Self::logRevenue(const ILibraryAnalytics::AdRevenue &adRevenue) {
+    if (adRevenue.mediationNetwork == AdNetwork::AdMob) {
+        // https://firebase.google.com/docs/analytics/measure-ad-revenue#implementation-admob
+        // Logged automatically.
+        return;
+    }
+
+    auto evName = adRevenue.isValid() ? "ad_impression" : "ad_impression_error";
+
+    std::string adFormat;
+    switch (adRevenue.adFormat) {
+        case AdFormat::AppOpen:
+            adFormat = "App Open";
+            break;
+        case AdFormat::Banner:
+            adFormat = "Banner";
+            break;
+        case AdFormat::Interstitial:
+            adFormat = "Interstitial";
+            break;
+        case AdFormat::Rectangle:
+            adFormat = "Rect";
+            break;
+        case AdFormat::Rewarded:
+            adFormat = "Rewarded";
+            break;
+        case AdFormat::RewardedInterstitial:
+            adFormat = "Rewarded Interstitial";
+            break;
+        default:
+            adFormat = "Others";
+            break;
+    }
+
+    std::string adPlatform;
+    switch (adRevenue.mediationNetwork) {
+        case ads::AdNetwork::AppLovinMax:
+            adPlatform = "AppLovin";
+            break;
+        case ads::AdNetwork::IronSource:
+            adPlatform = "IronSource";
+            break;
+        default:
+            adPlatform = "Others";
+            break;
+    }
+
+    nlohmann::json request;
+    request["name"] = evName;
+    request["parameters"] = std::unordered_map<std::string, std::variant<std::int64_t, double, std::string>>{
+        {"ad_platform", adPlatform},
+        {"ad_source", adRevenue.monetizationNetwork},
+        {"ad_unit", adRevenue.adUnit},
+        {"ad_format", adFormat},
+        {"value", adRevenue.revenue},
+        {"currency", adRevenue.currencyCode},
+    };
+    bridge_.call(kLogEvent, request.dump());
+}
+
+void Self::logRevenue(const ILibraryAnalytics::IapRevenue &iapRevenue) {
+    // Prepare name
+    auto pId = iapRevenue.productId;
+    std::replace(pId.begin(), pId.end(), '.', '_');
+    std::replace(pId.begin(), pId.end(), '-', '_');
+
+    std::string pIdShorten = iapRevenue.productId;
+    if (!appIdentifier_.empty()) {
+        auto found = pIdShorten.find(appIdentifier_ + ".");
+        if (found != std::string::npos) {
+            pIdShorten.erase(found, appIdentifier_.length());
+        }
+    }
+
+    {
+        auto removeStr = "com.senspark.";
+        auto found = pIdShorten.find(removeStr);
+        if (found != std::string::npos) {
+            pIdShorten.erase(found, std::string(removeStr).length());
+        }
+    }
+
+    std::replace(pIdShorten.begin(), pIdShorten.end(), '.', '_');
+    std::replace(pIdShorten.begin(), pIdShorten.end(), '-', '_');
+
+    logEvent("conv_buy_iap_" + pIdShorten, {});
+
+    logEvent("conv_buy_iap", {
+            {"package_name", iapRevenue.productId},
+            {"order_id",     iapRevenue.orderId},
+    });
 }
 } // namespace analytics
 } // namespace firebase

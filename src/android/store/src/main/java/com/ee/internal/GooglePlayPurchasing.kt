@@ -31,6 +31,7 @@ class GooglePlayPurchasing(
             1 to "BILLING_RESPONSE_RESULT_USER_CANCELED",
             2 to "BILLING_RESPONSE_RESULT_SERVICE_UNAVAILABLE",
             3 to "BILLING_RESPONSE_RESULT_BILLING_UNAVAILABLE",
+            3 to "BILLING_RESPONSE_RESULT_BILLING_UNAVAILABLE",
             4 to "BILLING_RESPONSE_RESULT_ITEM_UNAVAILABLE",
             5 to "BILLING_RESPONSE_RESULT_DEVELOPER_ERROR",
             6 to "BILLING_RESPONSE_RESULT_ERROR",
@@ -94,10 +95,16 @@ class GooglePlayPurchasing(
                     ?: throw IllegalStateException("Unexpected state")
                 val skuDetails = _inventory.getSkuDetails(suspectBadPurchase.productId)
                     ?: throw IllegalStateException("Unexpected state")
-                _unityPurchasing.onPurchaseSucceeded(purchase.sku, encodeReceipt(purchase, skuDetails),
-                    purchase.orderId.ifEmpty {
+                val transactionId: String =
+                    if (purchase.orderId?.isNotEmpty() == true)
+                        purchase.orderId!!
+                    else
                         purchase.purchaseToken
-                    })
+                _unityPurchasing.onPurchaseSucceeded(
+                    purchase.skus[0],
+                    encodeReceipt(purchase, skuDetails),
+                    transactionId
+                )
                 notified = true
             }
             if (!notified) {
@@ -130,7 +137,7 @@ class GooglePlayPurchasing(
                 _scope.launch {
                     try {
                         // Silently consume in background.
-                        _helper.consume(SkuType.INAPP, record.purchaseToken, record.sku)
+                        _helper.consume(SkuType.INAPP, record.purchaseToken, record.skus.get(0))
                     } catch (ex: Exception) {
                         ex.printStackTrace()
                     }
@@ -147,9 +154,12 @@ class GooglePlayPurchasing(
 
     private fun findPurchaseByOrderId(orderId: String): Pair<String, Purchase>? {
         return _inventory.getAllPurchases().find { item ->
-            orderId == item.second.orderId.ifEmpty {
-                item.second.purchaseToken
-            }
+            val transactionId =
+                if (item.second.orderId?.isNotEmpty() == true)
+                    item.second.orderId!!
+                else
+                    item.second.purchaseToken
+            orderId == transactionId
         }
     }
 
@@ -169,9 +179,11 @@ class GooglePlayPurchasing(
             val purchase = inventory.getPurchase(sku)
             val description = if (purchase != null) {
                 val receipt = encodeReceipt(purchase, details)
-                val transactionId = purchase.orderId.ifEmpty {
-                    purchase.purchaseToken
-                }
+                val transactionId =
+                    if (purchase.orderId?.isNotEmpty() == true)
+                        purchase.orderId!!
+                    else
+                        purchase.purchaseToken
                 ProductDescription(sku, metadata, receipt, transactionId)
             } else {
                 ProductDescription(sku, metadata, "", "")
@@ -229,7 +241,7 @@ class GooglePlayPurchasing(
             if (record != null) {
                 try {
                     // Silently consume.
-                    _helper.consume(SkuType.INAPP, record.purchaseToken, record.sku)
+                    _helper.consume(SkuType.INAPP, record.purchaseToken, record.skus.get(0))
                 } catch (ex: Exception) {
                     ex.printStackTrace()
                 }
@@ -272,12 +284,18 @@ class GooglePlayPurchasing(
                 _purchaseInProgress = false
                 _inventory.addPurchase(details.type, purchase)
                 if (details.type == SkuType.SUBS) {
-                    _inventory.addPurchaseToSubscriptionPurchaseHistory(purchase.sku)
+                    _inventory.addPurchaseToSubscriptionPurchaseHistory(purchase.skus[0])
                 }
-                _unityPurchasing.onPurchaseSucceeded(purchase.sku, encodeReceipt(purchase, details),
-                    purchase.orderId.ifEmpty {
+                val transactionId =
+                    if (purchase.orderId?.isNotEmpty() == true)
+                        purchase.orderId!!
+                    else
                         purchase.purchaseToken
-                    })
+                _unityPurchasing.onPurchaseSucceeded(
+                    purchase.skus[0],
+                    encodeReceipt(purchase, details),
+                    transactionId
+                )
             } catch (ex: StoreException) {
                 _purchaseInProgress = false
                 val responseCode = ex.responseCode
@@ -309,20 +327,20 @@ class GooglePlayPurchasing(
         val type = item.first
         val purchase = item.second
         if (product.type == ProductType.Consumable) {
-            _logger.debug("$kTag: finishTransaction: consuming ${purchase.sku}")
-            _inventory.erasePurchase(purchase.sku)
+            _logger.debug("$kTag: finishTransaction: consuming ${purchase.skus.get(0)}")
+            _inventory.erasePurchase(purchase.skus.get(0))
             _scope.launch {
                 try {
-                    _helper.consume(type, purchase.purchaseToken, purchase.sku)
+                    _helper.consume(type, purchase.purchaseToken, purchase.skus.get(0))
                 } catch (ex: IabException) {
                     _logger.error("$kTag: finishTransaction: failed to consume: ${ex.localizedMessage ?: ""}")
                 }
             }
         } else {
-            _logger.debug("$kTag: finishTransaction: acknowledging ${purchase.sku}")
+            _logger.debug("$kTag: finishTransaction: acknowledging ${purchase.skus.get(0)}")
             _scope.launch {
                 try {
-                    _helper.acknowledge(purchase.purchaseToken, purchase.sku)
+                    _helper.acknowledge(purchase.purchaseToken, purchase.skus.get(0))
                 } catch (ex: IabException) {
                     _logger.error("$kTag: finishTransaction: failed to acknowledge: ${ex.localizedMessage ?: ""}")
                 }
@@ -334,10 +352,10 @@ class GooglePlayPurchasing(
         val item = findPurchaseByOrderId(transactionId) ?: return
         val type = item.first
         val purchase = item.second
-        _logger.debug("$kTag: ${this::finishAdditionalTransaction.name}: consuming ${purchase.sku}")
-        _inventory.erasePurchase(purchase.sku)
+        _logger.debug("$kTag: ${this::finishAdditionalTransaction.name}: consuming ${purchase.skus.get(0)}")
+        _inventory.erasePurchase(purchase.skus.get(0))
         try {
-            _helper.consume(type, purchase.purchaseToken, purchase.sku)
+            _helper.consume(type, purchase.purchaseToken, purchase.skus.get(0))
         } catch (ex: IabException) {
             _logger.error("$kTag: ${this::finishAdditionalTransaction.name}: failed to consume: ${ex.localizedMessage ?: ""}")
         }

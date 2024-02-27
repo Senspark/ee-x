@@ -9,6 +9,7 @@
 #ifndef EE_X_FIREBASE_ANALYTICS_BRIDGE_HPP
 #define EE_X_FIREBASE_ANALYTICS_BRIDGE_HPP
 
+#include <functional>
 #include "ee/firebase_analytics/IFirebaseAnalyticsBridge.hpp"
 
 namespace ee {
@@ -27,17 +28,27 @@ public:
     virtual Task<bool> initialize() override;
     virtual void setUserProperty(const std::string& key,
                                  const std::string& value) override;
+
+    void setAppIdentifier(const std::string &appIdentifier) override;
+
     virtual void trackScreen(const std::string& name) override;
     virtual void
     logEvent(const std::string& name,
              const std::unordered_map<
                  std::string, std::variant<std::int64_t, double, std::string>>&
                  parameters) override;
+    
+    void logRevenue(const AdRevenue &adRevenue) override;
+    void logRevenue(const IapRevenue &iapRevenue) override;
+
+    void pushGameLevel(int levelNo, const std::string &levelMode) override {}
+    void popGameLevel(bool winGame) override {}
 
 private:
     IMessageBridge& bridge_;
     ILogger& logger_;
     Destroyer destroyer_;
+    std::string appIdentifier_;
 };
 } // namespace analytics
 } // namespace firebase

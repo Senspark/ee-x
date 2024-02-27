@@ -27,6 +27,7 @@ public:
     virtual void purchase(const std::string& productJson) override;
     virtual void finishTransaction(const std::string& productJson,
                                    const std::string& transactionId) override;
+    virtual void setObfuscationAccountId(const std::string& obfuscationAccountId) override {}
     virtual void restoreTransactions() override;
     virtual void refreshAppReceipt() override;
     virtual void addTransactionObserver() override;

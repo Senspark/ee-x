@@ -22,6 +22,7 @@ private let kCreateInterstitialAd = "\(kPrefix)CreateInterstitialAd"
 private let kCreateRewardedInterstitialAd = "\(kPrefix)CreateRewardedInterstitialAd"
 private let kCreateRewardedAd = "\(kPrefix)CreateRewardedAd"
 private let kDestroyAd = "\(kPrefix)DestroyAd"
+private let kOnAdPaid = "\(kPrefix)OnAdPaid"
 
 @objc(EEAdMobBridge)
 class AdMobBridge: NSObject, IPlugin {
@@ -52,7 +53,7 @@ class AdMobBridge: NSObject, IPlugin {
                 .subscribe(
                     onSuccess: {
                         result in resolver(Utils.toString(result))
-                    }, onError: {
+                    }, onFailure: {
                         _ in resolver(Utils.toString(false))
                     })
         }
@@ -191,7 +192,7 @@ class AdMobBridge: NSObject, IPlugin {
 
     func createBannerAd(_ adId: String, _ adSize: GADAdSize) -> Bool {
         return createAd(adId) {
-            AdMobBannerAd(_bridge, _logger, adId, adSize, _bannerHelper)
+            AdMobBannerAd(_bridge, _logger, adId, adSize, _bannerHelper, onAdPaid)
         }
     }
 
@@ -206,25 +207,25 @@ class AdMobBridge: NSObject, IPlugin {
 
     func createAppOpenAd(_ adId: String) -> Bool {
         return createAd(adId) {
-            AdMobAppOpenAd(self._bridge, self._logger, adId)
+            AdMobAppOpenAd(self._bridge, self._logger, adId, onAdPaid)
         }
     }
 
     func createInterstitialAd(_ adId: String) -> Bool {
         return createAd(adId) {
-            AdMobInterstitialAd(self._bridge, self._logger, adId)
+            AdMobInterstitialAd(self._bridge, self._logger, adId, onAdPaid)
         }
     }
 
     func createRewardedInterstitialAd(_ adId: String) -> Bool {
         return createAd(adId) {
-            AdMobRewardedInterstitialAd(self._bridge, self._logger, adId)
+            AdMobRewardedInterstitialAd(self._bridge, self._logger, adId, onAdPaid)
         }
     }
 
     func createRewardedAd(_ adId: String) -> Bool {
         return createAd(adId) {
-            AdMobRewardedAd(self._bridge, self._logger, adId)
+            AdMobRewardedAd(self._bridge, self._logger, adId, onAdPaid)
         }
     }
 
@@ -246,5 +247,22 @@ class AdMobBridge: NSObject, IPlugin {
         ad.destroy()
         _ads.removeValue(forKey: adId)
         return true
+    }
+    
+    func onAdPaid(_ data:AdPaidResponse) -> Void {
+        let revenue:Double = data.revenue.doubleValue // ko chia cho 1e6 (chỉ chia đối với android)
+        let mediationName = "admob"
+        
+        let adPaidData = AdRevenueData(
+            networkName: data.networkName,
+            mediationName: mediationName,
+            adUnitId: data.adUnitId,
+            adFormat: data.adFormat,
+            revenue: revenue)
+        
+        let outputJson = JSONUtil.toJSON(adPaidData) ?? ""
+        
+        _logger.info("\(kTag): \(adPaidData.networkName) \(adPaidData.adUnitId ) \(adPaidData.adFormat) \(revenue)")
+        _bridge.callCpp(kOnAdPaid, outputJson)
     }
 }

@@ -5,7 +5,6 @@
 
 #include <atomic>
 #include <cstdint>
-#include <experimental/coroutine>
 #include <mutex> // for std::adopt_lock_t
 
 #include "ee/core/CoreFwd.hpp"
@@ -151,7 +150,7 @@ public:
         : m_mutex(mutex) {}
 
     bool await_ready() const noexcept { return false; }
-    bool await_suspend(std::experimental::coroutine_handle<> awaiter) noexcept;
+    bool await_suspend(estd::coroutine_handle<> awaiter) noexcept;
     void await_resume() const noexcept {}
 
 protected:
@@ -161,7 +160,7 @@ protected:
 
 private:
     async_mutex_lock_operation* m_next;
-    std::experimental::coroutine_handle<> m_awaiter;
+    estd::coroutine_handle<> m_awaiter;
 };
 
 class async_mutex_scoped_lock_operation : public async_mutex_lock_operation {

@@ -2,6 +2,7 @@ package com.ee
 
 import android.app.Activity
 import android.app.Application
+import android.os.RemoteException
 import androidx.annotation.AnyThread
 import com.android.billingclient.api.AcknowledgePurchaseParams
 import com.android.billingclient.api.BillingClient
@@ -14,12 +15,15 @@ import com.android.billingclient.api.BillingResult
 import com.android.billingclient.api.ConsumeParams
 import com.android.billingclient.api.Purchase
 import com.android.billingclient.api.PurchaseHistoryRecord
+import com.android.billingclient.api.QueryPurchasesParams
 import com.android.billingclient.api.SkuDetails
 import com.android.billingclient.api.SkuDetailsParams
 import com.android.billingclient.api.acknowledgePurchase
 import com.android.billingclient.api.consumePurchase
 import com.android.billingclient.api.queryPurchaseHistory
 import com.android.billingclient.api.querySkuDetails
+import com.android.installreferrer.api.InstallReferrerClient
+import com.android.installreferrer.api.InstallReferrerStateListener
 import com.ee.internal.GooglePlayPurchasing
 import com.ee.internal.IUnityCallback
 import com.ee.internal.IabHelper
@@ -40,6 +44,7 @@ import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.serialization.Serializable
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
+import kotlin.coroutines.suspendCoroutine
 
 /**
  * Created by Zinge on 5/16/17.
@@ -63,6 +68,7 @@ class StoreBridge(
         private const val kGetProductJson = "${kPrefix}GetProductJson"
         private const val kRestoreTransactions = "${kPrefix}RestoreTransactions"
         private const val kFinishAdditionalTransaction = "${kPrefix}FinishAdditionalTransaction"
+        private const val kSetObfuscatedAccountId = "${kPrefix}SetObfuscatedAccountId"
     }
 
     private val _scope = MainScope()
@@ -71,6 +77,7 @@ class StoreBridge(
     private val _skuDetailsList: MutableMap<String, SkuDetails> = HashMap()
     private var _client: BillingClient? = null
     private var _clientAwaiter: Deferred<Unit>? = null
+    private var _obfuscatedAccountId: String = ""
 
     init {
         _logger.info("$kTag: constructor begin: application = $_application activity = $_activity")
@@ -132,6 +139,11 @@ class StoreBridge(
             }
             ""
         }
+        _bridge.registerAsyncHandler(kSetObfuscatedAccountId) { message ->
+            _logger.info("$kTag: Set account id = $message")
+            _obfuscatedAccountId = message
+            ""
+        }
     }
 
     private fun deregisterHandlers() {
@@ -141,6 +153,7 @@ class StoreBridge(
         _bridge.deregisterHandler(kGetProductJson)
         _bridge.deregisterHandler(kRestoreTransactions)
         _bridge.deregisterHandler(kFinishAdditionalTransaction)
+        _bridge.deregisterHandler(kSetObfuscatedAccountId)
     }
 
     override fun onSetupFailed(json: String) {
@@ -257,12 +270,16 @@ class StoreBridge(
 
     override suspend fun getPurchases(@SkuType skuType: String): List<Purchase> {
         val client = connect()
-        val result = client.queryPurchases(skuType)
-        if (result.responseCode == BillingResponseCode.OK) {
-            val purchaseList = result.purchasesList
-            return purchaseList ?: ArrayList()
-        } else {
-            throw StoreException(result.responseCode)
+        return suspendCoroutine { cont ->
+            client.queryPurchasesAsync(
+                QueryPurchasesParams.newBuilder().setProductType(skuType).build()
+            ) { billingResult, purchaseList ->
+                if (billingResult.responseCode == BillingResponseCode.OK) {
+                    cont.resume(purchaseList)
+                } else {
+                    cont.resumeWithException(StoreException(billingResult.responseCode))
+                }
+            }
         }
     }
 
@@ -291,22 +308,20 @@ class StoreBridge(
             if (update.code != BillingResponseCode.OK) {
                 throw StoreException(update.code)
             }
-            if (update.purchases.all { it.sku != details.sku }) {
+            if (update.purchases.all { it.skus[0] != details.sku }) {
                 continue
             }
-            if (update.code == BillingResponseCode.OK) {
-                return update.purchases.first { it.sku == details.sku }
-            } else {
-                throw StoreException(update.code)
-            }
+            return update.purchases.first { it.skus[0] == details.sku }
         }
     }
 
     private suspend fun launchBillingFlow(details: SkuDetails) {
-        return launchBillingFlow(BillingFlowParams
-            .newBuilder()
-            .setSkuDetails(details)
-            .build())
+        val flow = BillingFlowParams.newBuilder()
+        flow.setSkuDetails(details)
+        if (_obfuscatedAccountId.isNotEmpty()) {
+            flow.setObfuscatedAccountId(_obfuscatedAccountId)
+        }
+        return launchBillingFlow(flow.build())
     }
 
     private suspend fun launchBillingFlow(params: BillingFlowParams) {

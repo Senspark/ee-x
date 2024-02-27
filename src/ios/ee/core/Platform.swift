@@ -97,7 +97,7 @@ public class Platform: NSObject {
                 .subscribe(
                     onSuccess: {
                         result in resolver(Utils.toString(result))
-                    }, onError: {
+                    }, onFailure: {
                         _ in resolver(Utils.toString(false))
                     })
         }
@@ -106,7 +106,7 @@ public class Platform: NSObject {
                 .subscribe(
                     onSuccess: {
                         result in resolver("\(result)")
-                    }, onError: {
+                    }, onFailure: {
                         _ in resolver("\(AuthorizationStatusOther)")
                     })
         }
@@ -250,11 +250,11 @@ public class Platform: NSObject {
                 let isReachable = status != .unavailable
                 single(.success(isReachable))
             } catch let ex {
-                single(.error(ex))
+                single(.failure(ex))
             }
             return Disposables.create()
         }
-        .subscribeOn(scheduler)
+        .subscribe(on:scheduler)
         .timeout(.milliseconds(Int(timeOut * 1000)), scheduler: scheduler)
     }
     
@@ -269,6 +269,6 @@ public class Platform: NSObject {
             }
             return Disposables.create()
         }
-        .subscribeOn(MainScheduler())
+        .subscribe(on:MainScheduler())
     }
 }

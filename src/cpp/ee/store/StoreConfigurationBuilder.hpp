@@ -12,6 +12,7 @@
 
 #include <set>
 #include <vector>
+#include <string>
 
 #include "ee/store/StoreFwd.hpp"
 
@@ -29,6 +30,8 @@ public:
     Self& addProduct(const std::string& id, ProductType type,
                      const std::string& storeIds);
 
+    Self& setObfuscatedAccountId(const std::string& accountId);
+
 private:
     friend Bridge;
     friend UnityPurchasing;
@@ -42,6 +45,7 @@ private:
 
     std::shared_ptr<PurchasingFactory> factory_;
     std::set<std::shared_ptr<ProductDefinition>> products_;
+    std::string obfuscatedAccountId_;
 };
 } // namespace store
 } // namespace ee

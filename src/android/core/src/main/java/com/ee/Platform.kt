@@ -11,7 +11,6 @@ import android.content.res.Configuration
 import android.content.res.Resources
 import android.graphics.Point
 import android.net.ConnectivityManager
-import android.net.Uri
 import android.os.Build
 import android.os.RemoteException
 import android.util.DisplayMetrics
@@ -64,6 +63,7 @@ object Platform {
     private const val kTestConnection = kPrefix + "testConnection"
     private const val kShowInstallPrompt = kPrefix + "showInstallPrompt"
     private const val kGetInstallReferrer = kPrefix + "getInstallReferrer"
+    private const val kFetchSocket = kPrefix + "fetchSocket"
 
     @Serializable
     private class GetApplicationSignaturesRequest(
@@ -110,6 +110,13 @@ object Platform {
     private class TestConnectionRequest(
         val host_name: String,
         val time_out: Float
+    )
+
+    @Serializable
+    private class FetchRequest(
+        val host_name: String,
+        val port: Int,
+        val message: String
     )
 
     @Serializable
@@ -194,6 +201,11 @@ object Platform {
             val result = testConnection(context, request.host_name, request.time_out)
             Utils.toString(result)
         }
+        bridge.registerAsyncHandler(kFetchSocket) { message ->
+            val request = deserialize<FetchRequest>(message)
+            val result = fetchSocket(request.host_name, request.port, request.message)
+            result
+        }
         bridge.registerAsyncHandler(kGetInstallReferrer) {
             val activity = PluginManager.instance.activity
             if (activity == null) {
@@ -230,6 +242,7 @@ object Platform {
         bridge.deregisterHandler(kSendMail)
         bridge.deregisterHandler(kTestConnection)
         bridge.deregisterHandler(kShowInstallPrompt)
+        bridge.deregisterHandler(kFetchSocket)
     }
 
     @Suppress("MemberVisibilityCanBePrivate")
@@ -247,8 +260,10 @@ object Platform {
     private fun openApplication(context: Context, applicationId: String): Boolean {
         val packetManager = context.packageManager
         val launchIntent = packetManager.getLaunchIntentForPackage(applicationId)
+
+        // Null pointer check in case package name was not found.
         if (launchIntent != null) {
-            // Null pointer check in case package name was not found.
+            launchIntent.putExtra("sender", getApplicationId(context))
             context.startActivity(launchIntent)
             return true
         }
@@ -599,10 +614,44 @@ object Platform {
         return result
     }
 
+    private suspend fun fetchSocket(hostName: String, port: Int, message: String): String {
+        var result = ""
+        try {
+            result = withContext(Dispatchers.IO) {
+                withTimeout(10000) {
+                    val socket = java.net.Socket(hostName, port)
+
+                    try {
+                        val sendData = message.ifEmpty { "" }
+                        val outputStream = socket.getOutputStream()
+                        outputStream.write(sendData.toByteArray())
+                        outputStream.flush()
+
+                        val inputStream = socket.getInputStream()
+                        val buffer = ByteArray(1024)
+                        val read = inputStream.read(buffer)
+                        val data = String(buffer, 0, read)
+
+                        outputStream.close()
+                        inputStream.close()
+
+                        return@withTimeout data
+                    } catch (ex: Exception) {
+                        return@withTimeout ex.message ?: "err_time_out"
+                    } finally {
+                        socket.close()
+                    }
+                }
+            }
+        } catch (ex: Exception) {
+            result = ex.message ?: "err_unknown"
+        }
+        return result
+    }
+
     private fun showInstantPrompt(url: String, referrer: String, activity: Activity) {
-        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url)).addCategory(Intent.CATEGORY_BROWSABLE)
-        val requestCode = 10;
-        com.google.android.gms.instantapps.InstantApps.showInstallPrompt(activity, intent, requestCode, referrer)
+        // nhanc18 remove implementation 'com.google.android.gms:play-services-instantapps:18.0.1' in build.gradle
+        // Cho nên ko cần nữa
     }
 
     private suspend fun getInstallReferrer(activity: Activity): String {

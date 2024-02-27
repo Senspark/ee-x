@@ -25,5 +25,5 @@ dependencies {
     // https://maven.google.com/web/index.html#com.google.ads.mediation
     // https://developers.google.com/admob/android/mediation/applovin#applovin-android-mediation-adapter-changelog
     // Use "api" to inherit manifest elements.
-    api 'com.google.ads.mediation:applovin:11.6.1.0'
+    api 'com.google.ads.mediation:applovin:11.11.3.0'
 }

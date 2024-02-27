@@ -18,11 +18,15 @@
 
 #include <soomla/CCJsonHelper.h>
 #include <soomla/CCSoomlaUtils.h>
+#include <soomla/PurchaseTypes/CCPurchaseWithMarket.h>
+
+#include <ee/core/ILibraryAnalytics.h>
 
 #include "soomla/CCStoreBridge.h"
 #include "soomla/CCStoreEventDispatcher.h"
 #include "soomla/NativeImpl/CCNativeSoomlaStore.h"
 #include "soomla/data/CCStoreInfo.h"
+#include "StoreEventListener.h"
 
 namespace soomla {
 #define TAG "SOOMLA SoomlaStore"
@@ -46,37 +50,45 @@ CCSoomlaStore* CCSoomlaStore::getInstance() {
     return s_SharedSoomlaStore;
 }
 
-void CCSoomlaStore::initialize(soomla::CCStoreAssets* storeAssets,
-                               const cocos2d::ValueMap& storeParams) {
-    if (initialized) {
-        CCStoreEventDispatcher::getInstance()->onUnexpectedStoreError(0, true);
-        CCSoomlaUtils::logError(TAG, "SoomlaStore is already initialized. You "
-                                     "can't initialize it twice!");
-        return;
+    void CCSoomlaStore::initializeLegacy(soomla::CCStoreAssets *storeAssets,
+                                   const cocos2d::ValueMap &storeParams) {
+        initialize(storeAssets, storeParams, nullptr);
     }
 
-    CCStoreBridge::initShared();
+    void CCSoomlaStore::initialize(soomla::CCStoreAssets* storeAssets,
+                                   const cocos2d::ValueMap& storeParams,
+                                   const std::shared_ptr<ee::ILibraryAnalytics> &analytics) {
+        if (initialized) {
+            CCStoreEventDispatcher::getInstance()->onUnexpectedStoreError(0, true);
+            CCSoomlaUtils::logError(TAG, "SoomlaStore is already initialized. You "
+                                         "can't initialize it twice!");
+            return;
+        }
 
-    CCSoomlaUtils::logDebug(TAG, "CCSoomlaStore Initializing...");
+        CCStoreBridge::initShared();
 
-    getInstance()->loadBillingService();
+        CCSoomlaUtils::logDebug(TAG, "CCSoomlaStore Initializing...");
 
-    CCStoreInfo::createShared(storeAssets);
+        auto instance = getInstance();
+        instance->loadBillingService();
+        instance->analytics = analytics;
 
-    CCStoreBridge::getInstance()->applyParams(storeParams);
+        CCStoreInfo::createShared(storeAssets);
 
-    // #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-    // On iOS we only refresh market items
-    // CCError *error = nullptr;
-    // getInstance()->refreshMarketItemsDetails(&error);
-    // #elif (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-    // On Android we refresh market items and restore transactions
-    // getInstance()->refreshInventory();
-    // #endif
+        CCStoreBridge::getInstance()->applyParams(storeParams);
 
-    initialized = true;
-    CCStoreEventDispatcher::getInstance()->onSoomlaStoreInitialized(true);
-}
+        // #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+        // On iOS we only refresh market items
+        // CCError *error = nullptr;
+        // getInstance()->refreshMarketItemsDetails(&error);
+        // #elif (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+        // On Android we refresh market items and restore transactions
+        // getInstance()->refreshInventory();
+        // #endif
+
+        initialized = true;
+        CCStoreEventDispatcher::getInstance()->onSoomlaStoreInitialized(true);
+    }
 
 void CCSoomlaStore::buyMarketItem(const std::string& productId,
                                   const std::string& payload, CCError** error) {
@@ -99,5 +111,56 @@ void CCSoomlaStore::buyMarketItem(const std::string& productId,
 
     // complete purchasing routine
     CCStoreEventDispatcher::getInstance()->onItemPurchased(item, payload);
+}
+
+void CCSoomlaStore::logIapRevenue(const std::string& productId, CCError** error) {
+    CCPurchasableVirtualItem *item = CCStoreInfo::sharedStoreInfo()->getPurchasableItemWithProductId(productId, error);
+    if (item == nullptr) {
+        return;
+    }
+
+    auto purchaseType = item->getPurchaseType();
+    auto purchaseWithMarket = dynamic_cast<soomla::CCPurchaseWithMarket *>(purchaseType);
+    if (purchaseWithMarket == nullptr) {
+        return;
+    }
+
+    auto marketItem = purchaseWithMarket->getMarketItem();
+
+    auto listener = std::make_shared<soomla::StoreEventListener>();
+    listener->setMarketPurchaseCallback([this, listener, marketItem](
+        const std::string &purchasableId,
+        const std::string &payload,
+        const std::unordered_map<std::string, std::string> &extraInfo
+    ) {
+        // ios extraInfo: receiptUrl, transactionDate, receiptBase64, originalTransactionIdentifier, originalTransactionDate, transactionIdentifier
+        // android extraInfo: orderId
+        std::string orderId {""};
+
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+        if (extraInfo.find("transactionIdentifier") != extraInfo.end()) {
+            orderId = extraInfo.at("transactionIdentifier");
+        }
+#elif (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+        if (extraInfo.find("orderId") != extraInfo.end()) {
+            orderId = extraInfo.at("orderId");
+        }
+#endif
+        
+        auto price = marketItem->getMarketPriceMicros() / 1e6;
+        auto currencyCode = marketItem->getMarketCurrencyCode();
+        auto productId = marketItem->getProductId();
+
+        if (analytics) {
+            analytics->logRevenue(ee::core::analytics::IapRevenue{
+                    .revenue = price,
+                    .currencyCode = currencyCode,
+                    .productId = productId,
+                    .orderId = orderId
+            });
+        }
+
+        listener->clear();
+    });
 }
 } // namespace soomla

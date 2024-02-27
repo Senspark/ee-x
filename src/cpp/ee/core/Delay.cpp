@@ -19,7 +19,7 @@ Self::Delay(float duration)
     CC_ASSERT(duration_ >= 0);
 }
 
-void Self::await_suspend(std::experimental::coroutine_handle<> handle) {
+void Self::await_suspend(estd::coroutine_handle<> handle) {
     if (duration_ == 0) {
         handle.resume();
         return;

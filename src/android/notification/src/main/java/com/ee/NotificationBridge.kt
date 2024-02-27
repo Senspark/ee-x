@@ -6,6 +6,7 @@ import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.os.Build
 import androidx.annotation.AnyThread
 import com.ee.internal.NotificationReceiver
 import com.ee.internal.NotificationUtils
@@ -27,6 +28,9 @@ class NotificationBridge(
         private const val kUnschedule = "${kPrefix}Unschedule"
         private const val kUnscheduleAll = "${kPrefix}UnscheduleAll"
         private const val kClearAll = "${kPrefix}ClearAll"
+
+        private val isAndroid6OrHigher: Boolean
+            get() = Build.VERSION.SDK_INT >= Build.VERSION_CODES.M // API 21
     }
 
     init {
@@ -59,6 +63,7 @@ class NotificationBridge(
         val body: String,
         val delay: Int,
         val interval: Int,
+        val style: Int, // 0: Basic | 1: Custom
         val tag: Int
     )
 
@@ -71,7 +76,15 @@ class NotificationBridge(
     private fun registerHandlers() {
         _bridge.registerHandler(kSchedule) { message ->
             val request = deserialize<ScheduleRequest>(message)
-            schedule(request.ticker, request.title, request.body, request.delay, request.interval, request.tag)
+            schedule(
+                request.ticker,
+                request.title,
+                request.body,
+                request.delay,
+                request.interval,
+                request.tag,
+                request.style
+            )
             ""
         }
         _bridge.registerHandler(kUnscheduleAll) {
@@ -97,16 +110,32 @@ class NotificationBridge(
         _bridge.deregisterHandler(kClearAll)
     }
 
-    fun schedule(ticker: String, title: String, body: String, delay: Int, interval: Int, tag: Int) {
+    fun schedule(
+        ticker: String,
+        title: String,
+        body: String,
+        delay: Int,
+        interval: Int,
+        tag: Int,
+        style: Int
+    ) {
         val activity = _activity ?: return
         val intent = Intent(_application, NotificationReceiver::class.java)
         intent.putExtra("ticker", ticker)
         intent.putExtra("title", title)
         intent.putExtra("body", body)
         intent.putExtra("tag", tag)
+        intent.putExtra("style", style)
         intent.putExtra("className", activity::class.java.name)
-        NotificationUtils.scheduleAlarm(_application, intent, tag, PendingIntent.FLAG_UPDATE_CURRENT,
-            delay, interval)
+
+        val ptFlags =
+            if (isAndroid6OrHigher) {
+                PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_CANCEL_CURRENT
+            } else {
+                PendingIntent.FLAG_CANCEL_CURRENT
+            }
+
+        NotificationUtils.scheduleAlarm(_application, intent, tag, ptFlags, delay, interval)
     }
 
     fun unschedule(tag: Int) {

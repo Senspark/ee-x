@@ -47,5 +47,10 @@ NotificationBuilder& NotificationBuilder::setTag(int tag) {
     tag_ = tag;
     return *this;
 }
+
+NotificationBuilder& NotificationBuilder::setStyle(int style) {
+    style_ = style;
+    return *this;
+}
 } // namespace notification
 } // namespace ee

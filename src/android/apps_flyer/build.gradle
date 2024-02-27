@@ -31,7 +31,14 @@ dependencies {
     // https://support.appsflyer.com/hc/en-us/articles/115001256006-AppsFlyer-Android-SDK-Release-Notes
     // https://support.appsflyer.com/hc/en-us/articles/207032126-AppsFlyer-SDK-Integration-Android
     // https://support.appsflyer.com/hc/en-us/articles/207032126-Android-SDK-integration-for-developers
-    api 'com.appsflyer:af-android-sdk:6.3.2'
+    api 'com.appsflyer:af-android-sdk:6.12.2'
+
+    // https://dev.appsflyer.com/hc/docs/ad-revenue-1
+    implementation 'com.appsflyer:adrevenue:6.9.1'
+
+    // https://support.appsflyer.com/hc/en-us/articles/7459048170769#integrate-purchase-sdk-connector
+    // https://github.com/AppsFlyerSDK/appsflyer-android-purchase-connector
+    implementation 'com.appsflyer:purchase-connector:2.0.0'
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
     implementation "org.jetbrains.kotlinx:kotlinx-serialization-json:$kotlinSerializationVersion"

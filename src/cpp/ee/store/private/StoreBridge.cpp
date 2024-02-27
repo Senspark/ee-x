@@ -13,12 +13,14 @@
 #include <ee/core/LambdaAwaiter.hpp>
 #include <ee/core/Task.hpp>
 #include <ee/core/Utils.hpp>
+#include <ee/core/ILibraryAnalytics.h>
 #include <ee/nlohmann/json.hpp>
 
 #include "ee/store/StoreConfigurationBuilder.hpp"
 #include "ee/store/StoreProduct.hpp"
 #include "ee/store/StoreProductCollection.hpp"
 #include "ee/store/StoreProductDefinition.hpp"
+#include "ee/store/StoreProductMetadata.hpp"
 #include "ee/store/StoreProductType.hpp"
 #include "ee/store/private/StoreIAppleExtensions.hpp"
 #include "ee/store/private/StoreIExtensionProvider.hpp"
@@ -52,7 +54,8 @@ public:
 
     virtual void onInitialized(
         const std::shared_ptr<IStoreController>& controller,
-        const std::shared_ptr<IExtensionProvider>& extensions) override {
+        const std::shared_ptr<IExtensionProvider>& extensions,
+        const std::shared_ptr<ILibraryAnalytics>& analytics) override {
         onInitialized_(controller, extensions);
     }
 
@@ -88,13 +91,15 @@ void Self::destroy() {
 
 Task<bool>
 Self::initialize(const ConfigurationBuilder& builder,
-                 const std::shared_ptr<ITransactionLog>& transactionLog) {
+                 const std::shared_ptr<ITransactionLog>& transactionLog,
+                 const std::shared_ptr<ILibraryAnalytics>& analytics) {
     if (initialized_) {
         co_return false;
     }
     if (initializationAwaiter_) {
         // Waiting.
     } else {
+        analytics_ = analytics;
         initializationAwaiter_ = std::make_unique<LambdaAwaiter<bool>>(
             [this, builder, transactionLog](auto&& resolver) {
                 initializationResolver_ = [this, resolver](auto&& result) {
@@ -191,6 +196,25 @@ Task<bool> Self::purchase(const std::string& itemId) {
             controller_->initiatePurchase(itemId);
         });
     auto result = co_await(*purchaseAwaiter_);
+    if (result == true) {
+        auto product = getProducts()->withId(itemId);
+        if (product) {
+            auto metaData = product->metadata();
+            auto price = metaData->localizedPrice();
+            auto currencyCode = metaData->isoCurrencyCode();
+            auto productId = product->definition()->storeSpecificId();
+            auto orderId = product->transactionId();
+
+            if (analytics_) {
+                analytics_->logRevenue(ee::core::analytics::IapRevenue{
+                    .revenue = price,
+                    .currencyCode = currencyCode,
+                    .productId = productId,
+                    .orderId = orderId
+                });
+            }
+        }
+    }
     co_return result;
 }
 

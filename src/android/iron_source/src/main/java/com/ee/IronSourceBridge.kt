@@ -273,6 +273,7 @@ class IronSourceBridge(
         _bridge.callCpp(kOnRewardedAdClosed, Utils.toString(_rewarded))
     }
 
+    @Deprecated("Deprecated in Java")
     override fun onInterstitialAdReady() {
         Thread.runOnMainThread {
             _logger.debug("$kTag: ${this::onInterstitialAdReady.name}")
@@ -281,6 +282,7 @@ class IronSourceBridge(
         }
     }
 
+    @Deprecated("Deprecated in Java")
     override fun onInterstitialAdLoadFailed(error: IronSourceError) {
         Thread.runOnMainThread {
             _logger.debug("$kTag: ${this::onInterstitialAdLoadFailed.name}: ${error.errorMessage}")
@@ -288,12 +290,14 @@ class IronSourceBridge(
         }
     }
 
+    @Deprecated("Deprecated in Java")
     override fun onInterstitialAdShowSucceeded() {
         Thread.runOnMainThread {
             _logger.debug("$kTag: ${this::onInterstitialAdShowSucceeded.name}")
         }
     }
 
+    @Deprecated("Deprecated in Java")
     override fun onInterstitialAdShowFailed(error: IronSourceError) {
         Thread.runOnMainThread {
             _logger.debug("$kTag:${this::onInterstitialAdShowFailed.name}: ${error.errorMessage}")
@@ -302,12 +306,14 @@ class IronSourceBridge(
         }
     }
 
+    @Deprecated("Deprecated in Java")
     override fun onInterstitialAdOpened() {
         Thread.runOnMainThread {
             _logger.debug("$kTag: ${this::onInterstitialAdOpened.name}")
         }
     }
 
+    @Deprecated("Deprecated in Java")
     override fun onInterstitialAdClicked() {
         Thread.runOnMainThread {
             _logger.debug("$kTag: ${this::onInterstitialAdClicked.name}")
@@ -315,6 +321,7 @@ class IronSourceBridge(
         }
     }
 
+    @Deprecated("Deprecated in Java")
     override fun onInterstitialAdClosed() {
         Thread.runOnMainThread {
             _logger.debug("$kTag: ${this::onInterstitialAdClosed.name}")
@@ -323,6 +330,7 @@ class IronSourceBridge(
         }
     }
 
+    @Deprecated("Deprecated in Java")
     override fun onRewardedVideoAvailabilityChanged(available: Boolean) {
         Thread.runOnMainThread {
             _logger.info("$kTag: ${this::onRewardedVideoAvailabilityChanged.name}: $available")
@@ -333,6 +341,7 @@ class IronSourceBridge(
         }
     }
 
+    @Deprecated("Deprecated in Java")
     override fun onRewardedVideoAdShowFailed(error: IronSourceError) {
         Thread.runOnMainThread {
             _logger.debug("$kTag: ${this::onRewardedVideoAdShowFailed.name}: ${error.errorMessage}")
@@ -341,18 +350,21 @@ class IronSourceBridge(
         }
     }
 
+    @Deprecated("Deprecated in Java")
     override fun onRewardedVideoAdOpened() {
         Thread.runOnMainThread {
             _logger.debug("$kTag: ${this::onRewardedVideoAdOpened.name}")
         }
     }
 
+    @Deprecated("Deprecated in Java")
     override fun onRewardedVideoAdStarted() {
         Thread.runOnMainThread {
             _logger.debug("$kTag: ${this::onRewardedVideoAdStarted.name}")
         }
     }
 
+    @Deprecated("Deprecated in Java")
     override fun onRewardedVideoAdClicked(placement: Placement?) {
         Thread.runOnMainThread {
             _logger.debug("$kTag: ${this::onRewardedVideoAdClicked.name}: ${placement?.placementName ?: ""}")
@@ -360,12 +372,14 @@ class IronSourceBridge(
         }
     }
 
+    @Deprecated("Deprecated in Java")
     override fun onRewardedVideoAdEnded() {
         Thread.runOnMainThread {
             _logger.debug("$kTag: ${this::onRewardedVideoAdEnded.name}")
         }
     }
 
+    @Deprecated("Deprecated in Java")
     override fun onRewardedVideoAdRewarded(placement: Placement?) {
         Thread.runOnMainThread {
             _logger.debug("$kTag: ${this::onRewardedVideoAdRewarded.name}: ${placement?.placementName ?: ""}")
@@ -373,6 +387,7 @@ class IronSourceBridge(
         }
     }
 
+    @Deprecated("Deprecated in Java")
     override fun onRewardedVideoAdClosed() {
         Thread.runOnMainThread {
             _logger.debug("$kTag: ${this::onRewardedVideoAdClosed.name}")

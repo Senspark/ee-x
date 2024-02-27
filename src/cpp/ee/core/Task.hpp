@@ -4,7 +4,6 @@
 #ifdef __cplusplus
 
 #include <exception>
-#include <experimental/coroutine>
 #include <variant>
 
 #include "ee/core/CoreFwd.hpp"
@@ -21,7 +20,7 @@ public:
         }
 
         auto initial_suspend() { //
-            return std::experimental::suspend_always();
+            return estd::suspend_always();
         }
 
         auto final_suspend() noexcept {
@@ -33,7 +32,7 @@ public:
                 }
 
                 void await_suspend(
-                    std::experimental::coroutine_handle<> handle) noexcept {
+                    estd::coroutine_handle<> handle) noexcept {
                     me_->handle_.resume();
                 }
 
@@ -55,7 +54,7 @@ public:
         friend Task;
 
         std::variant<std::monostate, T, std::exception_ptr> result_;
-        std::experimental::coroutine_handle<> handle_;
+        estd::coroutine_handle<> handle_;
     };
 
     Task(const Task&) = delete;
@@ -73,7 +72,7 @@ public:
         return false;
     }
 
-    void await_suspend(std::experimental::coroutine_handle<void> handle) {
+    void await_suspend(estd::coroutine_handle<void> handle) {
         handle_.promise().handle_ = handle;
         handle_.resume();
     }
@@ -86,7 +85,7 @@ public:
     }
 
 private:
-    using Handle = std::experimental::coroutine_handle<promise_type>;
+    using Handle = estd::coroutine_handle<promise_type>;
 
     Task(promise_type* p)
         : handle_(Handle::from_promise(*p)) {}
@@ -104,7 +103,7 @@ public:
         }
 
         auto initial_suspend() { //
-            return std::experimental::suspend_always();
+            return estd::suspend_always();
         }
 
         auto final_suspend() noexcept {
@@ -116,7 +115,7 @@ public:
                 }
 
                 void await_suspend(
-                    std::experimental::coroutine_handle<> handle) noexcept {
+                    estd::coroutine_handle<> handle) noexcept {
                     me_->handle_.resume();
                 }
 
@@ -135,7 +134,7 @@ public:
         friend Task;
 
         std::variant<std::monostate, std::exception_ptr> result_;
-        std::experimental::coroutine_handle<> handle_;
+        estd::coroutine_handle<> handle_;
     };
 
     Task(const Task&) = delete;
@@ -153,7 +152,7 @@ public:
         return false;
     }
 
-    void await_suspend(std::experimental::coroutine_handle<void> handle) {
+    void await_suspend(estd::coroutine_handle<void> handle) {
         handle_.promise().handle_ = handle;
         handle_.resume();
     }
@@ -165,7 +164,7 @@ public:
     }
 
 private:
-    using Handle = std::experimental::coroutine_handle<promise_type>;
+    using Handle = estd::coroutine_handle<promise_type>;
 
     explicit Task(promise_type* p)
         : handle_(Handle::from_promise(*p)) {}
